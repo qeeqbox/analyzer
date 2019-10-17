@@ -1,0 +1,906 @@
+[{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 4
+  },
+  "Detection": [
+    "OpenProcess",
+    "VirtualAllocEx",
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "CreateRemoteThread"
+  ],
+  "Extra": ""
+},{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 4
+  },
+  "Detection": [
+    "OpenProcess",
+    "VirtualAllocEx",
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "NtCreateThreadEx"
+  ],
+  "Extra": ""
+},{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 5
+  },
+  "Detection": [
+    "OpenProcess",
+    "VirtualAllocEx",
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "OpenThread",
+    "QueueUserAPC"
+  ],
+  "Extra": ""
+},{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 4
+  },
+  "Detection": [
+    "OpenProcess",
+    "VirtualAllocEx",
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "RtlCreateUserThread"
+  ],
+  "Extra": ""
+},{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 5
+  },
+  "Detection": [
+    "OpenProcess",
+    "VirtualAllocEx",
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "GetThreadContext",
+    "SetThreadContext"
+  ],
+  "Extra": ""
+},{
+  "Name": "DLL injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 3
+  },
+  "Detection": [
+    "FindWindow",
+    "GetWindowThreadProcessId",
+    "SetWindowsHookEx"
+  ],
+  "Extra": ""
+},{
+  "Name": "Mutex functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateMutex",
+    "OpenMutex"
+  ],
+  "Extra": ""
+},{
+  "Name": "Events interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "EvtClearLog",
+    "ClearEventLog",
+    "EvtClose"
+  ],
+  "Extra": ""
+},{
+  "Name": "Get folder location",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetTempPath",
+    "SHGetFolderLocation",
+    "SHGetFolderPath",
+    "SHGetSpecialFolderLocation",
+    "SHGetSpecialFolderPath"
+  ],
+  "Extra": ""
+},{
+  "Name": "Keyboard functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetKeyboardState",
+    "GetAsyncKeyState",
+    "GetKeyState"
+  ],
+  "Extra": ""
+},{
+  "Name": "Keylogger functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetForegroundWindow",
+    "GetCursorPos",
+    "AttachThreadInput",
+    "MapVirtualKey"
+  ],
+  "Extra": ""
+},{
+  "Name": "Privileges interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "AdjustTokenPrivileges",
+    "IsNTAdmin",
+    "LsaEnumerateLogonSessions",
+    "SamIGetPrivateData",
+    "LookupPrivilegeValue",
+    "AdjustPrivilege"
+  ],
+  "Extra": ""
+},{
+  "Name": "Dynamic loading",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "LoadLibrary",
+    "LoadLibraryGetProcAddress",
+    "LdrLoadDll",
+    "MmGetSystemRoutineAddress",
+    "GetProcAddress"
+  ],
+  "Extra": ""
+},{
+  "Name": "Clipboard functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "OpenClipboard"
+  ],
+  "Extra": ""
+},{
+  "Name": "Time interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetLocalTime",
+    "GetSystemTime"
+  ],
+  "Extra": ""
+},{
+  "Name": "Atom interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GlobalAddAtom",
+    "GlobalGetAtomName",
+    "QueueUserAPC"
+  ],
+  "Extra": ""
+},{
+  "Name": "Process Hollowing",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 3
+  },
+  "Detection": [
+    "(WriteProcessMemory|WriteVirtualMemory)",
+    "SetThreadContext",
+    "ResumeThread"
+  ],
+  "Extra": ""
+},{
+  "Name": "Process Hollowing",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "UnmapViewOfSection"
+  ],
+  "Extra": ""
+},{
+  "Name": "Registry interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "RegOpenKey",
+    "RegQueryValue",
+    "RegCloseKey",
+    "SHQueryValue",
+    "SHGetValue",
+    "ZwOpenKey",
+    "ZwSetValueKey",
+    "ZwQueryValueKey"
+  ],
+  "Extra": ""
+},{
+  "Name": "Service interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "OpenService",
+    "StartService",
+    "CreateService",
+    "DeleteService",
+    "StartServiceCtrlDispatcher",
+    "OpenSCManager",
+    "ControlService",
+    "ChangeServiceConfig",
+    "EnumServicesStatus",
+    "NdrClientCall2"
+  ],
+  "Extra": ""
+},{
+  "Name": "Load driver",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "NtLoadDriver",
+    "ZwLoadDriver"
+  ],
+  "Extra": ""
+},{
+  "Name": "Discretionary access control list",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "SetUserObjectInfo",
+    "GetUserObjectSecurity",
+    "GetKernelObjectSecurity",
+    "SetKernelObjectSecurity",
+    "SetFileSecurity",
+    "GetFileSecurity",
+    "SetNamedSecurityInfo",
+    "SetSecurityInfo"
+  ],
+  "Extra": ""
+},{
+  "Name": "Driver interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "DeviceIOControl"
+  ],
+  "Extra": ""
+},{
+  "Name": "File IO",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateFile",
+    "WriteFile",
+    "GetFileSize",
+    "ReadFile",
+    "DeleteFile",
+    "GetFileAttributes",
+    "GetFileType"
+  ],
+  "Extra": ""
+},{
+  "Name": "Creating process",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateProcess",
+    "ShellExecute",
+    "WinExec"
+  ],
+  "Extra": ""
+},{
+  "Name": "Creating process",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 3
+  },
+  "Detection": [
+    "NtOpenFile",
+    "NtCreateSection",
+    "NtCreateProcess"
+  ],
+  "Extra": ""
+},{
+  "Name": "Unpacking functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CryptDecrypt",
+    "DecompressBuffer"
+  ],
+  "Extra": ""
+},{
+  "Name": "Packer functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 2
+  },
+  "Detection": [
+    "VirtualAlloc",
+    "VirtualProtect"
+  ],
+  "Extra": ""
+},{
+  "Name": "Screenshot functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "BitBlt",
+    "GdipGetDC",
+    "GetDIBits",
+    "GdipReleaseDC",
+    "GdipGetImageGraphicsContext",
+    "CreateCompatibleDC",
+    "GdilsMetaPrintDC",
+    "GetDC",
+    "ReleaseDC",
+    "GdipCreateBitmapFromScan0",
+    "GdipGetImagePixelFormat",
+    "PrintWindow"
+  ],
+  "Extra": ""
+},{
+  "Name": "Windows enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "EnumWindows",
+    "EnumDesktopWindows",
+    "EnumChildWindows",
+    "EnumProps",
+    "EnumPropsEx"
+  ],
+  "Extra": ""
+},{
+  "Name": "Windows Process Injection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 2
+  },
+  "Detection": [
+    "GetWindowLong",
+    "SetWindowLong"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking using socket",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Word",
+    "Required": 1
+  },
+  "Detection": [
+    "accept",
+    "bind",
+    "connect",
+    "close",
+    "getaddrinfo",
+    "freeaddrinfo",
+    "gethostname",
+    "gethostbyname",
+    "gethostbyaddr",
+    "getnameinfo",
+    "getpeername",
+    "errno",
+    "fcntl",
+    "htons",
+    "htonl",
+    "ntohs",
+    "ntohl",
+    "inet_ntoa",
+    "inet_aton",
+    "inet_addr",
+    "inet_ntop",
+    "inet_pton",
+    "listen",
+    "poll",
+    "recv",
+    "recvfrom",
+    "select",
+    "setsockopt",
+    "getsockopt",
+    "send",
+    "sendto",
+    "shutdo"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking using WinInet",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "InternetOpen",
+    "InternetConnect",
+    "InternetOpenURL",
+    "HttpOpenRequest",
+    "HttpSendRequest",
+    "InternetReadFile",
+    "InternetWriteFile"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking using Winsock2",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "WSARecv",
+    "WSASend",
+    "WSAStartup",
+    "WSACleanup"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking using URLMon",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "URLOpenPullStream",
+    "URLDownloadToFile",
+    "URLDownloadToCacheFile",
+    "URLOpenStream"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking using winhttp",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "WinHttpWriteData",
+    "WinHttpSendRequest",
+    "WinHttpOpen"
+  ],
+  "Extra": ""
+},{
+  "Name": "Username enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetUserName"
+  ],
+  "Extra": ""
+},{
+  "Name": "System enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetCurrentHwProfile",
+    "GetVersion",
+    "QuerySystemInformation",
+    "SetSystemInformation"
+  ],
+  "Extra": ""
+},{
+  "Name": "Debugger detection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "IsDebuggerPresent",
+    "CheckRemoteDebuggerPresent",
+    "OutputDebugString",
+    "DbgPrint",
+    "FindClose",
+    "DebugActiveProcess"
+  ],
+  "Extra": ""
+},{
+  "Name": "Sandbox detection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 2
+  },
+  "Detection": [
+    "GetCursorPos",
+    "sleep"
+  ],
+  "Extra": ""
+},{
+  "Name": "Mailslot functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateMailslot",
+    "GetMailslotInfo"
+  ],
+  "Extra": ""
+},{
+  "Name": "Process Doppelganging",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 3
+  },
+  "Detection": [
+    "CreateTransaction",
+    "(CreateFileTransacted|SetCurrentTransaction)",
+    "RollbackTransaction"
+  ],
+  "Extra": ""
+},{
+  "Name": "COM interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CoInitialize",
+    "CoCreateInstance",
+    "Navigate"
+  ],
+  "Extra": ""
+},{
+  "Name": "Security account manager",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "SamConnect",
+    "SamEnumerateDomainsInSamServer",
+    "SamEnumerateUsersInDomain",
+    "SamGetAliasMembership",
+    "SamGetGroupsForUser",
+    "SamLookupDomainInSamServer",
+    "SamLookupIdsInDomain",
+    "SamOpenDomain",
+    "SamOpenUser",
+    "SamRidToSid"
+  ],
+  "Extra": ""
+},{
+  "Name": "Extracting password hashes",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "NlpGetPrimaryCredential",
+    "SamrQueryInformationUser"
+  ],
+  "Extra": ""
+},{
+  "Name": "Credential interaction",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "LsaEnumerateLogonSessions",
+    "LsaGetLogonSessionData",
+    "LsaDeregisterLogonProcess"
+  ],
+  "Extra": ""
+},{
+  "Name": "MAC Address information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetAdaptersInfo",
+    "GetAdaptersAddresses"
+  ],
+  "Extra": ""
+},{
+  "Name": "Volume information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetVolumeInformation",
+    "GetVolumeInformationByHandle"
+  ],
+  "Extra": ""
+},{
+  "Name": "Computer name information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetComputerName"
+  ],
+  "Extra": ""
+},{
+  "Name": "System information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetSystemInfo",
+    "GetSystemMetrics"
+  ],
+  "Extra": ""
+},{
+  "Name": "Version information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetVersion"
+  ],
+  "Extra": ""
+},{
+  "Name": "User account control bypass",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetSidSubAuthorityCount",
+    "GetSidSubAuthority",
+    "RtlQueryElevationFlags"
+  ],
+  "Extra": ""
+},{
+  "Name": "Token information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "OpenProcessToken",
+    "GetTokenInformation"
+  ],
+  "Extra": ""
+},{
+  "Name": "White list",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "GetCommandLine",
+    "GetModuleHandle",
+    "GetStartupInfo",
+    "GetVersion"
+  ],
+  "Extra": ""
+},{
+  "Name": "SEH information",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "AddVectoredExceptionHandler",
+    "RemoveVectoredExceptionHandler",
+    "XcptFilter",
+    "vbaExceptHandler"
+  ],
+  "Extra": ""
+},{
+  "Name": "Network enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "NetShareEnum",
+    "NetServerEnum"
+  ],
+  "Extra": ""
+},{
+  "Name": "Process enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateToolhelp32Snapshot",
+    "Module32First"
+  ],
+  "Extra": ""
+},{
+  "Name": "Process enumeration",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "CreateToolhelp32Snapshot",
+    "Module32First"
+  ],
+  "Extra": ""
+},{
+  "Name": "SSL functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "ssl_write",
+    "ssl_read",
+    "ssl_close"
+  ],
+  "Extra": ""
+},{
+  "Name": "BIOS functionality",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "SystemBiosDate"
+  ],
+  "Extra": ""
+}]
