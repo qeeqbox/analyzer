@@ -252,6 +252,12 @@ class QBStrings:
 
     @verbose(verbose_flag)
     def checkwithstring(self,data):
+        '''
+        Setup words, wordsstripped, and add new keys in the data dict 
+        
+        Args:
+            data: main dict object
+        '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Strings"] = {  "English":[],
