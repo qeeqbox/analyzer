@@ -13,12 +13,22 @@ class QBIntell:
     @verbose(verbose_flag)
     @progressbar(True,"Starting QBIntell")
     def __init__(self):
+        '''
+        initialize object with the path of detections that contains json files
+        '''
         self.intell = path.abspath(path.join(path.dirname( __file__ ),'detections'))
         if not self.intell.endswith(path.sep): self.intell = self.intell+path.sep
         if not path.isdir(self.intell): mkdir(self.intell)
 
     @verbose(verbose_flag)
     def compileandfind(self,data,filename):
+        '''
+        Compile regex detection from json and find matches
+        
+        Args:
+            data: main dict object
+            filename: name of json file ex (android.json)
+        '''
         with copen(filename,"r",encoding='utf8') as f:
             for _ in loads(f.read()):
                 try:
@@ -41,9 +51,16 @@ class QBIntell:
 
     @verbose(verbose_flag)
     @progressbar(True,"Analyze file behavior")
-    def checkwithqbintell(self,data,detections):
+    def checkwithqbintell(self,data,filename):
+        '''
+        Setup words, wordsstripped, and add new keys in the data dict 
+        
+        Args:
+            data: main dict object
+            filename: name of json file ex (android.json)
+        '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Intell"] = {"WinAPI":[],
                           "_WinAPI":["Matched","Required","Behavior","Detected"]}
-        self.compileandfind(data["Intell"]["WinAPI"],self.intell+detections)
+        self.compileandfind(data["Intell"]["WinAPI"],self.intell+filename)
