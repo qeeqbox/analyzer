@@ -9,6 +9,12 @@ from ..logger.logger import logstring,verbose,verbose_flag
 t = None
 
 def tprogressbar(str):
+    '''
+    start wheel in terminal
+
+    Args:
+        str: output string before wheel
+    '''
     t = currentThread()
     spinner = cycle(['-', '/', '|','\\'])
     if str: logstring(str,"Green")
@@ -19,6 +25,13 @@ def tprogressbar(str):
         sleep(.1)
 
 def progressbar(OnOff=False,str=None):
+    '''
+    decorator for starting wheel and outputing message
+
+    Args:
+        OnOff: future use (not used currently)
+        str: output string
+    '''
     def decorator(func):
         def wrapper(*args, **kwargs):
             global t

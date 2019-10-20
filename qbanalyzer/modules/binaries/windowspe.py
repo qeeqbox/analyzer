@@ -12,20 +12,43 @@ class WindowsPe:
     @verbose(verbose_flag)
     @progressbar(True,"Starting WindowsPe")
     def __init__(self,qbs):
+        '''
+        initialize class
+
+        Args:
+            qbs: is QBStrings class, needed for string description
+        '''
         self.qbs = qbs
 
     @verbose(verbose_flag)
-    def whattype(self,pe):
+    def whattype(self,pe) -> str:
+        '''
+        check file exe or dll or driver
+
+        Args:
+            pe: pe object
+
+        Return:
+            True type
+        '''
         if pe.is_exe():
             return "exe"
         elif pe.is_dll():
             return "dll"
         elif pe.is_driver():
             return "driver"
-        return None
 
     @verbose(verbose_flag)
-    def checkifsinged(self,pe):
+    def checkifsinged(self,pe) -> list:
+        '''
+        check file if it has Signature or not
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of signatures
+        '''
         _list = []
         address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
         if address != 0:
@@ -36,14 +59,31 @@ class WindowsPe:
         return _list
 
     @verbose(verbose_flag)
-    def findentrypointfunction(self,pe, rva):
+    def findentrypointfunction(self,pe, rva) -> str:
+        '''
+        find entery point in sections
+
+        Args:
+            pe: pe object
+
+        Return:
+            section name
+        '''
         for section in pe.sections:
             if section.contains_rva(rva):
                 return section
-        return None
 
     @verbose(verbose_flag)
-    def getdlls(self,pe):
+    def getdlls(self,pe) -> list:
+        '''
+        get dlls
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of dlls
+        '''
         _list = []
         for dll in pe.DIRECTORY_ENTRY_IMPORT:
             if dll.dll.decode("utf-8") not in str(_list):
@@ -52,7 +92,16 @@ class WindowsPe:
         return _list
 
     @verbose(verbose_flag)
-    def getsections(self,pe):
+    def getsections(self,pe) -> list:
+        '''
+        get sections
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of sections
+        '''
         _list = []
         for section in pe.sections:
             _list.append({  "Section":section.Name.decode("utf-8").strip("\00"),
@@ -61,30 +110,58 @@ class WindowsPe:
         return _list
 
     @verbose(verbose_flag)
-    def getimportedfunctions(self,pe):
-        _importedfunctions = []
+    def getimportedfunctions(self,pe) -> list:
+        '''
+        get import functions
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of import functions and their info
+        '''
+        _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
             for entry in pe.DIRECTORY_ENTRY_IMPORT:
                 for func in entry.imports:
                     #print({entry.dll.decode("utf-8"):func.name.decode("utf-8")})
-                    _importedfunctions.append({ "Dll":entry.dll.decode("utf-8"),
+                    _list.append({ "Dll":entry.dll.decode("utf-8"),
                                                 "Function":func.name.decode("utf-8"),
                                                 "Description":""})
-        return _importedfunctions
+        return _list
 
     @verbose(verbose_flag)
-    def getexportedfunctions(self,pe):
-        _exportedfunction = []
+    def getexportedfunctions(self,pe) -> list:
+        '''
+        get export functions
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of export functions and their info
+        '''
+        _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_EXPORT"):
             for func in pe.DIRECTORY_ENTRY_EXPORT.symbols:
-                _exportedfunction.append({ "Function":func.name.decode("utf-8"),
+                _list.append({ "Function":func.name.decode("utf-8"),
                                            "Description":""})
-        return _exportedfunction
+        return _list
 
     @verbose(verbose_flag)
-    def getrecourse(self,pe):
+    def getrecourse(self,pe) -> (list,str):
+        '''
+        get resources
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of resources and their info
+            the manifest resource decoded
+        '''
         manifest = ""
-        resources = []
+        _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_RESOURCE"):
             for resource_type in pe.DIRECTORY_ENTRY_RESOURCE.entries:
                 if resource_type.name is not None:
@@ -106,17 +183,26 @@ class WindowsPe:
                                 sig = ""
                                 if len(resourcedata) >= 12:
                                     sig = "".join("{:02x}".format(x) for x in resourcedata[:12])
-                                resources.append({  "Resource":name,
+                                _list.append({  "Resource":name,
                                                     "Offset":hex(resource_lang.data.struct.OffsetToData),
                                                     "MD5":md5(resourcedata).hexdigest(),
                                                     "Sig":sig,
                                                     "Description":""})
-        return resources,manifest
+        return _list,manifest
 
 
 
     @verbose(verbose_flag)
-    def getCharacteristics(self,pe):
+    def getCharacteristics(self,pe) -> dict:
+        '''
+        get characteristics of file
+
+        Args:
+            pe: pe object
+
+        Return:
+            dict contains key and value
+        '''
         x = {"High Entropy":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA,
              "aslr":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE,
              "Force Integrity":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY,
@@ -130,21 +216,47 @@ class WindowsPe:
         return x
 
     @verbose(verbose_flag)
-    def getdebug(self,pe):
+    def getdebug(self,pe) -> list:
+        '''
+        get debug directory 
+
+        Args:
+            pe: pe object
+
+        Return:
+            list of pdb file names
+        '''
         _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_DEBUG"):
             for i in pe.DIRECTORY_ENTRY_DEBUG:
                 _list.append({  "Name":i.entries.PdbFileName,
                                 "Description":""})
+        return _list
 
     @verbose(verbose_flag)
-    def checkpesig(self,data):
-        if data["Details"]["Properties"]["mime"] == "application/x-dosexec" or data["Details"]["Properties"]["mime"] == "application/x-msi":
+    def checkpesig(self,data) -> bool:
+        '''
+        check mime is exe or msi
+
+        Args:
+            data: data dict
+
+        Return:
+            True if exe or msi
+        '''
+        if  data["Details"]["Properties"]["mime"] == "application/x-dosexec" or \
+            data["Details"]["Properties"]["mime"] == "application/x-msi":
             return True
 
     @verbose(verbose_flag)
     @progressbar(True,"Analyzing PE file")
     def getpedeatils(self,data):
+        '''
+        start analyzing exe logic, add descriptions and get words and wordsstripped from the file 
+
+        Args:
+            data: data dict
+        '''
         data["PE"] = {  "General" : {},
                         "Characteristics":{},
                         "Singed":[],
@@ -153,6 +265,7 @@ class WindowsPe:
                         "Resources":[],
                         "Imported functions":[],
                         "Exported functions":[],
+                        "Debug":[],
                         "Manifest":"",
                         "_General": {},
                         "_Characteristics": {},
@@ -162,6 +275,7 @@ class WindowsPe:
                         "_Resources":["Resource","Offset","MD5","Sig","Description"],
                         "_Imported functions":["Dll","Function","Description"],
                         "_Exported functions":["Dll","Function","Description"],
+                        "_Debug":["Name","Description"],
                         "_Manifest":""}
         pe = PE(data["Location"]["File"])
         ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint

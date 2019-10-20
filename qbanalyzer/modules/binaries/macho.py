@@ -2,32 +2,53 @@ __G__ = "(G)bd249ce4"
 
 from ...logger.logger import logstring,verbose,verbose_flag
 from ...mics.qprogressbar import progressbar
-from ...mics.funcs import getwords,getwordsmultifiles
+from ...mics.funcs import getwords,getwordsmultifiles,getentropy
 from ...modules.files.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from macholib.MachO import LC_SEGMENT,LC_SEGMENT_64,LC_LOAD_DYLIB
-from macholib import MachO
-from macholib import SymbolTable
+from macholib import MachO,SymbolTable
 from plistlib import readPlist
 
-#cmd.initprot & 0x4][0]
 
 class Macho:
     @verbose(verbose_flag)
     @progressbar(True,"Starting Macho")
     def __init__(self,qbs):
+        '''
+        initialize class
+
+        Args:
+            qbs: is QBStrings class, needed for string description
+        '''
         self.qbs = qbs
 
     @verbose(verbose_flag)
-    def entry_point(self,machos):
+    def entry_point(self,machos) -> bool:
+        '''
+        get entry point of macho (needs debugging)
+
+        Args:
+            machos: machos object
+
+        Return:
+            True if found
+        '''
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd == LC_MAIN:
                     return True
 
     @verbose(verbose_flag)
-    def getlibs(self,machos):
+    def getlibs(self,machos) -> list:
+        '''
+        get libs 
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of libs with their info
+        '''
         _list = []
-        #headers[0].commands
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd == LC_LOAD_DYLIB:
@@ -36,9 +57,17 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getsegments(self,machos):
+    def getsegments(self,machos) -> list:
+        '''
+        get segments 
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of segments with their info
+        '''
         _list = []
-        #headers[0].commands
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
@@ -49,9 +78,17 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getsections(self,machos):
+    def getsections(self,machos) -> list:
+        '''
+        get sections 
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of segments with their info
+        '''
         _list = []
-        #headers[0].commands
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
@@ -65,7 +102,16 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getsymbols(self,machos):
+    def getsymbols(self,machos) -> list:
+        '''
+        get all symbols
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of symbols
+        '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.nlists:
@@ -74,7 +120,16 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getlocalsymbols(self,machos):
+    def getlocalsymbols(self,machos) -> list:
+        '''
+        get local symbols
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of local symbols
+        '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.localsyms:
@@ -83,7 +138,16 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getundefsymbols(self,machos):
+    def getundefsymbols(self,machos) -> list:
+        '''
+        get undefined symbols
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of undefined symbols
+        '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.undefsyms:
@@ -92,7 +156,16 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getextdefsymbols(self,machos):
+    def getextdefsymbols(self,machos) -> list:
+        '''
+        get external reference symbol indices
+
+        Args:
+            machos: machos object
+
+        Return:
+            list of external symbols
+        '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.extdefsyms:
@@ -101,23 +174,29 @@ class Macho:
         return _list
 
     @verbose(verbose_flag)
-    def getentropy(self,data):
-        entropy = 0
-        if len(data) > 0:
-            for x in range(0, 256):
-                p_x = float(data.count(bytes(x))) / len(data)
-                if p_x > 0:
-                    entropy += - p_x*log(p_x, 2)
-            return "%f" % (entropy / 8)
-        else:
-            return "None"
+    def getplist(self,plist) -> dict:
+        '''
+        read plist file
 
-    @verbose(verbose_flag)
-    def getplist(self,plist):
+        Args:
+            plist: path of info.plist
+
+        Return:
+            dict conatins key and values of plist
+        '''
         return readPlist(plist)
 
     @verbose(verbose_flag)
-    def checkdmgsig(self,data):
+    def checkdmgsig(self,data) -> bool:
+        '''
+        check mime is dmg or not
+
+        Args:
+            data: data dict
+
+        Return:
+            True if dmg
+        '''
         if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
             data["Location"]["Original"].endswith(".dmg"):
             x = dmgunpack(data["Location"]["File"])
@@ -127,13 +206,28 @@ class Macho:
                     return True
 
     @verbose(verbose_flag)
-    def checkmacsig(self,data):
+    def checkmacsig(self,data) -> bool:
+        '''
+        check mime is machO or not
+
+        Args:
+            data: data dict
+
+        Return:
+            True if machO
+        '''
         if data["Details"]["Properties"]["mime"] == "application/x-mach-binary":
             return True
 
     @verbose(verbose_flag)
     @progressbar(True,"Analzying DMG file")
     def getdmgdeatils(self,data):
+        '''
+        start analyzing dmg file, loop over packed file and extract info.plist and shells
+
+        Args:
+            data: data dict
+        '''
         data["DMG"] = {"General":{},
                        "_General":{}}
         for i, v in enumerate(data["Packed"]["Files"]):
@@ -153,26 +247,32 @@ class Macho:
     @verbose(verbose_flag)
     @progressbar(True,"Analzying MACHO file")
     def getmachodeatils(self,data):
+        '''
+        start analyzing macho logic, add descriptions and get words and wordsstripped from the file 
+
+        Args:
+            data: data dict
+        '''
         try:
             macho = MachO.MachO(data["Location"]["File"])
-            data["MACHO"] = {   "General":{},
-                                "Sections":[],
-                                "Libraries":[],
-                                "Segments":[],
-                                "Symbols":[],
-                                "Undefined Symbols":[],
-                                "External Symbols":[],
-                                "Local Symbols":[],
-                                "General":{},
-                                "_Sections":["Section","Address","Segment","Description"],
-                                "_Libraries":["Library","Description"],
-                                "_Segments":["Segment","Address","Description"],
-                                "_Symbols":["Symbol","Description"],
-                                "_Undefined Symbols":["Symbol","Description"],
-                                "_External Symbols":["Symbol","Description"],
-                                "_Local Symbols":["Symbol","Description"]}
         except:
-            return False
+            return
+        data["MACHO"] = {   "General":{},
+                            "Sections":[],
+                            "Libraries":[],
+                            "Segments":[],
+                            "Symbols":[],
+                            "Undefined Symbols":[],
+                            "External Symbols":[],
+                            "Local Symbols":[],
+                            "General":{},
+                            "_Sections":["Section","Address","Segment","Description"],
+                            "_Libraries":["Library","Description"],
+                            "_Segments":["Segment","Address","Description"],
+                            "_Symbols":["Symbol","Description"],
+                            "_Undefined Symbols":["Symbol","Description"],
+                            "_External Symbols":["Symbol","Description"],
+                            "_Local Symbols":["Symbol","Description"]}
         sections = self.getsections(macho)
         libs = self.getlibs(macho)
         segments = self.getsegments(macho)

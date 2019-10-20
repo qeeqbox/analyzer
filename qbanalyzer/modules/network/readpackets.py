@@ -14,11 +14,27 @@ class ReadPackets:
     @verbose(verbose_flag)
     @progressbar(True,"Starting ReadPackets")
     def __init__(self,qbs,waf):
+        '''
+        initialize class
+
+        Args:
+            qbs: is QBStrings class, needed for string description
+            waf: is WafDetect class, needed for detecting waf
+        '''
         self.qbs = qbs
         self.waf = waf
 
     @verbose(verbose_flag)
-    def getlayers(self,packet):
+    def getlayers(self,packet) -> str:
+        '''
+        initialize class
+
+        Args:
+            packet: packet object
+
+        Return:
+            str of layers
+        '''
         c = 0
         _temp = []
         while True:
@@ -30,6 +46,20 @@ class ReadPackets:
 
     @verbose(verbose_flag)
     def readallpackets(self,packets):
+        '''
+        initialize class
+
+        Args:
+            packets: packets object
+
+        Return:
+            _list list of all payloads
+            _ports ports list
+            _ips ips list
+            _listreadarp list of arp requests
+            _listreaddns list of dns requests
+            _listreadhttp list of http requests
+        '''
         _listreadarp = []
         _listreaddns = []
         _listreadhttp = []
@@ -132,12 +162,27 @@ class ReadPackets:
 
     @verbose(verbose_flag)
     def checkpcapsig(self,data):
+        '''
+        check if mime is pcap
+
+        Args:
+            data: data dict
+
+        Return:
+            true if pcap
+        '''
         if data["Details"]["Properties"]["mime"] == "application/vnd.tcpdump.pcap":
             return True
 
     @verbose(verbose_flag)
     @progressbar(True,"Analyze pccp file")
     def getpacpdetails(self,data):
+        '''
+        start analyzing pcap logic, add descriptions and get words and wordsstripped from the file 
+
+        Args:
+            data: data dict
+        '''
         data["PCAP"] = {"WAF":{},
                         "ARP":[],
                         "DNS":[],

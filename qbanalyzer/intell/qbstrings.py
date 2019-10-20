@@ -18,9 +18,8 @@ class QBStrings:
     @progressbar(True,"Starting QBStrings")
     def __init__(self):
         '''
-        initialize object with the path of refs that contains References.db
-        Connect to References.db sqlite3 database, get english words from nltk.corpus
-        initialize some suspicious words to detect on
+        initialize class and make refs path that contains References.db
+        get english words from corpus and open connection with References.db
         '''
         self.refs = path.abspath(path.join(path.dirname( __file__ ),"..", 'refs'))
         if not self.refs.endswith(path.sep): self.refs = self.refs+path.sep
@@ -36,12 +35,12 @@ class QBStrings:
     @progressbar(True,"Detecing english strings")
     def checkwithenglish(self,_data):
         '''
-        Check if words are UnKnown, english, Partly English or Suspicious
-        
+        check if words are english words or not
+
         Args:
             _data: data dict
         '''
-        _List = {"UnKnown":[],"English":[],"Partly English":[],"Suspicious":[]}
+        _dict = {"UnKnown":[],"English":[],"Partly English":[],"Suspicious":[]}
         if len(self.words) > 0:
             for word in self.words:
                 _word = word.decode('utf-8',"ignore")
@@ -63,25 +62,38 @@ class QBStrings:
                         _word = _word.lower()
                         temp = "Suspicious"
 
-                _List[temp].append(_word)
+                _dict[temp].append(_word)
 
-        for key in _List.keys():
-            for x in set(_List[key]):
-                _data[key].append({"Count":_List[key].count(x),"Buffer":x})
+        for key in _dict.keys():
+            for x in set(_dict[key]):
+                _data[key].append({"Count":_dict[key].count(x),"Buffer":x})
 
     @verbose(verbose_flag)
-    def checkbase64(self):
-        _data = []
+    def checkbase64(self,_data):
+        '''
+        check if words are possible base64 or not 
+
+        Args:
+            data: data dict
+        '''
+        _List = []
         if len(self.words) > 0:
             for word in self.words:
-                b = self.testbase64(word)
-                if b != None and b != False:
-                    _data.append({"Base64":word.decode('ascii',"ignore")})
-            return _data
-        return False
+                if  word.endswith(b"="):  #needs to include all options
+                    b = self.testbase64(word)
+                    if b != None and b != False:
+                        _List.append(word)
+        for x in set(_List):
+            _data.append({"Count":_List.count(x),"Base64":x,"Decoded":b64decode(x)})
 
     @verbose(verbose_flag)
     def testbase64(self,w):
+        '''
+        match decoding base64 then encoding means most likely base64 
+
+        Args:
+            data: data dict
+        '''
         try:
             y = b64decode(w)
             if b64encode(y) == w:
@@ -90,11 +102,28 @@ class QBStrings:
             return False
 
     @verbose(verbose_flag)
-    @progressbar(True,"Check for IPS")
+    @progressbar(True,"check urls")
+    def checklink(self,_data):
+        '''
+        check if buffer contains ips xxx://xxxxxxxxxxxxx.xxx
+
+        Args:
+            _data: data dict
+        '''
+        _List = []
+        x = list(set(findall(compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I),self.wordsstripped)))
+        if len(x) > 0:
+            for _ in x:
+                _List.append(_[0])
+        for x in set(_List):
+            _data.append({"Count":_List.count(x),"Link":x})
+
+    @verbose(verbose_flag)
+    @progressbar(True,"check ips")
     def checkip(self,_data):
         '''
-        Check if wordsstripped contains ip or not
-        
+        check if buffer contains ips x.x.x.x
+
         Args:
             _data: data dict
         '''
@@ -106,14 +135,13 @@ class QBStrings:
                 _List.append(_)
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x})
-        return True
 
     @verbose(verbose_flag)
-    @progressbar(True,"Check for Emails")
+    @progressbar(True,"check emails")
     def checkemail(self,_data):
         '''
-        Check if wordsstripped contains emails or not
-        
+        check if buffer contains email xxxxxxx@xxxxxxx.xxx
+
         Args:
             _data: data dict
         '''
@@ -125,14 +153,13 @@ class QBStrings:
                 _List.append(_[0])
         for x in set(_List):
             _data.append({"Count":_List.count(x),"EMAIL":x})
-        return True
 
     @verbose(verbose_flag)
-    @progressbar(True,"Check for phone numbers")
+    @progressbar(True,"Check tel numbers")
     def checkphonenumber(self,_data):
         '''
-        Check if wordsstripped contains phone numbers or not
-        
+        check if buffer contains tel numbers 012 1234 567
+
         Args:
             _data: data dict
         '''
@@ -144,14 +171,13 @@ class QBStrings:
                 _List.append(_)
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TEL":x})
-        return True
 
     @verbose(verbose_flag)
-    @progressbar(True,"Check for tags")
+    @progressbar(True,"Check tags")
     def checktags(self,_data):
         '''
-        Check if wordsstripped contains tags or not
-        
+        check if buffer contains tags <>
+
         Args:
             _data: data dict
         '''
@@ -163,17 +189,17 @@ class QBStrings:
                 _List.append(_)
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TAG":x})
-        return True
 
     @verbose(verbose_flag)
     @progressbar(True,"Added descriptions to strings")
     def adddescription(self,_type,data,keyword):
         '''
-        Check if word has description in References.db or not
-        
+        add description to buffer
+
         Args:
-            _data: data dict
-            keyword: type of description (pretty much the db table)
+            _type: type of description
+            data: data dict
+            keyword: target key to check (Ex. IP)
         '''
         if len(data) > 0:
             for x in data:
@@ -244,7 +270,6 @@ class QBStrings:
                         x.update({"Description":description})
                 except:
                     pass
-        return False
 
     @verbose(verbose_flag)
     def sortbylen(self,_dict):
@@ -253,10 +278,10 @@ class QBStrings:
     @verbose(verbose_flag)
     def checkwithstring(self,data):
         '''
-        Setup words, wordsstripped, and add new keys in the data dict 
-        
+        start pattern analysis for words and wordsstripped
+
         Args:
-            data: main dict object
+            data: data dict
         '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
@@ -264,15 +289,19 @@ class QBStrings:
                              "UnKnown":[],
                              "Partly English":[],
                              "IPS":[],
+                             "LINKS":[],
                              "EMAILS":[],
                              "TELS":[],
                              "TAGS":[],
+                             "BASE64s":[],
                              "Suspicious":[],
                              "_English":["Count","Buffer"],
                              "_UnKnown":["Count","Buffer"],
                              "_Suspicious":["Count","Buffer"],
                              "_Partly English":["Count","Buffer"],
                              "_IPS":["Count","IP","Code","Description"],
+                             "_LINKS":["Count","Link"],
+                             "_BASE64s":["Count","Base64","Decoded"],
                              "_EMAILS":["Count","EMAIL","Description"],
                              "_TELS":["Count","TEL","Description"],
                              "_TAGS":["Count","TAG","Description"]}
@@ -280,9 +309,11 @@ class QBStrings:
         #unksorted = self.sortbylen(self.checkwithenglish()["UnKnown"])
         #b64 = self.checkbase64()
         self.checkwithenglish(data["Strings"])
+        self.checklink(data["Strings"]["LINKS"])
         self.checkip(data["Strings"]["IPS"])
         self.checkemail(data["Strings"]["EMAILS"])
         self.checktags(data["Strings"]["TAGS"])
+        self.checkbase64(data["Strings"]["BASE64s"])
         #self.checkphonenumber(data["Strings"]["TELS"])
         self.adddescription("DNS",data["Strings"]["IPS"],"IP")
         self.adddescription("IPs",data["Strings"]["IPS"],"IP")

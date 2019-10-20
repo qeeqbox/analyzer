@@ -2,7 +2,7 @@ __version__G__ = "(G)bd249ce4"
 
 from ...logger.logger import logstring,verbose,verbose_flag
 from ...mics.qprogressbar import progressbar
-from re import compile, findall
+from re import compile, findall,I
 from tld import get_fld,get_tld
 from tld.utils import update_tld_names
 from nltk import edit_distance
@@ -16,11 +16,13 @@ from csv import reader
 
 #need refactoring
 
-
 class URLSimilarity:
     @verbose(verbose_flag)
     @progressbar(True,"Starting URLSimilarity")
     def __init__(self):
+        '''
+        initialize class and get top 1m.csv from umbrella
+        '''
         self.topurl = path.abspath(path.join(path.dirname( __file__ ),'topurls'))
         if not self.topurl.endswith(path.sep): self.topurl = self.topurl+path.sep
         if not path.isdir(self.topurl): mkdir(self.topurl)
@@ -32,6 +34,13 @@ class URLSimilarity:
 
     @verbose(verbose_flag)
     def setup(self,_path):
+        '''
+        check if top-1m.csv exists or not, if not then download load
+        it and unzip it and take the top 10000 only
+
+        Args:
+            _path to topurls folder
+        '''
         if not path.exists(_path+'top-1m.csv'):
             zip_file = ZipFile(BytesIO(get(self.top).content))
             with zip_file.open('top-1m.csv') as zf, open(_path+'top-1m.csv', 'wb') as f:
@@ -42,13 +51,20 @@ class URLSimilarity:
 
     @verbose(verbose_flag)
     def geturls(self,data):
+        '''
+        check if root domain exists in the top 10000 or not
+        if yes appened it to list 
+
+        Args:
+            data: data dict
+        '''
         roots = []
-        _x =  list(set(findall(compile("(?:https?://)?(?:(?i:[a-z]+\.)+)[^ ]+"),self.wordsstripped)))
+        _x =  list(set(findall(compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I),self.wordsstripped)))
         for _ in _x:
-            if get_tld(_, fail_silently=True):
+            if get_tld(_[0], fail_silently=True):
                 root = None
                 try:
-                    root = get_fld(_,fix_protocol=True)
+                    root = get_fld(_[0],fix_protocol=True)
                 except:
                     pass
                 if root:
@@ -62,6 +78,12 @@ class URLSimilarity:
     @verbose(verbose_flag)
     @progressbar(True,"Analyze URLs")
     def checkwithurls(self,data):
+        '''
+        start finding urls in top 10000 list 
+
+        Args:
+            data: data dict
+        '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["URLs"] = {"URLs":[],

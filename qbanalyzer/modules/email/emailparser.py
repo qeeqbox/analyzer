@@ -10,10 +10,22 @@ class EmailParser():
     @verbose(verbose_flag)
     @progressbar(True, "Starting EmailParser")
     def __init__(self):
-        pass
+        '''
+        initialize class
+        '''
 
     @verbose(verbose_flag)
-    def getattachment(self, msg):
+    def getattachment(self, msg) -> (list,list):
+        '''
+        get attachment of email
+
+        Args:
+            msg: msg object
+
+        Return:
+            list of attachment and their info
+            list of extracted buffers
+        '''
         _list = []
         _Stream = []
         if msg.get_content_maintype() == 'multipart':
@@ -30,13 +42,30 @@ class EmailParser():
         return _list,_Stream
 
     @verbose(verbose_flag)
-    def checkemailsig(self, data):
-        if "message" in data["Details"]["Properties"]["mime"]:
+    def checkemailsig(self, data) -> bool:
+        '''
+        check mime if it contains message or not
+
+        Args:
+            data: data dict
+
+        Return:
+            True if message
+        '''
+        print(data["Details"]["Properties"]["mime"])
+        if "message" in data["Details"]["Properties"]["mime"] or \
+            data["Location"]["Original"].endswith(".eml"):
             return True
 
     @verbose(verbose_flag)
     @progressbar(True, "Starting analyzing email")
     def getemail(self, data):
+        '''
+        start analyzing exe logic, add descriptions and get words and wordsstripped from array 
+
+        Args:
+            data: data dict
+        '''
         data["EMAIL"] = { "General": {},
                          "_General": {},
                          "Attachments": [],

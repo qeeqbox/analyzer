@@ -14,7 +14,7 @@ class QBIntell:
     @progressbar(True,"Starting QBIntell")
     def __init__(self):
         '''
-        initialize object with the path of detections that contains json files
+        initialize class and make detections path 
         '''
         self.intell = path.abspath(path.join(path.dirname( __file__ ),'detections'))
         if not self.intell.endswith(path.sep): self.intell = self.intell+path.sep
@@ -23,11 +23,11 @@ class QBIntell:
     @verbose(verbose_flag)
     def compileandfind(self,data,filename):
         '''
-        Compile regex detection from json and find matches
-        
+        parse the detections and check them against wordsstripped
+
         Args:
-            data: main dict object
-            filename: name of json file ex (android.json)
+            data: data dict
+            filename: file contains detections
         '''
         with copen(filename,"r",encoding='utf8') as f:
             for _ in loads(f.read()):
@@ -53,11 +53,11 @@ class QBIntell:
     @progressbar(True,"Analyze file behavior")
     def checkwithqbintell(self,data,filename):
         '''
-        Setup words, wordsstripped, and add new keys in the data dict 
-        
+        start checking logic and setup words and wordsstripped
+
         Args:
-            data: main dict object
-            filename: name of json file ex (android.json)
+            data: data dict
+            filename: file contains detections
         '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]

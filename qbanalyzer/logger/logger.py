@@ -23,13 +23,25 @@ class colors:
     Cyan="\033[36m"
     White="\033[37m"
 
-def logstring(_str,type):
+def logstring(_str,color):
+    '''
+    output str with color and symbol (they are all as info)
+
+    Args:
+        color: output option
+    '''
     stdout.flush()
-    if type == "Green": log.info('{}{}{} {}'.format(colors.Green,"✓",colors.Restore,_str))
-    elif type == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,"→",colors.Restore,_str))
-    elif type == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
+    if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"✓",colors.Restore,_str))
+    elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,"→",colors.Restore,_str))
+    elif color == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
 
 def verbose(OnOff=False):
+    '''
+    decorator functions for debugging (show basic args, kwargs)
+
+    Args:
+        OnOff: turn debugging on or off
+    '''
     def decorator(func):
         def wrapper(*args, **kwargs):
             try:
@@ -38,7 +50,7 @@ def verbose(OnOff=False):
                 if x:
                     return x
             except Exception:
-                #print(format_exc())
+                print(format_exc())
                 logstring("{} failed..".format(func.__name__),"Red")
                 return None
         return wrapper

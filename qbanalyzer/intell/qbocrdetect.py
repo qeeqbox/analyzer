@@ -14,17 +14,17 @@ class QBOCRDetect:
     @verbose(verbose_flag)
     @progressbar(True,"Starting QBOCRDetect")
     def __init__(self):
-        self.words = []
+        pass
 
     @verbose(verbose_flag)
-    def mixandsetupfileocr(self,_path):
+    def mixandsetupfileocr(self,paths):
         '''
-        Convert image to RGBA and read their strings into self.words
-        
+        loop paths, convert each image to RGBA, and read text from image
+
         Args:
-            _path: path to dict contains "Path" keys
+            paths: dict contains Path keys
         '''
-        for x in _path:
+        for x in paths:
             #if x["Path"].endswith(".png") no need < lazy try and except
             try:
                 image = Image.open(x["Path"])
@@ -39,11 +39,11 @@ class QBOCRDetect:
     @verbose(verbose_flag)
     def checkocrtext(self,data,_list):
         '''
-        Read self.words into main data dict if there is a word
-        
+        loop paths, convert each image to RGBA, and read text from image
+
         Args:
-            data: main dict
-            _list: self.words from mixandsetupfileocr
+            data: data dict
+            paths: dict contains Path keys
         '''
         for words in _list:
             for word in words[0]:
@@ -54,11 +54,12 @@ class QBOCRDetect:
     @progressbar(True,"Analyze images with OCR")
     def checkwithocr(self,data):
         '''
-        Add new keys in the data dict
-        
+        start ocr reading logic for packed files only
+
         Args:
-            data: main dict
+            data: data dict
         '''
+        self.words = []
         data["OCR"] = { "OCR":[],
                         "_OCR":["Word","File"]}
         try:

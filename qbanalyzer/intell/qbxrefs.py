@@ -8,6 +8,10 @@ from re import search
 from ast import literal_eval
 
 #this module need some optimization
+#only apis for now, will change this in future
+#added a little hack for handling errors 
+#(check returns 0 because of error and flags=['-2'])
+#Similar to objdump, still needs to optimize
 
 verbose_flag = False
   
@@ -15,18 +19,21 @@ class QBXrefs:
     @progressbar(True,"Starting QBXrefs")
     def __init__(self):
         pass
-    #only apis for now, will change this in future
-    #added a little hack for handling errors 
-    #(check returns 0 because of error and flags=['-2'])
-    #Similar to objdump, still needs to optimize
 
     @verbose(verbose_flag)
-    def checkfunc(self,str,func):
+    def checkfunc(self,func,str) -> bool:
+        '''
+        check if functions are not sub or sym 
+
+        Args:
+            func: soruce function
+            str: target function
+        '''
         if func.startswith("sub."):
-            if func[4:-4] in str:
+            if func[4:].split("_")[1].lower() in str.lower():
                 return False
         elif func.startswith("sym."):
-            if func[4:] in str:
+            if func[4:].lower() in str.lower():
                 return False
         if search(r'\b{}\b'.format(func), str) is not None:
             return False
@@ -35,6 +42,12 @@ class QBXrefs:
     @verbose(verbose_flag)
     @progressbar(True,"Making symbol xrefs")
     def makexref(self,data):
+        '''
+        get cross references from file using radare2 
+
+        Args:
+            data: data dict
+        '''
         data["XREFS"] = { "GRAPH":{"nodes":[],"links":[]},
                           "TEXT":[],
                          "_TEXT":["From","To"]}
@@ -62,7 +75,7 @@ class QBXrefs:
                         _list.append({"From":func["fcn_name"],"To":funcfromopcode})
 
         for xfunc in _list:
-            if self.checkfunc(sym,xfunc["From"]):
+            if self.checkfunc(xfunc["From"],sym):
                 if xfunc["From"] not in _temp:
                     _temp.append(xfunc["From"])
                     _node.append({"func":xfunc["From"]})

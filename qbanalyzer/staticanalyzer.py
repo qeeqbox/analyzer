@@ -14,6 +14,7 @@ from .modules.email.emailparser import EmailParser
 from .modules.files.filetypes import FileTypes
 from .modules.files.pdfparser import PDFParser
 from .modules.files.officex import Officex
+from .modules.files.rtfparser import RTFParser
 from .yara.yaraparser import YaraParser
 from .intell.qbstrings import QBStrings
 from .intell.qbimage import QBImage
@@ -26,12 +27,16 @@ from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
 from webbrowser import open_new_tab
 from os import path
-
+from sys import getsizeof
+from gc import collect
 #import libarchive
 
 class StaticAnalyzer:
     @progressbar(True,"Starting StaticAnalyzer")
     def __init__(self):
+        '''
+        initialize class, and all modules 
+        '''
         self.mit = MitreParser()
         self.qbm = QBMitresearch(self.mit)
         self.qbs = QBStrings()
@@ -53,14 +58,27 @@ class StaticAnalyzer:
         self.fty = FileTypes()
         self.pdf = PDFParser()
         self.ofx = Officex()
+        self.rtf = RTFParser()
 
     def openinbrowser(self,_path):
+        '''
+        open html file in default browser
+        '''
         open_new_tab(_path)
 
     @verbose(verbose_flag)
     def analyze(self,_path,outputfolder,Open="no"):
+        '''
+        main analyze logic!
+
+        Args:
+            _path: path of target file output 
+            folder: folder where output going to be save 
+            Open the file in browser or not
+        '''
         data = {}
-        self.fty.checkfilesig(data,_path,outputfolder)
+        if not self.fty.checkfilesig(data,_path,outputfolder):
+            return
         if self.pdf.checkpdfsig(data):
             self.pdf.checkpdf(data)
         elif self.wpe.checkpesig(data):
@@ -85,14 +103,20 @@ class StaticAnalyzer:
             self.rpc.getpacpdetails(data)
         elif self.ofx.checkofficexsig(data):
             self.ofx.checkofficex(data)
+        elif self.rtf.checkrtfsig(data):
+            self.rtf.checkrtf(data)
         else:
             self.fty.unknownfile(data)
         self.yar.checkwithyara(data,None)
         self.qbs.checkwithstring(data)
         self.qbm.checkwithmitre(data)
         self.urs.checkwithurls(data)
+        self.qoc.checkwithocr(data)
+        collect()
+        logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):
             logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
             if Open == "yes":
                 self.openinbrowser(data["Location"]["html"])
+        
