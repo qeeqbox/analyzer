@@ -17,8 +17,17 @@ class LinuxELF:
         self.qbs = qbs
 
     @verbose(verbose_flag)
-    def getrelocations(self,elf):
-        _dict = []
+    def getrelocations(self,elf) -> list:
+        '''
+        get symbols locations
+
+        Args:
+            elf: elf object
+
+        Return:
+            list of symbols and their info 
+        '''
+        _list = []
         for section in elf.iter_sections():
             if isinstance(section, RelocationSection):
                 symboltable = elf.get_section(section['sh_link'])
@@ -27,55 +36,100 @@ class LinuxELF:
                     #address = hex(relocation['r_offset']) section['sh_flags']  section['sh_type']
                     #some have no names, need to check this out
                     if symbol.name != "":
-                        _dict.append({  "Section":section.name,
+                        _list.append({  "Section":section.name,
                                         "Name":symbol.name,
                                         "Description":""})
-        return _dict
+        return _list
 
     @verbose(verbose_flag)
-    def getsymbols(self,elf):
-        _dict = []
+    def getsymbols(self,elf) -> list:
+        '''
+        get symbols and types 
+
+        Args:
+            elf: elf object
+
+        Return:
+            list of symbols and their info 
+        '''
+        _list = []
         for section in elf.iter_sections():
             if not isinstance(section, SymbolTableSection):
                 continue
             for symbol in section.iter_symbols():
                 if len(symbol.name) > 0:
-                    _dict.append({  "Type":describe_symbol_type(symbol['st_info']['type']),
+                    _list.append({  "Type":describe_symbol_type(symbol['st_info']['type']),
                                     "Symbol":symbol.name,
                                     "Description":""})
-            return _dict
+            return _list
 
     @verbose(verbose_flag)
-    def getdynamic(self,elf):
-        _dict = []
+    def getdynamic(self,elf) -> list:
+        '''
+        get dynamic libraries 
+
+        Args:
+            elf: elf object
+
+        Return:
+            list of dynmaic libraries
+        '''
+        _list = []
         section = elf.get_section_by_name('.dynamic')
         if section != None:
             for tag in section.iter_tags():
                 if tag.entry.d_tag != "DT_NEEDED":
                     continue
-                _dict.append({  "Needed":tag.needed,
+                _list.append({  "Needed":tag.needed,
                                 "Description":""})
-        return _dict
+        return _list
 
     @verbose(verbose_flag)
-    def getiter(self,elf):
+    def getsection(self,elf) -> list:
+        '''
+        get all sections of elf 
+
+        Args:
+            elf: elf object
+
+        Return:
+            list of sections
+        '''
+        _list = []
+        for section in elf.iter_sections():
+            if section.name != "":
+                _list.append({  "Section":section.name,
+                                "MD5":md5(section.data()).hexdigest(),
+                                "Entropy":getentropy(section.data()),
+                                "Description":""})
+        return _list
+
+    @verbose(verbose_flag)
+    def getiter(self,elf) -> str:
+        '''
+        get run-time linker 
+
+        Args:
+            elf: elf object
+
+        Return:
+            run-time linker
+        '''
         for segment in elf.iter_segments():
             if segment['p_type'] == 'PT_INTERP':
                 return segment.get_interp_name()
 
     @verbose(verbose_flag)
-    def getsection(self,elf):
-        _dict = []
-        for section in elf.iter_sections():
-            if section.name != "":
-                _dict.append({  "Section":section.name,
-                                "MD5":md5(section.data()).hexdigest(),
-                                "Entropy":getentropy(section.data()),
-                                "Description":""})
-        return _dict
+    def checkelfsig(self,data) -> bool:
+        '''
+        check if mime is linux type 
 
-    @verbose(verbose_flag)
-    def checkelfsig(self,data):
+        Args:
+            data: data dict
+
+        Return:
+            True if elf
+        '''
         if  data["Details"]["Properties"]["mime"] == "application/x-pie-executable" or \
             data["Details"]["Properties"]["mime"] == "application/x-sharedlib" or \
             data["Details"]["Properties"]["mime"] == "application/x-executable":
@@ -84,6 +138,12 @@ class LinuxELF:
     @verbose(verbose_flag)
     @progressbar(True,"Analyzing elf file")
     def getelfdeatils(self,data):
+        '''
+        start analyzing elf logic, add description to strings and get words and wordsstripped from the file 
+
+        Args:
+            data: data dict
+        '''
         with open(data["Location"]["File"], 'rb') as f, open(data["Location"]["File"], 'rb') as ff:
             data["ELF"] = { "General":{},
                             "Sections":[],

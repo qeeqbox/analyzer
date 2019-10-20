@@ -15,6 +15,12 @@ class HtmlMaker:
     @verbose(verbose_flag)
     @progressbar(True,"Starting HtmlMaker")
     def __init__(self,qbimage):
+        '''
+        initialize class 
+
+        Args:
+            qbimage: is QBImage class, needed for generating similarity image
+        '''
         self.templates = path.abspath(path.join(path.dirname( __file__ ),'templates'))
         if not self.templates.endswith(path.sep): self.templates = self.templates+path.sep
         if not path.isdir(self.templates): mkdir(self.templates)
@@ -25,24 +31,53 @@ class HtmlMaker:
 
     @verbose(verbose_flag)
     def getmoudles(self):
+        '''
+        get all imported modules 
+        '''
         x = [x.split(".")[0] for x in modules.keys() if not x.startswith("_")]
         self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, PEiD, 7z, Cisco Umbrella, a lot of researches and awesome python packeges such as {} ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
-        return
 
     @verbose(verbose_flag)
-    def addtextarea(self):
+    def addtextarea(self) -> str:
+        '''
+        textarea tag
+
+        Return:
+            string contains textarea tag
+        '''
         return """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
 
     @verbose(verbose_flag)
     @progressbar(True,"Making yara table")
-    def makeyaratable(self,data):
+    def makeyaratable(self,data) -> str:
+        '''
+        add start generating yara html table 
+
+        Args:
+            data: data dict
+
+        Return
+            string that contains yara inside table
+        '''
         table = ""
         if len(data) > 0:
             table += self.makelisttableforyara(data,["Offset","Rule","String","Parsed","Condition"],None,True)
         return table
 
     @verbose(verbose_flag)
-    def makeimagetablebase64(self,data,header,exclude=None,textarea=None):
+    def makeimagetablebase64(self,data,header,exclude=None,textarea=None) -> str:
+        '''
+        render similarity image inside html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea 
+
+        Return
+            string that contains similarity image inside table
+        '''
         temp = """
         <div class="tablewrapper">
         <table>
@@ -63,7 +98,20 @@ class HtmlMaker:
         return result
 
     @verbose(verbose_flag)
-    def makealistsettablenew1(self,data,headers,exclude=None,textarea=None,_safe=None):
+    def makealistsettablenew1(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render list into html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea
+            is text safe or not to reneder
+
+        Return
+            string that contains list inside table
+        '''
         temp = """
         <div class="tablewrapper">
         <table>
@@ -98,7 +146,20 @@ class HtmlMaker:
         return result
 
     @verbose(verbose_flag)
-    def makealistsettablenew2(self,data,headers,exclude=None,textarea=None,_safe=None):
+    def makealistsettablenew2(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render dict into html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea
+            is text safe or not to reneder
+
+        Return
+            string that contains dict inside table
+        '''
         temp = """
         <div class="tablewrapper">
         <table>
@@ -132,7 +193,20 @@ class HtmlMaker:
         return result
 
     @verbose(verbose_flag)
-    def makealistsettablenew3(self,data,header,exclude=None,textarea=None,_safe=None):
+    def makealistsettablenew3(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render text into html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea
+            is text safe or not to reneder
+
+        Return
+            string that contains text inside table
+        '''
         temp = """
         <div class="tablewrapper">
         <table>
@@ -158,7 +232,19 @@ class HtmlMaker:
 
 
     @verbose(verbose_flag)
-    def makeworldimage(self,data,header,exclude=None,textarea=None):
+    def makeworldimage(self,data,header,exclude=None,textarea=None) -> str:
+        '''
+        render world image into html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea
+
+        Return
+            string that contains world image inside table
+        '''
         _data = []
         for _ in data:
             if _["Code"]:
@@ -211,7 +297,19 @@ class HtmlMaker:
         return result
 
     @verbose(verbose_flag)
-    def makexrefmapimage(self,data,header,exclude=None,textarea=None):
+    def makexrefmapimage(self,data,header,exclude=None,textarea=None) -> str:
+        '''
+        render xref image into html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea
+
+        Return
+            string that contains xref inside table
+        '''
         temp = """
         <div class="tablewrapper">
         <table>
@@ -313,7 +411,17 @@ class HtmlMaker:
 
     @verbose(verbose_flag)
     @progressbar(True,"Making file tables")
-    def maketable(self,data,_path):
+    def maketable(self,data,_path) -> str:
+        '''
+        making tables of dict data
+
+        Args:
+            data: data dict
+            _path of file for similatry image
+
+        Return
+            string that contains all tables
+        '''
         table = ""
         for x in data:
             for key in data[x]:
@@ -345,10 +453,16 @@ class HtmlMaker:
 
     @verbose(verbose_flag)
     def rendertemplate(self,data,header,footer):
+        '''
+        start making tables and save them into a html file
+
+        Args:
+            data: data dict
+            header not used
+            footer used for disclaimer
+        '''
         footer = 'QBAnalyzer∞ generated this report at {} on {} - {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),platform(),self.d)
         table = self.maketable(data,data["Location"]["File"])
         table = "\n".join([line.rstrip() for line in table.splitlines() if line.strip()])
         with open(self.template) as file_:
-            out = Template(file_.read()).render(title=data["Details"]["Properties"]["md5"],content=table,footer=footer)
-        with open(data["Location"]["html"],"w") as file_:
-            file_.write(out)
+            Template(file_.read()).stream(title=data["Details"]["Properties"]["md5"],content=table,footer=footer).dump(data["Location"]["html"])

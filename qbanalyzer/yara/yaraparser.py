@@ -10,6 +10,9 @@ class YaraParser:
     @verbose(verbose_flag)
     @progressbar(True,"Starting YaraParser")
     def __init__(self):
+        '''
+        initialize class and make rules folder, get all conditions from .yar
+        '''
         self.yarapath = path.abspath(path.join(path.dirname( __file__ ),'rules'))
         if not self.yarapath.endswith(path.sep): self.yarapath = self.yarapath+path.sep
         if not path.isdir(self.yarapath): mkdir(self.yarapath)
@@ -32,6 +35,13 @@ class YaraParser:
     @verbose(verbose_flag)
     @progressbar(True,"Checking with yara rules")
     def checkwithyara(self,data,check=""):
+        '''
+        check file with compiled yara detection and append results into list
+
+        Args:
+            data: data dict
+            check not used
+        '''
         data["Yara"] = {"Matches":[],
                         "_Matches":["Offset","Rule","Patteren","Parsed","Condition"]}
         matches = self.rules.match(data["Location"]["File"])
@@ -53,4 +63,3 @@ class YaraParser:
                                                         "Parsed":ppattern,
                                                         "Condition":self.yararulenamelist[match.rule]})
                     #_list.append({key:val})
-        return True

@@ -16,6 +16,12 @@ class QBMitresearch:
     @verbose(verbose_flag)
     @progressbar(True,"Starting QBMitresearch")
     def __init__(self,mitre):
+        '''
+        initialize class, make mitrefiles path
+
+        Args:
+            mitre: is MitreParser class, needed for hardcoded list
+        '''
         self.mitrepath = path.abspath(path.join(path.dirname( __file__ ),'mitrefiles'))
         if not self.mitrepath.endswith(path.sep): self.mitrepath = self.mitrepath+path.sep
         if not path.isdir(self.mitrepath): mkdir(self.mitrepath)
@@ -24,6 +30,13 @@ class QBMitresearch:
 
     @verbose(verbose_flag)
     def searchinmitreandreturn(self,s,attack):
+        '''
+        get attack info from fulldict
+
+        Args:
+            s: hardcoded fulldict attack-patterns
+            attack: attack id
+        '''
         for x in s:
             if "id" in x and "attack-pattern" in x["id"]:
                 if x['external_references'][0]['external_id'].lower() == attack:
@@ -33,6 +46,12 @@ class QBMitresearch:
     @progressbar(True,"Check with attack patterns")
     @verbose(verbose_flag)
     def checkmitresimilarity(self,data):
+        '''
+        check detections from parsediocs.json against wordsstripped, if yes bring attack info
+
+        Args:
+            data: data dict
+        '''
         _list = []
         f = loads(open(self.parsediocs).read())
         for attack in f:
@@ -56,6 +75,12 @@ class QBMitresearch:
     @progressbar(True,"Check with mitre artifacts")
     @verbose(verbose_flag)
     def checkmitre(self,data):
+        '''
+        check if words are tools or malware listed in mitre 
+
+        Args:
+            data: data dict
+        '''
         for word in self.words:
             _word = word.lower().decode("utf-8")
             toolrecords = self.mitre.findtool(_word)
@@ -75,14 +100,17 @@ class QBMitresearch:
     @progressbar(True,"Check with mitre")
     @verbose(verbose_flag)
     def checkwithmitre(self,data):
+        '''
+        start mitre analysis for words and wordsstripped
+
+        Args:
+            data: data dict
+        '''
         self.words = data["StringsRAW"]["words"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["MITRE"] = {"Binary":[],
                          "Attack":[],
                          "_Binary":["Word","Name","Description"],
                          "_Attack":["Id","Name","Detected","Description"]}
-        #engsorted = self.sortbylen(self.checkwithenglish()["English"])
-        #unksorted = self.sortbylen(self.checkwithenglish()["UnKnown"])
-        #b64 = self.checkbase64()
         self.checkmitre(data["MITRE"])
         self.checkmitresimilarity(data["MITRE"])

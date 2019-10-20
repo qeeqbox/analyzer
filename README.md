@@ -34,6 +34,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Similarity image
 - Yara module and yara rules included
 - JSON editable records 
+- URL/EMAIL/TEL/Tags extraction
 - Linux
     - ELF information
     - API functions descriptions
@@ -90,10 +91,17 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Meta info extraction
     - Hyper and target links extraction
     - Bin printable parser
+- RTF
+    - Number of objects
+    - Object extraction
+- EMAIL
+    - Header information
+    - Attachment extraction
 
 ### Roadmap
 - ~~Reduce file I/O~~ 
 - ~~PDF module~~
+- ~~RTF module~~
 - MS office module
 - Machine learning modules
 - Refactoring modules v2
@@ -117,10 +125,13 @@ resource, posix, numpy, itertools, macholib, calendar, difflib, math, encodings,
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
 - [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
+- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.html)
 - [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/GoziBankerISFB.exe.html)
 - [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/Downloader.pdf.html)
 - [PCAP-dump](https://bd249ce4.github.io/pages/dump.pcap.html)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/jsdropper.html)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.html)
+- [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
+- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
 
 ### Run it
 ```sh
@@ -335,6 +346,15 @@ Office info
 
 Office bin extraction 
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/officebinextract.png)
+
+RTF object
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/rtfnobjects.png)
+
+RTF object dump
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/rtfobjectdump.png)
+
+Email patterns
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/emailextract.png)
 
 Behavior APIs
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/behavior.png)

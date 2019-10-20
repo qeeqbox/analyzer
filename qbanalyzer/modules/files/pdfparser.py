@@ -16,7 +16,17 @@ class PDFParser:
         pass
 
     @verbose(verbose_flag)
-    def getobjects(self,pdf):
+    def getobjects(self,pdf) -> (str,list):
+        '''
+        get objects from pdf by regex
+
+        Args:
+            pdf: buffer
+
+        Return:
+            len of objects
+            list of objects
+        '''
         _List = []
         Object = compile(b'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj',DOTALL|MULTILINE)
         Objects = findall(Object,pdf)
@@ -25,8 +35,20 @@ class PDFParser:
         return len(Objects),_List
 
     @verbose(verbose_flag)
-    def getstreams(self,pdf,_Streams):
+    def getstreams(self,pdf) -> (str,list,list):
+        '''
+        get streams from pdf by regex
+
+        Args:
+            pdf: buffer
+
+        Return:
+            len of objects
+            list of objects
+            streams decoded into list
+        '''
         _List = []
+        _Streams = []
         Stream = compile(b'.*?FlateDecode.*?stream(.*?)endstream', DOTALL|MULTILINE)
         Streams = findall(Stream,pdf)
         for _ in Streams:
@@ -39,10 +61,20 @@ class PDFParser:
                 parseddecode = parsed.decode("utf-8")
                 _Streams.append(parsed)
             _List.append({"Stream":mime,"Parsed":parseddecode,"Value":x})
-        return len(Streams),_List
+        return len(Streams),_List,_Streams
 
     @verbose(verbose_flag)
-    def getjss(self,pdf):
+    def getjss(self,pdf) -> (str,list):
+        '''
+        get jss from pdf by regex
+
+        Args:
+            pdf: buffer
+
+        Return:
+            len of objects
+            list of objects
+        '''
         _List = []
         JS = compile(b'/JS([\S][^>]+)',DOTALL|MULTILINE)
         JSs = findall(JS,pdf)
@@ -51,7 +83,17 @@ class PDFParser:
         return len(JSs),_List
 
     @verbose(verbose_flag)
-    def getjavascripts(self,pdf):
+    def getjavascripts(self,pdf) -> (str,list):
+        '''
+        get java from pdf by regex
+
+        Args:
+            pdf: buffer
+
+        Return:
+            len of objects
+            list of objects
+        '''
         _List = []
         Javascript = compile(b'/JavaScript([\S][^>]+)',DOTALL|MULTILINE)
         Javascripts = findall(Javascript,pdf)
@@ -60,7 +102,17 @@ class PDFParser:
         return len(Javascripts),_List
 
     @verbose(verbose_flag)
-    def getopenactions(self,pdf):
+    def getopenactions(self,pdf) -> (str,list):
+        '''
+        get openactions from pdf by regex
+
+        Args:
+            pdf: buffer
+
+        Return:
+            len of objects
+            list of objects
+        '''
         _List = []
         OpenAction = compile(b'/OpenAction([\S][^>]+)',DOTALL|MULTILINE)
         OpenActions = findall(OpenAction,pdf)
@@ -69,13 +121,30 @@ class PDFParser:
         return len(OpenActions),_List
 
     @verbose(verbose_flag)
-    def checkpdfsig(self,data):
+    def checkpdfsig(self,data) -> bool:
+        '''
+        check if mime is pdf
+
+        Args:
+            data: data dict
+
+        Return:
+            true if pdf
+        '''
         if data["Details"]["Properties"]["mime"] == "application/pdf":
             return True
 
     @verbose(verbose_flag)
     @progressbar(True,"Analyze pdf file")
     def checkpdf(self,data):
+        '''
+        start analyzing pdf logic, get pdf objects, 
+        get words and wordsstripped from buffers if streams exist 
+        otherwise get words and wordsstripped from file
+
+        Args:
+            data: data dict
+        '''
         words = None
         wordsstripped = None
         _Streams = []
@@ -93,7 +162,7 @@ class PDFParser:
                          "_Stream":["Stream","Parsed","Value"]}
         f = open(data["Location"]["File"],"rb").read()
         objlen,objs = self.getobjects(f)
-        strlen,strs = self.getstreams(f,_Streams)
+        strlen,strs,_Streams = self.getstreams(f)
         jsslen,jss = self.getjss(f)
         javlen,javs = self.getjavascripts(f)
         opelen,opens = self.getopenactions(f)

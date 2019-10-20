@@ -5,7 +5,13 @@ from struct import pack,unpack
 from re import findall
 
 @verbose(verbose_flag)
-def getentropy(data):
+def getentropy(data) -> str:
+    '''
+    get entropy of buffer
+
+    Args:
+        data: buffer
+    '''
     entropy = 0
     if len(data) > 0:
         for x in range(0, 256):
@@ -17,15 +23,43 @@ def getentropy(data):
         return "None"
 
 @verbose(verbose_flag)
-def longtoip(ip):
-    return inet_ntoa(pack("!L", ip))
+def longtoip(decimal) -> str:
+    '''
+    decimal to ip
+
+    Args:
+        decimal: ip in decimal
+
+    Return:
+        regular ip
+    '''
+    return inet_ntoa(pack("!L", decimal))
 
 @verbose(verbose_flag)
-def iptolong(l):
-    return unpack("!L", inet_aton(l))[0]
+def iptolong(ip) -> int:
+    '''
+    ip to decimal
+
+    Args:
+        ip: regular ip
+
+    Return:
+        decimal ip
+    '''
+    return unpack("!L", inet_aton(ip))[0]
 
 @verbose(verbose_flag)
-def getwords(_path):
+def getwords(_path) -> (list,str):
+    '''
+    get all words of file
+
+    Args:
+        _path: path of file
+
+    Return:
+        list of all words in the file
+        buffer contains all the words separated by spaces
+    '''
     words = []
     wordsstripped = ""
     with open(_path,"rb") as f:
@@ -34,7 +68,17 @@ def getwords(_path):
     return words,wordsstripped
 
 @verbose(verbose_flag)
-def getwordsmultifiles(arr):
+def getwordsmultifiles(arr) -> (list,str):
+    '''
+    get all words of multi files
+
+    Args:
+        arr: dict contains Path keys
+
+    Return:
+        list of all words in the file
+        buffer contains all the words separated by spaces
+    '''
     words = []
     _templist = []
     wordsstripped = ""
@@ -54,7 +98,17 @@ def getwordsmultifiles(arr):
     return words,wordsstripped
 
 @verbose(verbose_flag)
-def getwordsmultifilesarray(arr):
+def getwordsmultifilesarray(arr) -> (list,str):
+    '''
+    get all words of buffers in an array
+
+    Args:
+        arr: list contains buffer
+
+    Return:
+        list of all words in the file
+        buffer contains all the words separated by spaces
+    '''
     words = []
     _templist = []
     wordsstripped = ""
