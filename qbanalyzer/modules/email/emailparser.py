@@ -52,7 +52,6 @@ class EmailParser():
         Return:
             True if message
         '''
-        print(data["Details"]["Properties"]["mime"])
         if "message" in data["Details"]["Properties"]["mime"] or \
             data["Location"]["Original"].endswith(".eml"):
             return True
