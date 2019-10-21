@@ -74,7 +74,7 @@ class StaticAnalyzer:
         Args:
             parsed: namespace contains parsed arguments
         '''
-        data = {}
+        data = {}        #if parsed.yara or parsed.full:
         if not self.fty.checkfilesig(data,parsed.file,parsed.output):
             return
         if self.pdf.checkpdfsig(data):
@@ -109,8 +109,8 @@ class StaticAnalyzer:
             self.rtf.checkrtf(data)
         else:
             self.fty.unknownfile(data)
-        #if parsed.yara or parsed.full:
-        #    self.yar.checkwithyara(data,None)
+        if parsed.yara or parsed.full:
+            self.yar.checkwithyara(data,None)
         if parsed.string or parsed.full:
             self.qbs.checkwithstring(data)
         if parsed.topurl or parsed.full:
