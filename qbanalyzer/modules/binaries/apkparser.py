@@ -186,7 +186,7 @@ class ApkParser:
     @verbose(verbose_flag)
     def checkapksig(self,data) -> bool:
         '''
-        check mime is an apk type or check if file contains Androidmanifest in packed files
+        check if mime is an apk type or if file contains Androidmanifest in packed files
 
         Args:
             data: data dict

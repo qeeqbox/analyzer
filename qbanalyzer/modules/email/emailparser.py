@@ -83,4 +83,4 @@ class EmailParser():
 
         data["EMAIL"]["Attachments"],Streams = self.getattachment(message)
         if len(Streams) > 0:
-            getwordsmultifilesarray(Streams)
+            getwordsmultifilesarray(data,Streams)
