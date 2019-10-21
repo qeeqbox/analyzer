@@ -1,4 +1,6 @@
 [{
+  "Partof":"bd249ce4/QBAnalyzer"
+},{
   "Name": "Detect file change",
   "Type": "QREGEX",
   "Options": {

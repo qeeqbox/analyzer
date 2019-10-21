@@ -1,4 +1,7 @@
 [{
+  "Partof":"bd249ce4/QBAnalyzer"
+},
+  {
   "Name": "DLL injection",
   "Type": "QREGEX",
   "Options": {
