@@ -201,7 +201,7 @@ class Macho:
             data["Location"]["Original"].endswith(".dmg"):
             x = dmgunpack(data["Location"]["File"])
             if x: 
-                if checkpackedfiles(x,[b"Info.plist"]):
+                if checkpackedfiles(x,["Info.plist"]):
                     unpackfile(data,x)
                     return True
 
@@ -240,9 +240,7 @@ class Macho:
                 data[k] = { "Shell":"",
                             "_Shell":""}
                 data[k]["Shell"] = open(v["Path"],"r").read()
-        words,wordsstripped = getwordsmultifiles(data["Packed"]["Files"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwordsmultifiles(data,data["Packed"]["Files"])
                 
     @verbose(verbose_flag)
     @progressbar(True,"Analzying MACHO file")
@@ -289,6 +287,4 @@ class Macho:
         data["MACHO"]["External Symbols"] = extdefsymbols
         data["MACHO"]["Local Symbols"] = localsymbols
         self.qbs.adddescription("ManHelp",data["MACHO"]["Symbols"],"Symbol")
-        words,wordsstripped = getwords(data["Location"]["File"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwords(data,data["Location"]["File"])

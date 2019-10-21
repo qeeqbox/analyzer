@@ -49,35 +49,28 @@ def iptolong(ip) -> int:
     return unpack("!L", inet_aton(ip))[0]
 
 @verbose(verbose_flag)
-def getwords(_path) -> (list,str):
+def getwords(data,_path) -> (list,str):
     '''
     get all words of file
 
     Args:
         _path: path of file
 
-    Return:
-        list of all words in the file
-        buffer contains all the words separated by spaces
     '''
     words = []
     wordsstripped = ""
-    with open(_path,"rb") as f:
-        words = findall(b"[\x20-\x7e]{4,}",f.read())
-        wordsstripped = ' '.join([x.lower().decode('utf-8') for x in words])
-    return words,wordsstripped
+    words = findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][_path])
+    wordsstripped = ' '.join([x.lower().decode('utf-8') for x in words])
+    data["StringsRAW"] = {  "words": words,
+                            "wordsstripped": wordsstripped }
 
 @verbose(verbose_flag)
-def getwordsmultifiles(arr) -> (list,str):
+def getwordsmultifiles(data,arr) -> (list,str):
     '''
     get all words of multi files
 
     Args:
         arr: dict contains Path keys
-
-    Return:
-        list of all words in the file
-        buffer contains all the words separated by spaces
     '''
     words = []
     _templist = []
@@ -85,8 +78,7 @@ def getwordsmultifiles(arr) -> (list,str):
     for x in arr:
         #if x["Path"].endswith(".xml"):
         try:
-            with open(x["Path"],"rb") as f:
-                words.extend(findall(b"[\x20-\x7e]{4,}",f.read()))
+            words.extend(findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][x["Path"]]))
         except:
             pass
     for x in words:
@@ -95,19 +87,16 @@ def getwordsmultifiles(arr) -> (list,str):
         except:
             pass
     wordsstripped = ' '.join(_templist)
-    return words,wordsstripped
+    data["StringsRAW"] = {  "words": words,
+                            "wordsstripped": wordsstripped}
 
 @verbose(verbose_flag)
-def getwordsmultifilesarray(arr) -> (list,str):
+def getwordsmultifilesarray(data,arr) -> (list,str):
     '''
     get all words of buffers in an array
 
     Args:
         arr: list contains buffer
-
-    Return:
-        list of all words in the file
-        buffer contains all the words separated by spaces
     '''
     words = []
     _templist = []
@@ -124,4 +113,5 @@ def getwordsmultifilesarray(arr) -> (list,str):
         except:
             pass
     wordsstripped = ' '.join(_templist)
-    return words,wordsstripped
+    data["StringsRAW"] = {  "words": words,
+                            "wordsstripped": wordsstripped }

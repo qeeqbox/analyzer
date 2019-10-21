@@ -5,6 +5,7 @@ from ..mics.qprogressbar import progressbar
 from re import findall
 from PIL import Image
 from pytesseract import image_to_string
+from io import BytesIO
 
 #this module need some optimization
 
@@ -17,7 +18,7 @@ class QBOCRDetect:
         pass
 
     @verbose(verbose_flag)
-    def mixandsetupfileocr(self,paths):
+    def mixandsetupfileocr(self,data,paths):
         '''
         loop paths, convert each image to RGBA, and read text from image
 
@@ -27,7 +28,7 @@ class QBOCRDetect:
         for x in paths:
             #if x["Path"].endswith(".png") no need < lazy try and except
             try:
-                image = Image.open(x["Path"])
+                image = Image.open(BytesIO(data["FilesDumps"][x["Path"]]))
                 image = image.convert("RGBA")
                 text = image_to_string(image,config='--psm 6')
                 words = findall("[\x20-\x7e]{4,}",text)
@@ -64,7 +65,7 @@ class QBOCRDetect:
                         "_OCR":["Word","File"]}
         try:
             if len(data["Packed"]["Files"]) > 0:
-                self.mixandsetupfileocr(data["Packed"]["Files"])
+                self.mixandsetupfileocr(data,data["Packed"]["Files"])
                 self.checkocrtext(data["OCR"]["OCR"],self.words)           
         except:
             pass

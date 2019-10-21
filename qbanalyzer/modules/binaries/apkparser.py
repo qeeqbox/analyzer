@@ -160,7 +160,7 @@ class ApkParser:
             return nodes[0].getAttribute("package")
 
     @verbose(verbose_flag)
-    def readpermissions(self,_path) -> list:
+    def readpermissions(self,data,_path) -> list:
         '''
         read apk permission by regex..
 
@@ -171,15 +171,15 @@ class ApkParser:
             List of parsed permissions 
         '''
         _list = []
-        with open(_path,"rb") as f:
-            text = sub(b'[^\x20-\x7e]{2,}', b' ', f.read())
-            text = sub(b'[^\x20-\x7e]{1,}', b'', text)
-            text = sub(b'[^\w\. ]', b'', text)
-            words = text.decode("utf-8").split(" ")
-            if words:
-                for x in words:
-                    if "permission." in x:
-                        _list.append({"Permission":x,"Description":""})
+        f = data["FilesDumps"][_path]
+        text = sub(b'[^\x20-\x7e]{2,}', b' ', f)
+        text = sub(b'[^\x20-\x7e]{1,}', b'', text)
+        text = sub(b'[^\w\. ]', b'', text)
+        words = text.decode("utf-8").split(" ")
+        if words:
+            for x in words:
+                if "permission." in x:
+                    _list.append({"Permission":x,"Description":""})
         return _list
 
 
@@ -217,7 +217,7 @@ class ApkParser:
         for i, v in enumerate(data["Packed"]["Files"]):
             if v["Name"].lower() == "androidmanifest.xml":
                 #self.readpepackage(v["Path"])
-                Permissions = self.readpermissions(v["Path"])
+                Permissions = self.readpermissions(data,v["Path"])
                 data["APK"]["Permissions"] = Permissions
             if "classes" in v["Name"].lower() and v["Name"].lower().endswith(".dex"):
                 r2p = r2open(v["Path"],flags=['-2'])
@@ -245,6 +245,4 @@ class ApkParser:
                 data[k]["Bigfunctions"] = Bigfunctions
                 data[k]["Suspicious"] = Suspicious
         self.qbs.adddescription("AndroidPermissions",data["APK"]["Permissions"],"Permission")
-        words,wordsstripped = getwordsmultifiles(data["Packed"]["Files"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwordsmultifiles(data,data["Packed"]["Files"])

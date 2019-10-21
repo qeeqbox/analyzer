@@ -18,10 +18,20 @@ class QBAnalyzer(Cmd):
 
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
-    _analyze_parsergroup= _analyze_parser.add_argument_group('required arguments')
-    _analyze_parsergroup.add_argument('--file', help="path of file/dump", required=True)
-    _analyze_parsergroup.add_argument('--output', help="path of output folder", required=True)
-    _analyze_parsergroup.add_argument('--open', help="open the report in webbroswer", required=True)
+    _analyze_parsergroupreq= _analyze_parser.add_argument_group('required arguments')
+    _analyze_parsergroupreq.add_argument('--file', help="path of file/dump", required=True)
+    _analyze_parsergroupreq.add_argument('--output', help="path of output folder", required=True)
+    _analyze_parsergroupdef= _analyze_parser.add_argument_group('default arguments')
+    _analyze_parsergroupdef.add_argument('--intel',action='store_true', help="check with generic detections", required=False)
+    _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
+    _analyze_parsergroupdef.add_argument('--yara',action='store_true', help="analyze with yara module (Disable this for big files)", required=False)
+    _analyze_parsergroupdef.add_argument('--string',action='store_true', help="analyze strings", required=False)
+    _analyze_parsergroupdef.add_argument('--mitre',action='store_true', help="map strings to mitre", required=False)
+    _analyze_parsergroupdef.add_argument('--topurl',action='store_true', help="get urls and check them against top 10000", required=False)
+    _analyze_parsergroupdef.add_argument('--ocr',action='store_true', help="get all ocr text", required=False)
+    _analyze_parsergroupdef.add_argument('--json',action='store_true', help="make json record", required=False)
+    _analyze_parsergroupdef.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
+    _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
 
     def __init__(self):
         super(QBAnalyzer, self).__init__()
@@ -39,7 +49,7 @@ class QBAnalyzer(Cmd):
         if not path.exists(parsed.file) or not path.isdir(parsed.output):
             logstring("File/dump or folder is wrong..","Red")
         else:
-            self.san.analyze(parsed.file,parsed.output,parsed.open)
+            self.san.analyze(parsed)
 
     def do_exit(self, line):
         exit()

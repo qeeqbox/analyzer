@@ -18,19 +18,18 @@ class RTFParser:
         pass
 
     @verbose(verbose_flag)
-    def getobjects(self,data) -> (list,list):
+    def getobjects(self,data,buffer) -> (list,list):
         '''
         get objects from rtf by regex
 
         Args:
-            data: data dict
+            data: not used
 
         Return:
             list of objects
             list of parsed objects
         '''
         x = compile(rb'\\objdata\b',DOTALL|MULTILINE)
-        buffer = open(data["Location"]["File"],"rb").read()
         _List = []
         _Listobjects = []
         for _ in finditer(x,buffer):
@@ -76,14 +75,11 @@ class RTFParser:
         Args:
             data: data dict
         '''
-        words = None
-        wordsstripped = None
         data["RTF"] ={"General":{},
                          "Objects":[],
                          "_General":{},
                          "_Objects":["Len","Parsed"]}
-        data["RTF"]["Objects"],objects = self.getobjects(data)
+        f = data["FilesDumps"][data["Location"]["File"]]
+        data["RTF"]["Objects"],objects = self.getobjects(data,f)
         data["RTF"]["General"] = {"Objects":len(objects)}
-        words,wordsstripped = getwordsmultifilesarray(objects)
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwordsmultifilesarray(data,objects)

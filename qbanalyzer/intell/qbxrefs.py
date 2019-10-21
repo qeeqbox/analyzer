@@ -51,7 +51,6 @@ class QBXrefs:
         data["XREFS"] = { "GRAPH":{"nodes":[],"links":[]},
                           "TEXT":[],
                          "_TEXT":["From","To"]}
-
         r2p = r2open(data["Location"]["File"],flags=['-2'])
         r2p.cmd("e anal.timeout = 10")
         r2p.cmd("aaaa")

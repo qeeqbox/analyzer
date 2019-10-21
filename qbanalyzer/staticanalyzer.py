@@ -67,34 +67,36 @@ class StaticAnalyzer:
         open_new_tab(_path)
 
     @verbose(verbose_flag)
-    def analyze(self,_path,outputfolder,Open="no"):
+    def analyze(self,parsed):
         '''
         main analyze logic!
 
         Args:
-            _path: path of target file output 
-            folder: folder where output going to be save 
-            Open the file in browser or not
+            parsed: namespace contains parsed arguments
         '''
         data = {}
-        if not self.fty.checkfilesig(data,_path,outputfolder):
+        if not self.fty.checkfilesig(data,parsed.file,parsed.output):
             return
         if self.pdf.checkpdfsig(data):
             self.pdf.checkpdf(data)
         elif self.wpe.checkpesig(data):
             self.wpe.getpedeatils(data)
-            self.qbt.checkwithqbintell(data,"winapi.json")
-            self.qbx.makexref(data)
+            if parsed.intel or parsed.full:
+                self.qbt.checkwithqbintell(data,"winapi.json")
+            if parsed.xref or parsed.full:
+                self.qbx.makexref(data)
         elif self.elf.checkelfsig(data):
             self.elf.getelfdeatils(data)
-            self.qbx.makexref(data)
+            if parsed.xref or parsed.full:
+                self.qbx.makexref(data)
         elif self.mac.checkmacsig(data):
             self.mac.getmachodeatils(data)
         elif self.mac.checkdmgsig(data):
             self.mac.getdmgdeatils(data)
         elif self.apk.checkapksig(data):
             self.apk.analyzeapk(data)
-            self.qbt.checkwithqbintell(data,"android.json")
+            if parsed.intel or parsed.full:
+                self.qbt.checkwithqbintell(data,"android.json")
         elif self.bbl.checkbbsig(data):
             self.bbl.getbbdeatils(data)
         elif self.epa.checkemailsig(data):
@@ -107,16 +109,21 @@ class StaticAnalyzer:
             self.rtf.checkrtf(data)
         else:
             self.fty.unknownfile(data)
-        self.yar.checkwithyara(data,None)
-        self.qbs.checkwithstring(data)
-        self.qbm.checkwithmitre(data)
-        self.urs.checkwithurls(data)
-        self.qoc.checkwithocr(data)
-        collect()
+        #if parsed.yara or parsed.full:
+        #    self.yar.checkwithyara(data,None)
+        if parsed.string or parsed.full:
+            self.qbs.checkwithstring(data)
+        if parsed.topurl or parsed.full:
+            self.urs.checkwithurls(data)
+        if parsed.ocr or parsed.full:
+            self.qoc.checkwithocr(data)
+        if parsed.mitre or parsed.full:
+            self.qbm.checkwithmitre(data)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):
             logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
-            if Open == "yes":
-                self.openinbrowser(data["Location"]["html"])
-        
+            self.openinbrowser(data["Location"]["html"])
+        #d = self.convert(data)
+        #with open(data["Location"]["json"], 'w') as fp:
+        #    dump(d, fp)

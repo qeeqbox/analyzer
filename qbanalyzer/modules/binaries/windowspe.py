@@ -320,6 +320,4 @@ class WindowsPe:
         self.qbs.adddescription("WinDlls",data["PE"]["Dlls"],"Dll")
         self.qbs.adddescription("WinSections",data["PE"]["Sections"],"Section")
         self.qbs.adddescription("WinResources",data["PE"]["Resources"],"Resource")
-        words,wordsstripped = getwords(data["Location"]["File"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwords(data,data["Location"]["File"])

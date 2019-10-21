@@ -9,6 +9,7 @@ from base64 import b64decode,b64encode
 from nltk.tokenize import word_tokenize
 from sqlite3 import connect
 from os import mkdir, path
+from binascii import unhexlify
 
 #this module need some optimization
 
@@ -191,6 +192,25 @@ class QBStrings:
             _data.append({"Count":_List.count(x),"TAG":x})
 
     @verbose(verbose_flag)
+    @progressbar(True,"Check Hex")
+    def checkhex(self,_data):
+        '''
+        check if buffer contains tags <>
+
+        Args:
+            _data: data dict
+        '''
+        _List = []
+        _hex = compile('([0-9a-fA-F]{4,})',I)
+        x = findall(_hex,self.wordsstripped)
+        if len(x) > 0:
+            for _ in x:
+                _List.append(_)
+        for x in set(_List):
+            parsed = unhexlify(x)
+            _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed})
+
+    @verbose(verbose_flag)
     @progressbar(True,"Added descriptions to strings")
     def adddescription(self,_type,data,keyword):
         '''
@@ -295,6 +315,7 @@ class QBStrings:
                              "TAGS":[],
                              "BASE64s":[],
                              "Suspicious":[],
+                             "HEX":[],
                              "_English":["Count","Buffer"],
                              "_UnKnown":["Count","Buffer"],
                              "_Suspicious":["Count","Buffer"],
@@ -304,7 +325,8 @@ class QBStrings:
                              "_BASE64s":["Count","Base64","Decoded"],
                              "_EMAILS":["Count","EMAIL","Description"],
                              "_TELS":["Count","TEL","Description"],
-                             "_TAGS":["Count","TAG","Description"]}
+                             "_TAGS":["Count","TAG","Description"],
+                             "_HEX":["Count","HEX","Parsed"]}
         #engsorted = self.sortbylen(self.checkwithenglish()["English"])
         #unksorted = self.sortbylen(self.checkwithenglish()["UnKnown"])
         #b64 = self.checkbase64()
@@ -313,6 +335,7 @@ class QBStrings:
         self.checkip(data["Strings"]["IPS"])
         self.checkemail(data["Strings"]["EMAILS"])
         self.checktags(data["Strings"]["TAGS"])
+        self.checkhex(data["Strings"]["HEX"])
         self.checkbase64(data["Strings"]["BASE64s"])
         #self.checkphonenumber(data["Strings"]["TELS"])
         self.adddescription("DNS",data["Strings"]["IPS"],"IP")
