@@ -50,7 +50,7 @@ def verbose(OnOff=False):
                 if x:
                     return x
             except Exception:
-                print(format_exc())
+                #print(format_exc())
                 logstring("{} failed..".format(func.__name__),"Red")
                 return None
         return wrapper
