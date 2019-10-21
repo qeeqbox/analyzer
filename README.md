@@ -140,6 +140,27 @@ cd QBAnalyzer
 chmod +x install.sh
 ./install.sh
 python3 -m qbanalyzer.cli
+
+(Cmd) help analyze
+usage: analyze [-h] --file FILE --output OUTPUT [--intel] [--xref] [--yara]
+               [--string] [--mitre] [--topurl] [--ocr] [--json] [--open]
+               [--full]
+
+required arguments:
+  --file FILE      path of file/dump
+  --output OUTPUT  path of output folder
+
+default arguments:
+  --intel          check with generic detections
+  --xref           get symb cross references
+  --yara           analyze with yara module (Disable this for big files)
+  --string         analyze strings
+  --mitre          map strings to mitre
+  --topurl         get urls and check them against top 10000
+  --ocr            get all ocr text
+  --json           make json record
+  --open           open the report in webbroswer
+  --full           analyze using all modules
 ```
 
 ### Run it with docker
