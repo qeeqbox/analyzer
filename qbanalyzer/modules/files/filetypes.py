@@ -26,6 +26,7 @@ def checkpackedfiles(_path,files) -> bool:
         detect = 0
         p = Popen(["7z", "l", _path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
+        output = output.decode("utf-8")
         for _ in files:
             if _.lower() in output.lower():
                 detect += 1
@@ -75,9 +76,9 @@ def unpackfile(data,_path):
                 _md5 = md5(f).hexdigest()
                 mime = from_file(path.join(currentpath, file),mime=True)
                 data["Packed"]["Files"].append({"Name":file,"Type":mime,"Path":path.join(currentpath, file),"md5":_md5})
+                data["FilesDumps"].update({path.join(currentpath, file):f})
     except:
         pass
-
 
 class FileTypes:
     @progressbar(True,"Starting FileTypes")
@@ -114,6 +115,7 @@ class FileTypes:
                             "html":self.malwarefarm+md5+path.sep+"html",
                             "json":self.malwarefarm+md5+path.sep+"json",
                             "Folder":self.malwarefarm+md5+path.sep+"temp_unpacked"}
+        data["FilesDumps"] = {self.malwarefarm+md5+path.sep+"temp":open(_path,"rb").read()}
 
     @verbose(verbose_flag)
     def getdetailes(self,data,_path):
@@ -159,13 +161,9 @@ class FileTypes:
             data["Details"]["Properties"]["mime"] == "application/zip" or \
             data["Details"]["Properties"]["mime"] == "application/zlib":
             unpackfile(data,data["Location"]["File"])
-            words,wordsstripped = getwordsmultifiles(data["Packed"]["Files"])
-            data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}
+            getwordsmultifiles(data,data["Packed"]["Files"])
         else:
-            words,wordsstripped = getwords(data["Location"]["File"])
-            data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}    
+            getwords(data,data["Location"]["File"])
 
     @verbose(verbose_flag)
     def checkfilesig(self,data,_path,folder) -> bool:

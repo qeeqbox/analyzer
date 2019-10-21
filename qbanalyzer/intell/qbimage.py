@@ -28,8 +28,8 @@ class QBImage:
 
     @verbose(verbose_flag)
     @progressbar(True,"Making a visualized image")
-    def createimage(self,_path,_c,_s) -> str:
-        x = [c for c in open(_path,"rb").read()]
+    def createimage(self,_buffer,_c,_s) -> str:
+        x = [c for c in _buffer]
         _list = list(self.chunk(x,_c))
         out = list(self.chunk([int(self.average(l)) for l in _list],int(_s)))
         _x = 10

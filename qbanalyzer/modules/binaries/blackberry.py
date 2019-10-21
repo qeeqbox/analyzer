@@ -134,6 +134,4 @@ class BBParser:
             _data["COD"]["Resources"] = _temp
             file.seek(0)
             _data["COD"]["Symbols"] = self.getfunctionsold(file.read())
-            words,wordsstripped = getwords(_data["Location"]["File"])
-            _data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}
+            getwords(data,_data["Location"]["File"])

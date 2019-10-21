@@ -113,19 +113,13 @@ class Officex:
         Args:
             data: data dict
         '''
-        words = None
-        wordsstripped = None
         data["Office"] ={"General":{},
                          "Hyper":[],
                          "Other":[],
                          "_General":{},
                          "_Hyper":["Count","Link"],
                          "_Other":["Count","Link"]}
-        
         data["Office"]["General"] = self.officemetainfo(data)
         data["Office"].update(self.officeanalysis(data))
         self.officereadbin(data)
-
-        words,wordsstripped = getwordsmultifiles(data["Packed"]["Files"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwordsmultifiles(data,data["Packed"]["Files"])

@@ -211,6 +211,4 @@ class ReadPackets:
         self.qbs.adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
         self.qbs.adddescription("Ports",data["PCAP"]["PORTS"],"Port")
         self.qbs.adddescription("IPs",data["PCAP"]["IPS"],"IP")
-        words,wordsstripped = getwords(data["Location"]["File"])
-        data["StringsRAW"] = {"words":words,
-                              "wordsstripped":wordsstripped}
+        getwords(data["Location"]["File"])

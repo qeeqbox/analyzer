@@ -3,7 +3,7 @@ __G__ = "(G)bd249ce4"
 from ...logger.logger import logstring,verbose,verbose_flag
 from ...mics.qprogressbar import progressbar
 from ...mics.funcs import getwordsmultifilesarray
-from email import message_from_file
+from email import message_from_bytes
 from hashlib import md5
 
 class EmailParser():
@@ -69,7 +69,8 @@ class EmailParser():
                          "_General": {},
                          "Attachments": [],
                          "_Attachments": ["Name", "md5", "Sig", "Parsed"]}
-        message = message_from_file(open(data["Location"]["File"]))
+        f = data["FilesDumps"][data["Location"]["File"]]
+        message = message_from_bytes(f)        
         data["EMAIL"]["General"] = {"From": message['From'],
                                     "To": message['To'],
                                     "Subject": message['Subject'],
@@ -82,6 +83,4 @@ class EmailParser():
 
         data["EMAIL"]["Attachments"],Streams = self.getattachment(message)
         if len(Streams) > 0:
-            words, wordsstripped = getwordsmultifilesarray(Streams)
-        data["StringsRAW"] = {"words": words,
-                              "wordsstripped": wordsstripped}
+            getwordsmultifilesarray(data,Streams)

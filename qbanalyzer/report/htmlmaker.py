@@ -417,7 +417,6 @@ class HtmlMaker:
 
         Args:
             data: data dict
-            _path of file for similatry image
 
         Return
             string that contains all tables
@@ -448,7 +447,7 @@ class HtmlMaker:
                 except:
                     pass
 
-        table += self.makeimagetablebase64(self.qbi.createimage(_path,"16","100"),"Image",None,True)
+        table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,True)
         return table
 
     @verbose(verbose_flag)

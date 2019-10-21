@@ -145,8 +145,6 @@ class PDFParser:
         Args:
             data: data dict
         '''
-        words = None
-        wordsstripped = None
         _Streams = []
         data["PDF"] = {  "Count":{},
                          "Object":[],
@@ -160,7 +158,7 @@ class PDFParser:
                          "_JS":["Key","Value"],
                          "_OpenAction":["Key","Value"],
                          "_Stream":["Stream","Parsed","Value"]}
-        f = open(data["Location"]["File"],"rb").read()
+        f = data["FilesDumps"][data["Location"]["File"]]
         objlen,objs = self.getobjects(f)
         strlen,strs,_Streams = self.getstreams(f)
         jsslen,jss = self.getjss(f)
@@ -177,11 +175,6 @@ class PDFParser:
         data["PDF"]["OpenAction"] = opens
         data["PDF"]["Stream"] = strs
         if len(_Streams) > 0:
-            words,wordsstripped = getwordsmultifilesarray(_Streams)
-            data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}
-            
+            getwordsmultifilesarray(data,_Streams)
         else:
-            words,wordsstripped = getwords(_Streams)
-            data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}
+            getwords(data,_Streams)
