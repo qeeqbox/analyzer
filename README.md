@@ -194,7 +194,7 @@ Successfully tagged qbanalyzer:latest
 2019-10-12 02:16:00,876 ✓ Starting QBXrefs
 2019-10-12 02:16:00,978 ✓ Starting QBOCRDetect
 2019-10-12 02:16:01,079 ✓ Starting URLSimilarity
-(Cmd) analyze --file /localmalwarefolder/mal --output /localfolder/ --open yes
+(Cmd) analyze --file /localmalwarefolder/mal --output /localfolder/ --full
 2019-10-06 21:33:38,915 ! getdebug failed..
 2019-10-06 21:33:38,935 ✓ Added descriptions to strings
 2019-10-06 21:33:39,637 ✓ Added descriptions to strings
