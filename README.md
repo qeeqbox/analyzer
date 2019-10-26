@@ -35,6 +35,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Yara module and yara rules included
 - JSON editable records 
 - URL/EMAIL/TEL/Tags extraction
+- Encryption patterns detection
 - Linux
     - ELF information
     - API functions descriptions
@@ -99,9 +100,10 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Attachment extraction
 
 ### Roadmap
-- ~~Reduce file I/O~~ Re-opned
+- ~~Reduce file I/O~~
 - ~~PDF module~~
 - ~~RTF module~~
+- Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects
 - MS office module
 - Machine learning modules
 - Refactoring modules v2
@@ -140,6 +142,27 @@ cd QBAnalyzer
 chmod +x install.sh
 ./install.sh
 python3 -m qbanalyzer.cli
+
+(Cmd) help analyze
+usage: analyze [-h] --file FILE --output OUTPUT [--intel] [--xref] [--yara]
+               [--string] [--mitre] [--topurl] [--ocr] [--json] [--open]
+               [--full]
+
+required arguments:
+  --file FILE      path of file/dump
+  --output OUTPUT  path of output folder
+
+default arguments:
+  --intel          check with generic detections
+  --xref           get symb cross references
+  --yara           analyze with yara module (Disable this for big files)
+  --string         analyze strings
+  --mitre          map strings to mitre
+  --topurl         get urls and check them against top 10000
+  --ocr            get all ocr text
+  --json           make json record
+  --open           open the report in webbroswer
+  --full           analyze using all modules
 ```
 
 ### Run it with docker
@@ -194,7 +217,7 @@ Successfully tagged qbanalyzer:latest
 2019-10-12 02:16:00,876 ✓ Starting QBXrefs
 2019-10-12 02:16:00,978 ✓ Starting QBOCRDetect
 2019-10-12 02:16:01,079 ✓ Starting URLSimilarity
-(Cmd) analyze --file /localmalwarefolder/mal --output /localfolder/ --open yes
+(Cmd) analyze --file /localmalwarefolder/mal --output /localfolder/ --full
 2019-10-06 21:33:38,915 ! getdebug failed..
 2019-10-06 21:33:38,935 ✓ Added descriptions to strings
 2019-10-06 21:33:39,637 ✓ Added descriptions to strings
