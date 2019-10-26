@@ -12,8 +12,6 @@ from ast import literal_eval
 #added a little hack for handling errors 
 #(check returns 0 because of error and flags=['-2'])
 #Similar to objdump, still needs to optimize
-
-verbose_flag = False
   
 class QBXrefs:
     @progressbar(True,"Starting QBXrefs")

@@ -8,8 +8,6 @@ from binascii import hexlify
 from scapy.layers import http
 from datetime import datetime
 
-verbose_flag = False
-
 class ReadPackets:
     @verbose(verbose_flag)
     @progressbar(True,"Starting ReadPackets")

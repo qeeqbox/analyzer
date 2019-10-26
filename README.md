@@ -35,6 +35,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Yara module and yara rules included
 - JSON editable records 
 - URL/EMAIL/TEL/Tags extraction
+- Encryption patterns (base64, md5, sha1..) detection
 - Linux
     - ELF information
     - API functions descriptions
@@ -99,9 +100,10 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Attachment extraction
 
 ### Roadmap
-- ~~Reduce file I/O~~ Re-opned
+- ~~Reduce file I/O~~
 - ~~PDF module~~
 - ~~RTF module~~
+- Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects
 - MS office module
 - Machine learning modules
 - Refactoring modules v2

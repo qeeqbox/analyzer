@@ -21,6 +21,7 @@ from .intell.qbimage import QBImage
 from .intell.qbintell import QBIntell
 from .intell.qbxrefs import QBXrefs
 from .intell.qbocrdetect import QBOCRDetect
+from .intell.qbencryption import QBEncryption
 from .modules.network.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
 from .mitre.mitreparser import MitreParser
@@ -59,6 +60,7 @@ class StaticAnalyzer:
         self.pdf = PDFParser()
         self.ofx = Officex()
         self.rtf = RTFParser()
+        self.qbe = QBEncryption()
 
     def openinbrowser(self,_path):
         '''
@@ -119,6 +121,8 @@ class StaticAnalyzer:
             self.qoc.checkwithocr(data)
         if parsed.mitre or parsed.full:
             self.qbm.checkwithmitre(data)
+        if parsed.enc or parsed.full:
+            self.qbe.checkencryption(data)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):

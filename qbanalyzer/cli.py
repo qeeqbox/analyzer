@@ -31,6 +31,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--ocr',action='store_true', help="get all ocr text", required=False)
     _analyze_parsergroupdef.add_argument('--json',action='store_true', help="make json record", required=False)
     _analyze_parsergroupdef.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
+    _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="open the report in webbroswer", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
 
     def __init__(self):
