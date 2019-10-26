@@ -1,6 +1,12 @@
 {
+  "Partof": "bd249ce4/QBAnalyzer - Still beta",
   "t1002": [
-    "zip -r"
+    "zip ",
+    "Compress-Archive",
+    "-Recurse",
+    "rar ",
+    "gzip ",
+    "tar "
   ],
   "t1003": [
     "ProgramData\\Mail\\MailAg",
@@ -10,7 +16,7 @@
     "procdump",
     "/proc//maps",
     "sekurlsa::Minidumplsassdump.dmp",
-    "reg save"
+    "procdump "
   ],
   "t1004": [
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
@@ -21,12 +27,23 @@
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell",
     "Software[Wow6432Node]Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
   ],
+  "t1005": [
+    "grep "
+  ],
   "t1007": [
     "sc query",
     "tasklist",
     "net start",
-    "net start",
-    "tasklist /svc"
+    "sc start",
+    "sc stop",
+    "wmic service",
+    "net.exe start"
+  ],
+  "t1009": [
+    "dd "
+  ],
+  "t1010": [
+    "csc.exe "
   ],
   "t1012": [
     "regkeyenum",
@@ -48,6 +65,11 @@
     "\\Windows\\System32",
     "SYSTEM\\CurrentControlSet\\Control\\Print\\Monitors"
   ],
+  "t1014": [
+    "modprobe",
+    "insmod",
+    "puppetstrings"
+  ],
   "t1015": [
     "\\Windows\\System32\\utilman.exe",
     "\\Windows\\System32\\osk.exe",
@@ -60,14 +82,12 @@
     "%systemdir%"
   ],
   "t1016": [
-    "route PRINT",
     "arp -a",
     "net config workstation",
     "GetAdaptersInfo",
     "netsh interface show",
     "/parentdomain",
     "nbtscan",
-    "ifconfig -a",
     "ipconfig",
     "nbtstat -s",
     "net config",
@@ -75,12 +95,12 @@
     "getmac",
     "nbtstat -n",
     "route print",
-    "ipconfig /all",
     "cmd.exe /c ipconfig /all",
     "ifconfig"
   ],
   "t1018": [
     "C$",
+    "arp -a",
     "etc/hosts",
     "ping",
     "/dsgetdc",
@@ -88,21 +108,32 @@
     "/dclist",
     "bonjour",
     "net view /domain",
-    "net view /DOMAIN",
     "net view",
+    "do ping -c",
     "\\Windows\\System32\\Drivers\\etc\\hosts"
+  ],
+  "t1022": [
+    "--password"
   ],
   "t1023": [
     "Start Menu\\Programs\\Startup\\Realtek"
   ],
   "t1027": [
     "Out-EncryptedScript.ps1",
-    "Invoke-Obfuscation"
+    "Invoke-Obfuscation",
+    "base64 -d"
   ],
   "t1028": [
-    "winrm"
+    "ExecuteShellCommand",
+    "winrm",
+    "Enable-PSRemoting",
+    "invoke-command -computer_name"
+  ],
+  "t1030": [
+    "split -b"
   ],
   "t1031": [
+    "sc config",
     "SYSTEM\\CurrentControlSet\\Services"
   ],
   "t1033": [
@@ -142,7 +173,7 @@
     "SystemDiskClean.ps1"
   ],
   "t1037": [
-    "Environment\\UserInitMprLogonScript"
+    "UserInitMprLogonScript"
   ],
   "t1038": [
     "\\WINDOWS\\ntshrui.dll",
@@ -152,6 +183,10 @@
   "t1039": [
     "net use"
   ],
+  "t1040": [
+    "tcpdump",
+    "tshark"
+  ],
   "t1042": [
     "txtfile\\shell\\print\\command",
     "txtfile\\shell\\open\\command",
@@ -159,7 +194,8 @@
     "\\command",
     "txtfile\\shell\\printto\\command",
     "HKEY_CLASSES_ROOT.txt",
-    "HKEY_CLASSES_ROOT."
+    "HKEY_CLASSES_ROOT.",
+    "assoc "
   ],
   "t1044": [
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
@@ -169,7 +205,10 @@
     "%TEMP%"
   ],
   "t1046": [
-    "pr"
+    "nmap",
+    "nc ",
+    "Test-NetConnection",
+    "dev/tcp"
   ],
   "t1047": [
     "Invoke-WmiCommand",
@@ -183,7 +222,8 @@
     "arp -a",
     "net session",
     "GetTcpTable2",
-    "net file"
+    "net file",
+    "Get-NetTCPConnection"
   ],
   "t1050": [
     "net start",
@@ -199,10 +239,14 @@
     "taskeng.exe",
     "schtasks /create",
     "sc ONLOGON",
+    "/interactive",
+    "/ST",
     "SYSTEM\\CurrentControlSet\\Control\\Lsa\\SubmitControl"
   ],
   "t1055": [
     "Invoke-PSInject",
+    "mavinject",
+    "ld.so.preload",
     "Invoke-ReflectivePEInjection.ps1"
   ],
   "t1056": [
@@ -210,8 +254,7 @@
     "Get-Keystrokes"
   ],
   "t1057": [
-    "ps",
-    "ps aux",
+    "ps ",
     "tasklist",
     "Get-ProcessTokenPrivilege",
     "tasklist /v",
@@ -223,67 +266,40 @@
   ],
   "t1059": [
     "cmd.exe",
-    "/C whoami",
     "netsh",
     "cmd.exe /c",
     "\\Windows\\System32\\cmd.exe"
   ],
   "t1060": [
     "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\IAStorD",
     "autocheck autochk ",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\ssonsvr.exe",
     "CurrentVersion\\Run",
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\Load",
     "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
     "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
     "Software\\Microsoft\\Windows\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
     "Software\\Microsoft\\CurrentVersion\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run vpdn %ALLUSERPROFILE%\\%APPDATA%\\vpdn\\VPDN_LU.exe",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
     "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx",
     "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\BootExecute",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\ IMJPMIJ8.1{3 characters of Unique Identifier}",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run:%appdata%\\NeutralApp\\NeutralApp.exe",
-    "autocheck autoche ",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\imejp : [self]",
     "New-UserPersistenceOption",
     "Software\\Microsoft\\CurrentVersion\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Windows Debug Tools-%LOCALAPPDATA%",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\svchost : %APPDATA%\\Microsoft\\Network\\svchost.exe",
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
-    "Software\\Microsoft\\Windows\\currentVersion\\Run",
     "Software\\Run auto_update",
     "wdm",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
     "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
-    "KCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\SystemTextEncoding",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell",
-    "reg add SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx\\0001",
-    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\Micromedia"
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell"
+  ],
+  "t1062": [
+    "Install Hyper-V",
+    "Hyper-V"
   ],
   "t1063": [
-    "dir",
     "netsh advfirewall firewall",
-    "\\Program\\Files",
-    "reg query"
+    "CbOsxSensorService"
   ],
   "t1064": [
-    "powershell.exe -WindowStyle Hidden -exec bypass -File"
+    "powershell.exe -WindowStyle Hidden"
   ],
   "t1066": [
     "Find-AVSignature"
@@ -295,13 +311,16 @@
     "net localgroup",
     "net group",
     "dscl . -list /Groups",
-    "dscacheutil -q group"
+    "dscacheutil -q group",
+    "get-localgroup",
+    "get-ADPrinicipalGroupMembership"
   ],
   "t1070": [
     "wevtutil cl application",
     "wevtutil cl system",
-    "wevtutil",
-    "wevtutil cl Security"
+    "wevtutil cl",
+    "wevtutil cl Security",
+    "private/var/log/"
   ],
   "t1074": [
     "\\Windows\\ServiceProfiles\\NetworkService\\appdata\\Local\\Temp",
@@ -320,8 +339,7 @@
   ],
   "t1076": [
     "tscon.exe",
-    "cmd.exe /c",
-    "cmd.exe /k"
+    "tscon"
   ],
   "t1077": [
     "C$",
@@ -333,10 +351,12 @@
     "wmic"
   ],
   "t1081": [
-    "DPAPI"
+    "DPAPI",
+    "invoke-mimikittenz",
+    "mimikatz"
   ],
   "t1082": [
-    "ver",
+    "ver ",
     "Get-ComputerInfo",
     "hostname",
     "ls -la /Applications",
@@ -347,16 +367,14 @@
     "GetComputerName",
     "system_profiler",
     "dir",
-    "set",
     "SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum",
     "date /t"
   ],
   "t1083": [
-    "tree",
-    "find",
+    "find ",
     "dir",
     "echo %APPDATA%",
-    "ls",
+    "ls ",
     "locate"
   ],
   "t1085": [

@@ -9,8 +9,6 @@ from io import BytesIO
 
 #this module need some optimization
 
-verbose_flag = False
-
 class QBOCRDetect:
     @verbose(verbose_flag)
     @progressbar(True,"Starting QBOCRDetect")

@@ -10,8 +10,6 @@ from os import mkdir, path
 
 #this module need some optimization
 
-verbose_flag = False
-
 class QBMitresearch:
     @verbose(verbose_flag)
     @progressbar(True,"Starting QBMitresearch")

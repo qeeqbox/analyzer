@@ -5,15 +5,12 @@ from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from re import findall,compile,I,sub
 from nltk.corpus import words
-from base64 import b64decode,b64encode
 from nltk.tokenize import word_tokenize
 from sqlite3 import connect
 from os import mkdir, path
 from binascii import unhexlify
 
 #this module need some optimization
-
-verbose_flag = False
 
 class QBStrings:
     @progressbar(True,"Starting QBStrings")
@@ -70,44 +67,11 @@ class QBStrings:
                 _data[key].append({"Count":_dict[key].count(x),"Buffer":x})
 
     @verbose(verbose_flag)
-    def checkbase64(self,_data):
-        '''
-        check if words are possible base64 or not 
-
-        Args:
-            data: data dict
-        '''
-        _List = []
-        if len(self.words) > 0:
-            for word in self.words:
-                if  word.endswith(b"="):  #needs to include all options
-                    b = self.testbase64(word)
-                    if b != None and b != False:
-                        _List.append(word)
-        for x in set(_List):
-            _data.append({"Count":_List.count(x),"Base64":x,"Decoded":b64decode(x)})
-
-    @verbose(verbose_flag)
-    def testbase64(self,w):
-        '''
-        match decoding base64 then encoding means most likely base64 
-
-        Args:
-            data: data dict
-        '''
-        try:
-            y = b64decode(w)
-            if b64encode(y) == w:
-                return y
-        except:
-            return False
-
-    @verbose(verbose_flag)
     @progressbar(True,"check urls")
     def checklink(self,_data):
         '''
         check if buffer contains ips xxx://xxxxxxxxxxxxx.xxx
-
+        
         Args:
             _data: data dict
         '''
@@ -129,7 +93,7 @@ class QBStrings:
             _data: data dict
         '''
         _List = []
-        ip = compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',I)
+        ip = compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',I)
         x = findall(ip,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
@@ -147,7 +111,7 @@ class QBStrings:
             _data: data dict
         '''
         _List = []
-        email = compile('(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
+        email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
         x = findall(email,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
@@ -165,7 +129,7 @@ class QBStrings:
             _data: data dict
         '''
         _List = []
-        tel = compile('(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
+        tel = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
         x = findall(tel,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
@@ -183,7 +147,7 @@ class QBStrings:
             _data: data dict
         '''
         _List = []
-        html = compile('>([^<]*)<\/',I)
+        html = compile(r'>([^<]*)<\/',I)
         x = findall(html,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
@@ -201,7 +165,7 @@ class QBStrings:
             _data: data dict
         '''
         _List = []
-        _hex = compile('([0-9a-fA-F]{4,})',I)
+        _hex = compile(r'([0-9a-fA-F]{4,})',I)
         x = findall(_hex,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
@@ -313,7 +277,6 @@ class QBStrings:
                              "EMAILS":[],
                              "TELS":[],
                              "TAGS":[],
-                             "BASE64s":[],
                              "Suspicious":[],
                              "HEX":[],
                              "_English":["Count","Buffer"],
@@ -322,7 +285,6 @@ class QBStrings:
                              "_Partly English":["Count","Buffer"],
                              "_IPS":["Count","IP","Code","Description"],
                              "_LINKS":["Count","Link"],
-                             "_BASE64s":["Count","Base64","Decoded"],
                              "_EMAILS":["Count","EMAIL","Description"],
                              "_TELS":["Count","TEL","Description"],
                              "_TAGS":["Count","TAG","Description"],
@@ -336,7 +298,6 @@ class QBStrings:
         self.checkemail(data["Strings"]["EMAILS"])
         self.checktags(data["Strings"]["TAGS"])
         self.checkhex(data["Strings"]["HEX"])
-        self.checkbase64(data["Strings"]["BASE64s"])
         #self.checkphonenumber(data["Strings"]["TELS"])
         self.adddescription("DNS",data["Strings"]["IPS"],"IP")
         self.adddescription("IPs",data["Strings"]["IPS"],"IP")
