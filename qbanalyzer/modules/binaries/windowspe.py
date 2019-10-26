@@ -279,42 +279,26 @@ class WindowsPe:
                         "_Manifest":""}
         pe = PE(data["Location"]["File"])
         ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
-        _ep = ep
         section = self.findentrypointfunction(pe,ep)
         sig = section.get_data(ep, 12)
-        sectionname = section.Name.decode("utf-8").strip("\00")
         singinhex = "".join("{:02x}".format(x) for x in sig)
-        sectionentropy = section.get_entropy()
-        imphash = pe.get_imphash()
-        warning = pe.get_warnings()
-        checksum = pe.verify_checksum()
-        timestamp = datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp)
-        sections = self.getsections(pe)
-        dlls = self.getdlls(pe)
-        pe_type = self.whattype(pe)
-        resources,manifest = self.getrecourse(pe)
-        self.getdebug(pe)
-        signature = self.checkifsinged(pe)
-        Characteristics = self.getCharacteristics(pe)
-        importedfunctions = self.getimportedfunctions(pe)
-        exportedfunctions = self.getexportedfunctions(pe)
-        data["PE"]["General"] = {   "PE Type" : pe_type,
-                                    "Entropy": sectionentropy,
-                                    "Entrypoint": _ep,
-                                    "Entrypoint Section":sectionname,
-                                    "verify checksum":checksum,
+        #self.getdebug(pe)
+        data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
+                                    "Entropy": section.get_entropy(),
+                                    "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
+                                    "Entrypoint Section":section.Name.decode("utf-8").strip("\00"),
+                                    "verify checksum":pe.verify_checksum(),
                                     "Sig":singinhex,
-                                    "imphash":imphash,
-                                    "warning":warning,
-                                    "Timestamp":timestamp}
-        data["PE"]["Characteristics"] = Characteristics
-        data["PE"]["Singed"] = signature
-        data["PE"]["Sections"] = sections
-        data["PE"]["Dlls"] = dlls
-        data["PE"]["Resources"] = resources
-        data["PE"]["Imported functions"] = importedfunctions
-        data["PE"]["Exported functions"] = exportedfunctions
-        data["PE"]["Manifest"] = manifest
+                                    "imphash":pe.get_imphash(),
+                                    "warning":pe.get_warnings(),
+                                    "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp)}
+        data["PE"]["Characteristics"] = self.getCharacteristics(pe)
+        data["PE"]["Singed"] = self.checkifsinged(pe)
+        data["PE"]["Sections"] = self.getsections(pe)
+        data["PE"]["Dlls"] = self.getdlls(pe)
+        data["PE"]["Resources"],data["PE"]["Manifest"] = self.getrecourse(pe)
+        data["PE"]["Imported functions"] = self.getimportedfunctions(pe)
+        data["PE"]["Exported functions"] = self.getexportedfunctions(pe)
         self.qbs.adddescription("WinApis",data["PE"]["Imported functions"],"Function")
         self.qbs.adddescription("ManHelp",data["PE"]["Imported functions"],"Function")
         self.qbs.adddescription("WinDlls",data["PE"]["Dlls"],"Dll")
