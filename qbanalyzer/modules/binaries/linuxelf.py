@@ -156,25 +156,15 @@ class LinuxELF:
                             "_Symbols":["Type","Symbol","Description"],
                             "_Relocations":["Section","Name","Description"]}
             elf = ELFFile(f)
-            d = ff.read()
-            _ep = hex(elf.header.e_entry)
-            elf_machine = elf.header.e_machine
-            elf_type = elf.header.e_type
-            entropy = getentropy(d)
-            sections = self.getsection(elf)
-            relocations = self.getrelocations(elf)
-            dynamic = self.getdynamic(elf)
-            symbols = self.getsymbols(elf)
-            interpreter = self.getiter(elf)
-            data["ELF"]["General"] = {  "ELF Type" : elf_type,
-                                        "ELF Machine" : elf_machine,
-                                        "Entropy": entropy,
-                                        "Entrypoint": _ep,
-                                        "Interpreter":interpreter}
-            data["ELF"]["Sections"] = sections
-            data["ELF"]["Dynamic"] = dynamic
-            data["ELF"]["Symbols"] = symbols
-            data["ELF"]["Relocations"] = relocations
+            data["ELF"]["General"] = {  "ELF Type" : elf.header.e_type,
+                                        "ELF Machine" : elf.header.e_machine,
+                                        "Entropy": getentropy(ff.read()),
+                                        "Entrypoint": hex(elf.header.e_entry),
+                                        "Interpreter":self.getiter(elf)}
+            data["ELF"]["Sections"] = self.getsection(elf)
+            data["ELF"]["Dynamic"] = self.getdynamic(elf)
+            data["ELF"]["Symbols"] = self.getsymbols(elf)
+            data["ELF"]["Relocations"] = self.getrelocations(elf)
             self.qbs.adddescription("ManHelp",data["ELF"]["Symbols"],"Symbol")
             self.qbs.adddescription("LinuxSections",data["ELF"]["Sections"],"Section")
             words,wordsstripped = getwords(data,data["Location"]["File"])
