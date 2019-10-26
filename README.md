@@ -35,7 +35,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Yara module and yara rules included
 - JSON editable records 
 - URL/EMAIL/TEL/Tags extraction
-- Encryption patterns detection
+- Encryption patterns (base64, md5, sha1..) detection
 - Linux
     - ELF information
     - API functions descriptions
