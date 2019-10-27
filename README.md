@@ -257,7 +257,7 @@ Dll Description
 PE Signature
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/sigextract.png)
 
-PE Signature
+PE Extraction
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/siginfo.png)
 
 PE Manifest
