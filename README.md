@@ -58,6 +58,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Secitons descriptions
     - DLL descriptions
     - Symbs extraction
+    - Signature extraction
     - API functions descriptions
     - PE ASLR, DEP, SEH and CFG detection
     - MITRE artifacts detection
@@ -255,6 +256,9 @@ Dll Description
 
 PE Signature
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/sigextract.png)
+
+PE Signature
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/siginfo.png)
 
 PE Manifest
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/manfiest.png)
