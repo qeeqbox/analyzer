@@ -128,22 +128,14 @@ class FileTypes:
         '''
         data["Details"] = {"Properties":{},
                            "_Properties":{}}
-        name = path.basename(_path)
         f = open(_path,"rb").read()
-        _md5 = md5(f).hexdigest()
-        _sha1 = sha1(f).hexdigest()
-        _sha256 = sha256(f).hexdigest()
-        #_sha512 = sha512(f).hexdigest()
-        size = path.getsize(_path)
-        mime = from_file(_path,mime=True)
-        charset = Magic(mime_encoding=True).from_file(_path)
-        data["Details"]["Properties"]={ "Name": name,
-                                        "md5": _md5,
-                                        "sha1": _sha1,
-                                        "sha256": _sha256,
-                                        "size": size,
-                                        "mime":mime,
-                                        "charset":charset,
+        data["Details"]["Properties"]={ "Name": path.basename(_path),
+                                        "md5": md5(f).hexdigest(),
+                                        "sha1": sha1(f).hexdigest(),
+                                        "sha256": sha256(f).hexdigest(),
+                                        "size": path.getsize(_path),
+                                        "mime":from_file(_path,mime=True),
+                                        "charset":Magic(mime_encoding=True).from_file(_path),
                                         "ssdeep":hash_from_file(_path)}
 
     @verbose(verbose_flag)

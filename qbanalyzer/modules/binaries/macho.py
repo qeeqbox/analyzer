@@ -271,20 +271,13 @@ class Macho:
                             "_Undefined Symbols":["Symbol","Description"],
                             "_External Symbols":["Symbol","Description"],
                             "_Local Symbols":["Symbol","Description"]}
-        sections = self.getsections(macho)
-        libs = self.getlibs(macho)
-        segments = self.getsegments(macho)
-        symbols = self.getsymbols(macho)
-        undefsymbols = self.getundefsymbols(macho)
-        extdefsymbols = self.getextdefsymbols(macho)
-        localsymbols = self.getlocalsymbols(macho)
         data["MACHO"]["General"]:{}
-        data["MACHO"]["Sections"] = sections
-        data["MACHO"]["Libraries"] = libs
-        data["MACHO"]["Segments"] = segments
-        data["MACHO"]["Symbols"] = symbols
-        data["MACHO"]["Undefined Symbols"] = undefsymbols
-        data["MACHO"]["External Symbols"] = extdefsymbols
-        data["MACHO"]["Local Symbols"] = localsymbols
+        data["MACHO"]["Sections"] = self.getsections(macho)
+        data["MACHO"]["Libraries"] = self.getlibs(macho)
+        data["MACHO"]["Segments"] = self.getsegments(macho)
+        data["MACHO"]["Symbols"] = self.getsymbols(macho)
+        data["MACHO"]["Undefined Symbols"] = self.getundefsymbols(macho)
+        data["MACHO"]["External Symbols"] = self.getextdefsymbols(macho)
+        data["MACHO"]["Local Symbols"] = self.getlocalsymbols(macho)
         self.qbs.adddescription("ManHelp",data["MACHO"]["Symbols"],"Symbol")
         getwords(data,data["Location"]["File"])

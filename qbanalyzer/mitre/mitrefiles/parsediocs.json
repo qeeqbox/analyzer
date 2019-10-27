@@ -1,5 +1,5 @@
 {
-  "Partof": "bd249ce4/QBAnalyzer - Still beta",
+  "Partof": ["bd249ce4/QBAnalyzer - Still beta"],
   "t1002": [
     "zip ",
     "Compress-Archive",

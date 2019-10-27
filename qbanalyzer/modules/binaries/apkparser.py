@@ -217,8 +217,7 @@ class ApkParser:
         for i, v in enumerate(data["Packed"]["Files"]):
             if v["Name"].lower() == "androidmanifest.xml":
                 #self.readpepackage(v["Path"])
-                Permissions = self.readpermissions(data,v["Path"])
-                data["APK"]["Permissions"] = Permissions
+                data["APK"]["Permissions"] = self.readpermissions(data,v["Path"])
             if "classes" in v["Name"].lower() and v["Name"].lower().endswith(".dex"):
                 r2p = r2open(v["Path"],flags=['-2'])
                 r2p.cmd("e anal.timeout = 10")
@@ -234,15 +233,10 @@ class ApkParser:
                             "_Symbols":["Type","Address","X","Name"],
                             "_Bigfunctions":["Size","Name"],
                             "_Suspicious":["Location","Function","Xrefs"]}
-                Classes = self.getallclasses(r2p)
-                Externals = self.getallexternals(r2p)
-                Symbols = self.getallsymbol(r2p)
-                Bigfunctions = self.bigfunctions(r2p)
-                Suspicious = self.checksus(r2p)
-                data[k]["Classes"] = Classes
-                data[k]["Externals"] = Externals
-                data[k]["Symbols"] = Symbols
-                data[k]["Bigfunctions"] = Bigfunctions
-                data[k]["Suspicious"] = Suspicious
+                data[k]["Classes"] = self.getallclasses(r2p)
+                data[k]["Externals"] = self.getallexternals(r2p)
+                data[k]["Symbols"] = self.getallsymbol(r2p)
+                data[k]["Bigfunctions"] = self.bigfunctions(r2p)
+                data[k]["Suspicious"] = self.checksus(r2p)
         self.qbs.adddescription("AndroidPermissions",data["APK"]["Permissions"],"Permission")
         getwordsmultifiles(data,data["Packed"]["Files"])
