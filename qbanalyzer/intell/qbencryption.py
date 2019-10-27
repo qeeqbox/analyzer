@@ -22,6 +22,9 @@ class QBEncryption:
 
         Args:
             data: data dict
+
+        Return:
+            _Tempreturn: list conatins results
         '''
         _List = []
         if len(self.words) > 0:

@@ -425,7 +425,11 @@ class HtmlMaker:
         for x in data:
             for key in data[x]:
                 try:
-                    if key.startswith("_"):
+                    if key.startswith("__"):
+                        if len(data[x][key[2:]]) > 0:
+                            for item in data[x][key[2:]]:
+                                table += self.makealistsettablenew2(data[x][key[2:]][item],["key","value"],None,True,safe)
+                    elif key.startswith("_"):
                         if x == "MITRE":
                             safe = True
                         else:

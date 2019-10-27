@@ -7,7 +7,7 @@ from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
 from magic import from_file
 from datetime import datetime
-
+import M2Crypto
 class WindowsPe:
     @verbose(verbose_flag)
     @progressbar(True,"Starting WindowsPe")
@@ -49,14 +49,77 @@ class WindowsPe:
         Return:
             list of signatures
         '''
+        i = 0
         _list = []
+        _extracted = {}
+        Problems = False 
         address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
         if address != 0:
-            sig = pe.write()[address+8:]
+            try:
+                sig = pe.write()[address+8:]
+                m2cbio = M2Crypto.BIO.MemoryBuffer(bytes(sig))
+                if m2cbio:
+                    pkcs7bio = M2Crypto.m2.pkcs7_read_bio_der(m2cbio.bio_ptr())
+                    if pkcs7bio:
+                        pkcs7 = M2Crypto.SMIME.PKCS7(pkcs7bio)
+                        for cert in pkcs7.get0_signers(M2Crypto.X509.X509_Stack()):
+                            tempcert = "CERT_{}".format(i)
+                            _extracted[tempcert] = { "CommonName":None,
+                                                     "OrganizationalUnit":None,
+                                                     "Organization":None,
+                                                     "Locality":None,
+                                                     "StateOrProvinceName":None,
+                                                     "CountryName":None,
+                                                     "Start":None,
+                                                     "Ends":None,
+                                                     "SerialNumber":None}
+                            try:
+                                _extracted[tempcert]["CommonName"] = cert.get_subject().CN
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["OrganizationalUnit"] = cert.get_subject().OU
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["Organization"] = cert.get_subject().O
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["Locality"] = cert.get_subject().L
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["StateOrProvinceName"] = cert.get_subject().S
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["CountryName"] = cert.get_subject().C
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["Email"] = cert.get_subject().Email
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["Start"] = str(cert.get_not_before())
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["Ends"] = str(cert.get_not_after())
+                            except:
+                                pass
+                            try:
+                                _extracted[tempcert]["SerialNumber"] = cert.get_serial_number()
+                                _extracted[tempcert]["SerialNumberMD5"] = cert.get_fingerprint('md5').lower().rjust(32, '0')
+                            except:
+                                pass
+            except:
+                Problems = True
             sighex = "".join("{:02x}".format(x) for x in sig)
-            _list.append({"Signature":"Yes",
+            _list.append({"Issues":Problems,
                           "SignatureHex":sighex})
-        return _list
+        return _list,_extracted
 
     @verbose(verbose_flag)
     def findentrypointfunction(self,pe, rva) -> str:
@@ -260,6 +323,7 @@ class WindowsPe:
         data["PE"] = {  "General" : {},
                         "Characteristics":{},
                         "Singed":[],
+                        "SignatureExtracted":{},
                         "Sections":[],
                         "Dlls":[],
                         "Resources":[],
@@ -269,7 +333,8 @@ class WindowsPe:
                         "Manifest":"",
                         "_General": {},
                         "_Characteristics": {},
-                        "_Singed":["Signature","SignatureHex"],
+                        "_Singed":["Issues","SignatureHex"],
+                        "__SignatureExtracted":{},
                         "_Sections":["Section","MD5","Description"],
                         "_Dlls":["Dll","Description"],
                         "_Resources":["Resource","Offset","MD5","Sig","Description"],
@@ -293,7 +358,7 @@ class WindowsPe:
                                     "warning":pe.get_warnings(),
                                     "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp)}
         data["PE"]["Characteristics"] = self.getCharacteristics(pe)
-        data["PE"]["Singed"] = self.checkifsinged(pe)
+        data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
         data["PE"]["Sections"] = self.getsections(pe)
         data["PE"]["Dlls"] = self.getdlls(pe)
         data["PE"]["Resources"],data["PE"]["Manifest"] = self.getrecourse(pe)

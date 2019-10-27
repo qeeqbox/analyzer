@@ -1,4 +1,5 @@
 __G__ = "(G)bd249ce4"
+__V__ = "2019.V.01.01"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -6,6 +7,7 @@ from cmd import Cmd
 from os import path
 from argparse import ArgumentParser
 from shlex import split as ssplit
+from requests import get
 
 print("                                                                            ")
 print(" _____   _____   _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -36,7 +38,18 @@ class QBAnalyzer(Cmd):
 
     def __init__(self):
         super(QBAnalyzer, self).__init__()
+        ver = get("https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/version").text.strip()
+        if ver != __V__:
+            logstring("New version {} available, please update.. ".format(ver),"Red")
         self.san = StaticAnalyzer()
+        #self.do_analyze("--file /home/localfiles/sexSimulator.apk --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/f9boo3.doc --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/officejsdropper.docx --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/Downloader.pdf --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/BrRAT.apk --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/Xorddos --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/GoziBankerISFB.exe --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/BundloreAdware.dmg --output /home/localfiles/ --full")
 
     def help_analyze(self):
         self._analyze_parser.print_help()
