@@ -91,6 +91,8 @@ class StaticAnalyzer:
             self.elf.getelfdeatils(data)
             if parsed.xref or parsed.full:
                 self.qbx.makexref(data)
+            if parsed.intel or parsed.full:
+                self.qbt.checkwithqbintell(data,"linux.json")
         elif self.mac.checkmacsig(data):
             self.mac.getmachodeatils(data)
         elif self.mac.checkdmgsig(data):

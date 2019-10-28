@@ -38,9 +38,12 @@ class QBAnalyzer(Cmd):
 
     def __init__(self):
         super(QBAnalyzer, self).__init__()
-        ver = get("https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/version")
-        if ver.ok and ver.text.strip() != __V__:
-            logstring("New version {} available, please update.. ".format(ver),"Red")
+        try:
+            ver = get("https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/version")
+            if ver.ok and ver.text.strip() != __V__:
+                logstring("New version {} available, please update.. ".format(ver),"Red")
+        except:
+            logstring("Checking update failed","Red")
         self.san = StaticAnalyzer()
         #self.do_analyze("--file /home/localfiles/sexSimulator.apk --output /home/localfiles/ --full")
         #self.do_analyze("--file /home/localfiles/f9boo3.doc --output /home/localfiles/ --full")
