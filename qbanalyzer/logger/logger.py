@@ -2,7 +2,6 @@ __G__ = "(G)bd249ce4"
 
 from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger
 from sys import stdout
-from traceback import format_exc
 
 verbose_flag = False
 

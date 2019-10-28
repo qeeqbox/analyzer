@@ -167,6 +167,4 @@ class LinuxELF:
             data["ELF"]["Relocations"] = self.getrelocations(elf)
             self.qbs.adddescription("ManHelp",data["ELF"]["Symbols"],"Symbol")
             self.qbs.adddescription("LinuxSections",data["ELF"]["Sections"],"Section")
-            words,wordsstripped = getwords(data,data["Location"]["File"])
-            data["StringsRAW"] = {"words":words,
-                                  "wordsstripped":wordsstripped}
+            getwords(data,data["Location"]["File"])

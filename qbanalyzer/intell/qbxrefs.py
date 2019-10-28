@@ -7,7 +7,7 @@ from r2pipe import open as r2open
 from re import search
 from ast import literal_eval
 
-#this module need some optimization
+#this module needs some optimization
 #only apis for now, will change this in future
 #added a little hack for handling errors 
 #(check returns 0 because of error and flags=['-2'])

@@ -6,7 +6,7 @@ from ..mics.funcs import iptolong
 from re import I, compile, findall
 from base64 import b64decode,b64encode
 
-#each encryption has a function for further customization 
+#each encryption has a function for each logic (further customization) 
 
 class QBEncryption:
     @progressbar(True,"Starting QBEncryption")

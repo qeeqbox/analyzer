@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 from io import BytesIO
 from base64 import b64encode
 
-#this module need some optimization
+#this module needs some optimization
 
 class QBImage:
     @verbose(verbose_flag)

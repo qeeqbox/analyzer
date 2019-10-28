@@ -7,7 +7,7 @@ from PIL import Image
 from pytesseract import image_to_string
 from io import BytesIO
 
-#this module need some optimization
+#this module needs some optimization
 
 class QBOCRDetect:
     @verbose(verbose_flag)

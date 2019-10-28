@@ -10,7 +10,7 @@ from sqlite3 import connect
 from os import mkdir, path
 from binascii import unhexlify
 
-#this module need some optimization
+#this module needs some optimization
 
 class QBStrings:
     @progressbar(True,"Starting QBStrings")

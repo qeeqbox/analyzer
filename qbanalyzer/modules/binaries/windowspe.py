@@ -7,7 +7,8 @@ from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
 from magic import from_file
 from datetime import datetime
-import M2Crypto
+from M2Crypto import BIO, m2, SMIME, X509
+
 class WindowsPe:
     @verbose(verbose_flag)
     @progressbar(True,"Starting WindowsPe")
@@ -57,12 +58,12 @@ class WindowsPe:
         if address != 0:
             try:
                 sig = pe.write()[address+8:]
-                m2cbio = M2Crypto.BIO.MemoryBuffer(bytes(sig))
+                m2cbio = BIO.MemoryBuffer(bytes(sig))
                 if m2cbio:
-                    pkcs7bio = M2Crypto.m2.pkcs7_read_bio_der(m2cbio.bio_ptr())
+                    pkcs7bio = m2.pkcs7_read_bio_der(m2cbio.bio_ptr())
                     if pkcs7bio:
-                        pkcs7 = M2Crypto.SMIME.PKCS7(pkcs7bio)
-                        for cert in pkcs7.get0_signers(M2Crypto.X509.X509_Stack()):
+                        pkcs7 = SMIME.PKCS7(pkcs7bio)
+                        for cert in pkcs7.get0_signers(X509.X509_Stack()):
                             tempcert = "CERT_{}".format(i)
                             _extracted[tempcert] = { "CommonName":None,
                                                      "OrganizationalUnit":None,

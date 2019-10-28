@@ -7,7 +7,7 @@ from codecs import open as copen
 from json import loads
 from os import mkdir, path
 
-#this module need some optimization
+#this module needs some optimization
 
 class QBIntell:
     @verbose(verbose_flag)
