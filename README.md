@@ -6,10 +6,13 @@
 ~~~~
 
 # QBAnalyzer
-QBAnalyzer is a threat intelligence framework for extracting artifacts and IOCs from file/dump into readable format.
+QBAnalyzer is an open source threat intelligence framework for extracting artifacts and IOCs from file/dump into readable format.
 
 ### Architecture
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/withoutint.png)
+
+### Update
+Thank you for reaching out!! I have been getting requests to curl info from virustotal, hybridanalysis, Any.Run and Jotti through their apis. I will definitely check this out and make individual modules if possible for each service
 
 ### Backstory
 Back in 2018, I used to analyze many files and dumps using my old automated tools I developed in the past. The main tool called (QManager) that interacted with the rest of them through Pipes, APIs, Events sand RAW Files. The interaction happened in phases using a queue due to the variation and availability of some tools. Then, results were handled by a parser that piped structured and unstructured information into centralized databases. Finally, it informed me with the end of the process by sending a notification message. This worked just fine until recently when I wanted to implement some machine learning and few other features to the process. After a lot of researching I came to the conclusion that the best way is rewriting most of those old tools, and implement different opensource packages into modules. Then, have them compiled into one framework for easy management by researchers.
