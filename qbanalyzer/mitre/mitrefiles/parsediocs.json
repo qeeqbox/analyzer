@@ -488,12 +488,11 @@
     "Software\\Microsoft\\Office"
   ],
   "t1113": [
-    "\\system\\screenshot.bmp",
+    "\\system\\screenshot",
     "Get-TimedScreenshot",
     "$screenshot",
     "screencapture",
-    "xwd ",
-    "\\ProgramData\\Mail\\MailAg\\shot.png"
+    "xwd "
   ],
   "t1115": [
     "pbpaste"
@@ -892,19 +891,13 @@
   ],
   "t1490": [
     "wmic",
-    "wbadmin.exe delete catalog -quiet",
     "bootstatuspolicy",
     "ignoreallfailures",
     "recoveryenable",
-    "vssadmin.exe delete shadows /all /quiet",
     "vssadmin",
     "bcdedit",
-    "wbadmin.exe",
-    "Software\\Policies\\Microsoft\\PreviousVersions\\DisableLocalPage",
-    "wmic shadowcopy delete",
     "wbadmin",
-    "vssadmin.exe",
-    "bcdedit.exe"
+    "Software\\Policies\\Microsoft\\PreviousVersions\\DisableLocalPage"
   ],
   "t1497": [
     "SOFTWARE\\Oracle\\VirtualBox Guest Additions",
@@ -922,9 +915,7 @@
     "etc/systemd/system",
     "systemctl list-units -type=service all",
     ".service",
-    "~/.config/systemd/user/",
-    "/home//.config/systemd/user/",
-    "/usr/lib/systemd/system/",
+    ".config/systemd/user/",
     "/usr/lib/systemd/system",
     "/usr/sbin/service"
   ]
