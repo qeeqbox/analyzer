@@ -113,7 +113,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Refactoring modules v2
 
 ### Recent update/phase 
-- Added from staging
+- Cleaning up
 
 ### Depends on
 Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img and a lot of researches.
