@@ -54,7 +54,7 @@ class QBMitresearch:
         f = loads(open(self.parsediocs).read())
         for attack in f:
             for ioc in f[attack]:
-                if ioc.lower() in self.wordsstripped:
+                if ioc.lower() in self.wordsstripped and len(ioc.lower()) > 3: # added > 3 less FB 
                     _list.append(ioc.lower())
             if len(_list) > 0:
                 x = self.searchinmitreandreturn(self.mitre.fulldict,attack)

@@ -19,13 +19,7 @@
     "procdump "
   ],
   "t1004": [
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion]Winlogon",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
-    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell",
-    "Software[Wow6432Node]Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
+    "CurrentVersion\\Winlogon"
   ],
   "t1005": [
     "grep "
@@ -165,11 +159,10 @@
     "CSIDL_APPDATA\\microsoft\\security",
     "/bin",
     "%ALLUSERPROFILE%\\Application Data\\Microsoft\\MediaPlayer\\updatewindws.exe",
-    "%ProgramFiles%\\Microsoft\\Exchange Server\\ClientAccess\\Owa\\Auth",
+    "%ProgramFiles%\\Microsoft\\Exchange Server\\ClientAccess\\Owa\\",
     "winmail.dat",
     "Office365DCOMCheck.ps1",
     "\\Windows\\System32",
-    "%ProgramFiles%\\Microsoft\\Exchange Server\\ClientAccess\\Owa\\bin",
     "SystemDiskClean.ps1"
   ],
   "t1037": [
@@ -232,15 +225,14 @@
   "t1053": [
     "%appdata%\\Roaming\\Microsoft\\Templates",
     "New-UserPersistenceOption",
-    "svchost.exe",
+    "svchost",
     "SchTasks",
-    "schtasks /create /sc",
     "%systemroot%\\System32\\Tasks",
-    "taskeng.exe",
+    "taskeng",
     "schtasks /create",
     "sc ONLOGON",
     "/interactive",
-    "/ST",
+    "/ST ",
     "SYSTEM\\CurrentControlSet\\Control\\Lsa\\SubmitControl"
   ],
   "t1055": [
@@ -271,7 +263,6 @@
     "\\Windows\\System32\\cmd.exe"
   ],
   "t1060": [
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
     "autocheck autochk ",
     "CurrentVersion\\Run",
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\Load",
@@ -279,15 +270,12 @@
     "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
     "Software\\Microsoft\\Windows\\Run",
-    "Software\\Microsoft\\CurrentVersion\\Run",
     "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx",
     "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\BootExecute",
     "New-UserPersistenceOption",
-    "Software\\Microsoft\\CurrentVersion\\Run",
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
     "Software\\Run auto_update",
     "wdm",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell"
   ],
   "t1062": [
@@ -320,18 +308,14 @@
     "wevtutil cl system",
     "wevtutil cl",
     "wevtutil cl Security",
-    "private/var/log/"
+    "var/log/"
   ],
   "t1074": [
     "\\Windows\\ServiceProfiles\\NetworkService\\appdata\\Local\\Temp",
-    "%USERPROFILE%\\AppData\\Local\\SKC",
-    "\\ProgramData\\Mail\\MailAg\\gl",
+    "%USERPROFILE%\\AppData\\Local",
     "AppData\\Local\\Microsoft\\Windows\\Explorer",
-    "LOCALAPPDATA%\\MicroSoft Updatea\\uplog.tmp",
     "%temp%\\SMB",
-    "\\system",
-    "%Temp%\\reports\\%",
-    "\\Users\\\\AppData\\Roaming\\Microsoft\\store"
+    "\\system"
   ],
   "t1075": [
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LocalAccountTokenFilterPolicy",
@@ -345,7 +329,8 @@
     "C$",
     "IPC$",
     "net use",
-    "ADMIN$"
+    "ADMIN$",
+    "New-PSDrive"
   ],
   "t1078": [
     "wmic"
@@ -366,35 +351,37 @@
     "/proc/cpuinfo",
     "GetComputerName",
     "system_profiler",
-    "dir",
+    "dir ",
     "SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum",
     "date /t"
   ],
   "t1083": [
     "find ",
-    "dir",
+    "dir ",
     "echo %APPDATA%",
     "ls ",
-    "locate"
+    "locate",
+    "tree "
+  ],
+  "t1084": [
+    "CommandLineEventConsumer",
+    "__InstanceModificationEvent"
   ],
   "t1085": [
     "Control_RunDLL",
     "rundll32.exe",
     "wmic",
     "rundll32.exe javascript",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-    "Control_RunDLLAsUser",
-    "rundll32.exe C:\\Windows\\twain_64.dll"
+    "Control_RunDLLAsUser"
   ],
   "t1086": [
-    "Reflection.Assembly",
-    "Invoke-PSRemoting"
+    "powershell"
   ],
   "t1087": [
     "dscl . list /Groups",
     "net localgroup",
     "net group",
-    "id",
+    "id ",
     "net user",
     "etc/master.passwd",
     "Get-ProcessTokenGroup",
@@ -402,18 +389,18 @@
     "/domain",
     "dscacheutil",
     "net users",
-    "groups",
+    "groups ",
     "etc/passwd"
   ],
   "t1088": [
-    "Software\\Classes\\mscfile\\shell\\open\\command",
-    "sdclt.exe",
-    "Software\\Classes\\exefile\\shell\\runas\\command\\isolatedCommand",
-    "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\control.exe",
-    "eventvwr.exe"
+    "sdclt",
+    "Software\\Classes\\",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\",
+    "eventvwr"
   ],
   "t1089": [
-    "taskkill"
+    "taskkill",
+    "setenforce 0"
   ],
   "t1090": [
     "netsh firewall add portopening TCP"
@@ -437,8 +424,12 @@
     "LSADUMP::SetNTLM",
     "LSADUMP::ChangeNTLM"
   ],
+  "t1099": [
+    "touch ",
+    "date -s"
+  ],
   "t1100": [
-    "<?php @eval($_POST['password']);>"
+    "<?php "
   ],
   "t1101": [
     "Install-SSP",
@@ -452,13 +443,16 @@
     "net use"
   ],
   "t1103": [
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\AppInit_DLLs  %APPDATA%\\Intel\\ResN32.dll",
     "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
-    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
     "AppInit_DLLs",
     "pserver32.dll",
-    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\LoadAppInit_DLLs  0x1",
     "Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Windows"
+  ],
+  "t1105": [
+    "rsync -r",
+    "scp ",
+    "sftp ",
+    "bitsadmin.exe "
   ],
   "t1106": [
     "cmd.exe",
@@ -466,8 +460,9 @@
     "CreateProcess"
   ],
   "t1107": [
-    "rm",
-    "rm -rf"
+    "shred ",
+    "rm ",
+    "del "
   ],
   "t1110": [
     "net use"
@@ -497,7 +492,7 @@
     "Get-TimedScreenshot",
     "$screenshot",
     "screencapture",
-    "xwd",
+    "xwd ",
     "\\ProgramData\\Mail\\MailAg\\shot.png"
   ],
   "t1115": [
@@ -535,8 +530,7 @@
     "%APPDATA%\\Intel\\Skype"
   ],
   "t1126": [
-    "net use",
-    "net use \\system\\share /delete"
+    "net use"
   ],
   "t1128": [
     "SOFTWARE\\Microsoft\\Netsh"
@@ -578,8 +572,6 @@
     "df -aH"
   ],
   "t1136": [
-    "net user username \\password",
-    "net user username \\password \\domain",
     "support_388945a0",
     "net user"
   ],
@@ -602,7 +594,6 @@
     "set +o history",
     ".bash_history",
     "/dev/null",
-    "~/.bash_history",
     "ln -s /dev/null ~/.bash_history"
   ],
   "t1140": [
@@ -612,7 +603,6 @@
   ],
   "t1142": [
     "/Library/Keychains/",
-    "~/Library/Keychains/",
     "/Network/Library/Keychains/",
     "security"
   ],
@@ -620,14 +610,10 @@
     "apple.awt.UIElement"
   ],
   "t1144": [
-    "xattr",
-    "com.apple.quarantine",
-    "xattr -r -d",
-    "com.apple.quarantine"
-  ],
+    "xattr ",
+    "com.apple.quarantine"  ],
   "t1145": [
     "CRYPTO::Extract",
-    "~/.ssh",
     ".ssh",
     "Invoke-SessionGopher"
   ],
@@ -636,7 +622,6 @@
     "export HISTFILESIZE=0",
     "history -c",
     "rm ~/.bash_history",
-    "~/.bash_history",
     "HISTFILE"
   ],
   "t1147": [
@@ -647,11 +632,9 @@
   "t1148": [
     ".bash_history",
     "HISTCONTROL",
-    "~/.bash_history",
     "history"
   ],
   "t1150": [
-    "~/Library/Preferences",
     "/Library/Preferences"
   ],
   "t1152": [
@@ -677,9 +660,8 @@
   ],
   "t1158": [
     "defaults write com.apple.finder AppleShowAllFiles YES",
-    "attrib +h filename",
     "ls a",
-    "/Users/Shared/.local/kextd",
+    "/Users/Shared/.local/",
     "attrib +h",
     "\\ProgramData\\Apple\\Updates",
     "dir /a",
@@ -716,9 +698,7 @@
     "StartupParameters.plist"
   ],
   "t1166": [
-    "chmod 4777",
-    "chmod u+s",
-    "chmod",
+    "chmod ",
     "ls -l"
   ],
   "t1168": [
@@ -787,7 +767,7 @@
     "file:"
   ],
   "t1191": [
-    "cmstp.exe"
+    "cmstp"
   ],
   "t1196": [
     "rundll32.exe shell32.dll,Control_RunDLL",
@@ -795,13 +775,12 @@
     "HKEY_CLASSES_ROOT\\CLSID",
     "Shellex\\PropertySheetHandlers",
     "Extended Properties",
-    "control.exe /name",
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel\\NameSpace",
     "\\Windows",
     "WinExec(",
     "control.exe",
-    "cpl",
-    "Cpls"
+    "cpl ",
+    "Cpls "
   ],
   "t1197": [
     "Software\\Policies\\Microsoft\\Windows\\BITS",
@@ -828,12 +807,8 @@
   ],
   "t1206": [
     "tty_tickets",
-    "LOG_INPUT",
-    "killall Terminal",
-    "sudo",
-    "timestamp_timeout",
+    "sudo ",
     "etc/sudoers",
-    "LOG_OUTPUT",
     "/var/db/sudo",
     "etc/sudoers"
   ],
@@ -870,12 +845,9 @@
   ],
   "t1218": [
     "msiexec.exe",
-    "msiexec.exe /y",
     "MavInject32.exe",
     "INJECTRUNNING",
-    "odbcconf",
-    "msiexec.exe /q /i",
-    "odbcconf.exe"
+    "odbcconf"
   ],
   "t1220": [
     "msxsl.exe",
@@ -887,7 +859,7 @@
     "icacls"
   ],
   "t1424": [
-    "ps",
+    "ps ",
     "hidepid",
     "/proc"
   ],
