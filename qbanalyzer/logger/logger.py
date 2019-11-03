@@ -48,8 +48,8 @@ def verbose(OnOff=False):
                 x = func(*args, **kwargs)
                 if x:
                     return x
-            except Exception:
-                #print(format_exc())
+            except Exception as e:
+                #print(e)
                 logstring("{} failed..".format(func.__name__),"Red")
                 return None
         return wrapper
