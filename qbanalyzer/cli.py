@@ -34,6 +34,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--json',action='store_true', help="make json record", required=False)
     _analyze_parsergroupdef.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
     _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="open the report in webbroswer", required=False)
+    _analyze_parsergroupdef.add_argument('--plugins',action='store_true', help="scan with external plugins", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
 
     def __init__(self):
@@ -53,6 +54,7 @@ class QBAnalyzer(Cmd):
         #self.do_analyze("--file /home/localfiles/Xorddos --output /home/localfiles/ --full")
         #self.do_analyze("--file /home/localfiles/GoziBankerISFB.exe --output /home/localfiles/ --full")
         #self.do_analyze("--file /home/localfiles/BundloreAdware.dmg --output /home/localfiles/ --full")
+        #self.do_analyze("--file /home/localfiles/test --output /home/localfiles/ --full")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

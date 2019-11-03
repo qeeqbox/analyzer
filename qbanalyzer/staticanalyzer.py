@@ -22,6 +22,7 @@ from .intell.qbintell import QBIntell
 from .intell.qbxrefs import QBXrefs
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
+from .pydetect.loaddetections import LoadDetections
 from .modules.network.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
 from .mitre.mitreparser import MitreParser
@@ -61,6 +62,7 @@ class StaticAnalyzer:
         self.ofx = Officex()
         self.rtf = RTFParser()
         self.qbe = QBEncryption()
+        self.LD = LoadDetections()
 
     def openinbrowser(self,_path):
         '''
@@ -76,7 +78,7 @@ class StaticAnalyzer:
         Args:
             parsed: namespace contains parsed arguments
         '''
-        data = {}        #if parsed.yara or parsed.full:
+        data = {}
         if not self.fty.checkfilesig(data,parsed.file,parsed.output):
             return
         if self.pdf.checkpdfsig(data):
@@ -121,10 +123,12 @@ class StaticAnalyzer:
             self.urs.checkwithurls(data)
         if parsed.ocr or parsed.full:
             self.qoc.checkwithocr(data)
-        if parsed.mitre or parsed.full:
-            self.qbm.checkwithmitre(data)
         if parsed.enc or parsed.full:
             self.qbe.checkencryption(data)
+        if parsed.plugins or parsed.full:
+            self.LD.checkwithdetections(data)
+        if parsed.mitre or parsed.full:
+            self.qbm.checkwithmitre(data)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):
