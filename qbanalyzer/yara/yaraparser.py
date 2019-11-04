@@ -43,10 +43,11 @@ class YaraParser:
             check not used
         '''
         data["Yara"] = {"Matches":[],
-                        "_Matches":["Offset","Rule","Patteren","Parsed","Condition"]}
+                        "_Matches":["Count","Offset","Rule","Patteren","Parsed","Condition"]}
         matches = self.rules.match(data["Location"]["File"])
         if len(matches) > 0:
             for match in matches:
+                temp = {}
                 for _match in match.strings:
                     key = "{}:{}".format(match.namespace,match)
                     try:
@@ -57,9 +58,15 @@ class YaraParser:
                         ppattern =  _match[2].decode("ascii","replace")
                     #val = "{}:{} -> {}".format(basename,hex(_match[0]),pattern)
                     #_list.append([match.namespace,match,pattern,ppattern,hex(_match[0]),self.yararulenamelist[match.rule]])
-                    data["Yara"]["Matches"].append( {  "Offset":hex(_match[0]),
-                                                        "Rule":str(match),
-                                                        "Patteren":pattern,
-                                                        "Parsed":ppattern,
-                                                        "Condition":self.yararulenamelist[match.rule]})
-                    #_list.append({key:val})
+                    if pattern in temp:
+                        temp[pattern][0] += 1
+                        temp[pattern][1].append(hex(_match[0]))
+                    else:
+                        temp.update( {  pattern: [0,[hex(_match[0])],str(match),ppattern,self.yararulenamelist[match.rule]]})
+                for item in temp:
+                    data["Yara"]["Matches"].append( {   "Count": temp[item][0],
+                                                        "Offset":" ".join(temp[item][1]),
+                                                        "Rule":temp[item][2],
+                                                        "Patteren":item,
+                                                        "Parsed":temp[item][3],
+                                                        "Condition":temp[item][4]})
