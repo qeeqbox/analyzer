@@ -1,12 +1,21 @@
 # QBAnalyzer
-QBAnalyzer is an open source threat intelligence framework for extracting artifacts and IOCs from file/dump into readable format.
+QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IOCs from file/dump into readable format.
 
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/Peek%202019-11-04%2011-53.gif)
 
-### Update
-Thank you for reaching out!! I have been getting requests to implement the following:
-- Curling info from virustotal, hybridanalysis, Any.Run and Jotti through their apis
-- Making the current yara rules into individual modules for further customization
+### E.g. Outputs
+- [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
+- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
+- [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
+- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.html)
+- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/GoziBankerISFB.exe.html)
+- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/Downloader.pdf.html)
+- [PCAP-dump](https://bd249ce4.github.io/pages/dump.pcap.html)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.html)
+- [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
+- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
+
+---
 
 ### Backstory
 Back in 2018, I used to analyze many files and dumps using my old automated tools I developed in the past. The main tool called (QManager) that interacted with the rest of them through Pipes, APIs, Events sand RAW Files. The interaction happened in phases using a queue due to the variation and availability of some tools. Then, results were handled by a parser that piped structured and unstructured information into centralized databases. Finally, it informed me with the end of the process by sending a notification message. This worked just fine until recently when I wanted to implement some machine learning and few other features to the process. After a lot of researching I came to the conclusion that the best way is rewriting most of those old tools, and implement different opensource packages into modules. Then, have them compiled into one framework for easy management by researchers.
@@ -106,6 +115,11 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Machine learning modules
 - Refactoring modules v2
 
+### Update
+Thank you for reaching out!! I have been getting requests to implement the following:
+- Curling info from virustotal, hybridanalysis, Any.Run and Jotti through their apis
+- Making the current yara rules into individual modules for further customization
+
 ### Recent update/phase 
 - Cleaning up
 
@@ -120,19 +134,9 @@ resource, posix, numpy, itertools, macholib, calendar, difflib, math, encodings,
     - Is a result of compiling many researches/studies, use it in researching only (If i missed a reference/dependency, please let me know!) 
     - Is NOT an anti malware project and does not quarantine or delete malicious files (If you are interested in anti malware project, contact me and i will explain what dependencies/libs need be re-written)
     - Generates large html objects (You may need to wait few seconds on them to be load)
-
-### Examples
-- [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
-- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
-- [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
-- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.html)
-- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/GoziBankerISFB.exe.html)
-- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/Downloader.pdf.html)
-- [PCAP-dump](https://bd249ce4.github.io/pages/dump.pcap.html)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.html)
-- [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
-- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
-
+    
+---
+   
 ### Run it
 ```sh
 git clone git@github.com:bd249ce4/QBAnalyzer.git
@@ -231,7 +235,6 @@ Successfully tagged qbanalyzer:latest
 2019-10-06 21:33:47,844 ✓ Making a visualized image
 2019-10-06 21:33:48,721 → Generated Html file /localfolder/0fe8d113b826c9b46947bd9af598380a/html
 ```
-
 ---
 
 ### Screenshots
