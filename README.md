@@ -144,96 +144,12 @@ cd QBAnalyzer
 chmod +x install.sh
 ./install.sh
 python3 -m qbanalyzer.cli
-
-(Cmd) help analyze
-usage: analyze [-h] --file FILE --output OUTPUT [--intel] [--xref] [--yara]
-               [--string] [--mitre] [--topurl] [--ocr] [--json] [--open]
-               [--full]
-
-required arguments:
-  --file FILE      path of file/dump
-  --output OUTPUT  path of output folder
-
-default arguments:
-  --intel          check with generic detections
-  --xref           get symb cross references
-  --yara           analyze with yara module (Disable this for big files)
-  --string         analyze strings
-  --mitre          map strings to mitre
-  --topurl         get urls and check them against top 10000
-  --ocr            get all ocr text
-  --json           make json record
-  --open           open the report in webbroswer
-  --full           analyze using all modules
 ```
 
 ### Run it with docker
 ```docker
 git clone git@github.com:bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
-Step 1/9 : FROM python:3
- ---> 60e318e4984a
-Step 2/9 : RUN apt-get update && apt-get install -y curl libfuzzy-dev yara libmagic-dev libjansson-dev
- ---> Using cache
- ---> 73806233a032
-Step 3/9 : RUN pip install numpy pyelftools macholib macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy
- ---> Using cache
- ---> cfd27cee5c57
-Step 4/9 : RUN python -m nltk.downloader words
- ---> Using cache
- ---> 21ab04cabdce
-Step 5/9 : RUN ln -s /usr/local/lib/python3.7/site-packages/usr/local/lib/libyara.so /usr/local/lib/libyara.so
- ---> Using cache
- ---> dba0ee3f6b6c
-Step 6/9 : RUN pip install --global-option="build" --global-option="--enable-cuckoo" --global-option="--enable-magic" yara-python
- ---> Using cache
- ---> 58bd90288959
-Step 7/9 : WORKDIR /app
- ---> Using cache
- ---> 14d674a78fab
-Step 8/9 : COPY qbanalyzer qbanalyzer
- ---> Using cache
- ---> 3d6251393ee5
-Step 9/9 : CMD ["python", "-m","qbanalyzer.cli"]
- ---> Using cache
- ---> c4457a7562c3
-Successfully built c4457a7562c3
-Successfully tagged qbanalyzer:latest
-2019-10-12 02:15:56,661 ✓ Starting StaticAnalyzer
-2019-10-12 02:15:56,762 ✓ Starting MitreParser
-2019-10-12 02:15:56,763 ✓ Parsing Mitre databases
-2019-10-12 02:15:57,172 ✓ Starting QBMitresearch
-2019-10-12 02:15:57,275 ✓ Starting QBStrings
-2019-10-12 02:15:57,594 ✓ Starting WindowsPe
-2019-10-12 02:15:57,695 ✓ Starting LinuxELF
-2019-10-12 02:15:57,897 ✓ Starting Macho
-2019-10-12 02:15:57,998 ✓ Starting ApkParser
-2019-10-12 02:15:58,100 ✓ Starting BBParser (Experimental)
-2019-10-12 02:15:58,202 ✓ Starting YaraParser
-2019-10-12 02:16:00,066 ✓ Starting WafDetect
-2019-10-12 02:16:00,168 ✓ Starting ReadPackets
-2019-10-12 02:16:00,269 ✓ Starting QBImage
-2019-10-12 02:16:00,370 ✓ Starting HtmlMaker
-2019-10-12 02:16:00,474 ✓ Starting EmailsParser
-2019-10-12 02:16:00,674 ✓ Starting QBIntell
-2019-10-12 02:16:00,876 ✓ Starting QBXrefs
-2019-10-12 02:16:00,978 ✓ Starting QBOCRDetect
-2019-10-12 02:16:01,079 ✓ Starting URLSimilarity
-(Cmd) analyze --file /localmalwarefolder/mal --output /localfolder/ --full
-2019-10-06 21:33:38,915 ! getdebug failed..
-2019-10-06 21:33:38,935 ✓ Added descriptions to strings
-2019-10-06 21:33:39,637 ✓ Added descriptions to strings
-2019-10-06 21:33:40,539 ✓ Added descriptions to strings
-2019-10-06 21:33:40,640 ✓ Added descriptions to strings
-2019-10-06 21:33:40,741 ✓ Added descriptions to strings
-2019-10-06 21:33:40,981 ✓ Detecting english strings
-2019-10-06 21:33:41,086 ✓ Added descriptions to strings
-2019-10-06 21:33:41,086 ✓ Added descriptions to strings
-2019-10-06 21:33:41,220 ✓ Making symbol xrefs
-2019-10-06 21:33:47,420 ✓ Analyze windows APIs
-2019-10-06 21:33:47,638 ✓ Making file tables
-2019-10-06 21:33:47,844 ✓ Making a visualized image
-2019-10-06 21:33:48,721 → Generated Html file /localfolder/0fe8d113b826c9b46947bd9af598380a/html
 ```
 ---
 
