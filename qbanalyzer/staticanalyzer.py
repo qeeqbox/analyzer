@@ -22,7 +22,7 @@ from .intell.qbintell import QBIntell
 from .intell.qbxrefs import QBXrefs
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
-from .pydetect.loaddetections import LoadDetections
+from .qbdetect.loaddetections import LoadDetections
 from .modules.network.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
 from .mitre.mitreparser import MitreParser
@@ -31,6 +31,7 @@ from webbrowser import open_new_tab
 from os import path
 from sys import getsizeof
 from gc import collect
+from pickle import dump,HIGHEST_PROTOCOL
 #import libarchive
 
 class StaticAnalyzer:
@@ -129,6 +130,8 @@ class StaticAnalyzer:
             self.LD.checkwithdetections(data)
         if parsed.mitre or parsed.full:
             self.qbm.checkwithmitre(data)
+        with open('temp.pickle', 'wb') as handle:
+            dump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):
