@@ -1,15 +1,7 @@
-~~~~
-  _____   _____   _____  __   _  _____        \   /   _____  ______  _____
- |     | |_____] |_____| | \  | |_____| |      \_/    ____/ |______ |_____/
- |____\| |_____] |     | |  \_| |     | |_____  |    /_____ |______ |    \ ∞
-                                                |                          
-~~~~
-
 # QBAnalyzer
 QBAnalyzer is an open source threat intelligence framework for extracting artifacts and IOCs from file/dump into readable format.
 
-### Architecture
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/withoutint.png)
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/Peek%202019-11-04%2011-53.gif)
 
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
@@ -239,6 +231,8 @@ Successfully tagged qbanalyzer:latest
 2019-10-06 21:33:47,844 ✓ Making a visualized image
 2019-10-06 21:33:48,721 → Generated Html file /localfolder/0fe8d113b826c9b46947bd9af598380a/html
 ```
+
+---
 
 ### Screenshots
 Write your thoughts and findings
