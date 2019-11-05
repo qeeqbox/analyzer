@@ -3,7 +3,7 @@ __G__ = "(G)bd249ce4"
 from ...logger.logger import logstring,verbose,verbose_flag
 from ...mics.qprogressbar import progressbar
 from ...modules.files.filetypes import checkpackedfiles,dmgunpack,unpackfile
-from ...mics.funcs import getwordsmultifiles
+from ...mics.funcs import getwordsmultifiles,getwords
 from r2pipe import open as r2open
 from xml.dom.minidom import parseString
 from re import sub
@@ -175,7 +175,7 @@ class ApkParser:
         text = sub(b'[^\x20-\x7e]{2,}', b' ', f)
         text = sub(b'[^\x20-\x7e]{1,}', b'', text)
         text = sub(b'[^\w\. ]', b'', text)
-        words = text.decode("utf-8").split(" ")
+        words = text.decode("utf-8",errors="ignore").split(" ")
         if words:
             for x in words:
                 if "permission." in x:
@@ -199,6 +199,51 @@ class ApkParser:
             if checkpackedfiles(data["Location"]["File"],["Androidmanifest.xml"]):
                 unpackfile(data,data["Location"]["File"])
                 return True
+
+    @verbose(verbose_flag)
+    def checkdexsig(self,data) -> bool:
+        '''
+        check if mime is an apk type or if file contains Androidmanifest in packed files
+
+        Args:
+            data: data dict
+
+        Return:
+            True if dex
+        '''
+        if data["Details"]["Properties"]["mime"] == "application/octet-stream" and data["Location"]["Original"].endswith(".dex"):
+            return True
+
+    @verbose(verbose_flag)
+    @progressbar(True,"Analyzing dex file")
+    def analyzedex(self,data):
+        '''
+        start analyzing apk logic (r2p timeout = 10) for all dex files
+        add description to strings, get words and wordsstripped from the packed files 
+
+        Args:
+            data: data dict
+        '''
+        r2p = r2open(data["Location"]["File"],flags=['-2'])
+        r2p.cmd("e anal.timeout = 10")
+        r2p.cmd("aaaa;")
+        k = 'APK_DEX_1'
+        data[k] ={ "Classes":[],
+                   "Externals":[],
+                    "Symbols":[],
+                    "Bigfunctions":[],
+                    "Suspicious":[],
+                    "_Classes":["Type","Name"],
+                    "_Externals":["Type","Name"],
+                    "_Symbols":["Type","Address","X","Name"],
+                    "_Bigfunctions":["Size","Name"],
+                    "_Suspicious":["Location","Function","Xrefs"]}
+        data[k]["Classes"] = self.getallclasses(r2p)
+        data[k]["Externals"] = self.getallexternals(r2p)
+        data[k]["Symbols"] = self.getallsymbol(r2p)
+        data[k]["Bigfunctions"] = self.bigfunctions(r2p)
+        data[k]["Suspicious"] = self.checksus(r2p)
+        getwords(data,data["Location"]["File"])
 
     @verbose(verbose_flag)
     @progressbar(True,"Analyzing apk file")

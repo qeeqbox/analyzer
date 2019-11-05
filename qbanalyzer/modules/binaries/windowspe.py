@@ -150,8 +150,8 @@ class WindowsPe:
         '''
         _list = []
         for dll in pe.DIRECTORY_ENTRY_IMPORT:
-            if dll.dll.decode("utf-8") not in str(_list):
-                _list.append({"Dll":dll.dll.decode("utf-8"),
+            if dll.dll.decode("utf-8",errors="ignore") not in str(_list):
+                _list.append({"Dll":dll.dll.decode("utf-8",errors="ignore"),
                               "Description":""})
         return _list
 
@@ -168,7 +168,7 @@ class WindowsPe:
         '''
         _list = []
         for section in pe.sections:
-            _list.append({  "Section":section.Name.decode("utf-8").strip("\00"),
+            _list.append({  "Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
                             "MD5":section.get_hash_md5(),
                             "Description":""})
         return _list
@@ -188,9 +188,9 @@ class WindowsPe:
         if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
             for entry in pe.DIRECTORY_ENTRY_IMPORT:
                 for func in entry.imports:
-                    #print({entry.dll.decode("utf-8"):func.name.decode("utf-8")})
-                    _list.append({ "Dll":entry.dll.decode("utf-8"),
-                                                "Function":func.name.decode("utf-8"),
+                    #print({entry.dll.decode("utf-8",errors="ignore"):func.name.decode("utf-8",errors="ignore")})
+                    _list.append({ "Dll":entry.dll.decode("utf-8",errors="ignore"),
+                                                "Function":func.name.decode("utf-8",errors="ignore"),
                                                 "Description":""})
         return _list
 
@@ -208,7 +208,7 @@ class WindowsPe:
         _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_EXPORT"):
             for func in pe.DIRECTORY_ENTRY_EXPORT.symbols:
-                _list.append({ "Function":func.name.decode("utf-8"),
+                _list.append({ "Function":func.name.decode("utf-8",errors="ignore"),
                                            "Description":""})
         return _list
 
@@ -241,7 +241,7 @@ class WindowsPe:
                                 resourcedata = pe.get_data(resource_lang.data.struct.OffsetToData, resource_lang.data.struct.Size)
                                 if name == "RT_MANIFEST":
                                     try:
-                                        manifest = resourcedata.decode("utf-8")
+                                        manifest = resourcedata.decode("utf-8",errors="ignore")
                                     except:
                                         pass
                                 sig = ""
@@ -352,7 +352,7 @@ class WindowsPe:
         data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
                                     "Entropy": section.get_entropy(),
                                     "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
-                                    "Entrypoint Section":section.Name.decode("utf-8").strip("\00"),
+                                    "Entrypoint Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
                                     "verify checksum":pe.verify_checksum(),
                                     "Sig":singinhex,
                                     "imphash":pe.get_imphash(),

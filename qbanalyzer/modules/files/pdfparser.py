@@ -31,7 +31,7 @@ class PDFParser:
         Object = compile(b'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj',DOTALL|MULTILINE)
         Objects = findall(Object,pdf)
         for _ in Objects:
-            _List.append({"Object":_[0].decode("utf-8"),"Value":_[1]})
+            _List.append({"Object":_[0].decode("utf-8",errors="ignore"),"Value":_[1].decode('utf-8',errors="ignore")})
         return len(Objects),_List
 
     @verbose(verbose_flag)
@@ -58,9 +58,9 @@ class PDFParser:
             mime = from_buffer(x,mime=True)
             if mime == "application/zlib":
                 parsed = decompress(x)
-                parseddecode = parsed.decode("utf-8")
+                parseddecode = parsed.decode("utf-8",errors="ignore")
                 _Streams.append(parsed)
-            _List.append({"Stream":mime,"Parsed":parseddecode,"Value":x})
+            _List.append({"Stream":mime,"Parsed":parseddecode,"Value":x.decode('utf-8',errors="ignore")})
         return len(Streams),_List,_Streams
 
     @verbose(verbose_flag)
@@ -79,7 +79,7 @@ class PDFParser:
         JS = compile(b'/JS([\S][^>]+)',DOTALL|MULTILINE)
         JSs = findall(JS,pdf)
         for _ in JSs:
-            _List.append({"Key":"/JS","Value":_.decode("utf-8")})
+            _List.append({"Key":"/JS","Value":_.decode("utf-8",errors="ignore")})
         return len(JSs),_List
 
     @verbose(verbose_flag)
@@ -98,7 +98,7 @@ class PDFParser:
         Javascript = compile(b'/JavaScript([\S][^>]+)',DOTALL|MULTILINE)
         Javascripts = findall(Javascript,pdf)
         for _ in Javascripts:
-            _List.append({"Key":"/JavaScript","Value":_.decode("utf-8")})
+            _List.append({"Key":"/JavaScript","Value":_.decode("utf-8",errors="ignore")})
         return len(Javascripts),_List
 
     @verbose(verbose_flag)
@@ -117,7 +117,7 @@ class PDFParser:
         OpenAction = compile(b'/OpenAction([\S][^>]+)',DOTALL|MULTILINE)
         OpenActions = findall(OpenAction,pdf)
         for _ in OpenActions:
-            _List.append({"Key":"/OpenAction","Value":_.decode("utf-8")})
+            _List.append({"Key":"/OpenAction","Value":_.decode("utf-8",errors="ignore")})
         return len(OpenActions),_List
 
     @verbose(verbose_flag)

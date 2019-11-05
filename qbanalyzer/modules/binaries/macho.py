@@ -52,7 +52,7 @@ class Macho:
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd == LC_LOAD_DYLIB:
-                    _list.append({  "Library":data.decode("utf-8").rstrip('\x00'),
+                    _list.append({  "Library":data.decode("utf-8",errors="ignore").rstrip('\x00'),
                                     "Description":""})
         return _list
 
@@ -71,7 +71,7 @@ class Macho:
         for h in machos.headers:
             for lc, cmd, data in h.commands:
                 if lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
-                    name = cmd.segname[:cmd.segname.find(b'\x00')].decode("utf-8")
+                    name = cmd.segname[:cmd.segname.find(b'\x00')].decode("utf-8",errors="ignore")
                     _list.append({  "Segment":name,
                                     "Address":hex(cmd.vmaddr),
                                     "Description":""})
@@ -93,8 +93,8 @@ class Macho:
             for lc, cmd, data in h.commands:
                 if lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
                     for section in data:
-                        name = section.sectname[:section.sectname.find(b'\x00')].decode("utf-8")
-                        seg = section.segname[:section.segname.find(b'\x00')].decode("utf-8")
+                        name = section.sectname[:section.sectname.find(b'\x00')].decode("utf-8",errors="ignore")
+                        seg = section.segname[:section.segname.find(b'\x00')].decode("utf-8",errors="ignore")
                         _list.append({"Section":name,
                                       "Address":hex(section.addr),
                                       "Segment":seg,
@@ -115,7 +115,7 @@ class Macho:
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.nlists:
-            _list.append({"Symbol":name.decode("utf-8"),
+            _list.append({"Symbol":name.decode("utf-8",errors="ignore"),
                           "Description":""})
         return _list
 
@@ -133,7 +133,7 @@ class Macho:
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.localsyms:
-            _list.append({  "Symbol":name.decode("utf-8"),
+            _list.append({  "Symbol":name.decode("utf-8",errors="ignore"),
                             "Description":""})
         return _list
 
@@ -151,7 +151,7 @@ class Macho:
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.undefsyms:
-            _list.append({ "Symbol":name.decode("utf-8"),
+            _list.append({ "Symbol":name.decode("utf-8",errors="ignore"),
                             "Description":""})
         return _list
 
@@ -169,7 +169,7 @@ class Macho:
         _list = []
         s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in s.extdefsyms:
-            _list.append({  "Symbol":name.decode("utf-8"),
+            _list.append({  "Symbol":name.decode("utf-8",errors="ignore"),
                             "Description":""})
         return _list
 

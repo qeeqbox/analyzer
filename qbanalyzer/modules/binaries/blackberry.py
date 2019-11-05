@@ -29,14 +29,14 @@ class BBParser:
             if b"() " in _:
                 __ = _.split(b"() ")
                 try:
-                    _list.append({"Type":"Function","Name":__[0].decode("utf-8")})
-                    _list.append({"Type":"String","Name":__[1].decode("utf-8")})
+                    _list.append({"Type":"Function","Name":__[0].decode("utf-8",errors="ignore")})
+                    _list.append({"Type":"String","Name":__[1].decode("utf-8",errors="ignore")})
                 except:
                     pass
         strings = findall(b"[\x24][\xd8] ([\x20-\x7e]{4,})",f) #<--- check this out
         for _ in strings:
             try:
-                _list.append({"Type":"String","Name":_.decode("utf-8")})
+                _list.append({"Type":"String","Name":_.decode("utf-8",errors="ignore")})
             except:
                 pass
         return _list

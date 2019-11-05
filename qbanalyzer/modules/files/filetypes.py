@@ -26,7 +26,7 @@ def checkpackedfiles(_path,files) -> bool:
         detect = 0
         p = Popen(["7z", "l", _path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
-        output = output.decode("utf-8")
+        output = output.decode("utf-8",errors="ignore")
         for _ in files:
             if _.lower() in output.lower():
                 detect += 1

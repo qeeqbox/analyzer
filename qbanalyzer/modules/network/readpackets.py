@@ -94,14 +94,14 @@ class ReadPackets:
                                     "SourcePort":packet.getlayer(scapy.IP).sport,
                                     "Destination":packet.getlayer(scapy.IP).dst,
                                     "DestinationPort":packet.getlayer(scapy.IP).dport,
-                                    "rrname":packet.an.rrname.decode("utf-8"),
+                                    "rrname":packet.an.rrname.decode("utf-8",errors="ignore"),
                                     "rdata":str(packet.an.rdata)[1:], #I know... do not ask, long story
                                     "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
             if packet.haslayer(http.HTTPRequest):
                 for k in packet.getlayer(http.HTTPRequest).fields:
                     v = packet.getlayer(http.HTTPRequest).fields[k]
                     try:
-                        fields.update({k:v.decode("utf-8")})
+                        fields.update({k:v.decode("utf-8",errors="ignore")})
                     except:
                         pass
                 _listreadhttp.append({  "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
@@ -116,7 +116,7 @@ class ReadPackets:
                 for k in packet.getlayer(http.HTTPResponse).fields:
                     v = packet.getlayer(http.HTTPResponse).fields[k]
                     try:
-                        fields.update({k:v.decode("utf-8")})
+                        fields.update({k:v.decode("utf-8",errors="ignore")})
                     except:
                         pass
                 _listreadhttp.append({  "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),

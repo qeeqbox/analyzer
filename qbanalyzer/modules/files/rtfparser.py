@@ -48,7 +48,7 @@ class RTFParser:
                     temp = unhexlify(whitespaces)
                     tempdecoded = sub(br'[^\x20-\x7F]+',b'', temp)
                     _Listobjects.append(tempdecoded)
-                    _List.append({"Len":len(buffer[position:i]),"Parsed":tempdecoded.decode("utf-8")})
+                    _List.append({"Len":len(buffer[position:i]),"Parsed":tempdecoded.decode("utf-8",errors="ignore")})
                     break
         return _List,_Listobjects
 
