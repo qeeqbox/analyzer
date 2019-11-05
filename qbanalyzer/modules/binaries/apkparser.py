@@ -218,8 +218,8 @@ class ApkParser:
     @progressbar(True,"Analyzing dex file")
     def analyzedex(self,data):
         '''
-        start analyzing apk logic (r2p timeout = 10) for all dex files
-        add description to strings, get words and wordsstripped from the packed files 
+        start analyzing dex logic (r2p timeout = 10) for individual dex
+        add description to strings, get words and wordsstripped from the dex 
 
         Args:
             data: data dict
