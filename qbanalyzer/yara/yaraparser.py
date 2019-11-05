@@ -51,7 +51,7 @@ class YaraParser:
                 for _match in match.strings:
                     key = "{}:{}".format(match.namespace,match)
                     try:
-                        pattern =  _match[2].decode("utf-8")
+                        pattern =  _match[2].decode("utf-8",errors="ignore")
                         ppattern = "None"
                     except:
                         pattern = ''.join('\\x{:02x}'.format(x) for x in _match[2])

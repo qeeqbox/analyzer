@@ -31,7 +31,8 @@ from webbrowser import open_new_tab
 from os import path
 from sys import getsizeof
 from gc import collect
-from pickle import dump,HIGHEST_PROTOCOL
+from pickle import dump as pdump,HIGHEST_PROTOCOL
+
 #import libarchive
 
 class StaticAnalyzer:
@@ -104,6 +105,10 @@ class StaticAnalyzer:
             self.apk.analyzeapk(data)
             if parsed.intel or parsed.full:
                 self.qbt.checkwithqbintell(data,"android.json")
+        elif self.apk.checkdexsig(data):
+            self.apk.analyzedex(data)
+            if parsed.intel or parsed.full:
+                self.qbt.checkwithqbintell(data,"android.json")
         elif self.bbl.checkbbsig(data):
             self.bbl.getbbdeatils(data)
         elif self.epa.checkemailsig(data):
@@ -131,12 +136,9 @@ class StaticAnalyzer:
         if parsed.mitre or parsed.full:
             self.qbm.checkwithmitre(data)
         with open('temp.pickle', 'wb') as handle:
-            dump(data, handle, protocol=HIGHEST_PROTOCOL)
+            pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         self.hge.rendertemplate(data,None,None)
         if path.exists(data["Location"]["html"]):
             logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
             self.openinbrowser(data["Location"]["html"])
-        #d = self.convert(data)
-        #with open(data["Location"]["json"], 'w') as fp:
-        #    dump(d, fp)

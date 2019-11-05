@@ -46,15 +46,6 @@ class QBAnalyzer(Cmd):
         except:
             logstring("Checking update failed","Red")
         self.san = StaticAnalyzer()
-        #self.do_analyze("--file /home/localfiles/sexSimulator.apk --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/f9boo3.doc --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/officejsdropper.docx --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/Downloader.pdf --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/BrRAT.apk --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/Xorddos --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/GoziBankerISFB.exe --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/BundloreAdware.dmg --output /home/localfiles/ --full")
-        #self.do_analyze("--file /home/localfiles/test --output /home/localfiles/ --full")
 
     def help_analyze(self):
         self._analyze_parser.print_help()
