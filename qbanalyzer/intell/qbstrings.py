@@ -172,7 +172,7 @@ class QBStrings:
                 _List.append(_)
         for x in set(_List):
             parsed = unhexlify(x)
-            _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed})
+            _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed.decode('utf-8',errors="ignore")})
 
     @verbose(verbose_flag)
     @progressbar(True,"Added descriptions to strings")

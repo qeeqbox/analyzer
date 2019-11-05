@@ -34,7 +34,7 @@ class QBEncryption:
                     if b != None and b != False:
                         _List.append(word)
         for x in set(_List):
-            data.append({"Count":_List.count(x),"Base64":x,"Decoded":b64decode(x)})
+            data.append({"Count":_List.count(x),"Base64":x.decode('utf-8',errors="ignore"),"Decoded":b64decode(x).decode('utf-8',errors="ignore")})
 
     @verbose(verbose_flag)
     def testbase64(self,w):

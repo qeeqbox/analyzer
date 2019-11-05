@@ -56,5 +56,5 @@ class QBImage:
         buffer = BytesIO()
         img.save(buffer,format="JPEG",quality=10,optimize=True)
         bimage = b64encode(buffer.getvalue())
-        output = "data:image/jpeg;base64, {}".format(bimage.decode("utf-8"))
+        output = "data:image/jpeg;base64, {}".format(bimage.decode("utf-8",errors="ignore"))
         return output
