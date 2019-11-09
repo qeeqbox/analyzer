@@ -144,7 +144,7 @@ socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, lo
    
 ### Run it
 ```sh
-git clone git@github.com:bd249ce4/QBAnalyzer.git
+git clone https://github.com/bd249ce4/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
 ./install.sh
@@ -153,7 +153,7 @@ python3 -m qbanalyzer.cli
 
 ### Run it with docker
 ```docker
-git clone git@github.com:bd249ce4/QBAnalyzer.git
+git clone https://github.com/bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
 ```
 ---
