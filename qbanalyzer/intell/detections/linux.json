@@ -1,0 +1,136 @@
+[{
+  "Partof":"bd249ce4/QBAnalyzer"
+},{
+  "Name": "Web server file download",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "wget","curl"
+  ],
+  "Extra": ""
+},{
+  "Name": "Executable script",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "chmod +x","chmod 777"
+  ],
+  "Extra": ""
+},{
+  "Name": "History deletion",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "history -c","history -w"," bash_history","export HISTFILESIZE=0"
+  ],
+  "Extra": ""
+},{
+  "Name": "Reverse shell",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "bash -i >& /dev/tcp","bash -i >& /dev/udp","/bin/sh | nc",":localhost:","nc -e /bin/sh"
+  ],
+  "Extra": ""
+},{
+  "Name": "Firewall",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "iptables","firewall-cmd","ufw status"
+  ],
+  "Extra": ""
+},{
+  "Name": "Networking",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "route -n","hostname -f","/etc/network","/proc/net","ip addr","ifconfig","lsof","route -n"
+  ],
+  "Extra": ""
+},{
+  "Name": "Logs identifications",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "/var/log"
+  ],
+  "Extra": ""
+},{
+  "Name": "Null Redirection",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "/dev/null"
+  ],
+  "Extra": ""
+},{
+  "Name": "Temp folders",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "/dev/shm","/tmp"
+  ],
+  "Extra": ""
+},{
+  "Name": "Terminate process",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "pkill ","kill ", "killall "
+  ],
+  "Extra": ""
+},{
+  "Name": "AutoRun",
+  "Type": "QREGEX",
+  "Options": {
+    "Flag": 2 ,
+    "Word": "Normal",
+    "Required": 1
+  },
+  "Detection": [
+    "rc.local","init.d/"
+  ],
+  "Extra": ""
+}]
+
