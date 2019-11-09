@@ -41,7 +41,7 @@ class QBMitresearch:
                     return x
         return None
 
-    @progressbar(True,"Check with attack patterns")
+    @progressbar(True,"Finding attack patterns")
     @verbose(verbose_flag)
     def checkmitresimilarity(self,data):
         '''
@@ -70,7 +70,7 @@ class QBMitresearch:
                                             "Description":"None"})
             _list = []
 
-    @progressbar(True,"Check with mitre artifacts")
+    @progressbar(True,"Finding mitre artifacts")
     @verbose(verbose_flag)
     def checkmitre(self,data):
         '''
@@ -95,7 +95,7 @@ class QBMitresearch:
                                             "Description":record["description"]})
         return True
 
-    @progressbar(True,"Check with mitre")
+    @progressbar(True,"Analyzing with mitre")
     @verbose(verbose_flag)
     def checkwithmitre(self,data):
         '''

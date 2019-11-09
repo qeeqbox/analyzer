@@ -15,7 +15,7 @@ detections = { "cryptocurrency strings" : [r"\b(Bitcoin|Litecoin|Namecoin|Terrac
 				"xrp:Ripple Address":[r"\br[0-9a-zA-Z]{33}\b"],
 				"xmr:Monero Address":[r"\b4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}\b"]}
 
-@progressbar(True,"Check Crypto Currency")
+@progressbar(True,"Finding Crypto Currency patterns")
 def startanalyzing(data):
 	for detectonroot in detections:
 		for detection in detections[detectonroot]:

@@ -26,7 +26,7 @@ class LoadDetections:
                 logstring("Loading plugins failed","Red")
 
     @verbose(verbose_flag)
-    @progressbar(True,"Starting LoadDetections")
+    @progressbar(True,"Loading extra plugins")
     def checkwithdetections(self,data):
         data["QBDETECT"] = {"Detection":[],
     						"_Detection":["Count","Offset","Rule","Parsed","Match"]}

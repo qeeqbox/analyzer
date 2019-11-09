@@ -44,7 +44,7 @@ class QBAnalyzer(Cmd):
             if ver.ok and ver.text.strip() != __V__:
                 logstring("New version {} available, please update.. ".format(ver),"Red")
         except:
-            logstring("Checking update failed","Red")
+            logstring("Update failed","Red")
         self.san = StaticAnalyzer()
 
     def help_analyze(self):

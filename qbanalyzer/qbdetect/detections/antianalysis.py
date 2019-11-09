@@ -10,7 +10,7 @@ detections = {"Debugger or analyzer" : [rb"ProcessHacker\.exe|processmonitor\.ex
     			"vmcheckdll" : [rb"\x45\xC7\x00\x01"],
     			"redpill" : [rb"\x0F\x01\x0D\x00\x00\x00\x00\xC3"]}
 
-@progressbar(True,"Check Anti-Analysis")
+@progressbar(True,"Finding Anti-Analysis patterns")
 def startanalyzing(data):
 	for detectonroot in detections:
 		for detection in detections[detectonroot]:
