@@ -24,6 +24,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Runs locally and easy to maintain
 - Generates HTML and JSON as output
 - Write your ideas under each output
+- General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
 - OCR words detections (!)
@@ -72,6 +73,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Xref detection
 - Android
     - APK information
+    - DEX information
     - Manifest descriptions
     - Intent descriptions
     - Resources extraction
@@ -105,6 +107,9 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - EMAIL
     - Header information
     - Attachment extraction
+- Archives
+    - Extract mimes and guess by extensions
+    - Finding patterns in all unpacked files
 
 ### Roadmap
 - ~~Reduce file I/O~~
@@ -127,7 +132,7 @@ Thank you for reaching out!! I have been getting requests to implement the follo
 Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img and a lot of researches.
 
 ### Libs
-sre_parse, requests, r2pipe, scapy, queue, lzma, genericpath, nltk, cython_runtime, json, markupsafe, xml, pprint, signal, elftools, code, asyncio, codecs, qbanalyzer, token, encodings, glob, fcntl, OpenSSL, ssl, certifi, mimetypes, sqlite3, urllib, uu, hmac, bisect, multiprocessing, cryptography, binascii, xmlrpc, copyreg, collections, select, zipimport, fractions, concurrent, pytesseract, grp, tld, gzip, sre_compile, fnmatch, socket, subprocess, traceback, importlib, mmap, locale, marshal, calendar, cmd, warnings, datetime, inspect, numbers, urllib3, atexit, zope, platform, cffi, gettext, ctypes, sys, enum, hashlib, math, zlib, pyexpat, logging, struct, uuid, difflib, html, linecache, macholib, sitecustomize, six, stringprep, posix, weakref, opcode, re, runpy, site, ssdeep, zipfile, shutil, email, reprlib, netrc, types, functools, dis, quopri, pickle, pathlib, pkgutil, pefile, copy, decimal, ftplib, distutils, time, numpy, os, imp, unittest, yara, typing, pycparser, getopt, apport_python_hook, asyncore, posixpath, base64, asn1crypto, builtins, errno, bz2, sre_constants, array, optparse, pdb, operator, selectors, webbrowser, codeop, abc, PIL, chardet, gc, heapq, socketserver, magic, textwrap, tempfile, pydoc, resource, threading, http, keyword, itertools, ast, pwd, M2Crypto, ipaddress, csv, swig_runtime_data4, plistlib, ntpath, jinja2, shlex, ordlookup, tokenize, bdb, idna, simplejson, secrets, cgi, io, string, sysconfig, argparse, contextlib, regex, random, unicodedata, stat
+socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, locale, pathlib, csv, hmac, token, queue, scapy, html, types, inspect, functools, nltk, site, genericpath, secrets, re, os, sre_parse, qbanalyzer, threading, shutil, mimetypes, struct, optparse, pickle, cffi, cryptography, bdb, urllib, plistlib, zipimport, tempfile, sre_compile, runpy, opcode, elftools, magic, uu, sqlite3, ctypes, chardet, ntpath, enum, argparse, array, codeop, datetime, selectors, heapq, distutils, logging, posix, pytesseract, requests, jinja2, contextlib, cmd, collections, email, calendar, decimal, M2Crypto, unittest, swig_runtime_data4, tokenize, json, sitecustomize, grp, sysconfig, random, six, subprocess, pwd, ftplib, reprlib, ordlookup, ssdeep, cgi, PIL, ssl, sre_constants, gzip, apport_python_hook, tld, typing, warnings, platform, getopt, pyexpat, zlib, abc, idna, stringprep, select, cython_runtime, certifi, multiprocessing, keyword, r2pipe, sys, pdb, regex, resource, code, pydoc, copyreg, difflib, urllib3, uuid, ast, itertools, string, signal, fnmatch, xmlrpc, quopri, ipaddress, numbers, numpy, weakref, importlib, bz2, math, asyncio, binascii, traceback, encodings, pycparser, lzma, http, errno, glob, asn1crypto, gc, fcntl, bisect, unicodedata, textwrap, builtins, macholib, imp, marshal, pprint, yara, markupsafe, hashlib, linecache, posixpath, socket, base64, time, OpenSSL, asyncore, atexit, fractions, dis, copy, zipfile, pkgutil, gettext, webbrowser, netrc
 
 ### Disclaimer
 - This project:
