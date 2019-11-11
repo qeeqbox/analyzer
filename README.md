@@ -34,6 +34,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Ports description
 - DNS servers description (Top servers)
 - Websites similarity detection (Top 10000)
+- Artifacts force directed image
 - Xrefs force directed image
 - Xrefs count table
 - MITRE att&ck tools detection (could be FP)
@@ -106,7 +107,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Object extraction
 - EMAIL
     - Header information
-    - Attachment extraction
+    - Attachment extraction and parsing 
 - Archives
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
