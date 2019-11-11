@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.02"
+__V__ = "2019.V.01.03"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -12,7 +12,7 @@ from requests import get
 print("                                                                            ")
 print(" _____   _____   _____  __   _  _____        \\   / ______  ______  _____   ")
 print("|     | |_____] |_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
-print("|____\\| |_____] |     | |  \\_| |     | |_____  |   /_____ |______ |    \\ ∞")
+print("|____\\| |_____] |     | |  \\_| |     | |_____  |   /_____ |______ |    \\")
 print("                                               |                         ")
 print("                                                                           ")
 

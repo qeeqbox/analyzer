@@ -24,6 +24,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Runs locally and easy to maintain
 - Generates HTML and JSON as output
 - Write your ideas under each output
+- General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
 - OCR words detections (!)
@@ -72,6 +73,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Xref detection
 - Android
     - APK information
+    - DEX information
     - Manifest descriptions
     - Intent descriptions
     - Resources extraction
@@ -105,6 +107,9 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - EMAIL
     - Header information
     - Attachment extraction
+- Archives
+    - Extract mimes and guess by extensions
+    - Finding patterns in all unpacked files
 
 ### Roadmap
 - ~~Reduce file I/O~~
@@ -127,7 +132,7 @@ Thank you for reaching out!! I have been getting requests to implement the follo
 Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img and a lot of researches.
 
 ### Libs
-sre_parse, requests, r2pipe, scapy, queue, lzma, genericpath, nltk, cython_runtime, json, markupsafe, xml, pprint, signal, elftools, code, asyncio, codecs, qbanalyzer, token, encodings, glob, fcntl, OpenSSL, ssl, certifi, mimetypes, sqlite3, urllib, uu, hmac, bisect, multiprocessing, cryptography, binascii, xmlrpc, copyreg, collections, select, zipimport, fractions, concurrent, pytesseract, grp, tld, gzip, sre_compile, fnmatch, socket, subprocess, traceback, importlib, mmap, locale, marshal, calendar, cmd, warnings, datetime, inspect, numbers, urllib3, atexit, zope, platform, cffi, gettext, ctypes, sys, enum, hashlib, math, zlib, pyexpat, logging, struct, uuid, difflib, html, linecache, macholib, sitecustomize, six, stringprep, posix, weakref, opcode, re, runpy, site, ssdeep, zipfile, shutil, email, reprlib, netrc, types, functools, dis, quopri, pickle, pathlib, pkgutil, pefile, copy, decimal, ftplib, distutils, time, numpy, os, imp, unittest, yara, typing, pycparser, getopt, apport_python_hook, asyncore, posixpath, base64, asn1crypto, builtins, errno, bz2, sre_constants, array, optparse, pdb, operator, selectors, webbrowser, codeop, abc, PIL, chardet, gc, heapq, socketserver, magic, textwrap, tempfile, pydoc, resource, threading, http, keyword, itertools, ast, pwd, M2Crypto, ipaddress, csv, swig_runtime_data4, plistlib, ntpath, jinja2, shlex, ordlookup, tokenize, bdb, idna, simplejson, secrets, cgi, io, string, sysconfig, argparse, contextlib, regex, random, unicodedata, stat
+socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, locale, pathlib, csv, hmac, token, queue, scapy, html, types, inspect, functools, nltk, site, genericpath, secrets, re, os, sre_parse, qbanalyzer, threading, shutil, mimetypes, struct, optparse, pickle, cffi, cryptography, bdb, urllib, plistlib, zipimport, tempfile, sre_compile, runpy, opcode, elftools, magic, uu, sqlite3, ctypes, chardet, ntpath, enum, argparse, array, codeop, datetime, selectors, heapq, distutils, logging, posix, pytesseract, requests, jinja2, contextlib, cmd, collections, email, calendar, decimal, M2Crypto, unittest, swig_runtime_data4, tokenize, json, sitecustomize, grp, sysconfig, random, six, subprocess, pwd, ftplib, reprlib, ordlookup, ssdeep, cgi, PIL, ssl, sre_constants, gzip, apport_python_hook, tld, typing, warnings, platform, getopt, pyexpat, zlib, abc, idna, stringprep, select, cython_runtime, certifi, multiprocessing, keyword, r2pipe, sys, pdb, regex, resource, code, pydoc, copyreg, difflib, urllib3, uuid, ast, itertools, string, signal, fnmatch, xmlrpc, quopri, ipaddress, numbers, numpy, weakref, importlib, bz2, math, asyncio, binascii, traceback, encodings, pycparser, lzma, http, errno, glob, asn1crypto, gc, fcntl, bisect, unicodedata, textwrap, builtins, macholib, imp, marshal, pprint, yara, markupsafe, hashlib, linecache, posixpath, socket, base64, time, OpenSSL, asyncore, atexit, fractions, dis, copy, zipfile, pkgutil, gettext, webbrowser, netrc
 
 ### Disclaimer
 - This project:
@@ -139,7 +144,7 @@ sre_parse, requests, r2pipe, scapy, queue, lzma, genericpath, nltk, cython_runti
    
 ### Run it
 ```sh
-git clone git@github.com:bd249ce4/QBAnalyzer.git
+git clone https://github.com/bd249ce4/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
 ./install.sh
@@ -148,180 +153,6 @@ python3 -m qbanalyzer.cli
 
 ### Run it with docker
 ```docker
-git clone git@github.com:bd249ce4/QBAnalyzer.git
+git clone https://github.com/bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
 ```
----
-
-### Screenshots
-Write your thoughts and findings
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/textarea.png)
-
-PE information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pe.png)
-
-WIN API and C functions Description
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/winapi1.png)
-
-Sections Description
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/winsecs.png)
-
-Resources Description
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/cdes.png)
-
-Dll Description
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/dlls.png)
-
-PE Signature
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/sigextract.png)
-
-PE Extraction
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/siginfo.png)
-
-PE Manifest
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/manfiest.png)
-
-DMG plist information 
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/dmginfo.png)
-
-MACHO resources
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/res.png)
-
-MACHO Sections
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/mac1.png)
-
-MACHO Libs
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/mac2.png)
-
-MACHO Symbols
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/machosym.png)
-
-DMG shell extraction 
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/shellextract.png)
-
-ELF sections
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/linuxsecs.png)
-
-ELF Symbols
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/elfsym.png)
-
-BB HEADER information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/bb1.png)
-
-BB DATA information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/bb2.png)
-
-BB Functions and strings
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/bbfs.png)
-
-APK information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/dexinfo.png)
-
-APK permissions information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/apkper.png)
-
-APK classes
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/apkclasses.png)
-
-APK externals
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/apkex.png)
-
-APK symbols
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/apksymbols.png)
-
-APK big functions
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/apkfuncs.png)
-
-PCAP HTTP
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap10.png)
-
-PCAP DNS
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap2.png)
-
-PCAP PORTs
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap5.png)
-
-PCAP Frames
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap4.png)
-
-PCAP IPs
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap6.png)
-
-PCAP WAP detection
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/detectfirewall.png)
-
-YARA
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/yara.png)
-
-NL English detection
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/eng.png)
-
-OCR detection
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/ocrdetection.png)
-
-Unknown word
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/unkn.png)
-
-URLs detection
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/urldet.png)
-
-DNS Servers detection
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/dnsservers.png)
-
-URLs similarity
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/urlsim.png)
-
-MITRE description
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/mitre.png)
-
-MITRE information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/mitreinfo.png)
-
-Extracted files
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/extract.png)
-
-Email information
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/emailinfo.png)
-
-Email attachment extraction
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/attachments.png)
-
-Office info 
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/officeinfo.png)
-
-Office bin extraction 
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/officebinextract.png)
-
-RTF object
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/rtfnobjects.png)
-
-RTF object dump
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/rtfobjectdump.png)
-
-Email patterns
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/emailextract.png)
-
-Behavior APIs
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/behavior.png)
-
-Xref count
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/xrefscount.png)
-
-PDF keys
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pdfkeys.png)
-
-PDF objects
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pdfobjects.png)
-
-PDF stream parsing
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/flatstreamparsed.png)
-
-Xref force directed image
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/xrefstree.png)
-
-PCAP IPs MAP
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/pcap7.png)
-
-Similarity image
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/sim.png)
-

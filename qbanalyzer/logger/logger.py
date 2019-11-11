@@ -30,8 +30,8 @@ def logstring(_str,color):
         color: output option
     '''
     stdout.flush()
-    if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"✓",colors.Restore,_str))
-    elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,"→",colors.Restore,_str))
+    if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"X",colors.Restore,_str))
+    elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,">",colors.Restore,_str))
     elif color == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
 
 def verbose(OnOff=False):
