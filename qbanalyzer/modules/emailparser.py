@@ -21,17 +21,16 @@ class EmailParser():
         initialize class
         '''
 
-
     @verbose(verbose_flag)
     def getattachment(self,data, msg) -> (list):
         '''
         get attachment of email
 
         Args:
+            data: data dict
             msg: msg object
 
         Return:
-            list of attachment and their info
             list of extracted buffers
         '''
 
@@ -65,14 +64,14 @@ class EmailParser():
     @verbose(verbose_flag)
     def checkattachmentandmakedir(self,data, msg) -> (bool):
         '''
-        get attachment of email
+        check if an email has attachments or not
 
         Args:
+            data: data dict
             msg: msg object
-
+            
         Return:
-            list of attachment and their info
-            list of extracted buffers
+            true or false
         '''
         if msg.get_content_maintype() == 'multipart':
             for attachment in msg.walk():
