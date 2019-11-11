@@ -5,6 +5,13 @@ from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwordsmultifilesarray
 from email import message_from_bytes
 from hashlib import md5
+from random import choice
+from os import path,mkdir
+from string import ascii_lowercase
+from re import match
+from magic import from_file,Magic
+from ssdeep import hash_from_file
+from mimetypes import guess_type
 
 class EmailParser():
     @verbose(verbose_flag)
@@ -14,8 +21,9 @@ class EmailParser():
         initialize class
         '''
 
+
     @verbose(verbose_flag)
-    def getattachment(self, msg) -> (list,list):
+    def getattachment(self,data, msg) -> (list):
         '''
         get attachment of email
 
@@ -26,20 +34,53 @@ class EmailParser():
             list of attachment and their info
             list of extracted buffers
         '''
-        _list = []
+
         _Stream = []
+
+
         if msg.get_content_maintype() == 'multipart':
             for attachment in msg.walk():
                 if attachment.get_content_maintype() == 'multipart': continue
-                if attachment.get('Content-Disposition') is None: continue# print analyzer(attachment.get_payload(decode = True))
-                data = attachment.get_payload(decode = True)
-                sig = ''.join('\\x{:02x}'.format(x) for x in data[: 12])
-                _Stream.append(data)
-                _list.append({"Name": attachment.get_filename(),
-                              "md5": md5(data).hexdigest(),
-                              "Sig": sig,
-                              "Parsed": data})
-        return _list,_Stream
+                if attachment.get('Content-Disposition') is None: continue
+                tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
+                safename = "temp_"+tempstring
+                file = path.join(data["Location"]["Folder"], safename)
+                tempfilename = "temp"+"".join([c for c in attachment.get_filename() if match(r'[\w\.]', c)])
+                buffer = attachment.get_payload(decode=True)
+                with open(file,"wb") as f:
+                    f.write(buffer)
+                    _md5 = md5(buffer).hexdigest()
+                    mime = from_file(file,mime=True)
+                    data["EMAIL"]["Attachments"].append({"Name":attachment.get_filename(),
+                                                         "Type":mime,
+                                                         "Extension":guess_type(tempfilename)[0],
+                                                         "Path":file,
+                                                         "md5":_md5})
+                    data[tempstring] = { "Attached":"",
+                                         "_Attached":""}
+                    data[tempstring]["Attached"] = buffer
+                    _Stream.append(buffer)
+        return _Stream
+
+    @verbose(verbose_flag)
+    def checkattachmentandmakedir(self,data, msg) -> (bool):
+        '''
+        get attachment of email
+
+        Args:
+            msg: msg object
+
+        Return:
+            list of attachment and their info
+            list of extracted buffers
+        '''
+        if msg.get_content_maintype() == 'multipart':
+            for attachment in msg.walk():
+                if attachment.get_content_maintype() == 'multipart': continue
+                if attachment.get('Content-Disposition') is None: continue
+                if not path.isdir(data["Location"]["Folder"]):
+                    mkdir(data["Location"]["Folder"])
+                return True
 
     @verbose(verbose_flag)
     def checkemailsig(self, data) -> bool:
@@ -68,9 +109,14 @@ class EmailParser():
         data["EMAIL"] = { "General": {},
                          "_General": {},
                          "Attachments": [],
-                         "_Attachments": ["Name", "md5", "Sig", "Parsed"]}
+                         "_Attachments": ["Name","Type","Extension","md5","Path"]}
         f = data["FilesDumps"][data["Location"]["File"]]
-        message = message_from_bytes(f)        
+        message = message_from_bytes(f)
+        if self.checkattachmentandmakedir(data,message):
+            Attachments = True
+            Streams = self.getattachment(data,message)
+        else:
+            Attachments = False
         data["EMAIL"]["General"] = {"From": message['From'],
                                     "To": message['To'],
                                     "Subject": message['Subject'],
@@ -79,8 +125,7 @@ class EmailParser():
                                     "MIME-Version": message['MIME-Version'],
                                     "Content-Type": message['Content-Type'],
                                     "Date": message['Date'],
-                                    "Message-ID": message['Message-ID']}
-
-        data["EMAIL"]["Attachments"],Streams = self.getattachment(message)
+                                    "Message-ID": message['Message-ID'],
+                                    "Attachments":Attachments}
         if len(Streams) > 0:
             getwordsmultifilesarray(data,Streams)

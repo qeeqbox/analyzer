@@ -43,15 +43,10 @@ def verbose(OnOff=False):
     '''
     def decorator(func):
         def wrapper(*args, **kwargs):
-            try:
-                if OnOff: log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
-                x = func(*args, **kwargs)
-                if x:
-                    return x
-            except Exception:
-                #print(format_exc())
-                logstring("{} failed..".format(func.__name__),"Red")
-                return None
+            if OnOff: log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+            x = func(*args, **kwargs)
+            if x:
+                return x
         return wrapper
     return decorator
 

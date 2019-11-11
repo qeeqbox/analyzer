@@ -261,6 +261,8 @@ class HtmlMaker:
                    <tr>
                         <td class="nobackgroundcolor"><canvas class="worldmap"></canvas></td>
                         <script>
+                        //contact me for license
+                        (function() {
                         var canvas = d3.select(".worldmap").attr("width", '960').attr("height", '500');
                         var context = canvas.node().getContext("2d");
                         var proj = d3.geo.equirectangular(),color = d3.scale.category20(),graticule = d3.geo.graticule();
@@ -286,7 +288,7 @@ class HtmlMaker:
                                   return 1;
                               });
                         });
-
+                        })();
                         </script>
                     </tr>
             </tbody>
@@ -297,7 +299,7 @@ class HtmlMaker:
         return result
 
     @verbose(verbose_flag)
-    def makexrefmapimage(self,data,header,exclude=None,textarea=None) -> str:
+    def makerefmapimage(self,data,header,name,exclude=None,textarea=None) -> str:
         '''
         render xref image into html table
 
@@ -315,98 +317,139 @@ class HtmlMaker:
         <table>
             <thead>
                 <tr>
-                    <th colspan="1">{{ header }}</th>
+                    <th colspan="1">{{header}}</th>
                 </tr>
             </thead>
             <tbody>
                    <tr>
-                        <td class="nobackgroundcolor"><svg class="xrefmap"></svg></td>
+                        <td id="{{name}}" class="nobackgroundcolor"><svg class="{{name}}"></svg></td>
                         <script>
-                        var width = 2000,
-                            height = 2000,
+                        //contact me for license
+                        (function() {
+                        var width = 1000,
+                            height = 1000,
                             radius = 10;
-                           var svg = d3.select(".xrefmap").attr("width", width).attr("height", height);
-                            var dataset = {{ data|safe }};
-                            var force = d3.layout.force()
-                                .nodes(dataset["nodes"])
-                                .links(dataset["links"])
-                                .linkDistance(100)
-                                .theta(0.1)
-                                .size([width,height])
-                                .charge(-1000)
-                                .start();
-                            var links = svg.selectAll("line")
-                              .data(dataset["links"])
-                              .enter()
-                              .append("line")
-                              .attr('marker-end','url(#arrowhead)')
-                              .style("stroke","#000")
-                              .style("pointer-events", "none");
-                            var nodes = svg.selectAll("circle")
-                              .data(dataset["nodes"])
-                              .enter().append("circle")
-                              .attr("r", radius - .75)
-                              .style("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
-                              .call(force.drag)
-                            var nodelabels = svg.selectAll(".nodelabel") 
-                               .data(dataset["nodes"])
-                               .enter()
-                               .append("text")
-                               .text(function(d){return d["func"];});
-                            var linkpaths = svg.selectAll(".linkpath")
-                                .data(dataset["links"])
-                                .enter()
-                                .append('path')
-                                .attr('fill-opacity',0)
-                                .attr('id',function(d,i) {return 'linkpath'+i})
-                                .style("pointer-events", "none");
-                            var linklabels = svg.selectAll(".linklabel")
-                                .data(dataset["links"])
-                                .enter()
-                                .append('text')
-                                .style("pointer-events", "none")
-                                .attr('font-size',10)
-                                .attr('dy',0)
-                                .attr('dx',50)
-                                .attr('fill','#000');
-                            linklabels.append('textPath')
-                                .attr('xlink:href',function(d,i) {return '#linkpath'+i})
-                                .style("pointer-events", "none");
-                                //.text(function(d,i){return 'label '+i});
-                              svg.append('defs').append('marker')
-                                  .attr('id', 'arrowhead')
-                                  .attr('viewBox', '0 -5 10 10')
-                                  .attr('refX', 20)
-                                  .attr('refY', 0)
-                                  .attr('markerWidth', 8)
-                                  .attr('markerHeight', 8)
-                                  .attr('orient', 'auto')
-                                .append('path')
-                                  .attr('d', 'M0,-5L10,0L0,5')
-                                  .attr('fill', '#000');
-
-                            force.on("tick", function(){
-
-                                links.attr({"x1": function(d){return d["source"].x;},
-                                            "y1": function(d){return d["source"].y;},
-                                            "x2": function(d){return d["target"].x;},
-                                            "y2": function(d){return d["target"].y;}});
-
-                                nodes.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
-                                .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
-
-                                nodelabels.attr("x", function(d) { return d.x; }) 
-                                          .attr("y", function(d) { return d.y; });
-                                linkpaths.attr('d', function (d) {return 'M ' + d["source"].x + ' ' + d["source"].y + ' L ' + d["target"].x + ' ' + d["target"].y;});       
-
+                        var svg = d3.select(".{{name}}").attr("width", width).attr("height", height);
+                        var dataset = {{data | safe}};
+                        var force = d3.layout.force()
+                            .nodes(dataset["nodes"])
+                            .links(dataset["links"])
+                            .linkDistance(100)
+                            .theta(0.1)
+                            .size([width, height])
+                            .charge(-1000)
+                            .start();
+                        var links = svg.selectAll("line")
+                            .data(dataset["links"])
+                            .enter()
+                            .append("line")
+                            .attr('marker-end', 'url(#arrowhead)')
+                            .style("stroke", "#000")
+                            .style("pointer-events", "none");
+                        var nodes = svg.selectAll("circle")
+                            .data(dataset["nodes"])
+                            .enter().append("circle")
+                            .attr("r", radius - .75)
+                            .style("fill", function() {
+                                return "hsl(" + Math.random() * 360 + ",100%,50%)";
+                            })
+                            .call(force.drag)
+                        var nodelabels = svg.selectAll(".nodelabel")
+                            .data(dataset["nodes"])
+                            .enter()
+                            .append("text")
+                            .text(function(d) {
+                                return d["func"];
                             });
+                        var linkpaths = svg.selectAll(".linkpath")
+                            .data(dataset["links"])
+                            .enter()
+                            .append('path')
+                            .attr('fill-opacity', 0)
+                            .attr('id', function(d, i) {
+                                return 'linkpath' + i
+                            })
+                            .style("pointer-events", "none");
+                        var linklabels = svg.selectAll(".linklabel")
+                            .data(dataset["links"])
+                            .enter()
+                            .append('text')
+                            .style("pointer-events", "none")
+                            .attr('font-size', 10)
+                            .attr('dy', 0)
+                            .attr('dx', 50)
+                            .attr('fill', '#000');
+                        linklabels.append('textPath')
+                            .attr('xlink:href', function(d, i) {
+                                return '#linkpath' + i
+                            })
+                            .style("pointer-events", "none");
+                        //.text(function(d,i){return 'label '+i});
+                        svg.append('defs').append('marker')
+                            .attr('id', 'arrowhead')
+                            .attr('viewBox', '0 -5 10 10')
+                            .attr('refX', 20)
+                            .attr('refY', 0)
+                            .attr('markerWidth', 8)
+                            .attr('markerHeight', 8)
+                            .attr('orient', 'auto')
+                            .append('path')
+                            .attr('d', 'M0,-5L10,0L0,5')
+                            .attr('fill', '#000');
+
+                        resize();
+                        d3.select(window).on("resize.{{name}}", resize);
+
+                        force.on("tick", function() {
+
+                            links.attr({
+                                "x1": function(d) {
+                                    return d["source"].x;
+                                },
+                                "y1": function(d) {
+                                    return d["source"].y;
+                                },
+                                "x2": function(d) {
+                                    return d["target"].x;
+                                },
+                                "y2": function(d) {
+                                    return d["target"].y;
+                                }
+                            });
+
+                            nodes.attr("cx", function(d) {
+                                    return d.x = Math.max(radius, Math.min(width - radius, d.x));
+                                })
+                                .attr("cy", function(d) {
+                                    return d.y = Math.max(radius, Math.min(height - radius, d.y));
+                                });
+
+                            nodelabels.attr("x", function(d) {
+                                    return d.x;
+                                })
+                                .attr("y", function(d) {
+                                    return d.y;
+                                });
+                            linkpaths.attr('d', function(d) {
+                                return 'M ' + d["source"].x + ' ' + d["source"].y + ' L ' + d["target"].x + ' ' + d["target"].y;
+                            });
+
+                        });
+
+                        function resize() {
+                            width = document.getElementById("{{name}}").clientWidth - 20; //for padding
+                            height = document.getElementById("{{name}}").clientHeight;
+                            svg.attr("width", width).attr("height", height);
+                            force.size([width, height]).resume();
+                        }
+                        })();
                         </script>
                     </tr>
             </tbody>
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
-        result = Template(temp).render(header="Xrefs",data=str(data))
+        result = Template(temp).render(header="Xrefs",data=str(data),name=name)
         return result
 
     @verbose(verbose_flag)
@@ -445,11 +488,22 @@ class HtmlMaker:
                                 table += self.makealistsettablenew3(data[x][key[1:]],key[1:],None,True,safe)
                         if key[1:] == "IPS" and len(data[x][key[1:]]) > 0 and x == "PCAP":
                             table +=self.makeworldimage(data[x][key[1:]],None,None,True)
-                    elif key == "GRAPH" and len(data[x][key]) > 0 and x == "XREFS":
-                        if data["XREFS"]["GRAPH"]["nodes"] and data["XREFS"]["GRAPH"]["links"]:
-                            table +=self.makexrefmapimage(data[x][key],None,None,True)
+                    elif key == "GRAPH":
+                        pass
+
                 except:
                     pass
+
+        
+        keys = ["XREFS","REFS"]
+
+        for key in keys:
+            try:
+                if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
+                    table +=self.makerefmapimage(data[key]["GRAPH"],None,key+"d3map",None,True)
+            except:
+                pass
+
 
         table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,True)
         return table

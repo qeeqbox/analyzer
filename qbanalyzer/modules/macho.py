@@ -201,7 +201,7 @@ class Macho:
             data["Location"]["Original"].endswith(".dmg"):
             x = dmgunpack(data["Location"]["File"])
             if x: 
-                if checkpackedfiles(x,["Info.plist"]):
+                if checkpackedfiles(x,["info.plist"]):
                     unpackfile(data,x)
                     return True
 
@@ -218,6 +218,48 @@ class Macho:
         '''
         if data["Details"]["Properties"]["mime"] == "application/x-mach-binary":
             return True
+
+    @verbose(verbose_flag)
+    def checkipa(self,data) -> bool:
+        '''
+        check mime is dmg or not
+
+        Args:
+            data: data dict
+
+        Return:
+            True if dmg
+        '''
+        if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
+            data["Location"]["Original"].endswith(".ipa"):
+            x = dmgunpack(data["Location"]["File"])
+            if x: 
+                if checkpackedfiles(x,["info.plist"]):
+                    unpackfile(data,x)
+                    return True
+
+    @verbose(verbose_flag)
+    @progressbar(True,"Analzying DMG file")
+    def getipadeatils(self,data):
+        '''
+        start analyzing dmg file, loop over packed file and extract info.plist and shells
+
+        Args:
+            data: data dict
+        '''
+        data["IPA"] = {"General":{},
+                       "_General":{}}
+        for i, v in enumerate(data["Packed"]["Files"]):
+            if v["Path"].lower().endswith("info.plist"):
+                data["DMG"]["General"] = self.getplist(v["Path"])
+                break
+        for i, v in enumerate(data["Packed"]["Files"]):
+            if v["Type"] == "text/x-shellscript":
+                k = 'DMG_Shellscript_{}'.format(i)
+                data[k] = { "Shell":"",
+                            "_Shell":""}
+                data[k]["Shell"] = open(v["Path"],"r").read()
+        getwordsmultifiles(data,data["Packed"]["Files"])
 
     @verbose(verbose_flag)
     @progressbar(True,"Analzying DMG file")

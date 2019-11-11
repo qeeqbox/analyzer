@@ -10,6 +10,7 @@ from hashlib import md5, sha1, sha256
 from magic import from_file,Magic
 from ssdeep import hash_from_file
 from mimetypes import guess_type
+from re import match
 
 @verbose(verbose_flag)
 def checkpackedfiles(_path,files) -> bool:
@@ -76,7 +77,11 @@ def unpackfile(data,_path):
                 f = open(path.join(currentpath, file),"rb").read()
                 _md5 = md5(f).hexdigest()
                 mime = from_file(path.join(currentpath, file),mime=True)
-                data["Packed"]["Files"].append({"Name":file,"Type":mime,"Extension":guess_type(path.join(currentpath, file))[0],"Path":path.join(currentpath, file),"md5":_md5})
+                data["Packed"]["Files"].append({"Name":file,
+                                                "Type":mime,
+                                                "Extension":guess_type(path.join(currentpath, file))[0],
+                                                "Path":path.join(currentpath, file),
+                                                "md5":_md5})
                 data["FilesDumps"].update({path.join(currentpath, file):f})
     except:
         pass
@@ -107,6 +112,9 @@ class FileTypes:
             data: data dict
             path of target file
         '''
+
+        safename = "".join([c for c in path.basename(_path) if match(r'[\w\.]', c)])
+        if len(safename) == 0: safename = "temp"
         md5 = data["Details"]["Properties"]["md5"]
         if path.exists(self.malwarefarm+md5):
             rmtree(self.malwarefarm+md5)
@@ -114,7 +122,7 @@ class FileTypes:
         copyfile(_path,self.malwarefarm+md5+path.sep+"temp")
         data["Location"] = {"Original":_path,
                             "File":self.malwarefarm+md5+path.sep+"temp",
-                            "html":self.malwarefarm+md5+path.sep+"html",
+                            "html":self.malwarefarm+md5+path.sep+safename+".html",
                             "json":self.malwarefarm+md5+path.sep+"json",
                             "Folder":self.malwarefarm+md5+path.sep+"temp_unpacked"}
         data["FilesDumps"] = {self.malwarefarm+md5+path.sep+"temp":open(_path,"rb").read()}

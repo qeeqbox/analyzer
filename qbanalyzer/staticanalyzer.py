@@ -18,7 +18,7 @@ from .yara.yaraparser import YaraParser
 from .intell.qbstrings import QBStrings
 from .intell.qbimage import QBImage
 from .intell.qbintell import QBIntell
-from .intell.qbxrefs import QBXrefs
+from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
 from .intell.wafdetect import WafDetect
@@ -56,7 +56,7 @@ class StaticAnalyzer:
         self.hge = HtmlMaker(self.qbi)
         self.epa = EmailParser()
         self.qbt = QBIntell()
-        self.qbx = QBXrefs()
+        self.qb3 = QBD3generator()
         self.qoc = QBOCRDetect()
         self.urs = URLSimilarity()
         self.fty = FileTypes()
@@ -65,12 +65,6 @@ class StaticAnalyzer:
         self.rtf = RTFParser()
         self.qbe = QBEncryption()
         self.LD = LoadDetections()
-
-    def openinbrowser(self,_path):
-        '''
-        open html file in default browser
-        '''
-        open_new_tab(_path)
 
     @verbose(verbose_flag)
     def analyze(self,parsed):
@@ -90,11 +84,11 @@ class StaticAnalyzer:
             if parsed.intel or parsed.full:
                 self.qbt.checkwithqbintell(data,"winapi.json")
             if parsed.xref or parsed.full:
-                self.qbx.makexref(data)
+                self.qb3.makexref(data)
         elif self.elf.checkelfsig(data):
             self.elf.getelfdeatils(data)
             if parsed.xref or parsed.full:
-                self.qbx.makexref(data)
+                self.qb3.makexref(data)
             if parsed.intel or parsed.full:
                 self.qbt.checkwithqbintell(data,"linux.json")
         elif self.mac.checkmacsig(data):
@@ -135,6 +129,8 @@ class StaticAnalyzer:
             self.LD.checkwithdetections(data)
         if parsed.mitre or parsed.full:
             self.qbm.checkwithmitre(data)
+        if parsed.visualize or parsed.full:
+            self.qb3.makeartifactsd3(data)
         with open('temp.pickle', 'wb') as handle:
             pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
@@ -142,3 +138,9 @@ class StaticAnalyzer:
         if path.exists(data["Location"]["html"]):
             logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
             self.openinbrowser(data["Location"]["html"])
+
+    def openinbrowser(self,_path):
+        '''
+        open html file in default browser
+        '''
+        open_new_tab(_path)

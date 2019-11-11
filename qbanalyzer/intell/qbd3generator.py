@@ -13,8 +13,8 @@ from ast import literal_eval
 #(check returns 0 because of error and flags=['-2'])
 #Similar to objdump, still needs to optimize
   
-class QBXrefs:
-    @progressbar(True,"Starting QBXrefs")
+class QBD3generator:
+    @progressbar(True,"Starting QBD3generator")
     def __init__(self):
         pass
 
@@ -93,3 +93,57 @@ class QBXrefs:
             data["XREFS"]["GRAPH"]["nodes"] = _node
             data["XREFS"]["GRAPH"]["links"] = _links
             data["XREFS"]["TEXT"] = _list
+
+    @verbose(verbose_flag)
+    def makeartifactsd3(self,data) -> bool:
+        '''
+        get artifacts from data and generate d3
+
+        Args:
+            data: data dict
+        '''
+
+        data["REFS"] = { "GRAPH":{"nodes":[],"links":[]},
+                          "TEXT":[],
+                         "_TEXT":["From","To"]}
+
+        _node = []
+        _links = []
+        _list = []
+        _temp = []
+
+        #will be fixed later on
+
+        try:        
+            for item in data["Strings"]["IPS"]:
+                _list.append({"From":"File","To":item["IP"]})
+        except:
+            pass
+
+        try:        
+            for item in data["Strings"]["EMAILs"]:
+                _list.append({"From":"File","To":item["EMAIL"]})
+        except:
+            pass
+
+        for item in _list:
+            if item["From"] not in _temp:
+                _temp.append(item["From"])
+                _node.append({"func":item["From"]})
+            if item["To"] not in _temp:
+                _temp.append(item["To"])
+                _node.append({"func":item["To"]})
+
+        for item in _list:
+            try:
+                S = _temp.index(item["From"])
+                T = _temp.index(item["To"])
+                if next((item for item in _links if item["source"] == S and item["target"] == T), False) == False:
+                    _links.append({"source":S,"target":T})
+            except:
+                pass
+
+        if len(_node) > 0 and len(_links) > 0:
+            data["REFS"]["GRAPH"]["nodes"] = _node
+            data["REFS"]["GRAPH"]["links"] = _links
+            data["REFS"]["TEXT"] = _list
