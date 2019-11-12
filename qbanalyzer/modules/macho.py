@@ -239,7 +239,7 @@ class Macho:
                     return True
 
     @verbose(verbose_flag)
-    @progressbar(True,"Analzying DMG file")
+    @progressbar(True,"Analzying IPA file")
     def getipadeatils(self,data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
