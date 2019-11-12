@@ -124,7 +124,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
 - Curling info from virustotal, hybridanalysis, Any.Run and Jotti through their apis
-- Making the current yara rules into individual modules for further customization
+- ~~Making the current yara rules into individual modules for further customization~~ (rolled back but added extra plugins)
 
 ### Recent update/phase 
 - Cleaning up
