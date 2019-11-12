@@ -4,3 +4,4 @@
 - Fixed Bitcoin patterns
 - Fixed email extraction and parsing 
 - Added IPA logic
+- Rolled back yara rules
