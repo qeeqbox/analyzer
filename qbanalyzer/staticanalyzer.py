@@ -21,7 +21,7 @@ from .intell.qbintell import QBIntell
 from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
-from .intell.wafdetect import WafDetect
+from .intell.qbwafdetect import QBWafDetect
 from .qbdetect.loaddetections import LoadDetections
 from .modules.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
@@ -50,7 +50,7 @@ class StaticAnalyzer:
         self.apk = ApkParser(self.qbs)
         self.bbl = BBParser()
         self.yar = YaraParser()
-        self.waf = WafDetect()
+        self.waf = QBWafDetect()
         self.rpc = ReadPackets(self.qbs,self.waf)
         self.qbi = QBImage()
         self.hge = HtmlMaker(self.qbi)

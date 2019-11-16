@@ -61,6 +61,7 @@ class ReadPackets:
         _listreadarp = []
         _listreaddns = []
         _listreadhttp = []
+        _listurlhttp = []
         _list = []
         _ports = []
         _ips = []
@@ -104,6 +105,10 @@ class ReadPackets:
                         fields.update({k:v.decode("utf-8",errors="ignore")})
                     except:
                         pass
+                try:
+                    payload = str(packet.getlayer(http.HTTPRequest).payload)
+                except:
+                    payload = "Error parsing"
                 _listreadhttp.append({  "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
                                 "Type":"HTTPRequest",
                                 "Source":packet.getlayer(scapy.IP).src,
@@ -111,7 +116,18 @@ class ReadPackets:
                                 "Destination":packet.getlayer(scapy.IP).dst,
                                 "DestinationPort":packet.getlayer(scapy.IP).dport,
                                 "fields":fields,
-                                "payload":str(packet.getlayer(http.HTTPRequest).payload)})
+                                "payload":payload})
+                try:
+                    src = packet.getlayer(scapy.IP).src
+                    fields = packet.getlayer(http.HTTPRequest).fields
+                    _listurlhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "src":src,
+                                         "Method":fields["Method"].decode("utf-8",errors="ignore"),
+                                         "Host":fields["Host"].decode("utf-8",errors="ignore"),
+                                         "Path":fields["Path"].decode("utf-8",errors="ignore")})
+                except:
+                    pass
+
             if packet.haslayer(http.HTTPResponse):
                 for k in packet.getlayer(http.HTTPResponse).fields:
                     v = packet.getlayer(http.HTTPResponse).fields[k]
@@ -119,6 +135,10 @@ class ReadPackets:
                         fields.update({k:v.decode("utf-8",errors="ignore")})
                     except:
                         pass
+                try:
+                    payload = str(packet.getlayer(http.HTTPResponse).payload)
+                except:
+                    payload = "Error parsing"
                 _listreadhttp.append({  "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
                                 "Type":"HTTPResponse",
                                 "Source":packet.getlayer(scapy.IP).src,
@@ -126,7 +146,19 @@ class ReadPackets:
                                 "Destination":packet.getlayer(scapy.IP).dst,
                                 "DestinationPort":packet.getlayer(scapy.IP).dport,
                                 "fields":fields,
-                                "payload":str(packet.getlayer(http.HTTPResponse).payload)})
+                                "payload":payload})
+
+                try:
+                    src = packet.getlayer(scapy.IP).src
+                    fields = packet.getlayer(http.HTTPResponse).fields
+                    _listurlhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "src":src,
+                                         "Method":fields["Method"].decode("utf-8",errors="ignore"),
+                                         "Host":fields["Host"].decode("utf-8",errors="ignore"),
+                                         "Path":fields["Path"].decode("utf-8",errors="ignore")})
+                except:
+                    pass
+
             packetlayers = self.getlayers(packet)
             #packetdata = hexlify(bytes(packet))
             if hasattr(packet.payload, "sport"):
@@ -156,7 +188,7 @@ class ReadPackets:
         if tempips:
             _ips = [{"IP":x,"Description":"","Code":""} for x in tempips]
 
-        return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp
+        return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp,_listurlhttp
 
     @verbose(verbose_flag)
     def checkpcapsig(self,data):
@@ -181,30 +213,33 @@ class ReadPackets:
         Args:
             data: data dict
         '''
-        data["PCAP"] = {"WAF":{},
+        data["PCAP"] = {"WAF":[],
+                        "URLs":[],
                         "ARP":[],
                         "DNS":[],
                         "HTTP":[],
                         "ALL":[],
                         "PORTS":[],
                         "IPS":[],
-                        "_WAF":{},
+                        "_WAF":["Matched","Required","WAF","Detected"],
+                        "_URLs":["Time","src","Method","Host","Path"],
                         "_ARP":["Time","Type","PacketSoruce","PacketDestination","Macaddress"],
                         "_DNS":["Time","Type","Source","SourcePort","Destination","DestinationPort","qname","rrname","rdata"],
                         "_HTTP":["Time","Type","Source","SourcePort","Destination","DestinationPort","fields","payload"],
                         "_ALL":["Time","ProtocolsFrame","Source","SourcePort","SPDescription","Destination","DestinationPort","DPDescription"],
                         "_PORTS":["Port","Description"],
                         "_IPS":["IP","Description"]}
+
         packets = scapy.rdpcap(data["Location"]["File"])
-        all,ports,ips,rarp,rdns,http = self.readallpackets(packets)
+        all,ports,ips,rarp,rdns,http,urlshttp = self.readallpackets(packets)
+        data["PCAP"]["URLs"] = urlshttp
         data["PCAP"]["ARP"] = rarp
         data["PCAP"]["DNS"] = rdns
         data["PCAP"]["HTTP"] = http
         data["PCAP"]["ALL"] = all
         data["PCAP"]["PORTS"] = ports
         data["PCAP"]["IPS"] = ips
-        waf = self.waf.checkpacketsforwaf(data["PCAP"]["HTTP"])
-        data["PCAP"]["WAF"] = waf
+        self.waf.checkpacketsforwaf(data["PCAP"]["HTTP"],data["PCAP"]["WAF"],"waf.json")
         self.qbs.adddescription("Ports",data["PCAP"]["ALL"],"SourcePort")
         self.qbs.adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
         self.qbs.adddescription("Ports",data["PCAP"]["PORTS"],"Port")
