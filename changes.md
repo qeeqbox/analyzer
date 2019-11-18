@@ -1,7 +1,11 @@
+#### 2019.V.01.04
+- Fixed bugs
+- Json dumps is functioning (str objects only)
+
 #### 2019.V.01.03
 - Fixed bugs
 - Added url http extractions
-- Refracted waf module
+- Refactored waf module
 
 #### 2019.V.01.02
 - Fixed bugs
