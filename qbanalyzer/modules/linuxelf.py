@@ -3,6 +3,7 @@ __G__ = "(G)bd249ce4"
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getentropy,getwords
+from ..intell.qbdescription import adddescription
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from elftools.elf.descriptions import describe_reloc_type
@@ -13,8 +14,8 @@ from elftools.elf.sections import SymbolTableSection
 class LinuxELF:
     @verbose(verbose_flag)
     @progressbar(True,"Starting LinuxELF")
-    def __init__(self,qbs):
-        self.qbs = qbs
+    def __init__(self):
+        pass
 
     @verbose(verbose_flag)
     def getrelocations(self,elf) -> list:
@@ -165,6 +166,6 @@ class LinuxELF:
             data["ELF"]["Dynamic"] = self.getdynamic(elf)
             data["ELF"]["Symbols"] = self.getsymbols(elf)
             data["ELF"]["Relocations"] = self.getrelocations(elf)
-            self.qbs.adddescription("ManHelp",data["ELF"]["Symbols"],"Symbol")
-            self.qbs.adddescription("LinuxSections",data["ELF"]["Sections"],"Section")
+            adddescription("ManHelp",data["ELF"]["Symbols"],"Symbol")
+            adddescription("LinuxSections",data["ELF"]["Sections"],"Section")
             getwords(data,data["Location"]["File"])

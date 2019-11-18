@@ -123,7 +123,7 @@ class FileTypes:
         data["Location"] = {"Original":_path,
                             "File":self.malwarefarm+md5+path.sep+"temp",
                             "html":self.malwarefarm+md5+path.sep+safename+".html",
-                            "json":self.malwarefarm+md5+path.sep+"json",
+                            "json":self.malwarefarm+md5+path.sep+safename+".json",
                             "Folder":self.malwarefarm+md5+path.sep+"temp_unpacked"}
         data["FilesDumps"] = {self.malwarefarm+md5+path.sep+"temp":open(_path,"rb").read()}
 

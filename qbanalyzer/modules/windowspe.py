@@ -3,6 +3,7 @@ __G__ = "(G)bd249ce4"
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords
+from ..intell.qbdescription import adddescription
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
 from magic import from_file
@@ -12,14 +13,8 @@ from M2Crypto import BIO, m2, SMIME, X509
 class WindowsPe:
     @verbose(verbose_flag)
     @progressbar(True,"Starting WindowsPe")
-    def __init__(self,qbs):
-        '''
-        initialize class
-
-        Args:
-            qbs: is QBStrings class, needed for string description
-        '''
-        self.qbs = qbs
+    def __init__(self):
+        pass
 
     @verbose(verbose_flag)
     def whattype(self,pe) -> str:
@@ -357,7 +352,7 @@ class WindowsPe:
                                     "Sig":singinhex,
                                     "imphash":pe.get_imphash(),
                                     "warning":pe.get_warnings(),
-                                    "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp)}
+                                    "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
         data["PE"]["Characteristics"] = self.getCharacteristics(pe)
         data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
         data["PE"]["Sections"] = self.getsections(pe)
@@ -365,9 +360,9 @@ class WindowsPe:
         data["PE"]["Resources"],data["PE"]["Manifest"] = self.getrecourse(pe)
         data["PE"]["Imported functions"] = self.getimportedfunctions(pe)
         data["PE"]["Exported functions"] = self.getexportedfunctions(pe)
-        self.qbs.adddescription("WinApis",data["PE"]["Imported functions"],"Function")
-        self.qbs.adddescription("ManHelp",data["PE"]["Imported functions"],"Function")
-        self.qbs.adddescription("WinDlls",data["PE"]["Dlls"],"Dll")
-        self.qbs.adddescription("WinSections",data["PE"]["Sections"],"Section")
-        self.qbs.adddescription("WinResources",data["PE"]["Resources"],"Resource")
+        adddescription("WinApis",data["PE"]["Imported functions"],"Function")
+        adddescription("ManHelp",data["PE"]["Imported functions"],"Function")
+        adddescription("WinDlls",data["PE"]["Dlls"],"Dll")
+        adddescription("WinSections",data["PE"]["Sections"],"Section")
+        adddescription("WinResources",data["PE"]["Resources"],"Resource")
         getwords(data,data["Location"]["File"])

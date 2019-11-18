@@ -27,8 +27,9 @@ class QBEncryption:
             _Tempreturn: list conatins results
         '''
         _List = []
-        if len(self.words) > 0:
-            for word in self.words:
+        if len(self.wordssensitive) > 0:
+            for _word in self.wordssensitive:
+                word = _word.encode()
                 if  word.endswith(b"="):  #needs to include all options
                     b = self.testbase64(word)
                     if b != None and b != False:
@@ -62,7 +63,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b[0-9a-fA-F]{32}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -80,7 +81,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b[0-9a-fA-F]{40}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -98,7 +99,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b[0-9a-fA-F]{64}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -117,7 +118,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b[0-9a-fA-F]{128}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -146,7 +147,7 @@ class QBEncryption:
                     ("UUID type 5",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I))]
         for detection in detections:
             _List = []
-            x = findall(detection[1],self.wordsstripped)
+            x = findall(detection[1],self.wordsinsensitivestripped)
             if len(x) > 0:
                 for _ in x:
                     _List.append(_)
@@ -164,7 +165,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b0x[0-9a-fA-F]{1,16}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -182,7 +183,7 @@ class QBEncryption:
         '''
         _List = []
         detection = compile(r'\b[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(detection,self.wordsinsensitivestripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -222,7 +223,8 @@ class QBEncryption:
         Args:
             data: data dict
         '''
-        self.words = data["StringsRAW"]["words"]
+        self.wordsinsensitive = data["StringsRAW"]["wordsinsensitive"]
+        self.wordssensitive = data["StringsRAW"]["wordssensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.buffer =  data["FilesDumps"][data["Location"]["File"]]
         data["Encryption"] = {  "MD5s":[],

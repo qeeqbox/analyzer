@@ -4,6 +4,7 @@ from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords,getwordsmultifiles,getentropy
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
+from ..intell.qbdescription import adddescription
 from macholib.MachO import LC_SEGMENT,LC_SEGMENT_64,LC_LOAD_DYLIB
 from macholib import MachO,SymbolTable
 from plistlib import readPlist
@@ -12,14 +13,8 @@ from plistlib import readPlist
 class Macho:
     @verbose(verbose_flag)
     @progressbar(True,"Starting Macho")
-    def __init__(self,qbs):
-        '''
-        initialize class
-
-        Args:
-            qbs: is QBStrings class, needed for string description
-        '''
-        self.qbs = qbs
+    def __init__(self):
+        pass
 
     @verbose(verbose_flag)
     def entry_point(self,machos) -> bool:
@@ -321,5 +316,5 @@ class Macho:
         data["MACHO"]["Undefined Symbols"] = self.getundefsymbols(macho)
         data["MACHO"]["External Symbols"] = self.getextdefsymbols(macho)
         data["MACHO"]["Local Symbols"] = self.getlocalsymbols(macho)
-        self.qbs.adddescription("ManHelp",data["MACHO"]["Symbols"],"Symbol")
+        adddescription("ManHelp",data["MACHO"]["Symbols"],"Symbol")
         getwords(data,data["Location"]["File"])

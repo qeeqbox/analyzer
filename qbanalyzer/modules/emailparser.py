@@ -57,7 +57,7 @@ class EmailParser():
                                                          "md5":_md5})
                     data[tempstring] = { "Attached":"",
                                          "_Attached":""}
-                    data[tempstring]["Attached"] = buffer
+                    data[tempstring]["Attached"] = buffer.decode("utf-8",errors="ignore")
                     _Stream.append(buffer)
         return _Stream
 

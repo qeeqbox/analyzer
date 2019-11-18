@@ -4,6 +4,7 @@ from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from ..mics.funcs import getwordsmultifiles,getwords
+from ..intell.qbdescription import adddescription
 from r2pipe import open as r2open
 from xml.dom.minidom import parseString
 from re import sub
@@ -13,14 +14,13 @@ from re import sub
 class ApkParser:
     @verbose(verbose_flag)
     @progressbar(True,"Starting ApkParser")
-    def __init__(self,qbs):
+    def __init__(self):
         '''
         initialize class
 
         Args:
             qbs: is QBStrings class, needed for string description
         '''
-        self.qbs = qbs
         self.sus = ["encrypt","decrypt","http:","https","sudo","password","pass","admin","loadLibrary","isEmulator"]
 
     @verbose(verbose_flag)
@@ -283,5 +283,5 @@ class ApkParser:
                 data[k]["Symbols"] = self.getallsymbol(r2p)
                 data[k]["Bigfunctions"] = self.bigfunctions(r2p)
                 data[k]["Suspicious"] = self.checksus(r2p)
-        self.qbs.adddescription("AndroidPermissions",data["APK"]["Permissions"],"Permission")
+        adddescription("AndroidPermissions",data["APK"]["Permissions"],"Permission")
         getwordsmultifiles(data,data["Packed"]["Files"])

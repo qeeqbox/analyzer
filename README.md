@@ -1,7 +1,11 @@
 # QBAnalyzer
 QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IOCs from file/dump into readable format.
 
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/Peek%202019-11-04%2011-53.gif)
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/intro.gif)
+
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/html.gif)
+
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
 
 ### E.g. Outputs
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)

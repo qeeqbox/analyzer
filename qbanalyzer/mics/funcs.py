@@ -57,11 +57,20 @@ def getwords(data,_path) -> (list,str):
         _path: path of file
 
     '''
-    words = []
+    words =[]
+    wordsinsensitive = []
+    wordssensitive = []
     wordsstripped = ""
     words = findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][_path])
-    wordsstripped = ' '.join([x.lower().decode('utf-8') for x in words])
-    data["StringsRAW"] = {  "words": words,
+    for x in words:
+        try:
+            wordssensitive.append(x.decode('utf-8',errors="ignore"))
+            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
+        except:
+            pass
+    wordsstripped = ' '.join(wordsinsensitive)
+    data["StringsRAW"] = {  "wordssensitive": wordssensitive,
+                            "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
 
 @verbose(verbose_flag)
@@ -73,8 +82,9 @@ def getwordsmultifiles(data,arr) -> (list,str):
         arr: dict contains Path keys
     '''
     words = []
-    _templist = []
     wordsstripped = ""
+    wordsinsensitive = []
+    wordssensitive = []
     for x in arr:
         #if x["Path"].endswith(".xml"):
         try:
@@ -83,12 +93,14 @@ def getwordsmultifiles(data,arr) -> (list,str):
             pass
     for x in words:
         try:
-            _templist.append(x.lower().decode('utf-8'))
+            wordssensitive.append(x.decode('utf-8',errors="ignore"))
+            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
         except:
             pass
-    wordsstripped = ' '.join(_templist)
-    data["StringsRAW"] = {  "words": words,
-                            "wordsstripped": wordsstripped}
+    wordsstripped = ' '.join(wordsinsensitive)
+    data["StringsRAW"] = {  "wordssensitive": wordssensitive,
+                            "wordsinsensitive": wordsinsensitive,
+                            "wordsstripped": wordsstripped }
 
 @verbose(verbose_flag)
 def getwordsmultifilesarray(data,arr) -> (list,str):
@@ -99,8 +111,9 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
         arr: list contains buffer
     '''
     words = []
-    _templist = []
     wordsstripped = ""
+    wordsinsensitive = []
+    wordssensitive = []
     for x in arr:
         #if x["Path"].endswith(".xml"):
         try:
@@ -109,9 +122,11 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
             pass
     for x in words:
         try:
-            _templist.append(x.lower().decode('utf-8'))
+            wordssensitive.append(x.decode('utf-8',errors="ignore"))
+            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
         except:
             pass
-    wordsstripped = ' '.join(_templist)
-    data["StringsRAW"] = {  "words": words,
+    wordsstripped = ' '.join(wordsinsensitive)
+    data["StringsRAW"] = {  "wordssensitive": wordssensitive,
+                            "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }

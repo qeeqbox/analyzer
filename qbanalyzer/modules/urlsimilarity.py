@@ -84,7 +84,7 @@ class URLSimilarity:
         Args:
             data: data dict
         '''
-        self.words = data["StringsRAW"]["words"]
+        self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["URLs"] = {"URLs":[],
                           "_URLs":["Distance","URL","Similar"]}

@@ -3,6 +3,7 @@ __G__ = "(G)bd249ce4"
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords
+from ..intell.qbdescription import adddescription
 from scapy import all as scapy
 from binascii import hexlify
 from scapy.layers import http
@@ -11,15 +12,13 @@ from datetime import datetime
 class ReadPackets:
     @verbose(verbose_flag)
     @progressbar(True,"Starting ReadPackets")
-    def __init__(self,qbs,waf):
+    def __init__(self,waf):
         '''
         initialize class
 
         Args:
-            qbs: is QBStrings class, needed for string description
             waf: is WafDetect class, needed for detecting waf
         '''
-        self.qbs = qbs
         self.waf = waf
 
     @verbose(verbose_flag)
@@ -240,8 +239,8 @@ class ReadPackets:
         data["PCAP"]["PORTS"] = ports
         data["PCAP"]["IPS"] = ips
         self.waf.checkpacketsforwaf(data["PCAP"]["HTTP"],data["PCAP"]["WAF"],"waf.json")
-        self.qbs.adddescription("Ports",data["PCAP"]["ALL"],"SourcePort")
-        self.qbs.adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
-        self.qbs.adddescription("Ports",data["PCAP"]["PORTS"],"Port")
-        self.qbs.adddescription("IPs",data["PCAP"]["IPS"],"IP")
+        adddescription("Ports",data["PCAP"]["ALL"],"SourcePort")
+        adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
+        adddescription("Ports",data["PCAP"]["PORTS"],"Port")
+        adddescription("IPs",data["PCAP"]["IPS"],"IP")
         getwords(data,data["Location"]["File"])

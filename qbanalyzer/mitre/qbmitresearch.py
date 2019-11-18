@@ -104,7 +104,7 @@ class QBMitresearch:
         Args:
             data: data dict
         '''
-        self.words = data["StringsRAW"]["words"]
+        self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["MITRE"] = {"Binary":[],
                          "Attack":[],

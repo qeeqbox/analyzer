@@ -59,7 +59,7 @@ class QBIntell:
             data: data dict
             filename: file contains detections
         '''
-        self.words = data["StringsRAW"]["words"]
+        self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Intell"] = {"WinAPI":[],
                           "_WinAPI":["Matched","Required","Behavior","Detected"]}

@@ -22,6 +22,8 @@ from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
 from .intell.qbwafdetect import QBWafDetect
+from .intell.qbcreditcards import QBCreditcards
+from .intell.qbpatterns import QBPatterns
 from .qbdetect.loaddetections import LoadDetections
 from .modules.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
@@ -32,8 +34,17 @@ from os import path
 from sys import getsizeof
 from gc import collect
 from pickle import dump as pdump,HIGHEST_PROTOCOL
+from json import dump as jdump
+from json import JSONEncoder
 
 #import libarchive
+
+
+class ComplexEncoder(JSONEncoder):
+    def default(self, obj):
+        if not isinstance(obj, str):
+            return "Object type {} was removed..".format(type(obj))
+        return JSONEncoder.default(self, obj)
 
 class StaticAnalyzer:
     @progressbar(True,"Starting StaticAnalyzer")
@@ -44,14 +55,14 @@ class StaticAnalyzer:
         self.mit = MitreParser()
         self.qbm = QBMitresearch(self.mit)
         self.qbs = QBStrings()
-        self.wpe = WindowsPe(self.qbs)
-        self.elf = LinuxELF(self.qbs)
-        self.mac = Macho(self.qbs)
-        self.apk = ApkParser(self.qbs)
+        self.wpe = WindowsPe()
+        self.elf = LinuxELF()
+        self.mac = Macho()
+        self.apk = ApkParser()
         self.bbl = BBParser()
         self.yar = YaraParser()
         self.waf = QBWafDetect()
-        self.rpc = ReadPackets(self.qbs,self.waf)
+        self.rpc = ReadPackets(self.waf)
         self.qbi = QBImage()
         self.hge = HtmlMaker(self.qbi)
         self.epa = EmailParser()
@@ -64,6 +75,8 @@ class StaticAnalyzer:
         self.ofx = Officex()
         self.rtf = RTFParser()
         self.qbe = QBEncryption()
+        self.qbcr = QBCreditcards()
+        self.qbp = QBPatterns()
         self.LD = LoadDetections()
 
     @verbose(verbose_flag)
@@ -119,12 +132,16 @@ class StaticAnalyzer:
             self.yar.checkwithyara(data,None)
         if parsed.string or parsed.full:
             self.qbs.checkwithstring(data)
+        if parsed.patterns or parsed.full:
+            self.qbp.checkpatterns(data)
         if parsed.topurl or parsed.full:
             self.urs.checkwithurls(data)
         if parsed.ocr or parsed.full:
             self.qoc.checkwithocr(data)
         if parsed.enc or parsed.full:
             self.qbe.checkencryption(data)
+        if parsed.cards or parsed.full:
+            self.qbcr.checkcreditcards(data)
         if parsed.plugins or parsed.full:
             self.LD.checkwithdetections(data)
         if parsed.mitre or parsed.full:
@@ -138,6 +155,9 @@ class StaticAnalyzer:
         if path.exists(data["Location"]["html"]):
             logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
             self.openinbrowser(data["Location"]["html"])
+        if parsed.json or parsed.full:
+            with open(data["Location"]["json"], 'w') as fp:
+                jdump(data, fp, cls=ComplexEncoder)
 
     def openinbrowser(self,_path):
         '''
