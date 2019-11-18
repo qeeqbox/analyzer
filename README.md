@@ -4,13 +4,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/intro.gif)
 
-### Output html
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/html.gif)
-
-### Output json
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
-
-### E.g. Outputs
+### E.g. HTML Outputs
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
 - [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
@@ -21,6 +15,9 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.html)
 - [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
+
+### Output json
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
 
 ---
 
