@@ -16,7 +16,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
 
-### Output json
+### E.g. Output json
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
 
 ---
