@@ -46,7 +46,8 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Similarity image
 - Yara module and yara rules included
 - JSON editable records 
-- URL/EMAIL/TEL/Tags extraction
+- URL/EMAIL/TEL/Tags common patterns extraction
+- Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
 - Linux
     - ELF information
