@@ -68,7 +68,7 @@ def getwords(data,_path) -> (list,str):
             wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
         except:
             pass
-    wordsstripped = ' '.join(wordsinsensitive)
+    wordsstripped = '\n'+'\n'.join(wordsinsensitive) + '\n'
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
@@ -97,7 +97,7 @@ def getwordsmultifiles(data,arr) -> (list,str):
             wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
         except:
             pass
-    wordsstripped = ' '.join(wordsinsensitive)
+    wordsstripped = '\n'.join(wordsinsensitive)
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
@@ -126,7 +126,7 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
             wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
         except:
             pass
-    wordsstripped = ' '.join(wordsinsensitive)
+    wordsstripped = '\n'.join(wordsinsensitive)
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }

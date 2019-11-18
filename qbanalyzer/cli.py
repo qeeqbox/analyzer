@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.03"
+__V__ = "2019.V.01.04"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -20,14 +20,14 @@ class QBAnalyzer(Cmd):
 
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
-    _analyze_parsergroupreq= _analyze_parser.add_argument_group('required arguments')
+    _analyze_parsergroupreq = _analyze_parser.add_argument_group('required arguments')
     _analyze_parsergroupreq.add_argument('--file', help="path of file/dump", required=True)
     _analyze_parsergroupreq.add_argument('--output', help="path of output folder", required=True)
-    _analyze_parsergroupdef= _analyze_parser.add_argument_group('default arguments')
+    _analyze_parsergroupdef = _analyze_parser.add_argument_group('default arguments')
     _analyze_parsergroupdef.add_argument('--intel',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
     _analyze_parsergroupdef.add_argument('--yara',action='store_true', help="analyze with yara module (Disable this for big files)", required=False)
-    _analyze_parsergroupdef.add_argument('--string',action='store_true', help="analyze strings", required=False)
+    _analyze_parsergroupdef.add_argument('--language',action='store_true', help="analyze words against english language", required=False)
     _analyze_parsergroupdef.add_argument('--mitre',action='store_true', help="map strings to mitre", required=False)
     _analyze_parsergroupdef.add_argument('--topurl',action='store_true', help="get urls and check them against top 10000", required=False)
     _analyze_parsergroupdef.add_argument('--ocr',action='store_true', help="get all ocr text", required=False)
@@ -36,6 +36,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="find encryptions", required=False)
     _analyze_parsergroupdef.add_argument('--cards',action='store_true', help="find credit cards", required=False)
     _analyze_parsergroupdef.add_argument('--patterns',action='store_true', help="find common patterns", required=False)
+    _analyze_parsergroupdef.add_argument('--suspicious',action='store_true', help="find suspicious strings", required=False)
     _analyze_parsergroupdef.add_argument('--plugins',action='store_true', help="scan with external plugins", required=False)
     _analyze_parsergroupdef.add_argument('--visualize',action='store_true', help="visualize some artifacts", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
@@ -53,7 +54,7 @@ class QBAnalyzer(Cmd):
     def help_analyze(self):
         self._analyze_parser.print_help()
 
-    @verbose(verbose_flag)
+    	
     def do_analyze(self,line):
         try:
             parsed = self._analyze_parser.parse_args(ssplit(line))

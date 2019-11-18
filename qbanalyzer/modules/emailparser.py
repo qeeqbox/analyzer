@@ -36,7 +36,6 @@ class EmailParser():
 
         _Stream = []
 
-
         if msg.get_content_maintype() == 'multipart':
             for attachment in msg.walk():
                 if attachment.get_content_maintype() == 'multipart': continue

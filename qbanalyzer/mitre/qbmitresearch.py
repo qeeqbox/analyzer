@@ -79,8 +79,7 @@ class QBMitresearch:
         Args:
             data: data dict
         '''
-        for word in self.words:
-            _word = word.lower().decode("utf-8",errors="ignore")
+        for _word in self.words:
             toolrecords = self.mitre.findtool(_word)
             if toolrecords:
                 for record in toolrecords:

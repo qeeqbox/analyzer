@@ -225,7 +225,7 @@ class ApkParser:
             data: data dict
         '''
         r2p = r2open(data["Location"]["File"],flags=['-2'])
-        r2p.cmd("e anal.timeout = 10")
+        r2p.cmd("e anal.timeout = 5")
         r2p.cmd("aaaa;")
         k = 'APK_DEX_1'
         data[k] ={ "Classes":[],
@@ -265,7 +265,7 @@ class ApkParser:
                 data["APK"]["Permissions"] = self.readpermissions(data,v["Path"])
             if "classes" in v["Name"].lower() and v["Name"].lower().endswith(".dex"):
                 r2p = r2open(v["Path"],flags=['-2'])
-                r2p.cmd("e anal.timeout = 10")
+                r2p.cmd("e anal.timeout = 5")
                 r2p.cmd("aaaa;")
                 k = 'APK_DEX_{}'.format(i)
                 data[k] ={ "Classes":[],

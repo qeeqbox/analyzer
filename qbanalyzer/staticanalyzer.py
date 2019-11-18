@@ -15,7 +15,8 @@ from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
 from .modules.rtfparser import RTFParser
 from .yara.yaraparser import YaraParser
-from .intell.qbstrings import QBStrings
+from .intell.qblanguage import QBLanguage
+from .intell.qbsuspicious import QBSuspicious
 from .intell.qbimage import QBImage
 from .intell.qbintell import QBIntell
 from .intell.qbd3generator import QBD3generator
@@ -37,8 +38,6 @@ from pickle import dump as pdump,HIGHEST_PROTOCOL
 from json import dump as jdump
 from json import JSONEncoder
 
-#import libarchive
-
 
 class ComplexEncoder(JSONEncoder):
     def default(self, obj):
@@ -54,7 +53,6 @@ class StaticAnalyzer:
         '''
         self.mit = MitreParser()
         self.qbm = QBMitresearch(self.mit)
-        self.qbs = QBStrings()
         self.wpe = WindowsPe()
         self.elf = LinuxELF()
         self.mac = Macho()
@@ -78,6 +76,8 @@ class StaticAnalyzer:
         self.qbcr = QBCreditcards()
         self.qbp = QBPatterns()
         self.LD = LoadDetections()
+        self.qbla = QBLanguage()
+        self.qbsu = QBSuspicious()
 
     @verbose(verbose_flag)
     def analyze(self,parsed):
@@ -130,10 +130,12 @@ class StaticAnalyzer:
             self.fty.unknownfile(data)
         if parsed.yara or parsed.full:
             self.yar.checkwithyara(data,None)
-        if parsed.string or parsed.full:
-            self.qbs.checkwithstring(data)
+        if parsed.language or parsed.full:
+            self.qbla.checkwithstring(data)
         if parsed.patterns or parsed.full:
             self.qbp.checkpatterns(data)
+        if parsed.suspicious or parsed.full:
+            self.qbsu.checksusp(data)
         if parsed.topurl or parsed.full:
             self.urs.checkwithurls(data)
         if parsed.ocr or parsed.full:
