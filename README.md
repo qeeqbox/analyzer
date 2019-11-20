@@ -119,14 +119,16 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
 
-### Roadmap
+### 2020 
+- Machine learning modules (Separate modules)
+
+### Roadmap 2019
 - ~~Reduce file I/O~~
 - ~~PDF module~~
 - ~~RTF module~~
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
+- ~~Refactoring modules v2~~
 - MS office module
-- Machine learning modules
-- Refactoring modules v2
 
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
