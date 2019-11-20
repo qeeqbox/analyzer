@@ -119,7 +119,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
 
-### 2020 
+### Roadmap 2020 
 - Machine learning modules (Separate modules)
 
 ### Roadmap 2019
