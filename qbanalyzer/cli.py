@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.04"
+__V__ = "2019.V.01.05"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -37,8 +37,11 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--cards',action='store_true', help="find credit cards", required=False)
     _analyze_parsergroupdef.add_argument('--patterns',action='store_true', help="find common patterns", required=False)
     _analyze_parsergroupdef.add_argument('--suspicious',action='store_true', help="find suspicious strings", required=False)
+    _analyze_parsergroupdef.add_argument('--dga',action='store_true', help="find Domain generation algorithms", required=False)
     _analyze_parsergroupdef.add_argument('--plugins',action='store_true', help="scan with external plugins", required=False)
     _analyze_parsergroupdef.add_argument('--visualize',action='store_true', help="visualize some artifacts", required=False)
+    _analyze_parsergroupdef.add_argument('--flags',action='store_true', help="add countries flags to html", required=False)
+    _analyze_parsergroupdef.add_argument('--worldmap',action='store_true', help="add world map to html", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
 
     def __init__(self):

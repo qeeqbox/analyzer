@@ -24,7 +24,6 @@ class HtmlMaker:
         self.templates = path.abspath(path.join(path.dirname( __file__ ),'templates'))
         if not self.templates.endswith(path.sep): self.templates = self.templates+path.sep
         if not path.isdir(self.templates): mkdir(self.templates)
-        self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, PEiD, 7z, Cisco Umbrella, a lot of researches and awesome python packeges ..) If i missed a reference/dependency, please let me know!'
         self.template = self.templates + "template.html"
         self.qbi = qbimage
         self.getmoudles()
@@ -35,7 +34,7 @@ class HtmlMaker:
         get all imported modules 
         '''
         x = [x.split(".")[0] for x in modules.keys() if not x.startswith("_")]
-        self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, PEiD, 7z, Cisco Umbrella, a lot of researches and awesome python packeges such as {} ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
+        self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, PEiD, 7z, Cisco Umbrella, font-awesome, flag-icon a lot of researches and awesome python packeges such as {} ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
 
     @verbose(verbose_flag)
     def addtextarea(self) -> str:
@@ -232,7 +231,40 @@ class HtmlMaker:
 
 
     @verbose(verbose_flag)
-    def makeworldimage(self,data,header,exclude=None,textarea=None) -> str:
+    def makeflags(self,data,header,exclude=None,textarea=None) -> str:
+        '''
+        render similarity image inside html table
+
+        Args:
+            data: data dict
+            header of table
+            exclude not used
+            with or without textarea 
+
+        Return
+            string that contains similarity image inside table
+        '''
+        temp = """
+        <div class="tablewrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="1">{{ header }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                   <tr>
+                        <td class="flags">{% for item in data %}<span class="flag-icon flag-icon-{{ item }}"></span>{% endfor %}</td>
+                    </tr>
+            </tbody>
+        </table>
+        </div>"""
+        if textarea: temp += self.addtextarea()
+        result = Template(temp).render(header=header,data=data)
+        return result
+
+    @verbose(verbose_flag)
+    def makeworldimage(self,data,header,name,exclude=None,textarea=None) -> str:
         '''
         render world image into html table
 
@@ -245,10 +277,7 @@ class HtmlMaker:
         Return
             string that contains world image inside table
         '''
-        _data = []
-        for _ in data:
-            if _["Code"]:
-                _data.append(_["Code"])
+
         temp = """
         <div class="tablewrapper">
         <table>
@@ -259,11 +288,11 @@ class HtmlMaker:
             </thead>
             <tbody>
                    <tr>
-                        <td class="nobackgroundcolor"><canvas class="worldmap"></canvas></td>
+                        <td id="{{name}}" class="nobackgroundcolor"><canvas class="{{name}}"></canvas></td>
                         <script>
                         //contact me for license
                         (function() {
-                        var canvas = d3.select(".worldmap").attr("width", '960').attr("height", '500');
+                        var canvas = d3.select(".{{name}}").attr("width", '960').attr("height", '500');
                         var context = canvas.node().getContext("2d");
                         var proj = d3.geo.equirectangular(),color = d3.scale.category20(),graticule = d3.geo.graticule();
                         var path = d3.geo.path().projection(proj).context(context);
@@ -295,7 +324,7 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
-        result = Template(temp).render(header=header,data=str(_data))
+        result = Template(temp).render(header=header,data=str(data),name=name)
         return result
 
     @verbose(verbose_flag)
@@ -471,7 +500,7 @@ class HtmlMaker:
                     if key.startswith("__"):
                         if len(data[x][key[2:]]) > 0:
                             for item in data[x][key[2:]]:
-                                table += self.makealistsettablenew2(data[x][key[2:]][item],["key","value"],None,True,safe)
+                                table += self.makealistsettablenew2(data[x][key[2:]][item],["key","value"],None,True,None)
                     elif key.startswith("_"):
                         if x == "MITRE":
                             safe = True
@@ -486,11 +515,8 @@ class HtmlMaker:
                         elif type(data[x][key]) is str:
                             if len(data[x][key[1:]]) > 0:
                                 table += self.makealistsettablenew3(data[x][key[1:]],key[1:],None,True,safe)
-                        if key[1:] == "IPS" and len(data[x][key[1:]]) > 0 and x == "PCAP":
-                            table +=self.makeworldimage(data[x][key[1:]],None,None,True)
-                    elif key == "GRAPH":
+                    elif key == "GRAPH" or key == "Flags":
                         pass
-
                 except:
                     pass
 
@@ -499,11 +525,25 @@ class HtmlMaker:
 
         for key in keys:
             try:
-                if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
-                    table +=self.makerefmapimage(data[key]["GRAPH"],None,key+"d3map",None,True)
+                if key in data and "GRAPH" in data[key]:
+                    if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
+                        table +=self.makerefmapimage(data[key]["GRAPH"],key,key+"d3map",None,True)
             except:
                 pass
 
+        if "Flags" in data:
+            try:
+                if len(data["Flags"]["Flags"]) > 0:
+                    table +=self.makeflags(data["Flags"]["Flags"],"Flags",None,True)
+            except:
+                pass
+    
+        if "Codes" in data:
+            try:
+                if len(data["Codes"]["Codes"]) > 0:
+                    table +=self.makeworldimage(data["Codes"]["Codes"],"Worldmap","Worldmap",None,True)
+            except:
+                pass
 
         table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,True)
         return table

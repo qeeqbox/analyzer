@@ -61,6 +61,7 @@ class ReadPackets:
         _listreaddns = []
         _listreadhttp = []
         _listurlhttp = []
+        _domains = []
         _list = []
         _ports = []
         _ips = []
@@ -97,6 +98,8 @@ class ReadPackets:
                                     "rrname":packet.an.rrname.decode("utf-8",errors="ignore"),
                                     "rdata":str(packet.an.rdata)[1:], #I know... do not ask, long story
                                     "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
+                    if packet.an.rrname.decode("utf-8",errors="ignore")[:-1] not in _domains:
+                        _domains.append(packet.an.rrname.decode("utf-8",errors="ignore")[:-1])
             if packet.haslayer(http.HTTPRequest):
                 for k in packet.getlayer(http.HTTPRequest).fields:
                     v = packet.getlayer(http.HTTPRequest).fields[k]
@@ -124,6 +127,8 @@ class ReadPackets:
                                          "Method":fields["Method"].decode("utf-8",errors="ignore"),
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
+                    if fields["Host"].decode("utf-8",errors="ignore") not in _domains:
+                        _domains.append(fields["Host"].decode("utf-8",errors="ignore"))
                 except:
                     pass
 
@@ -155,6 +160,8 @@ class ReadPackets:
                                          "Method":fields["Method"].decode("utf-8",errors="ignore"),
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
+                    if fields["Host"].decode("utf-8",errors="ignore") not in _domains:
+                        _domains.append(fields["Host"].decode("utf-8",errors="ignore"))
                 except:
                     pass
 
@@ -185,9 +192,9 @@ class ReadPackets:
             tempports.sort(key=int)
             _ports = [{"Port":x,"Description":""} for x in tempports]
         if tempips:
-            _ips = [{"IP":x,"Description":"","Code":""} for x in tempips]
+            _ips = [{"IP":x,"Code":"","Alpha2":"","Description":""} for x in tempips]
 
-        return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp,_listurlhttp
+        return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp,_listurlhttp,_domains
 
     @verbose(verbose_flag)
     def checkpcapsig(self,data):
@@ -214,12 +221,14 @@ class ReadPackets:
         '''
         data["PCAP"] = {"WAF":[],
                         "URLs":[],
+                        "Domains":[],
                         "ARP":[],
                         "DNS":[],
                         "HTTP":[],
                         "ALL":[],
                         "PORTS":[],
-                        "IPS":[],
+                        "IP4S":[],
+                        "Flags":[],
                         "_WAF":["Matched","Required","WAF","Detected"],
                         "_URLs":["Time","src","Method","Host","Path"],
                         "_ARP":["Time","Type","PacketSoruce","PacketDestination","Macaddress"],
@@ -227,20 +236,23 @@ class ReadPackets:
                         "_HTTP":["Time","Type","Source","SourcePort","Destination","DestinationPort","fields","payload"],
                         "_ALL":["Time","ProtocolsFrame","Source","SourcePort","SPDescription","Destination","DestinationPort","DPDescription"],
                         "_PORTS":["Port","Description"],
-                        "_IPS":["IP","Description"]}
+                        "_IP4S":["IP","Code","Alpha2","Description"]}
 
         packets = scapy.rdpcap(data["Location"]["File"])
-        all,ports,ips,rarp,rdns,http,urlshttp = self.readallpackets(packets)
+        all,ports,ips,rarp,rdns,http,urlshttp,domains = self.readallpackets(packets)
+        data["PCAP"]["Domains"] = domains
         data["PCAP"]["URLs"] = urlshttp
         data["PCAP"]["ARP"] = rarp
         data["PCAP"]["DNS"] = rdns
         data["PCAP"]["HTTP"] = http
         data["PCAP"]["ALL"] = all
         data["PCAP"]["PORTS"] = ports
-        data["PCAP"]["IPS"] = ips
+        data["PCAP"]["IP4S"] = ips
         self.waf.checkpacketsforwaf(data["PCAP"]["HTTP"],data["PCAP"]["WAF"],"waf.json")
         adddescription("Ports",data["PCAP"]["ALL"],"SourcePort")
         adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
         adddescription("Ports",data["PCAP"]["PORTS"],"Port")
-        adddescription("IPs",data["PCAP"]["IPS"],"IP")
+        adddescription("DNS",data["PCAP"]["IP4S"],"IP")
+        adddescription("IPs",data["PCAP"]["IP4S"],"IP")
+        adddescription("IPPrivate",data["PCAP"]["IP4S"],"IP")
         getwords(data,data["Location"]["File"])

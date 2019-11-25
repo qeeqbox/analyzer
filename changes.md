@@ -1,3 +1,8 @@
+#### 2019.V.01.05
+- Fixed bugs
+- Added DGA module
+- Added Flags
+
 #### 2019.V.01.04
 - Fixed bugs
 - Json dumps is functioning (str objects only)

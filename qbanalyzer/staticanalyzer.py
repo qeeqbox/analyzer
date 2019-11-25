@@ -25,6 +25,8 @@ from .intell.qbencryption import QBEncryption
 from .intell.qbwafdetect import QBWafDetect
 from .intell.qbcreditcards import QBCreditcards
 from .intell.qbpatterns import QBPatterns
+from .intell.qbdga import QBDGA
+from .intell.qbcountriesviz import QBCountriesviz
 from .qbdetect.loaddetections import LoadDetections
 from .modules.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
@@ -35,9 +37,7 @@ from os import path
 from sys import getsizeof
 from gc import collect
 from pickle import dump as pdump,HIGHEST_PROTOCOL
-from json import dump as jdump
-from json import JSONEncoder
-
+from json import JSONEncoder,dump as jdump
 
 class ComplexEncoder(JSONEncoder):
     def default(self, obj):
@@ -78,6 +78,8 @@ class StaticAnalyzer:
         self.LD = LoadDetections()
         self.qbla = QBLanguage()
         self.qbsu = QBSuspicious()
+        self.dga = QBDGA()
+        self.qbcv = QBCountriesviz()
 
     @verbose(verbose_flag)
     def analyze(self,parsed):
@@ -122,6 +124,8 @@ class StaticAnalyzer:
             self.epa.getemail(data)
         elif self.rpc.checkpcapsig(data):
             self.rpc.getpacpdetails(data)
+            if parsed.dga or parsed.full:
+                self.dga.checkdga(data)
         elif self.ofx.checkofficexsig(data):
             self.ofx.checkofficex(data)
         elif self.rtf.checkrtfsig(data):
@@ -150,6 +154,10 @@ class StaticAnalyzer:
             self.qbm.checkwithmitre(data)
         if parsed.visualize or parsed.full:
             self.qb3.makeartifactsd3(data)
+        if parsed.flags or parsed.full:
+            self.qbcv.getflagsfromcodes(data)
+        if parsed.worldmap or parsed.full:
+            self.qbcv.getallcodes(data)
         with open('temp.pickle', 'wb') as handle:
             pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")

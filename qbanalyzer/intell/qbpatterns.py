@@ -61,7 +61,7 @@ class QBPatterns:
                 except ValueError:
                     pass
         for x in set(_List):
-            _data.append({"Count":_List.count(x),"IP":x})
+            _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
     @verbose(verbose_flag)
     @progressbar(True,"Finding IP6s patterns")
@@ -79,7 +79,7 @@ class QBPatterns:
             for _ in x:
                 _List.append(_)
         for x in set(_List):
-            _data.append({"Count":_List.count(x),"IP":x})
+            _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
     @verbose(verbose_flag)
     @progressbar(True,"Finding Emails patterns")
@@ -165,15 +165,15 @@ class QBPatterns:
         '''
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        data["Patterns"] = {  "IP4S":[],
+        data["Patterns"] = { "IP4S":[],
                              "IP6S":[],
                              "LINKS":[],
                              "EMAILS":[],
                              "TELS":[],
                              "TAGS":[],
                              "HEX":[],
-                             "_IP4S":["Count","IP","Code","Description"],
-                             "_IP6S":["Count","IP","Code","Description"],
+                             "_IP4S":["Count","IP","Code","Alpha2","Description"],
+                             "_IP6S":["Count","IP","Code","Alpha2","Description"],
                              "_LINKS":["Count","Link"],
                              "_EMAILS":["Count","EMAIL","Description"],
                              "_TELS":["Count","TEL","Description"],

@@ -1,8 +1,9 @@
 from ..logger.logger import logstring,verbose,verbose_flag
-from math import log
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
+from collections import Counter
+from math import log2
 
 @verbose(verbose_flag)
 def getentropy(data) -> str:
@@ -12,15 +13,45 @@ def getentropy(data) -> str:
     Args:
         data: buffer
     '''
-    entropy = 0
-    if len(data) > 0:
-        for x in range(0, 256):
-            p_x = float(data.count(bytes(x))) / len(data)
-            if p_x > 0:
-                entropy += - p_x*log(p_x, 2)
-        return "%f" % (entropy / 8)
-    else:
+    try:
+        if not data:
+            return "0.0 (Minimum: 0.0, Max: 8.0)"
+        entropy = 0
+        counter = Counter(data)
+        l = len(data)
+        for count in counter.values():
+            p_x = float(count) / l
+            entropy += - p_x * log2(p_x)
+        return "{} (Minimum: 0.0, Maximum: 8.0)".format(entropy)
+    except:
         return "None"
+
+@verbose(verbose_flag)
+def getentropyfloatret(data) -> float:
+    '''
+    get entropy of buffer
+
+    Args:
+        data: buffer
+    '''
+    try:
+        if not data:
+            return 0.0
+        entropy = 0
+        counter = Counter(data)
+        l = len(data)
+        for count in counter.values():
+            p_x = float(count) / l
+            entropy += - p_x * log2(p_x)
+        return entropy
+    except:
+        return 0.0
+
+@verbose(verbose_flag)
+def getentropyold(data):
+    probabilities = [float(data.count(char)) / len(data) for char in dict.fromkeys(list(data))]
+    entropy =- sum([probability * log2(probability) / log2(2.0) for probability in probabilities])
+    return entropy
 
 @verbose(verbose_flag)
 def longtoip(decimal) -> str:

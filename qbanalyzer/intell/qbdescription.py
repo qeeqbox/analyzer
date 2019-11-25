@@ -6,8 +6,6 @@ from ..mics.funcs import iptolong
 from sqlite3 import connect
 from os import path
 
-#this module needs some optimization
-
 refs = path.abspath(path.join(path.dirname( __file__ ),"..", 'refs'))
 if not refs.endswith(path.sep): refs = refs+path.sep
 cursor = connect(refs+'References.db').cursor()
@@ -80,9 +78,10 @@ def adddescription(_type,data,keyword):
                         lip = iptolong(word)
                         result = cursor.execute('SELECT * FROM CountriesIPs WHERE ipto >= ? AND ipfrom <= ?', (lip,lip,)).fetchone()
                         if result:
-                            _result = cursor.execute('SELECT * FROM CountriesIDs WHERE ctry= ?', (result[5],)).fetchone()
+                            alpha2 = result[5]
+                            _result = cursor.execute('SELECT * FROM CountriesIDs WHERE ctry= ?', (alpha2,)).fetchone()
                             if _result:
-                                x.update({"Code":_result[4],"Description":result[7]})
+                                x.update({"Code":_result[4],"Alpha2":alpha2.lower(),"Description":result[7]})
                                 continue
                     elif _type == "IPPrivate":
                         lip = iptolong(word)

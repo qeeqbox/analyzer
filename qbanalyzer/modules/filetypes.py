@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
-from ..mics.funcs import getwords,getwordsmultifiles
+from ..mics.funcs import getwords,getwordsmultifiles,getentropy
 from shutil import copyfile,rmtree
 from os import path,mkdir,walk
 from subprocess import PIPE,Popen
@@ -143,11 +143,12 @@ class FileTypes:
                                         "md5": md5(f).hexdigest(),
                                         "sha1": sha1(f).hexdigest(),
                                         "sha256": sha256(f).hexdigest(),
+                                        "ssdeep":hash_from_file(_path),
                                         "size": path.getsize(_path),
                                         "mime":from_file(_path,mime=True),
                                         "extension":guess_type(_path)[0],
                                         "charset":Magic(mime_encoding=True).from_file(_path),
-                                        "ssdeep":hash_from_file(_path)}
+                                        "Entropy":getentropy(f)}
 
     @verbose(verbose_flag)
     @progressbar(True,"Handling unknown format")

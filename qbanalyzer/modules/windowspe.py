@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
-from ..mics.funcs import getwords
+from ..mics.funcs import getwords,getentropy
 from ..intell.qbdescription import adddescription
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
@@ -113,7 +113,7 @@ class WindowsPe:
             except:
                 Problems = True
             sighex = "".join("{:02x}".format(x) for x in sig)
-            _list.append({"Issues":Problems,
+            _list.append({"Wrong":Problems,
                           "SignatureHex":sighex})
         return _list,_extracted
 
@@ -165,6 +165,7 @@ class WindowsPe:
         for section in pe.sections:
             _list.append({  "Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
                             "MD5":section.get_hash_md5(),
+                            "Entropy":getentropy(section.get_data()),
                             "Description":""})
         return _list
 
@@ -329,9 +330,9 @@ class WindowsPe:
                         "Manifest":"",
                         "_General": {},
                         "_Characteristics": {},
-                        "_Singed":["Issues","SignatureHex"],
+                        "_Singed":["Wrong","SignatureHex"],
                         "__SignatureExtracted":{},
-                        "_Sections":["Section","MD5","Description"],
+                        "_Sections":["Section","MD5","Entropy","Description"],
                         "_Dlls":["Dll","Description"],
                         "_Resources":["Resource","Offset","MD5","Sig","Description"],
                         "_Imported functions":["Dll","Function","Description"],
@@ -345,13 +346,12 @@ class WindowsPe:
         singinhex = "".join("{:02x}".format(x) for x in sig)
         #self.getdebug(pe)
         data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
-                                    "Entropy": section.get_entropy(),
                                     "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
                                     "Entrypoint Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
                                     "verify checksum":pe.verify_checksum(),
                                     "Sig":singinhex,
                                     "imphash":pe.get_imphash(),
-                                    "warning":pe.get_warnings(),
+                                    "warning":pe.get_warnings() if len(pe.get_warnings())> 0 else "None",
                                     "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
         data["PE"]["Characteristics"] = self.getCharacteristics(pe)
         data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
