@@ -50,7 +50,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - URL/EMAIL/TEL/Tags common patterns extraction
 - Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
-- DGA - 
+- DGA (domain generation algorithm) patterns detection 
 - Linux
     - ELF information
     - API functions descriptions
@@ -97,11 +97,12 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Functions extraction
     - Strings extraction
 - PCAP
-    - Frame Filter
-    - HTTP Filter
-    - DNS Filter
-    - ARP Filter
-    - WAF Detection
+    - Frame filter
+    - HTTP filter
+    - DNS filter
+    - ARP filter
+    - WAF detection
+    - DGA detction
 - PDF
     - Objects enumeration
     - Keys (javascript, js, OpenAction) enumeration
