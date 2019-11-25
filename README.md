@@ -35,6 +35,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - IPS countries description
 - IPS reserved hints
 - World IPS countries image
+- World IPS countries flags
 - Ports description
 - DNS servers description (Top servers)
 - Websites similarity detection (Top 10000)
@@ -49,6 +50,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - URL/EMAIL/TEL/Tags common patterns extraction
 - Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
+- DGA - 
 - Linux
     - ELF information
     - API functions descriptions
