@@ -17,7 +17,6 @@ print("                                               |                         
 print("                                                                           ")
 
 class QBAnalyzer(Cmd):
-
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
     _analyze_parsergroupreq = _analyze_parser.add_argument_group('required arguments')
