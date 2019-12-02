@@ -16,9 +16,6 @@ class QBMitresearch:
     def __init__(self,mitre):
         '''
         initialize class, make mitrefiles path
-
-        Args:
-            mitre: is MitreParser class, needed for hardcoded list
         '''
         self.mitrepath = path.abspath(path.join(path.dirname( __file__ ),'mitrefiles'))
         if not self.mitrepath.endswith(path.sep): self.mitrepath = self.mitrepath+path.sep
@@ -30,10 +27,6 @@ class QBMitresearch:
     def searchinmitreandreturn(self,s,attack):
         '''
         get attack info from fulldict
-
-        Args:
-            s: hardcoded fulldict attack-patterns
-            attack: attack id
         '''
         for x in s:
             if "id" in x and "attack-pattern" in x["id"]:
@@ -46,9 +39,6 @@ class QBMitresearch:
     def checkmitresimilarity(self,data):
         '''
         check detections from parsediocs.json against wordsstripped, if yes bring attack info
-
-        Args:
-            data: data dict
         '''
         _list = []
         f = loads(open(self.parsediocs).read())
@@ -75,9 +65,6 @@ class QBMitresearch:
     def checkmitre(self,data):
         '''
         check if words are tools or malware listed in mitre 
-
-        Args:
-            data: data dict
         '''
         for _word in self.words:
             toolrecords = self.mitre.findtool(_word)
@@ -99,9 +86,6 @@ class QBMitresearch:
     def checkwithmitre(self,data):
         '''
         start mitre analysis for words and wordsstripped
-
-        Args:
-            data: data dict
         '''
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]

@@ -12,16 +12,19 @@ class QBDGA:
         '''
         initialize class
         '''
+        self.detectionlowfreq = compile(r"[vkjxqz]")
+        self.detectionconsonantslettersinrow = compile(r"[bcdfghjklmnpqrstvwxyz]{4,}")
+        self.detectionconsonants = compile(r"[bcdfghjklmnpqrstvwxyz]")
+        self.detectionhex = compile(r'([0-9a-fA-F]{4,})',I)
+        self.detectionsymbols = compile(r'[_\-~]',I)
+        self.detectionnumbers = compile(r'[\d]',I)
+
     @verbose(verbose_flag)
     @progressbar(True,"DGA-Find repeated patterns")
     def seqstongrams(self,data,domains):
         '''
         loop sequences, converts sequences to ngrams. map all of them and get thier intersection
         then, return the max item
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
         try:
             allngrams = []
@@ -46,14 +49,9 @@ class QBDGA:
     def findlowfreqletters(self,data,domains):
         '''
         loop sequences, find low frequency letters 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        lowfreq = compile(r"[vkjxqz]")
         for domain in domains:
-            x = findall(lowfreq,domain)
+            x = findall(self.detectionlowfreq,domain)
             if len(x) > 4:
                 data.append({"Count":len(x),"Letters":''.join(x),"URL":domain})
 
@@ -62,14 +60,9 @@ class QBDGA:
     def findconsonantslettersinrow(self,data,domains):
         '''
         loop sequences, find consonants in row
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        consonants = compile(r"[bcdfghjklmnpqrstvwxyz]{4,}")
         for domain in domains:
-            x = findall(consonants,domain)
+            x = findall(self.detectionconsonantslettersinrow,domain)
             if len(x) > 2:
                 data.append({"Groups":"{} > 2 groups".format(len(x)),"Row":','.join(x),"URL":domain})
 
@@ -78,14 +71,9 @@ class QBDGA:
     def findconsonantsletters(self,data,domains):
         '''
         loop sequences, find consonants 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        consonants = compile(r"[bcdfghjklmnpqrstvwxyz]")
         for domain in domains:
-            x = findall(consonants,domain)
+            x = findall(self.detectionconsonants,domain)
             if len(x) > 8:
                 data.append({"Count":"{} > 8".format(len(x)),"Letters":''.join(x),"URL":domain})
 
@@ -94,14 +82,9 @@ class QBDGA:
     def findencryptionpatterns(self,data,domains):
         '''
         loop sequences, find encryptions 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        _hex = compile(r'([0-9a-fA-F]{4,})',I)
         for domain in domains:
-            detection = search(_hex, domain)
+            detection = search(self.detectionhex, domain)
             if detection is not None:
                 temp = ""
                 if len(detection.group()) == 32:
@@ -122,14 +105,9 @@ class QBDGA:
     def findallsymbols(self,data,domains):
         '''
         loop sequences, find symbols 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        detection = compile(r'[_\-~]',I)
         for domain in domains:
-            x = findall(detection,domain)
+            x = findall(self.detectionsymbols,domain)
             #group them
             if len(x) > 2:
                 data.append({"Count":"{} > 2".format(len(x)),"Symbols":''.join(x),"URL":domain})
@@ -139,14 +117,9 @@ class QBDGA:
     def findallnumbers(self,data,domains):
         '''
         loop sequences, find numbers 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
-        detection = compile(r'[\d]',I)
         for domain in domains:
-            x = findall(detection,domain)
+            x = findall(self.detectionnumbers,domain)
             if len(x) > 5:
                 data.append({"Count":"{} > 5".format(len(x)),"Numbers":''.join(x),"URL":domain})
 
@@ -155,10 +128,6 @@ class QBDGA:
     def URLlength(self,data,domains):
         '''
         loop sequences, find long domains 
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
         for domain in domains:
             if len(domain) > 13:
@@ -169,10 +138,6 @@ class QBDGA:
     def checkentropy(self,data,domains):
         '''
         loop sequences, get entropy
-
-        Args:
-            data: dict object
-            domains: list of domains
         '''
         for domain in domains:
             entropy = getentropyfloatret(domain)

@@ -34,9 +34,6 @@ class MitreParser():
         '''
         check if there are enterprise-attack.json and pre-attack.json in the system
         if not, download them and parse them. otehrwise use the once from the system
-
-        Args:
-            _path: path to mitrefiles folder
         '''
         l = {}
         if not path.exists(_path+'enterprise-attack.json') and not path.exists(_path+'pre-attack.json'):
@@ -144,10 +141,6 @@ class MitreParser():
     def findapt(self,apt,_print=False):
         '''
         find an apt group from the hardocded list (Name is case sensitive)
-
-        Args:
-            apt: apt name
-            _print: pretty print json
         '''
         x = self.usedict['intrusion-set'][apt]
         c = self.countitem(x,'collection')
@@ -160,9 +153,6 @@ class MitreParser():
     def listapts(self,_print=False):
         '''
         list all apts from hardocded list 
-
-        Args:
-            _print: pretty print json
         '''
         x = [x for x in self.usedict['intrusion-set']]
         if _print:
@@ -174,10 +164,6 @@ class MitreParser():
     def findmalware(self,malware,_print=False):
         '''
         find malware from the hardocded list (Name is case sensitive)
-
-        Args:
-            malware: malware name
-            _print: pretty print json
         '''
         if malware in self.usedict['malware']:
             x = self.usedict['malware'][malware]
@@ -192,10 +178,6 @@ class MitreParser():
     def findtool(self,tool,_print=False):
         '''
         find tool from the hardocded list (Name is case sensitive)
-
-        Args:
-            tool: tool name
-            _print: pretty print json
         '''
         if tool in self.usedict['tool']:
             x = self.usedict['tool'][tool]
@@ -210,10 +192,6 @@ class MitreParser():
     def findword(self,word,_print=False):
         '''
         search for specific word in the files (case insensitive) 
-
-        Args:
-            word: word
-            _print: pretty print json
         '''
         x = {}
         pattern = compile(r'(^.*%s.*$)' % word, 8|2)

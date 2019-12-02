@@ -24,10 +24,6 @@ class QBIntell:
     def compileandfind(self,data,filename):
         '''
         parse the detections and check them against wordsstripped
-
-        Args:
-            data: data dict
-            filename: file contains detections
         '''
         with copen(filename,"r",encoding='utf8') as f:
             for _ in loads(f.read()):
@@ -54,13 +50,9 @@ class QBIntell:
     def checkwithqbintell(self,data,filename):
         '''
         start checking logic and setup words and wordsstripped
-
-        Args:
-            data: data dict
-            filename: file contains detections
         '''
-        self.words = data["StringsRAW"]["wordsinsensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Intell"] = {"WinAPI":[],
                           "_WinAPI":["Matched","Required","Behavior","Detected"]}
+        self.words = data["StringsRAW"]["wordsinsensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.compileandfind(data["Intell"]["WinAPI"],self.intell+filename)

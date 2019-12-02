@@ -16,12 +16,6 @@ class BBParser:
     def getfunctionsold(self,f) -> list:
         '''
         get function names and constant strings by regex
-
-        Args:
-            f: buffer
-
-        Return:
-            list of parsed strings and functions
         '''
         _list = []
         strings = findall(b"[\x24][\xd8]\\*\*\* ([\x20-\x7e]{4,})",f)
@@ -46,12 +40,6 @@ class BBParser:
     def checkbbsig(self,data) -> bool:
         '''
         check mime is cod or not
-
-        Args:
-            data: data dict
-
-        Return:
-            True if cod
         '''
         if  data["Details"]["Properties"]["mime"] == "application/octet-stream" and \
             data["Location"]["Original"].endswith(".cod"):
@@ -62,9 +50,6 @@ class BBParser:
     def getbbdeatils(self,_data):
         '''
         start analyzing cod logic, get words and wordsstripped from the file 
-
-        Args:
-            data: data dict
         '''
         with open(_data["Location"]["File"], 'rb') as file:
             class Header(Structure):

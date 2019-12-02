@@ -37,10 +37,6 @@ class YaraParser:
     def checkwithyara(self,data,check=""):
         '''
         check file with compiled yara detection and append results into list
-
-        Args:
-            data: data dict
-            check not used
         '''
         data["Yara"] = {"Matches":[],
                         "_Matches":["Count","Offset","Rule","Patteren","Parsed","Condition"]}
@@ -56,8 +52,7 @@ class YaraParser:
                     except:
                         pattern = ''.join('\\x{:02x}'.format(x) for x in _match[2])
                         ppattern =  _match[2].decode("ascii","replace")
-                    #val = "{}:{} -> {}".format(basename,hex(_match[0]),pattern)
-                    #_list.append([match.namespace,match,pattern,ppattern,hex(_match[0]),self.yararulenamelist[match.rule]])
+
                     if pattern in temp:
                         temp[pattern][0] += 1
                         temp[pattern][1].append(hex(_match[0]))

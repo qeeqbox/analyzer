@@ -22,10 +22,6 @@ class QBD3generator:
     def checkfunc(self,func,str) -> bool:
         '''
         check if functions are not sub or sym 
-
-        Args:
-            func: soruce function
-            str: target function
         '''
         if func.startswith("sub."):
             if func[4:].split("_")[1].lower() in str.lower():
@@ -42,9 +38,6 @@ class QBD3generator:
     def makexref(self,data):
         '''
         get cross references from file using radare2 
-
-        Args:
-            data: data dict
         '''
         data["XREFS"] = { "GRAPH":{"nodes":[],"links":[]},
                           "TEXT":[],
@@ -98,9 +91,6 @@ class QBD3generator:
     def makeartifactsd3(self,data) -> bool:
         '''
         get artifacts from data and generate d3
-
-        Args:
-            data: data dict
         '''
 
         data["REFS"] = { "GRAPH":{"nodes":[],"links":[]},

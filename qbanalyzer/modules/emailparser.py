@@ -25,13 +25,6 @@ class EmailParser():
     def getattachment(self,data, msg) -> (list):
         '''
         get attachment of email
-
-        Args:
-            data: data dict
-            msg: msg object
-
-        Return:
-            list of extracted buffers
         '''
 
         _Stream = []
@@ -64,13 +57,6 @@ class EmailParser():
     def checkattachmentandmakedir(self,data, msg) -> (bool):
         '''
         check if an email has attachments or not
-
-        Args:
-            data: data dict
-            msg: msg object
-            
-        Return:
-            true or false
         '''
         if msg.get_content_maintype() == 'multipart':
             for attachment in msg.walk():
@@ -84,12 +70,6 @@ class EmailParser():
     def checkemailsig(self, data) -> bool:
         '''
         check mime if it contains message or not
-
-        Args:
-            data: data dict
-
-        Return:
-            True if message
         '''
         if "message" in data["Details"]["Properties"]["mime"] or \
             data["Location"]["Original"].endswith(".eml"):
@@ -100,9 +80,6 @@ class EmailParser():
     def getemail(self, data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from array 
-
-        Args:
-            data: data dict
         '''
         data["EMAIL"] = { "General": {},
                          "_General": {},

@@ -16,10 +16,7 @@ class HtmlMaker:
     @progressbar(True,"Starting HtmlMaker")
     def __init__(self,qbimage):
         '''
-        initialize class 
-
-        Args:
-            qbimage: is QBImage class, needed for generating similarity image
+        initialize class
         '''
         self.templates = path.abspath(path.join(path.dirname( __file__ ),'templates'))
         if not self.templates.endswith(path.sep): self.templates = self.templates+path.sep
@@ -40,23 +37,20 @@ class HtmlMaker:
     def addtextarea(self) -> str:
         '''
         textarea tag
-
-        Return:
-            string contains textarea tag
         '''
         return """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
+
+    def emptytextarea(self) -> str:
+        '''
+        textarea tag
+        '''
+        return """<div class=textareawrapper></div>"""
 
     @verbose(verbose_flag)
     @progressbar(True,"Making yara table")
     def makeyaratable(self,data) -> str:
         '''
         add start generating yara html table 
-
-        Args:
-            data: data dict
-
-        Return
-            string that contains yara inside table
         '''
         table = ""
         if len(data) > 0:
@@ -64,18 +58,9 @@ class HtmlMaker:
         return table
 
     @verbose(verbose_flag)
-    def makeimagetablebase64(self,data,header,exclude=None,textarea=None) -> str:
+    def makeimagetablebase64(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render similarity image inside html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea 
-
-        Return
-            string that contains similarity image inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -93,6 +78,7 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(header=header,data=data)
         return result
 
@@ -100,16 +86,6 @@ class HtmlMaker:
     def makealistsettablenew1(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render list into html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea
-            is text safe or not to reneder
-
-        Return
-            string that contains list inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -141,6 +117,7 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
@@ -148,16 +125,6 @@ class HtmlMaker:
     def makealistsettablenew2(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render dict into html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea
-            is text safe or not to reneder
-
-        Return
-            string that contains dict inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -188,6 +155,7 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
@@ -195,16 +163,6 @@ class HtmlMaker:
     def makealistsettablenew3(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render text into html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea
-            is text safe or not to reneder
-
-        Return
-            string that contains text inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -226,23 +184,15 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(header=header,data=data,_safe=_safe)
         return result
 
 
     @verbose(verbose_flag)
-    def makeflags(self,data,header,exclude=None,textarea=None) -> str:
+    def makeflags(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render similarity image inside html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea 
-
-        Return
-            string that contains similarity image inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -260,24 +210,15 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(header=header,data=data)
         return result
 
     @verbose(verbose_flag)
-    def makeworldimage(self,data,header,name,exclude=None,textarea=None) -> str:
+    def makeworldimage(self,data,header,name,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render world image into html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea
-
-        Return
-            string that contains world image inside table
         '''
-
         temp = """
         <div class="tablewrapper">
         <table>
@@ -324,22 +265,14 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(header=header,data=str(data),name=name)
         return result
 
     @verbose(verbose_flag)
-    def makerefmapimage(self,data,header,name,exclude=None,textarea=None) -> str:
+    def makerefmapimage(self,data,header,name,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render xref image into html table
-
-        Args:
-            data: data dict
-            header of table
-            exclude not used
-            with or without textarea
-
-        Return
-            string that contains xref inside table
         '''
         temp = """
         <div class="tablewrapper">
@@ -478,6 +411,7 @@ class HtmlMaker:
         </table>
         </div>"""
         if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
         result = Template(temp).render(header="Xrefs",data=str(data),name=name)
         return result
 
@@ -486,12 +420,6 @@ class HtmlMaker:
     def maketable(self,data,_path) -> str:
         '''
         making tables of dict data
-
-        Args:
-            data: data dict
-
-        Return
-            string that contains all tables
         '''
         table = ""
         for x in data:
@@ -500,7 +428,7 @@ class HtmlMaker:
                     if key.startswith("__"):
                         if len(data[x][key[2:]]) > 0:
                             for item in data[x][key[2:]]:
-                                table += self.makealistsettablenew2(data[x][key[2:]][item],["key","value"],None,True,None)
+                                table += self.makealistsettablenew2(data[x][key[2:]][item],["key","value"],None,False,None)
                     elif key.startswith("_"):
                         if x == "MITRE":
                             safe = True
@@ -508,13 +436,13 @@ class HtmlMaker:
                             safe = None
                         if type(data[x][key]) is list:
                             if len(data[x][key[1:]]) > 0:
-                                table += self.makealistsettablenew1(data[x][key[1:]],data[x][key],None,True,safe)
+                                table += self.makealistsettablenew1(data[x][key[1:]],data[x][key],None,False,safe)
                         elif type(data[x][key]) is dict:
                             if len(data[x][key[1:]]) > 0:
-                                table += self.makealistsettablenew2(data[x][key[1:]],["key","value"],None,True,safe)
+                                table += self.makealistsettablenew2(data[x][key[1:]],["key","value"],None,False,safe)
                         elif type(data[x][key]) is str:
                             if len(data[x][key[1:]]) > 0:
-                                table += self.makealistsettablenew3(data[x][key[1:]],key[1:],None,True,safe)
+                                table += self.makealistsettablenew3(data[x][key[1:]],key[1:],None,False,safe)
                     elif key == "GRAPH" or key == "Flags":
                         pass
                 except:
@@ -527,36 +455,31 @@ class HtmlMaker:
             try:
                 if key in data and "GRAPH" in data[key]:
                     if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
-                        table +=self.makerefmapimage(data[key]["GRAPH"],key,key+"d3map",None,True)
+                        table +=self.makerefmapimage(data[key]["GRAPH"],key,key+"d3map",None,False,None)
             except:
                 pass
 
         if "Flags" in data:
             try:
                 if len(data["Flags"]["Flags"]) > 0:
-                    table +=self.makeflags(data["Flags"]["Flags"],"Flags",None,True)
+                    table +=self.makeflags(data["Flags"]["Flags"],"Flags",None,False,None)
             except:
                 pass
     
         if "Codes" in data:
             try:
                 if len(data["Codes"]["Codes"]) > 0:
-                    table +=self.makeworldimage(data["Codes"]["Codes"],"Worldmap","Worldmap",None,True)
+                    table +=self.makeworldimage(data["Codes"]["Codes"],"Worldmap","Worldmap",None,False,None)
             except:
                 pass
 
-        table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,True)
+        table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,False,None)
         return table
 
     @verbose(verbose_flag)
     def rendertemplate(self,data,header,footer):
         '''
         start making tables and save them into a html file
-
-        Args:
-            data: data dict
-            header not used
-            footer used for disclaimer
         '''
         footer = 'QBAnalyzer∞ generated this report at {} on {} - {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),platform(),self.d)
         table = self.maketable(data,data["Location"]["File"])

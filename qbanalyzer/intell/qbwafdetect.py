@@ -22,7 +22,7 @@ class QBWafDetect:
     def checkpacketsforwaf(self,data,_data,filename):
         listheaders = []
         listpayloads = []
-        #need dynamic loop
+
         for _ in data:
             listheaders.append(str( _["fields"]))
             listpayloads.append(str( _["payload"]))

@@ -17,9 +17,6 @@ class ApkParser:
     def __init__(self):
         '''
         initialize class
-
-        Args:
-            qbs: is QBStrings class, needed for string description
         '''
         self.sus = ["encrypt","decrypt","http:","https","sudo","password","pass","admin","loadLibrary","isEmulator"]
 
@@ -47,12 +44,6 @@ class ApkParser:
     def getallclasses(self,r2p) -> list:
         '''
         get all classes from dex using icq command
-
-        Args:
-            r2p: r2p object
-
-        Return:
-            _list: list of classes and their names
         '''
         _list = []
         for _ in self.executewithswtich(r2p,"icq",""):
@@ -64,12 +55,6 @@ class ApkParser:
     def getallexternals(self,r2p) -> list:
         '''
         get all externals from dex using iiq command
-
-        Args:
-            r2p: r2p object
-
-        Return:
-            _list: list of externals and their names
         '''
         _list = []
         for _ in self.executewithswtich(r2p,"iiq",""):
@@ -81,12 +66,6 @@ class ApkParser:
     def getallsymbol(self,r2p) -> list:
         '''
         get all symbols from dex using isq command
-
-        Args:
-            r2p: r2p object
-
-        Return:
-            _list: list of Symbols and their info
         '''
         _list = []
         for _ in self.executewithswtich(r2p,"isq",""):
@@ -99,12 +78,6 @@ class ApkParser:
     def bigfunctions(self,r2p) -> list:
         '''
         get all big functions from dex using aflj command
-
-        Args:
-            r2p: r2p object
-
-        Return:
-            _list: list of big functions and their info
         '''
         _list = []
         for item in r2p.cmdj("aflj"):
@@ -117,12 +90,6 @@ class ApkParser:
     def checksus(self,r2p) -> list:
         '''
         check if suspicious strings in class, externals or symbols
-
-        Args:
-            r2p: r2p object
-
-        Return:
-            _list: list of big xref suspicious strings and their locations
         '''
         _list = []
         for _ in self.executewithswtich(r2p,"icq",self.sus):
@@ -146,12 +113,6 @@ class ApkParser:
     def readpepackage(self,_path) -> str:
         '''
         read apk permission by by xml (if xml is not compressed)
-
-        Args:
-            _path: path to Androidmanifest
-
-        Return:
-            Name of packege 
         '''
         with open(_path, 'r',encoding="utf-8") as f:
             data = f.read()
@@ -163,12 +124,6 @@ class ApkParser:
     def readpermissions(self,data,_path) -> list:
         '''
         read apk permission by regex..
-
-        Args:
-            _path: path to Androidmanifest
-
-        Return:
-            List of parsed permissions 
         '''
         _list = []
         f = data["FilesDumps"][_path]
@@ -187,12 +142,6 @@ class ApkParser:
     def checkapksig(self,data) -> bool:
         '''
         check if mime is an apk type or if file contains Androidmanifest in packed files
-
-        Args:
-            data: data dict
-
-        Return:
-            True if apk
         '''
         if  data["Details"]["Properties"]["mime"] == "application/java-archive" or \
             data["Details"]["Properties"]["mime"] == "application/zip":
@@ -204,12 +153,6 @@ class ApkParser:
     def checkdexsig(self,data) -> bool:
         '''
         check if mime is a dex
-
-        Args:
-            data: data dict
-
-        Return:
-            True if dex
         '''
         if data["Details"]["Properties"]["mime"] == "application/octet-stream" and data["Location"]["Original"].endswith(".dex"):
             return True
@@ -220,9 +163,6 @@ class ApkParser:
         '''
         start analyzing dex logic (r2p timeout = 10) for individual dex
         add description to strings, get words and wordsstripped from the dex 
-
-        Args:
-            data: data dict
         '''
         r2p = r2open(data["Location"]["File"],flags=['-2'])
         r2p.cmd("e anal.timeout = 5")
@@ -251,9 +191,6 @@ class ApkParser:
         '''
         start analyzing apk logic (r2p timeout = 10) for all dex files
         add description to strings, get words and wordsstripped from the packed files 
-
-        Args:
-            data: data dict
         '''
         data["APK"] = { "General" : {},
                         "Permissions":[],

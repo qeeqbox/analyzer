@@ -35,6 +35,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - IPS countries description
 - IPS reserved hints
 - World IPS countries image
+- World IPS countries flags
 - Ports description
 - DNS servers description (Top servers)
 - Websites similarity detection (Top 10000)
@@ -49,6 +50,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - URL/EMAIL/TEL/Tags common patterns extraction
 - Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
+- DGA (domain generation algorithm) patterns detection 
 - Linux
     - ELF information
     - API functions descriptions
@@ -95,11 +97,12 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Functions extraction
     - Strings extraction
 - PCAP
-    - Frame Filter
-    - HTTP Filter
-    - DNS Filter
-    - ARP Filter
-    - WAF Detection
+    - Frame filter
+    - HTTP filter
+    - DNS filter
+    - ARP filter
+    - WAF detection
+    - DGA detction
 - PDF
     - Objects enumeration
     - Keys (javascript, js, OpenAction) enumeration
@@ -137,7 +140,7 @@ Thank you for reaching out!! I have been getting requests to implement the follo
 - Cleaning up
 
 ### Depends on
-Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img and a lot of researches.
+Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and a lot of researches.
 
 ### Libs
 socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, locale, pathlib, csv, hmac, token, queue, scapy, html, types, inspect, functools, nltk, site, genericpath, secrets, re, os, sre_parse, qbanalyzer, threading, shutil, mimetypes, struct, optparse, pickle, cffi, cryptography, bdb, urllib, plistlib, zipimport, tempfile, sre_compile, runpy, opcode, elftools, magic, uu, sqlite3, ctypes, chardet, ntpath, enum, argparse, array, codeop, datetime, selectors, heapq, distutils, logging, posix, pytesseract, requests, jinja2, contextlib, cmd, collections, email, calendar, decimal, M2Crypto, unittest, swig_runtime_data4, tokenize, json, sitecustomize, grp, sysconfig, random, six, subprocess, pwd, ftplib, reprlib, ordlookup, ssdeep, cgi, PIL, ssl, sre_constants, gzip, apport_python_hook, tld, typing, warnings, platform, getopt, pyexpat, zlib, abc, idna, stringprep, select, cython_runtime, certifi, multiprocessing, keyword, r2pipe, sys, pdb, regex, resource, code, pydoc, copyreg, difflib, urllib3, uuid, ast, itertools, string, signal, fnmatch, xmlrpc, quopri, ipaddress, numbers, numpy, weakref, importlib, bz2, math, asyncio, binascii, traceback, encodings, pycparser, lzma, http, errno, glob, asn1crypto, gc, fcntl, bisect, unicodedata, textwrap, builtins, macholib, imp, marshal, pprint, yara, markupsafe, hashlib, linecache, posixpath, socket, base64, time, OpenSSL, asyncore, atexit, fractions, dis, copy, zipfile, pkgutil, gettext, webbrowser, netrc

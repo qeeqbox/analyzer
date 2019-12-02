@@ -14,17 +14,22 @@ class QBEncryption:
         '''
         initialize class
         '''
+        self.detectioncheckmd5 = compile(r'\b[0-9a-fA-F]{32}\b',I)
+        self.detectionchecksha1 = compile(r'\b[0-9a-fA-F]{40}\b',I)
+        self.detectionchecksha256 = compile(r'\b[0-9a-fA-F]{64}\b',I)
+        self.detectionchecksha512 = compile(r'\b[0-9a-fA-F]{128}\b',I)
+        self.detectionscheckuuid =[ ("UUID type 1",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
+                                    ("UUID type 2",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[2][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
+                                    ("UUID type 3",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[3][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
+                                    ("UUID type 4",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
+                                    ("UUID type 5",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I))]
+        self.detectioncheckcrc = compile(r'\b0x[0-9a-fA-F]{1,16}\b',I)
+        self.detectioncheckjwt = compile(r'\b[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?\b',I)
 
     @verbose(verbose_flag)
     def checkbase64(self,data):
         '''
         check if words are possible base64 or not 
-
-        Args:
-            data: data dict
-
-        Return:
-            _Tempreturn: list conatins results
         '''
         _List = []
         if len(self.wordssensitive) > 0:
@@ -41,9 +46,6 @@ class QBEncryption:
     def testbase64(self,w):
         '''
         match decoding base64 then encoding means most likely base64 
-
-        Args:
-            data: data dict
         '''
         try:
             y = b64decode(w)
@@ -57,13 +59,9 @@ class QBEncryption:
     def checkmd5(self,data):
         '''
         check if buffer contains MD5 098F6BCD4621D373CADE4E832627B4F6
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b[0-9a-fA-F]{32}\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+        x = findall(self.detectioncheckmd5,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -75,13 +73,9 @@ class QBEncryption:
     def checksha1(self,data):
         '''
         check if buffer contains SHA1 A94A8FE5CCB19BA61C4C0873D391E987982FBBD3
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b[0-9a-fA-F]{40}\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+        x = findall(self.detectionchecksha1,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -93,13 +87,9 @@ class QBEncryption:
     def checksha256(self,data):
         '''
         check if buffer contains SHA256 9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b[0-9a-fA-F]{64}\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+        x = findall(self.detectionchecksha256,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -112,13 +102,9 @@ class QBEncryption:
     def checksha512(self,data):
         '''
         check if buffer contains SHA512 EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b[0-9a-fA-F]{128}\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+        x = findall(self.detectionchecksha512,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -135,19 +121,11 @@ class QBEncryption:
         5c10f566-2963-3311-bde5-f367e8bc6e17
         5c10f566-2963-4311-bde5-f367e8bc6e17
         5c10f566-2963-5311-bde5-f367e8bc6e17
-
-        Args:
-            data: data dict
         '''
 
-        detections =[("UUID type 1",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
-                    ("UUID type 2",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[2][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
-                    ("UUID type 3",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[3][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
-                    ("UUID type 4",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I)),
-                    ("UUID type 5",compile(r'\b[0-9A-F]{8}-[0-9A-F]{4}-[5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\b',I))]
-        for detection in detections:
+        for detection in self.detectionscheckuuid:
             _List = []
-            x = findall(detection[1],self.wordsinsensitivestripped)
+            x = findall(detection[1],self.wordsstripped)
             if len(x) > 0:
                 for _ in x:
                     _List.append(_)
@@ -159,13 +137,10 @@ class QBEncryption:
     def checkcrc(self,data):
         '''
         check if buffer contains CRC a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b0x[0-9a-fA-F]{1,16}\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+       
+        x = findall(self.detectioncheckcrc,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -177,13 +152,9 @@ class QBEncryption:
     def checkjwt(self,data):
         '''
         check if buffer contains JWT
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?\b',I)
-        x = findall(detection,self.wordsinsensitivestripped)
+        x = findall(self.detectioncheckjwt,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -193,12 +164,8 @@ class QBEncryption:
     @verbose(verbose_flag)
     @progressbar(True,"Finding encryptions")
     def checklogics(self,data):
-
         '''
         check if buffer contains encryption logic
-
-        Args:
-            data: data dict
         '''
         detections = {  "MD2":rb"\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x02\x05\x00\x04\x10",
                         "MD5":rb"\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10",
@@ -219,14 +186,7 @@ class QBEncryption:
     def checkencryption(self,data):
         '''
         start pattern analysis for words and wordsstripped
-
-        Args:
-            data: data dict
         '''
-        self.wordsinsensitive = data["StringsRAW"]["wordsinsensitive"]
-        self.wordssensitive = data["StringsRAW"]["wordssensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.buffer =  data["FilesDumps"][data["Location"]["File"]]
         data["Encryption"] = {  "MD5s":[],
                                 "SHA1s":[],
                                 "SHA256s":[],
@@ -245,12 +205,17 @@ class QBEncryption:
                                 "_JWTs":["Count","JWT","Description"],
                                 "_BASE64s":["Count","Base64","Decoded"],
                                 "_Logics":["Count","Type"]}
+
+        self.wordsinsensitive = data["StringsRAW"]["wordsinsensitive"]
+        self.wordssensitive = data["StringsRAW"]["wordssensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
+        self.buffer =  data["FilesDumps"][data["Location"]["File"]]
         self.checkmd5(data["Encryption"]["MD5s"])
         self.checksha1(data["Encryption"]["SHA1s"])
         self.checksha256(data["Encryption"]["SHA256s"])
         self.checksha512(data["Encryption"]["SHA512s"])
         self.checkcrc(data["Encryption"]["CRCs"])
-        self.checkjwt(data["Encryption"]["JWTs"])
+        #self.checkjwt(data["Encryption"]["JWTs"])
         self.checkbase64(data["Encryption"]["BASE64s"])
         self.checkuuid(data["Encryption"]["UUIDs"])
         self.checklogics(data["Encryption"]["Logics"])

@@ -19,18 +19,22 @@ class QBPatterns:
         initialize class and make refs path that contains References.db
         get english words from corpus and open connection with References.db
         '''
+        self.links = compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I)
+        self.ip4 = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
+        self.ip6 = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
+        self.email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
+        self.tel = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
+        self.html = compile(r'>([^<]*)<\/',I)
+        self.hex = compile(r'([0-9a-fA-F]{4,})',I)
 
     @verbose(verbose_flag)
     @progressbar(True,"Finding URLs patterns")
     def checklink(self,_data):
         '''
         check if buffer contains ips xxx://xxxxxxxxxxxxx.xxx
-        
-        Args:
-            _data: data dict
         '''
         _List = []
-        x = list(set(findall(compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I),self.wordsstripped)))
+        x = list(set(findall(self.links,self.wordsstripped)))
         if len(x) > 0:
             for _ in x:
                 try:
@@ -46,17 +50,13 @@ class QBPatterns:
     def checkip4(self,_data):
         '''
         check if buffer contains ips x.x.x.x
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        ip = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
-        x = findall(ip,self.wordsstripped)
+        x = findall(self.ip4,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 try:
-                    ip = ip_address(_)
+                    ip_address(_)
                     _List.append(_)
                 except ValueError:
                     pass
@@ -68,13 +68,9 @@ class QBPatterns:
     def checkip6(self,_data):
         '''
         check if buffer contains ips x.x.x.x
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        ip = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
-        x = findall(ip,self.wordsstripped)
+        x = findall(self.ip6,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -86,13 +82,9 @@ class QBPatterns:
     def checkemail(self,_data):
         '''
         check if buffer contains email xxxxxxx@xxxxxxx.xxx
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
-        x = findall(email,self.wordsstripped)
+        x = findall(self.email,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_[0])
@@ -104,13 +96,9 @@ class QBPatterns:
     def checkphonenumber(self,_data):
         '''
         check if buffer contains tel numbers 012 1234 567
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        tel = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
-        x = findall(tel,self.wordsstripped)
+        x = findall(self.tel,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -122,13 +110,9 @@ class QBPatterns:
     def checktags(self,_data):
         '''
         check if buffer contains tags <>
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        html = compile(r'>([^<]*)<\/',I)
-        x = findall(html,self.wordsstripped)
+        x = findall(self.html,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -140,13 +124,9 @@ class QBPatterns:
     def checkhex(self,_data):
         '''
         check if buffer contains tags <>
-
-        Args:
-            _data: data dict
         '''
         _List = []
-        _hex = compile(r'([0-9a-fA-F]{4,})',I)
-        x = findall(_hex,self.wordsstripped)
+        x = findall(self.hex,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -159,12 +139,7 @@ class QBPatterns:
     def checkpatterns(self,data):
         '''
         start pattern analysis for words and wordsstripped
-
-        Args:
-            data: data dict
         '''
-        self.words = data["StringsRAW"]["wordsinsensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Patterns"] = { "IP4S":[],
                              "IP6S":[],
                              "LINKS":[],
@@ -179,17 +154,15 @@ class QBPatterns:
                              "_TELS":["Count","TEL","Description"],
                              "_TAGS":["Count","TAG","Description"],
                              "_HEX":["Count","HEX","Parsed"]}
-        #engsorted = self.sortbylen(self.checkwithenglish()["English"])
-        #unksorted = self.sortbylen(self.checkwithenglish()["UnKnown"])
-        #b64 = self.checkbase64()
+
+        self.words = data["StringsRAW"]["wordsinsensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.checklink(data["Patterns"]["LINKS"])
         self.checkip4(data["Patterns"]["IP4S"])
         self.checkip6(data["Patterns"]["IP6S"])
         self.checkemail(data["Patterns"]["EMAILS"])
         self.checktags(data["Patterns"]["TAGS"])
         self.checkhex(data["Patterns"]["HEX"])
-        #self.checkphonenumber(data["Strings"]["TELS"])
         adddescription("DNS",data["Patterns"]["IP4S"],"IP")
         adddescription("IPs",data["Patterns"]["IP4S"],"IP")
         adddescription("IPPrivate",data["Patterns"]["IP4S"],"IP")
-        #self.checkmitre(data["Strings"])

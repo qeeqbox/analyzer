@@ -4,27 +4,27 @@ from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.qprogressbar import progressbar
 from re import I, compile, findall
 
-#each encryption has a function for each logic (further customization) 
-
 class QBCreditcards:
     @progressbar(True,"Starting QBCreditcards")
     def __init__(self):
         '''
         initialize class
         '''
+        self.detectionamericanexpress = compile(r'\b(?:3[47][0-9]{13})\b',I)
+        self.detectionvisa = compile(r'\b(?:4[0-9]{12})(?:[0-9]{3})?\b',I)
+        self.detectionmastercard = compile(r'\b(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}\b',I)
+        self.detectiondiscover = compile(r'\b(?:6011\d{12})|(?:65\d{14})\b',I)
+        self.detectionjcb = compile(r'\b(?:2131|1800|35[0-9]{3})[0-9]{11}?\b',I)
+        self.detectiondinersclub = compile(r'\b3(?:0[0-5]|[68][0-9])[0-9]{11}\b',I)
 
     @verbose(verbose_flag)
     @progressbar(True,"Finding American Express Card patterns")
     def americanexpress(self,data):
         '''
         check if buffer contains american express card number 371642190784801
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b(?:3[47][0-9]{13})\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectionamericanexpress,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -36,13 +36,9 @@ class QBCreditcards:
     def visa(self,data):
         '''
         check if buffer contains Visa card number 4035300539804083
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b(?:4[0-9]{12})(?:[0-9]{3})?\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectionvisa,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -55,13 +51,9 @@ class QBCreditcards:
     def mastercard(self,data):
         '''
         check if buffer contains master card number 5168441223630339
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectionmastercard,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -73,13 +65,9 @@ class QBCreditcards:
     def discover(self,data):
         '''
         check if buffer contains Visa card number 6011988461284820
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b(?:6011\d{12})|(?:65\d{14})\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectiondiscover,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -91,13 +79,9 @@ class QBCreditcards:
     def jcb(self,data):
         '''
         check if buffer contains Jcb card number 3538684728624673
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b(?:2131|1800|35[0-9]{3})[0-9]{11}?\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectionjcb,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -109,13 +93,9 @@ class QBCreditcards:
     def dinersclub(self,data):
         '''
         check if buffer contains Diners Club card number 30043277253249
-
-        Args:
-            data: data dict
         '''
         _List = []
-        detection = compile(r'\b3(?:0[0-5]|[68][0-9])[0-9]{11}\b',I)
-        x = findall(detection,self.wordsstripped)
+        x = findall(self.detectiondinersclub,self.wordsstripped)
         if len(x) > 0:
             for _ in x:
                 _List.append(_)
@@ -126,13 +106,7 @@ class QBCreditcards:
     def checkcreditcards(self,data):
         '''
         start pattern analysis for words and wordsstripped
-
-        Args:
-            data: data dict
         '''
-
-        self.words = data["StringsRAW"]["wordsinsensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["CARDS"] = {   "AMERICANEXPRESS":[],
                             "VISA":[],
                             "MASTERCARD":[],
@@ -145,6 +119,9 @@ class QBCreditcards:
                             "_DISCOVER":["Count","Discover"],
                             "_JCB":["Count","JCB"],
                             "_DINERSCLUB":["Count","DinersClub"]}
+
+        self.words = data["StringsRAW"]["wordsinsensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.americanexpress(data["CARDS"]["AMERICANEXPRESS"])
         self.visa(data["CARDS"]["VISA"])
         self.mastercard(data["CARDS"]["MASTERCARD"])

@@ -19,12 +19,8 @@ class QBOCRDetect:
     def mixandsetupfileocr(self,data,paths):
         '''
         loop paths, convert each image to RGBA, and read text from image
-
-        Args:
-            paths: dict contains Path keys
         '''
         for x in paths:
-            #if x["Path"].endswith(".png") no need < lazy try and except
             try:
                 image = Image.open(BytesIO(data["FilesDumps"][x["Path"]]))
                 image = image.convert("RGBA")
@@ -39,10 +35,6 @@ class QBOCRDetect:
     def checkocrtext(self,data,_list):
         '''
         loop paths, convert each image to RGBA, and read text from image
-
-        Args:
-            data: data dict
-            paths: dict contains Path keys
         '''
         for words in _list:
             for word in words[0]:
@@ -54,9 +46,6 @@ class QBOCRDetect:
     def checkwithocr(self,data):
         '''
         start ocr reading logic for packed files only
-
-        Args:
-            data: data dict
         '''
         self.words = []
         data["OCR"] = { "OCR":[],

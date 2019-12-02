@@ -21,13 +21,6 @@ class RTFParser:
     def getobjects(self,data,buffer) -> (list,list):
         '''
         get objects from rtf by regex
-
-        Args:
-            data: not used
-
-        Return:
-            list of objects
-            list of parsed objects
         '''
         x = compile(rb'\\objdata\b',DOTALL|MULTILINE)
         _List = []
@@ -56,12 +49,6 @@ class RTFParser:
     def checkrtfsig(self,data) -> bool:
         '''
         check if mime is rtf
-
-        Args:
-            data: data dict
-
-        Return:
-            true if rtf
         '''
         if "text/rtf" == data["Details"]["Properties"]["mime"]:
             return True
@@ -71,9 +58,6 @@ class RTFParser:
     def checkrtf(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from buffers 
-
-        Args:
-            data: data dict
         '''
         data["RTF"] ={"General":{},
                          "Objects":[],

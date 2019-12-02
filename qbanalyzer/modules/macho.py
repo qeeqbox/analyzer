@@ -20,12 +20,6 @@ class Macho:
     def entry_point(self,machos) -> bool:
         '''
         get entry point of macho (needs debugging)
-
-        Args:
-            machos: machos object
-
-        Return:
-            True if found
         '''
         for h in machos.headers:
             for lc, cmd, data in h.commands:
@@ -36,12 +30,6 @@ class Macho:
     def getlibs(self,machos) -> list:
         '''
         get libs 
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of libs with their info
         '''
         _list = []
         for h in machos.headers:
@@ -55,12 +43,6 @@ class Macho:
     def getsegments(self,machos) -> list:
         '''
         get segments 
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of segments with their info
         '''
         _list = []
         for h in machos.headers:
@@ -76,12 +58,6 @@ class Macho:
     def getsections(self,machos) -> list:
         '''
         get sections 
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of segments with their info
         '''
         _list = []
         for h in machos.headers:
@@ -100,12 +76,6 @@ class Macho:
     def getsymbols(self,machos) -> list:
         '''
         get all symbols
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of symbols
         '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
@@ -118,12 +88,6 @@ class Macho:
     def getlocalsymbols(self,machos) -> list:
         '''
         get local symbols
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of local symbols
         '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
@@ -136,12 +100,6 @@ class Macho:
     def getundefsymbols(self,machos) -> list:
         '''
         get undefined symbols
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of undefined symbols
         '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
@@ -154,12 +112,6 @@ class Macho:
     def getextdefsymbols(self,machos) -> list:
         '''
         get external reference symbol indices
-
-        Args:
-            machos: machos object
-
-        Return:
-            list of external symbols
         '''
         _list = []
         s = SymbolTable.SymbolTable(machos)
@@ -172,12 +124,6 @@ class Macho:
     def getplist(self,plist) -> dict:
         '''
         read plist file
-
-        Args:
-            plist: path of info.plist
-
-        Return:
-            dict conatins key and values of plist
         '''
         return readPlist(plist)
 
@@ -185,12 +131,6 @@ class Macho:
     def checkdmgsig(self,data) -> bool:
         '''
         check mime is dmg or not
-
-        Args:
-            data: data dict
-
-        Return:
-            True if dmg
         '''
         if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
             data["Location"]["Original"].endswith(".dmg"):
@@ -204,12 +144,6 @@ class Macho:
     def checkmacsig(self,data) -> bool:
         '''
         check mime is machO or not
-
-        Args:
-            data: data dict
-
-        Return:
-            True if machO
         '''
         if data["Details"]["Properties"]["mime"] == "application/x-mach-binary":
             return True
@@ -218,12 +152,6 @@ class Macho:
     def checkipa(self,data) -> bool:
         '''
         check mime is dmg or not
-
-        Args:
-            data: data dict
-
-        Return:
-            True if dmg
         '''
         if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
             data["Location"]["Original"].endswith(".ipa"):
@@ -238,9 +166,6 @@ class Macho:
     def getipadeatils(self,data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
-
-        Args:
-            data: data dict
         '''
         data["IPA"] = {"General":{},
                        "_General":{}}
@@ -261,9 +186,6 @@ class Macho:
     def getdmgdeatils(self,data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
-
-        Args:
-            data: data dict
         '''
         data["DMG"] = {"General":{},
                        "_General":{}}
@@ -284,9 +206,6 @@ class Macho:
     def getmachodeatils(self,data):
         '''
         start analyzing macho logic, add descriptions and get words and wordsstripped from the file 
-
-        Args:
-            data: data dict
         '''
         try:
             macho = MachO.MachO(data["Location"]["File"])

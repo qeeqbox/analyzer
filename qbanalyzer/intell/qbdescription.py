@@ -15,11 +15,6 @@ cursor = connect(refs+'References.db').cursor()
 def adddescription(_type,data,keyword):
     '''
     add description to buffer
-
-    Args:
-        _type: type of description
-        data: data dict
-        keyword: target key to check (Ex. IP)
     '''
 
     global cursor

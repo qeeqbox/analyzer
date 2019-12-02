@@ -1,3 +1,8 @@
+#### 2019.V.01.06
+- Fixed bugs
+- Added missing dependencies
+- Refactored some modules
+
 #### 2019.V.01.05
 - Fixed bugs
 - Added DGA module

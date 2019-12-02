@@ -8,6 +8,7 @@ from scapy import all as scapy
 from binascii import hexlify
 from scapy.layers import http
 from datetime import datetime
+from re import compile,I,search
 
 class ReadPackets:
     @verbose(verbose_flag)
@@ -15,22 +16,14 @@ class ReadPackets:
     def __init__(self,waf):
         '''
         initialize class
-
-        Args:
-            waf: is WafDetect class, needed for detecting waf
         '''
+        self.ip = compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])',I)
         self.waf = waf
 
     @verbose(verbose_flag)
     def getlayers(self,packet) -> str:
         '''
-        initialize class
-
-        Args:
-            packet: packet object
-
-        Return:
-            str of layers
+        get layers
         '''
         c = 0
         _temp = []
@@ -44,18 +37,7 @@ class ReadPackets:
     @verbose(verbose_flag)
     def readallpackets(self,packets):
         '''
-        initialize class
-
-        Args:
-            packets: packets object
-
-        Return:
-            _list list of all payloads
-            _ports ports list
-            _ips ips list
-            _listreadarp list of arp requests
-            _listreaddns list of dns requests
-            _listreadhttp list of http requests
+        analyze each packet
         '''
         _listreadarp = []
         _listreaddns = []
@@ -127,8 +109,9 @@ class ReadPackets:
                                          "Method":fields["Method"].decode("utf-8",errors="ignore"),
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
-                    if fields["Host"].decode("utf-8",errors="ignore") not in _domains:
-                        _domains.append(fields["Host"].decode("utf-8",errors="ignore"))
+                    parsedhost = fields["Host"].decode("utf-8",errors="ignore")
+                    if not search(self.ip, parsedhost) and parsedhost not in _domains:
+                        _domains.append(parsedhost)
                 except:
                     pass
 
@@ -160,8 +143,9 @@ class ReadPackets:
                                          "Method":fields["Method"].decode("utf-8",errors="ignore"),
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
-                    if fields["Host"].decode("utf-8",errors="ignore") not in _domains:
-                        _domains.append(fields["Host"].decode("utf-8",errors="ignore"))
+                    parsedhost = fields["Host"].decode("utf-8",errors="ignore")
+                    if not search(self.ip, parsedhost) and parsedhost not in _domains:
+                        _domains.append(parsedhost)
                 except:
                     pass
 

@@ -19,13 +19,6 @@ class PDFParser:
     def getobjects(self,pdf) -> (str,list):
         '''
         get objects from pdf by regex
-
-        Args:
-            pdf: buffer
-
-        Return:
-            len of objects
-            list of objects
         '''
         _List = []
         Object = compile(b'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj',DOTALL|MULTILINE)
@@ -38,14 +31,6 @@ class PDFParser:
     def getstreams(self,pdf) -> (str,list,list):
         '''
         get streams from pdf by regex
-
-        Args:
-            pdf: buffer
-
-        Return:
-            len of objects
-            list of objects
-            streams decoded into list
         '''
         _List = []
         _Streams = []
@@ -67,13 +52,6 @@ class PDFParser:
     def getjss(self,pdf) -> (str,list):
         '''
         get jss from pdf by regex
-
-        Args:
-            pdf: buffer
-
-        Return:
-            len of objects
-            list of objects
         '''
         _List = []
         JS = compile(b'/JS([\S][^>]+)',DOTALL|MULTILINE)
@@ -86,13 +64,6 @@ class PDFParser:
     def getjavascripts(self,pdf) -> (str,list):
         '''
         get java from pdf by regex
-
-        Args:
-            pdf: buffer
-
-        Return:
-            len of objects
-            list of objects
         '''
         _List = []
         Javascript = compile(b'/JavaScript([\S][^>]+)',DOTALL|MULTILINE)
@@ -105,13 +76,6 @@ class PDFParser:
     def getopenactions(self,pdf) -> (str,list):
         '''
         get openactions from pdf by regex
-
-        Args:
-            pdf: buffer
-
-        Return:
-            len of objects
-            list of objects
         '''
         _List = []
         OpenAction = compile(b'/OpenAction([\S][^>]+)',DOTALL|MULTILINE)
@@ -124,12 +88,6 @@ class PDFParser:
     def checkpdfsig(self,data) -> bool:
         '''
         check if mime is pdf
-
-        Args:
-            data: data dict
-
-        Return:
-            true if pdf
         '''
         if data["Details"]["Properties"]["mime"] == "application/pdf":
             return True
@@ -141,9 +99,6 @@ class PDFParser:
         start analyzing pdf logic, get pdf objects, 
         get words and wordsstripped from buffers if streams exist 
         otherwise get words and wordsstripped from file
-
-        Args:
-            data: data dict
         '''
         _Streams = []
         data["PDF"] = {  "Count":{},

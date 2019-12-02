@@ -26,9 +26,6 @@ class QBLanguage:
     def checkwithenglish(self,_data):
         '''
         check if words are english words or not
-
-        Args:
-            _data: data dict
         '''
         _dict = {"UnKnown":[],"English":[],"Partly English":[],"Suspicious":[]}
         if len(self.words) > 0:
@@ -46,19 +43,14 @@ class QBLanguage:
     def checkwithstring(self,data):
         '''
         start pattern analysis for words and wordsstripped
-
-        Args:
-            data: data dict
         '''
-        self.words = data["StringsRAW"]["wordsinsensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Language"] = {  "English":[],
                              "UnKnown":[],
                              "Partly English":[],
                              "_English":["Count","Word"],
                              "_UnKnown":["Count","Word"],
                              "_Partly English":["Count","Word"]}
-        #engsorted = self.sortbylen(self.checkwithenglish()["English"])
-        #unksorted = self.sortbylen(self.checkwithenglish()["UnKnown"])
-        #b64 = self.checkbase64()
+
+        self.words = data["StringsRAW"]["wordsinsensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.checkwithenglish(data["Language"])

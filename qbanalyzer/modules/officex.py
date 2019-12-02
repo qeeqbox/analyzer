@@ -22,12 +22,6 @@ class Officex:
     def officeanalysis(self,data) -> dict:
         '''
         get hyber links or other links by regex
-
-        Args:
-            data: data dict
-
-        Return:
-            list of dict contains links
         '''
         _dict = {"Hyber":[],"Other":[]}
         _temp = {"Hyber":[],"Other":[]}
@@ -50,9 +44,6 @@ class Officex:
     def officereadbin(self,data):
         '''
         get all bins from office
-
-        Args:
-            data: data dict
         '''
         for i, v in enumerate(data["Packed"]["Files"]):
             if v["Name"].lower().endswith(".bin"):
@@ -67,12 +58,6 @@ class Officex:
     def officemetainfo(self,data) -> dict:
         '''
         get office meta data
-
-        Args:
-            data: data dict
-
-        Return:
-            dict of meta contains key and value
         '''
         _dict = {}
         corePropNS = '{http://schemas.openxmlformats.org/package/2006/metadata/core-properties}'
@@ -91,12 +76,6 @@ class Officex:
     def checkofficexsig(self,data) -> bool:
         '''
         check if file is office or contains [Content_Types].xml
-
-        Args:
-            data: data dict
-
-        Return:
-            true if office 
         '''
         if "application/vnd.openxmlformats-officedocument" in data["Details"]["Properties"]["mime"] or \
             checkpackedfiles(data["Location"]["File"],["[Content_Types].xml"]):
@@ -109,9 +88,6 @@ class Officex:
         '''
         start analyzing office logic, get office meta informations add description 
         to strings, get words and wordsstripped from the packed files 
-
-        Args:
-            data: data dict
         '''
         data["Office"] ={"General":{},
                          "Hyper":[],

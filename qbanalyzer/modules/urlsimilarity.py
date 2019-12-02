@@ -37,9 +37,6 @@ class URLSimilarity:
         '''
         check if top-1m.csv exists or not, if not then download load
         it and unzip it and take the top 10000 only
-
-        Args:
-            _path to topurls folder
         '''
         if not path.exists(_path+'top-1m.csv'):
             zip_file = ZipFile(BytesIO(get(self.top).content))
@@ -54,9 +51,6 @@ class URLSimilarity:
         '''
         check if root domain exists in the top 10000 or not
         if yes appened it to list 
-
-        Args:
-            data: data dict
         '''
         roots = []
         _x =  list(set(findall(compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I),self.wordsstripped)))
@@ -80,9 +74,6 @@ class URLSimilarity:
     def checkwithurls(self,data):
         '''
         start finding urls in top 10000 list 
-
-        Args:
-            data: data dict
         '''
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]

@@ -20,12 +20,6 @@ class WindowsPe:
     def whattype(self,pe) -> str:
         '''
         check file exe or dll or driver
-
-        Args:
-            pe: pe object
-
-        Return:
-            True type
         '''
         if pe.is_exe():
             return "exe"
@@ -38,12 +32,6 @@ class WindowsPe:
     def checkifsinged(self,pe) -> list:
         '''
         check file if it has Signature or not
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of signatures
         '''
         i = 0
         _list = []
@@ -121,12 +109,6 @@ class WindowsPe:
     def findentrypointfunction(self,pe, rva) -> str:
         '''
         find entery point in sections
-
-        Args:
-            pe: pe object
-
-        Return:
-            section name
         '''
         for section in pe.sections:
             if section.contains_rva(rva):
@@ -136,12 +118,6 @@ class WindowsPe:
     def getdlls(self,pe) -> list:
         '''
         get dlls
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of dlls
         '''
         _list = []
         for dll in pe.DIRECTORY_ENTRY_IMPORT:
@@ -154,12 +130,6 @@ class WindowsPe:
     def getsections(self,pe) -> list:
         '''
         get sections
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of sections
         '''
         _list = []
         for section in pe.sections:
@@ -173,12 +143,6 @@ class WindowsPe:
     def getimportedfunctions(self,pe) -> list:
         '''
         get import functions
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of import functions and their info
         '''
         _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
@@ -194,12 +158,6 @@ class WindowsPe:
     def getexportedfunctions(self,pe) -> list:
         '''
         get export functions
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of export functions and their info
         '''
         _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_EXPORT"):
@@ -212,13 +170,6 @@ class WindowsPe:
     def getrecourse(self,pe) -> (list,str):
         '''
         get resources
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of resources and their info
-            the manifest resource decoded
         '''
         manifest = ""
         _list = []
@@ -256,12 +207,6 @@ class WindowsPe:
     def getCharacteristics(self,pe) -> dict:
         '''
         get characteristics of file
-
-        Args:
-            pe: pe object
-
-        Return:
-            dict contains key and value
         '''
         x = {"High Entropy":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA,
              "aslr":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE,
@@ -279,12 +224,6 @@ class WindowsPe:
     def getdebug(self,pe) -> list:
         '''
         get debug directory 
-
-        Args:
-            pe: pe object
-
-        Return:
-            list of pdb file names
         '''
         _list = []
         if hasattr(pe, "DIRECTORY_ENTRY_DEBUG"):
@@ -297,12 +236,6 @@ class WindowsPe:
     def checkpesig(self,data) -> bool:
         '''
         check mime is exe or msi
-
-        Args:
-            data: data dict
-
-        Return:
-            True if exe or msi
         '''
         if  data["Details"]["Properties"]["mime"] == "application/x-dosexec" or \
             data["Details"]["Properties"]["mime"] == "application/x-msi":
@@ -313,9 +246,6 @@ class WindowsPe:
     def getpedeatils(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from the file 
-
-        Args:
-            data: data dict
         '''
         data["PE"] = {  "General" : {},
                         "Characteristics":{},

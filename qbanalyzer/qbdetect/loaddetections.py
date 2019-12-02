@@ -30,6 +30,6 @@ class LoadDetections:
     def checkwithdetections(self,data):
         data["QBDETECT"] = {"Detection":[],
     						"_Detection":["Count","Offset","Rule","Parsed","Match"]}
-        #print(self.imported)
+
         for detectionplugin in self.imported:
             detectionplugin(data)

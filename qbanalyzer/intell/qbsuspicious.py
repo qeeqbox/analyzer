@@ -34,8 +34,9 @@ class QBSuspicious:
 
     @progressbar(True,"Finding suspicious strings")
     def checksusp(self,data):
-        self.words = data["StringsRAW"]["wordsinsensitive"]
-        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         data["Suspicious"] = {  "Suspicious":[],
                                 "_Suspicious":["Count","Detected"]}
+    
+        self.words = data["StringsRAW"]["wordsinsensitive"]
+        self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.findsus(data["Suspicious"]["Suspicious"])

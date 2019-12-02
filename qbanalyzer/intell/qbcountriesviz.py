@@ -40,9 +40,6 @@ class QBCountriesviz:
     def getflagsfromcodes(self,data):
         '''
         start get countries flags logic
-
-        Args:
-            data: data dict
         '''
 
         data["Flags"] = {"Flags":[]}
@@ -53,9 +50,6 @@ class QBCountriesviz:
     def getallcodes(self,data):
         '''
         start get countries codes logic
-
-        Args:
-            data: data dict
         '''
 
         data["Codes"] = {"Codes":[]}

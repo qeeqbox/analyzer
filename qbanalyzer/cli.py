@@ -53,6 +53,11 @@ class QBAnalyzer(Cmd):
         except:
             logstring("Update failed","Red")
         self.san = StaticAnalyzer()
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/BrRAT.apk --output /home/a8b2bd81cf1e/malware/ --full")
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/GoziBankerISFB.exe --output /home/a8b2bd81cf1e/malware/ --full")
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/sexSimulator.apk --output /home/a8b2bd81cf1e/malware/ --full")
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/Xorddos --output /home/a8b2bd81cf1e/malware/ --full")
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/2019-11-27-Dridex-infection-traffic.pcap --output /home/a8b2bd81cf1e/malware/ --full")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

@@ -21,12 +21,6 @@ class LinuxELF:
     def getrelocations(self,elf) -> list:
         '''
         get symbols locations
-
-        Args:
-            elf: elf object
-
-        Return:
-            list of symbols and their info 
         '''
         _list = []
         for section in elf.iter_sections():
@@ -46,12 +40,6 @@ class LinuxELF:
     def getsymbols(self,elf) -> list:
         '''
         get symbols and types 
-
-        Args:
-            elf: elf object
-
-        Return:
-            list of symbols and their info 
         '''
         _list = []
         for section in elf.iter_sections():
@@ -68,12 +56,6 @@ class LinuxELF:
     def getdynamic(self,elf) -> list:
         '''
         get dynamic libraries 
-
-        Args:
-            elf: elf object
-
-        Return:
-            list of dynmaic libraries
         '''
         _list = []
         section = elf.get_section_by_name('.dynamic')
@@ -89,12 +71,6 @@ class LinuxELF:
     def getsection(self,elf) -> list:
         '''
         get all sections of elf 
-
-        Args:
-            elf: elf object
-
-        Return:
-            list of sections
         '''
         _list = []
         for section in elf.iter_sections():
@@ -109,12 +85,6 @@ class LinuxELF:
     def getiter(self,elf) -> str:
         '''
         get run-time linker 
-
-        Args:
-            elf: elf object
-
-        Return:
-            run-time linker
         '''
         for segment in elf.iter_segments():
             if segment['p_type'] == 'PT_INTERP':
@@ -124,12 +94,6 @@ class LinuxELF:
     def checkelfsig(self,data) -> bool:
         '''
         check if mime is linux type 
-
-        Args:
-            data: data dict
-
-        Return:
-            True if elf
         '''
         if  data["Details"]["Properties"]["mime"] == "application/x-pie-executable" or \
             data["Details"]["Properties"]["mime"] == "application/x-sharedlib" or \
@@ -141,9 +105,6 @@ class LinuxELF:
     def getelfdeatils(self,data):
         '''
         start analyzing elf logic, add description to strings and get words and wordsstripped from the file 
-
-        Args:
-            data: data dict
         '''
         with open(data["Location"]["File"], 'rb') as f, open(data["Location"]["File"], 'rb') as ff:
             data["ELF"] = { "General":{},

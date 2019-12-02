@@ -16,13 +16,6 @@ from re import match
 def checkpackedfiles(_path,files) -> bool:
     '''
     check if archive contains strings or not 
-
-    Args:
-        path to archive
-        name of files to check 
-
-    Return:
-        true if all strings are detected
     '''
     try:
         detect = 0
@@ -41,12 +34,6 @@ def checkpackedfiles(_path,files) -> bool:
 def dmgunpack(_path) -> str:
     '''
     convert dmg to img
-
-    Args:
-        path to img
-
-    Return:
-        path of new img file
     '''
     p = Popen(["dmg2img",_path,_path+".img"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = p.communicate()
@@ -57,13 +44,6 @@ def dmgunpack(_path) -> str:
 def unpackfile(data,_path):
     '''
     unpack files using 7z into temp folder
-
-    Args:
-        data: data dict
-        path of archive
-
-    Return:
-        true if all strings are detected
     '''
     data["Packed"] = {"Files":[],
                       "Detected":[],
@@ -86,6 +66,15 @@ def unpackfile(data,_path):
     except:
         pass
 
+@verbose(verbose_flag)
+def convertsize(s):
+    for u in ['B','KB','MB','GB']:
+        if s < 1024.0:
+            return "{:.2f}{}".format(s,u)
+        else:
+            s /= 1024.0
+    return "File is too big"
+
 class FileTypes:
     @progressbar(True,"Starting FileTypes")
     def __init__(self):
@@ -95,9 +84,6 @@ class FileTypes:
     def setupmalwarefolder(self,folder):
         '''
         setup malware folder where files will be transferred and unpacked
-
-        Args:
-            folder name
         '''
         self.malwarefarm = folder
         if not self.malwarefarm.endswith(path.sep): self.malwarefarm = self.malwarefarm+path.sep
@@ -107,12 +93,7 @@ class FileTypes:
     def createtempfolder(self,data,_path):
         '''
         create temp folder that has the md5 of the target file
-
-        Args:
-            data: data dict
-            path of target file
         '''
-
         safename = "".join([c for c in path.basename(_path) if match(r'[\w\.]', c)])
         if len(safename) == 0: safename = "temp"
         md5 = data["Details"]["Properties"]["md5"]
@@ -131,10 +112,6 @@ class FileTypes:
     def getdetailes(self,data,_path):
         '''
         get general details of file
-
-        Args:
-            data: data dict
-            path of target file
         '''
         data["Details"] = {"Properties":{},
                            "_Properties":{}}
@@ -144,7 +121,7 @@ class FileTypes:
                                         "sha1": sha1(f).hexdigest(),
                                         "sha256": sha256(f).hexdigest(),
                                         "ssdeep":hash_from_file(_path),
-                                        "size": path.getsize(_path),
+                                        "size": convertsize(path.getsize(_path)),
                                         "mime":from_file(_path,mime=True),
                                         "extension":guess_type(_path)[0],
                                         "charset":Magic(mime_encoding=True).from_file(_path),
@@ -157,9 +134,6 @@ class FileTypes:
         start unknown files logic, this file is not detected by otehr modules
         if file is archive, then unpack and get words,wordsstripped otherwise
         get words,wordsstripped from the file only
-
-        Args:
-            data: data dict
         '''
         if  data["Details"]["Properties"]["mime"] == "application/java-archive" or \
             data["Details"]["Properties"]["mime"] == "application/zip" or \
@@ -175,21 +149,13 @@ class FileTypes:
         first logic to execute, this will check if malware folder exists or not
         get details of the target file and move a temp version of it to a temp
         folder that has the md5
-
-        Args:
-            data: data dict
-            path of target file
-            folder that will have a temp version of the target file
-
-        Return:
-            true if file is small
         '''
         self.setupmalwarefolder(folder)
         self.getdetailes(data,_path)
         self.createtempfolder(data,_path)
-        if data["Details"]["Properties"]["size"] > 10242880:
-            logstring("File is too big!","Red")
-            return False
+        #if data["Details"]["Properties"]["size"] > 10242880:
+        #    logstring("File is too big!","Red")
+        #    return False
         return True
 
         
