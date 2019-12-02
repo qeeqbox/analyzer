@@ -26,6 +26,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 
 ### Features
 - Runs locally and easy to maintain
+- Analyze full folder or individual file
 - Generates HTML and JSON as output
 - Write your ideas under each output
 - General file information MD5, charset, mime, ssdeep
@@ -51,6 +52,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
 - DGA (domain generation algorithm) patterns detection 
+- BOM detection
 - Linux
     - ELF information
     - API functions descriptions
