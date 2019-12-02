@@ -85,9 +85,6 @@ class StaticAnalyzer:
     def analyze(self,parsed):
         '''
         main analyze logic!
-
-        Args:
-            parsed: namespace contains parsed arguments
         '''
         data = {}
         if not self.fty.checkfilesig(data,parsed.file,parsed.output):
