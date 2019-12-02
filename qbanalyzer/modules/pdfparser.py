@@ -1,21 +1,17 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwordsmultifilesarray,getwords
 from re import DOTALL, MULTILINE, compile, findall
 from magic import from_buffer,Magic
 from zlib import decompress
 
-#this module need some optimization
-
 class PDFParser:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting PDFParser")
+    @verbose(True,verbose_flag,"Starting PDFParser")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getobjects(self,pdf) -> (str,list):
         '''
         get objects from pdf by regex
@@ -27,7 +23,7 @@ class PDFParser:
             _List.append({"Object":_[0].decode("utf-8",errors="ignore"),"Value":_[1].decode('utf-8',errors="ignore")})
         return len(Objects),_List
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getstreams(self,pdf) -> (str,list,list):
         '''
         get streams from pdf by regex
@@ -48,7 +44,7 @@ class PDFParser:
             _List.append({"Stream":mime,"Parsed":parseddecode,"Value":x.decode('utf-8',errors="ignore")})
         return len(Streams),_List,_Streams
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getjss(self,pdf) -> (str,list):
         '''
         get jss from pdf by regex
@@ -60,7 +56,7 @@ class PDFParser:
             _List.append({"Key":"/JS","Value":_.decode("utf-8",errors="ignore")})
         return len(JSs),_List
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getjavascripts(self,pdf) -> (str,list):
         '''
         get java from pdf by regex
@@ -72,7 +68,7 @@ class PDFParser:
             _List.append({"Key":"/JavaScript","Value":_.decode("utf-8",errors="ignore")})
         return len(Javascripts),_List
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getopenactions(self,pdf) -> (str,list):
         '''
         get openactions from pdf by regex
@@ -84,7 +80,7 @@ class PDFParser:
             _List.append({"Key":"/OpenAction","Value":_.decode("utf-8",errors="ignore")})
         return len(OpenActions),_List
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkpdfsig(self,data) -> bool:
         '''
         check if mime is pdf
@@ -92,8 +88,8 @@ class PDFParser:
         if data["Details"]["Properties"]["mime"] == "application/pdf":
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing PDF file")
+
+    @verbose(True,verbose_flag,"Analyzing PDF file")
     def checkpdf(self,data):
         '''
         start analyzing pdf logic, get pdf objects, 

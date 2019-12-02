@@ -1,20 +1,16 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from PIL import Image, ImageDraw
 from io import BytesIO
 from base64 import b64encode
 
-#this module needs some optimization
-
 class QBImage:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting QBImage")
+    @verbose(True,verbose_flag,"Starting QBImage")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def chunk(self,l, x):
         for i in range(0, len(l), int(x)):
             yield l[i:i + int(x)]
@@ -26,8 +22,8 @@ class QBImage:
         except:
             return 0
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Making a visualized image")
+
+    @verbose(True,verbose_flag,"Making a visualized image")
     def createimage(self,_buffer,_c,_s) -> str:
         x = [c for c in _buffer]
         _list = list(self.chunk(x,_c))

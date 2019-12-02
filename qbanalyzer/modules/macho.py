@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords,getwordsmultifiles,getentropy
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from ..intell.qbdescription import adddescription
@@ -11,12 +10,11 @@ from plistlib import readPlist
 
 
 class Macho:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting Macho")
+    @verbose(True,verbose_flag,"Starting Macho")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def entry_point(self,machos) -> bool:
         '''
         get entry point of macho (needs debugging)
@@ -26,7 +24,7 @@ class Macho:
                 if lc.cmd == LC_MAIN:
                     return True
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getlibs(self,machos) -> list:
         '''
         get libs 
@@ -39,7 +37,7 @@ class Macho:
                                     "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsegments(self,machos) -> list:
         '''
         get segments 
@@ -54,7 +52,7 @@ class Macho:
                                     "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsections(self,machos) -> list:
         '''
         get sections 
@@ -72,7 +70,7 @@ class Macho:
                                       "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsymbols(self,machos) -> list:
         '''
         get all symbols
@@ -84,7 +82,7 @@ class Macho:
                           "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getlocalsymbols(self,machos) -> list:
         '''
         get local symbols
@@ -96,7 +94,7 @@ class Macho:
                             "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getundefsymbols(self,machos) -> list:
         '''
         get undefined symbols
@@ -108,7 +106,7 @@ class Macho:
                             "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getextdefsymbols(self,machos) -> list:
         '''
         get external reference symbol indices
@@ -120,14 +118,14 @@ class Macho:
                             "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getplist(self,plist) -> dict:
         '''
         read plist file
         '''
         return readPlist(plist)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkdmgsig(self,data) -> bool:
         '''
         check mime is dmg or not
@@ -140,7 +138,7 @@ class Macho:
                     unpackfile(data,x)
                     return True
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkmacsig(self,data) -> bool:
         '''
         check mime is machO or not
@@ -148,7 +146,7 @@ class Macho:
         if data["Details"]["Properties"]["mime"] == "application/x-mach-binary":
             return True
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkipa(self,data) -> bool:
         '''
         check mime is dmg or not
@@ -161,8 +159,8 @@ class Macho:
                     unpackfile(data,x)
                     return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analzying IPA file")
+
+    @verbose(True,verbose_flag,"Analzying IPA file")
     def getipadeatils(self,data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
@@ -181,8 +179,8 @@ class Macho:
                 data[k]["Shell"] = open(v["Path"],"r").read()
         getwordsmultifiles(data,data["Packed"]["Files"])
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analzying DMG file")
+
+    @verbose(True,verbose_flag,"Analzying DMG file")
     def getdmgdeatils(self,data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
@@ -201,8 +199,8 @@ class Macho:
                 data[k]["Shell"] = open(v["Path"],"r").read()
         getwordsmultifiles(data,data["Packed"]["Files"])
                 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analzying MACHO file")
+
+    @verbose(True,verbose_flag,"Analzying MACHO file")
     def getmachodeatils(self,data):
         '''
         start analyzing macho logic, add descriptions and get words and wordsstripped from the file 

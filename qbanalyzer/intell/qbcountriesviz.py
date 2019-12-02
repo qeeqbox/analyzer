@@ -1,17 +1,15 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 
 class QBCountriesviz:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting QBCountriesviz")
+    @verbose(True,verbose_flag,"Starting QBCountriesviz")
     def __init__(self):
         '''
         initialize class
         '''
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findflags(self,flags,data):
         keys = ["PCAP","Patterns"]
         for key in keys:
@@ -23,7 +21,7 @@ class QBCountriesviz:
             except:
                 pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findcodes(self,codes,data):
         keys = ["PCAP","Patterns"]
         for key in keys:
@@ -35,8 +33,8 @@ class QBCountriesviz:
             except:
                 pass
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Get countries flags")
+
+    @verbose(True,verbose_flag,"Get countries flags")
     def getflagsfromcodes(self,data):
         '''
         start get countries flags logic
@@ -45,8 +43,8 @@ class QBCountriesviz:
         data["Flags"] = {"Flags":[]}
         self.findflags(data["Flags"]["Flags"],data)
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Get countries flags")
+
+    @verbose(True,verbose_flag,"Get countries flags")
     def getallcodes(self,data):
         '''
         start get countries codes logic

@@ -1,28 +1,22 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from ..intell.qbdescription import adddescription
 from nltk.corpus import words
 from nltk.tokenize import word_tokenize
 from binascii import unhexlify
 
-#this module needs some optimization
-
 class QBLanguage:
-    @progressbar(True,"Starting QBLanguage")
+    @verbose(True,verbose_flag,"Starting QBLanguage")
     def __init__(self):
         '''
         initialize class and make refs path that contains References.db
         get english words from corpus and open connection with References.db
         '''
-
         self.english_words = set(words.words())
-        #self.dic_dict = None #set([line.lower().strip() for line in open(_path+"dic_four.text", 'r')])
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding english strings")
+    @verbose(True,verbose_flag,"Finding english strings")
     def checkwithenglish(self,_data):
         '''
         check if words are english words or not
@@ -34,12 +28,11 @@ class QBLanguage:
             for _word in (set(self.words) - (self.english_words)):
                 _data["UnKnown"].append({"Count":"Unavailable","Word":_word})
 
-
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def sortbylen(self,_dict):
         return sorted(_dict, key=lambda l: (len(str(l))))
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkwithstring(self,data):
         '''
         start pattern analysis for words and wordsstripped

@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from yara import compile
 from jinja2 import Template
 from platform import platform
@@ -9,11 +8,8 @@ from datetime import datetime
 from sys import modules
 from os import mkdir, path
 
-#needs cheching..
-
 class HtmlMaker:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting HtmlMaker")
+    @verbose(True,verbose_flag,"Starting HtmlMaker")
     def __init__(self,qbimage):
         '''
         initialize class
@@ -25,7 +21,7 @@ class HtmlMaker:
         self.qbi = qbimage
         self.getmoudles()
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getmoudles(self):
         '''
         get all imported modules 
@@ -33,21 +29,22 @@ class HtmlMaker:
         x = [x.split(".")[0] for x in modules.keys() if not x.startswith("_")]
         self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, PEiD, 7z, Cisco Umbrella, font-awesome, flag-icon a lot of researches and awesome python packeges such as {} ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def addtextarea(self) -> str:
         '''
         textarea tag
         '''
         return """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
 
+    @verbose(True,verbose_flag,None)
     def emptytextarea(self) -> str:
         '''
         textarea tag
         '''
-        return """<div class=textareawrapper></div>"""
+        return """<div class=empty></div>"""
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Making yara table")
+
+    @verbose(True,verbose_flag,"Making yara table")
     def makeyaratable(self,data) -> str:
         '''
         add start generating yara html table 
@@ -57,7 +54,7 @@ class HtmlMaker:
             table += self.makelisttableforyara(data,["Offset","Rule","String","Parsed","Condition"],None,True)
         return table
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makeimagetablebase64(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render similarity image inside html table
@@ -82,7 +79,7 @@ class HtmlMaker:
         result = Template(temp).render(header=header,data=data)
         return result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makealistsettablenew1(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render list into html table
@@ -121,7 +118,7 @@ class HtmlMaker:
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makealistsettablenew2(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render dict into html table
@@ -159,7 +156,7 @@ class HtmlMaker:
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makealistsettablenew3(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render text into html table
@@ -188,8 +185,7 @@ class HtmlMaker:
         result = Template(temp).render(header=header,data=data,_safe=_safe)
         return result
 
-
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makeflags(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render similarity image inside html table
@@ -214,7 +210,7 @@ class HtmlMaker:
         result = Template(temp).render(header=header,data=data)
         return result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makeworldimage(self,data,header,name,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render world image into html table
@@ -269,7 +265,7 @@ class HtmlMaker:
         result = Template(temp).render(header=header,data=str(data),name=name)
         return result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def makerefmapimage(self,data,header,name,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render xref image into html table
@@ -415,8 +411,7 @@ class HtmlMaker:
         result = Template(temp).render(header="Xrefs",data=str(data),name=name)
         return result
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Making file tables")
+    @verbose(True,verbose_flag,"Making file tables")
     def maketable(self,data,_path) -> str:
         '''
         making tables of dict data
@@ -476,7 +471,7 @@ class HtmlMaker:
         table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,False,None)
         return table
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def rendertemplate(self,data,header,footer):
         '''
         start making tables and save them into a html file

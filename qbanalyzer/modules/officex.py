@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwordsmultifilesarray,getwords,getwordsmultifiles
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from re import sub
@@ -13,12 +12,11 @@ from xml.etree.cElementTree import XML as cetXML
 #this module need some optimization
 
 class Officex:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting Officex")
+    @verbose(True,verbose_flag,"Starting Officex")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def officeanalysis(self,data) -> dict:
         '''
         get hyber links or other links by regex
@@ -40,7 +38,7 @@ class Officex:
                 _temp[key].append({"Count":_dict[key].count(x),"Link":x})
         return _temp
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def officereadbin(self,data):
         '''
         get all bins from office
@@ -54,7 +52,7 @@ class Officex:
                 x = open(v["Path"],"r",encoding="utf-8", errors='ignore').read()
                 data[k]["Bin_Printable"] = sub(r'[^\x20-\x7F]+','', x)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def officemetainfo(self,data) -> dict:
         '''
         get office meta data
@@ -72,7 +70,7 @@ class Officex:
                 break
         return _dict
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkofficexsig(self,data) -> bool:
         '''
         check if file is office or contains [Content_Types].xml
@@ -82,8 +80,8 @@ class Officex:
                 unpackfile(data,data["Location"]["File"])
                 return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing office[x] file")
+
+    @verbose(True,verbose_flag,"Analyzing office[x] file")
     def checkofficex(self,data):
         '''
         start analyzing office logic, get office meta informations add description 

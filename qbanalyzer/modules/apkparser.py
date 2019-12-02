@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from ..mics.funcs import getwordsmultifiles,getwords
 from ..intell.qbdescription import adddescription
@@ -9,18 +8,15 @@ from r2pipe import open as r2open
 from xml.dom.minidom import parseString
 from re import sub
 
-#needs cheching..
-
 class ApkParser:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting ApkParser")
+    @verbose(True,verbose_flag,"Starting ApkParser")
     def __init__(self):
         '''
         initialize class
         '''
         self.sus = ["encrypt","decrypt","http:","https","sudo","password","pass","admin","loadLibrary","isEmulator"]
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def executewithswtich(self,r2p,switch,str) -> list:
         s = ""
         if str == "":
@@ -29,7 +25,7 @@ class ApkParser:
             s += r2p.cmd(switch + "~+" + _)
         return s.split("\n")
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def xref(self,r2p,line) -> list:
         x = ""
         try:
@@ -40,7 +36,7 @@ class ApkParser:
             pass
         return x.split("\n")
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getallclasses(self,r2p) -> list:
         '''
         get all classes from dex using icq command
@@ -51,7 +47,7 @@ class ApkParser:
                 _list.append({"Type":"Class","Name":_})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getallexternals(self,r2p) -> list:
         '''
         get all externals from dex using iiq command
@@ -62,7 +58,7 @@ class ApkParser:
                 _list.append({"Type":"External","Name":_})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getallsymbol(self,r2p) -> list:
         '''
         get all symbols from dex using isq command
@@ -74,7 +70,7 @@ class ApkParser:
                 _list.append({"Type":"Symbol","Address":add,"X":x,"Name":name})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def bigfunctions(self,r2p) -> list:
         '''
         get all big functions from dex using aflj command
@@ -86,7 +82,7 @@ class ApkParser:
                 #_list.append(r2p.cmd("pif@"+str(a["offset"])+"~call"))
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checksus(self,r2p) -> list:
         '''
         check if suspicious strings in class, externals or symbols
@@ -109,7 +105,7 @@ class ApkParser:
                     _list.append({"Location":"Symbols","Function":_, "Xrefs":xref})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def readpepackage(self,_path) -> str:
         '''
         read apk permission by by xml (if xml is not compressed)
@@ -120,7 +116,7 @@ class ApkParser:
             nodes = dom.getElementsByTagName('manifest')
             return nodes[0].getAttribute("package")
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def readpermissions(self,data,_path) -> list:
         '''
         read apk permission by regex..
@@ -137,8 +133,7 @@ class ApkParser:
                     _list.append({"Permission":x,"Description":""})
         return _list
 
-
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkapksig(self,data) -> bool:
         '''
         check if mime is an apk type or if file contains Androidmanifest in packed files
@@ -149,7 +144,7 @@ class ApkParser:
                 unpackfile(data,data["Location"]["File"])
                 return True
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkdexsig(self,data) -> bool:
         '''
         check if mime is a dex
@@ -157,8 +152,7 @@ class ApkParser:
         if data["Details"]["Properties"]["mime"] == "application/octet-stream" and data["Location"]["Original"].endswith(".dex"):
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing DEX file")
+    @verbose(True,verbose_flag,"Analyzing DEX file")
     def analyzedex(self,data):
         '''
         start analyzing dex logic (r2p timeout = 10) for individual dex
@@ -185,8 +179,8 @@ class ApkParser:
         data[k]["Suspicious"] = self.checksus(r2p)
         getwords(data,data["Location"]["File"])
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing APK file")
+
+    @verbose(True,verbose_flag,"Analyzing APK file")
     def analyzeapk(self,data):
         '''
         start analyzing apk logic (r2p timeout = 10) for all dex files

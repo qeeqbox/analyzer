@@ -1,14 +1,12 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from glob import glob
 from importlib import import_module
 from os import mkdir, path
 
 class LoadDetections:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting LoadDetections")
+    @verbose(True,verbose_flag,"Starting LoadDetections")
     def __init__(self):
         '''
         initialize class and make detections path 
@@ -25,8 +23,8 @@ class LoadDetections:
             except Exception:
                 logstring("Loading plugins failed","Red")
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Loading extra plugins")
+
+    @verbose(True,verbose_flag,"Loading extra plugins")
     def checkwithdetections(self,data):
         data["QBDETECT"] = {"Detection":[],
     						"_Detection":["Count","Offset","Rule","Parsed","Match"]}

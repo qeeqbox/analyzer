@@ -1,15 +1,13 @@
 __version__G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import compile, search
 from codecs import open as copen
 from json import loads
 from os import mkdir, path
-#need refactoring
 
-@progressbar(True,"Starting QBWafDetect")
 class QBWafDetect:
+    @verbose(True,verbose_flag,"Starting QBWafDetect")
     def __init__(self):
         '''
         initialize class and make detections path 
@@ -18,7 +16,7 @@ class QBWafDetect:
         if not self.intell.endswith(path.sep): self.intell = self.intell+path.sep
         if not path.isdir(self.intell): mkdir(self.intell)
 
-    @progressbar(True,"Checking packets for WAF detection")
+    @verbose(True,verbose_flag,"Checking packets for WAF detection")
     def checkpacketsforwaf(self,data,_data,filename):
         listheaders = []
         listpayloads = []

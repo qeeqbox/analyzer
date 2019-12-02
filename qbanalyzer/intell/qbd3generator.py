@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from r2pipe import open as r2open
 from re import search
@@ -14,11 +13,11 @@ from ast import literal_eval
 #Similar to objdump, still needs to optimize
   
 class QBD3generator:
-    @progressbar(True,"Starting QBD3generator")
+    @verbose(True,verbose_flag,"Starting QBD3generator")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkfunc(self,func,str) -> bool:
         '''
         check if functions are not sub or sym 
@@ -33,8 +32,8 @@ class QBD3generator:
             return False
         return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Making symbol xrefs")
+
+    @verbose(True,verbose_flag,"Making symbol xrefs")
     def makexref(self,data):
         '''
         get cross references from file using radare2 
@@ -87,7 +86,7 @@ class QBD3generator:
             data["XREFS"]["GRAPH"]["links"] = _links
             data["XREFS"]["TEXT"] = _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,"Making artifacts xrefs")
     def makeartifactsd3(self,data) -> bool:
         '''
         get artifacts from data and generate d3
@@ -101,8 +100,6 @@ class QBD3generator:
         _links = []
         _list = []
         _temp = []
-
-        #will be fixed later on
 
         try:        
             for item in data["Strings"]["IPS"]:

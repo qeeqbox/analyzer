@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from sqlite3 import connect
 from os import path
@@ -10,8 +9,7 @@ refs = path.abspath(path.join(path.dirname( __file__ ),"..", 'refs'))
 if not refs.endswith(path.sep): refs = refs+path.sep
 cursor = connect(refs+'References.db').cursor()
 
-@verbose(verbose_flag)
-@progressbar(True,"Adding descriptions to strings")
+@verbose(True,verbose_flag,"Adding descriptions to strings")
 def adddescription(_type,data,keyword):
     '''
     add description to buffer

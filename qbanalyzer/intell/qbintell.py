@@ -1,17 +1,13 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import compile, search
 from codecs import open as copen
 from json import loads
 from os import mkdir, path
 
-#this module needs some optimization
-
 class QBIntell:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting QBIntell")
+    @verbose(True,verbose_flag,"Starting QBIntell")
     def __init__(self):
         '''
         initialize class and make detections path 
@@ -20,7 +16,7 @@ class QBIntell:
         if not self.intell.endswith(path.sep): self.intell = self.intell+path.sep
         if not path.isdir(self.intell): mkdir(self.intell)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def compileandfind(self,data,filename):
         '''
         parse the detections and check them against wordsstripped
@@ -45,14 +41,13 @@ class QBIntell:
                 except:
                     pass
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing behaviors")
+    @verbose(True,verbose_flag,"Analyzing behaviors")
     def checkwithqbintell(self,data,filename):
         '''
         start checking logic and setup words and wordsstripped
         '''
-        data["Intell"] = {"WinAPI":[],
-                          "_WinAPI":["Matched","Required","Behavior","Detected"]}
+        data["Intell"] = {"API":[],
+                          "_API":["Matched","Required","Behavior","Detected"]}
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.compileandfind(data["Intell"]["WinAPI"],self.intell+filename)
+        self.compileandfind(data["Intell"]["API"],self.intell+filename)

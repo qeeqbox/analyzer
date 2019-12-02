@@ -25,28 +25,25 @@ class colors:
 def logstring(_str,color):
     '''
     output str with color and symbol (they are all as info)
-
-    Args:
-        color: output option
     '''
     stdout.flush()
     if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"X",colors.Restore,_str))
     elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,">",colors.Restore,_str))
     elif color == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
 
-def verbose(OnOff=False):
+def verbose(OnOff=False,Verb=False,str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
-
-    Args:
-        OnOff: turn debugging on or off
     '''
     def decorator(func):
         def wrapper(*args, **kwargs):
-            if OnOff: log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
-            x = func(*args, **kwargs)
-            if x:
-                return x
+            try:
+                if Verb: log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+                if str: logstring(str,"Green")
+                return func(*args, **kwargs)
+            except:
+                logstring("{} failed..".format(func.__module__,func.__name__),"Red")
+                return None
         return wrapper
     return decorator
 

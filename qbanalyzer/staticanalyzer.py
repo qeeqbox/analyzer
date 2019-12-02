@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from .logger.logger import logstring,verbose,verbose_flag
-from .mics.qprogressbar import progressbar
 from .mics.funcs import getwords, getwordsmultifiles
 from .modules.linuxelf import LinuxELF
 from .modules.macho import Macho
@@ -46,7 +45,7 @@ class ComplexEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
 
 class StaticAnalyzer:
-    @progressbar(True,"Starting StaticAnalyzer")
+    @verbose(True,verbose_flag,"Starting StaticAnalyzer")
     def __init__(self):
         '''
         initialize class, and all modules 
@@ -81,13 +80,10 @@ class StaticAnalyzer:
         self.dga = QBDGA()
         self.qbcv = QBCountriesviz()
 
-    @verbose(verbose_flag)
+
     def analyze(self,parsed):
         '''
         main analyze logic!
-
-        Args:
-            parsed: namespace contains parsed arguments
         '''
         data = {}
         if not self.fty.checkfilesig(data,parsed.file,parsed.output):

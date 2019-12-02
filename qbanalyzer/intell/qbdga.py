@@ -1,13 +1,12 @@
 __version__G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong,getentropyfloatret
 from itertools import chain,takewhile
 from re import I, compile, findall, search
 
-@progressbar(True,"Starting QBDGA")
 class QBDGA:
+    @verbose(True,verbose_flag,"Starting QBDGA")
     def __init__(self):
         '''
         initialize class
@@ -19,8 +18,7 @@ class QBDGA:
         self.detectionsymbols = compile(r'[_\-~]',I)
         self.detectionnumbers = compile(r'[\d]',I)
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find repeated patterns")
+    @verbose(True,verbose_flag,"DGA-Find repeated patterns")
     def seqstongrams(self,data,domains):
         '''
         loop sequences, converts sequences to ngrams. map all of them and get thier intersection
@@ -44,8 +42,8 @@ class QBDGA:
         except:
             pass
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find low frequency letters")
+
+    @verbose(True,verbose_flag,"DGA-Find low frequency letters")
     def findlowfreqletters(self,data,domains):
         '''
         loop sequences, find low frequency letters 
@@ -55,8 +53,8 @@ class QBDGA:
             if len(x) > 4:
                 data.append({"Count":len(x),"Letters":''.join(x),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find consonants letters in row")
+
+    @verbose(True,verbose_flag,"DGA-Find consonants letters in row")
     def findconsonantslettersinrow(self,data,domains):
         '''
         loop sequences, find consonants in row
@@ -66,8 +64,8 @@ class QBDGA:
             if len(x) > 2:
                 data.append({"Groups":"{} > 2 groups".format(len(x)),"Row":','.join(x),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find consonants letters")
+
+    @verbose(True,verbose_flag,"DGA-Find consonants letters")
     def findconsonantsletters(self,data,domains):
         '''
         loop sequences, find consonants 
@@ -77,8 +75,8 @@ class QBDGA:
             if len(x) > 8:
                 data.append({"Count":"{} > 8".format(len(x)),"Letters":''.join(x),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find encryptions")
+
+    @verbose(True,verbose_flag,"DGA-Find encryptions")
     def findencryptionpatterns(self,data,domains):
         '''
         loop sequences, find encryptions 
@@ -100,8 +98,8 @@ class QBDGA:
 
                 data.append({"Type":temp,"Detected":detection.group(),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find symbols")
+
+    @verbose(True,verbose_flag,"DGA-Find symbols")
     def findallsymbols(self,data,domains):
         '''
         loop sequences, find symbols 
@@ -112,8 +110,8 @@ class QBDGA:
             if len(x) > 2:
                 data.append({"Count":"{} > 2".format(len(x)),"Symbols":''.join(x),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find numbers")
+
+    @verbose(True,verbose_flag,"DGA-Find numbers")
     def findallnumbers(self,data,domains):
         '''
         loop sequences, find numbers 
@@ -123,8 +121,8 @@ class QBDGA:
             if len(x) > 5:
                 data.append({"Count":"{} > 5".format(len(x)),"Numbers":''.join(x),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Find long domains")
+
+    @verbose(True,verbose_flag,"DGA-Find long domains")
     def URLlength(self,data,domains):
         '''
         loop sequences, find long domains 
@@ -133,8 +131,8 @@ class QBDGA:
             if len(domain) > 13:
                 data.append({"Length":"{} > 13".format(len(domain)),"URL":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"DGA-Get entropies of domains")
+
+    @verbose(True,verbose_flag,"DGA-Get entropies of domains")
     def checkentropy(self,data,domains):
         '''
         loop sequences, get entropy
@@ -144,7 +142,7 @@ class QBDGA:
             if entropy > 3.7:
                 data.append({"Entropy":"{0:.15f}".format(entropy),"URL":domain})
 
-    @progressbar(True,"Finding Domain Generational Algorithm patterns")
+    @verbose(True,verbose_flag,"Finding Domain Generational Algorithm patterns")
     def checkdga(self,data):
         data["DGA"] = {  "Repeated":[],
                          "LowFreqLetters":[],

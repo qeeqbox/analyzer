@@ -1,10 +1,10 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.06"
+__V__ = "2019.V.01.07"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
 from cmd import Cmd
-from os import path
+from os import path,listdir
 from argparse import ArgumentParser
 from shlex import split as ssplit
 from requests import get
@@ -21,8 +21,9 @@ class QBAnalyzer(Cmd):
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
     _analyze_parsergroupreq = _analyze_parser.add_argument_group('required arguments')
-    _analyze_parsergroupreq.add_argument('--file', help="path of file/dump", required=True)
-    _analyze_parsergroupreq.add_argument('--output', help="path of output folder", required=True)
+    _analyze_parsergroupreq.add_argument('--file', help="path to file/dump")
+    _analyze_parsergroupreq.add_argument('--output', help="path of output folder")
+    _analyze_parsergroupreq.add_argument('--folder', help="path to folder")
     _analyze_parsergroupdef = _analyze_parser.add_argument_group('default arguments')
     _analyze_parsergroupdef.add_argument('--intel',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
@@ -56,17 +57,31 @@ class QBAnalyzer(Cmd):
 
     def help_analyze(self):
         self._analyze_parser.print_help()
-
     	
     def do_analyze(self,line):
         try:
             parsed = self._analyze_parser.parse_args(ssplit(line))
         except SystemExit:
             return
-        if not path.exists(parsed.file) or not path.isdir(parsed.output):
-            logstring("File/dump or folder is wrong..","Red")
-        else:
-            self.san.analyze(parsed)
+        if parsed.file:
+            if not path.exists(parsed.file) or not path.isdir(parsed.output):
+                logstring("Target File/dump or output folder is wrong..","Red")
+            else:
+                self.san.analyze(parsed)
+        elif parsed.folder:
+            if not path.exists(parsed.folder) or not path.isdir(parsed.output):
+                logstring("Target folder or output folder is wrong..","Red")
+            else:
+                self.do_folder(parsed.folder)
+
+    def do_folder(self,_path):
+        _List = []
+        for f in listdir(_path):
+            fullpath = path.join(_path, f)
+            if path.isfile(fullpath):
+                _List.append("--file {} --output {} --full".format(fullpath,_path))
+        for i in _List:
+            self.do_analyze(i)
 
     def do_exit(self, line):
         exit()

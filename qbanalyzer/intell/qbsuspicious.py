@@ -1,18 +1,17 @@
 __version__G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import I, compile, findall
-#need refactoring
 
-@progressbar(True,"Starting QBSuspicious")
 class QBSuspicious:
+    @verbose(True,verbose_flag,"Starting QBSuspicious")
     def __init__(self):
         '''
         initialize class and make detections path 
         '''
         self.suspicious = ["crypt","==","ransom","+tcp","pool.","bitcoin","encrypt","decrypt","mail","ftp","http","https","btc","address","sudo","password","pass","admin","payment"]
 
+    @verbose(True,verbose_flag,None)
     def findsusregex(self,data):
         for sus in self.suspicious:
             _List = []
@@ -23,6 +22,7 @@ class QBSuspicious:
             for x in set(_List):
                 data.append({"Count":_List.count(x),"Detected":x})
 
+    @verbose(True,verbose_flag,None)
     def findsus(self,data):
         for sus in self.suspicious:
             _List = []
@@ -32,7 +32,7 @@ class QBSuspicious:
             for x in set(_List):
                 data.append({"Count":_List.count(x),"Detected":x})
 
-    @progressbar(True,"Finding suspicious strings")
+    @verbose(True,verbose_flag,"Finding suspicious strings")
     def checksusp(self,data):
         data["Suspicious"] = {  "Suspicious":[],
                                 "_Suspicious":["Count","Detected"]}

@@ -1,14 +1,12 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from yara import compile
 from glob import glob
 from os import mkdir, path
 
 class YaraParser:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting YaraParser")
+    @verbose(True,verbose_flag,"Starting YaraParser")
     def __init__(self):
         '''
         initialize class and make rules folder, get all conditions from .yar
@@ -32,8 +30,7 @@ class YaraParser:
                     self.yararulenamelist.update({rule:x[i+1]})
                     rule =""
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Checking with yara rules")
+    @verbose(True,verbose_flag,"Checking with yara rules")
     def checkwithyara(self,data,check=""):
         '''
         check file with compiled yara detection and append results into list

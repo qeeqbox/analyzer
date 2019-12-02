@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords
 from ..intell.qbdescription import adddescription
 from scapy import all as scapy
@@ -11,8 +10,7 @@ from datetime import datetime
 from re import compile,I,search
 
 class ReadPackets:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting ReadPackets")
+    @verbose(True,verbose_flag,"Starting ReadPackets")
     def __init__(self,waf):
         '''
         initialize class
@@ -20,7 +18,7 @@ class ReadPackets:
         self.ip = compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])',I)
         self.waf = waf
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getlayers(self,packet) -> str:
         '''
         get layers
@@ -34,7 +32,7 @@ class ReadPackets:
             _temp.append(layer.name)
         return ":".join(_temp)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def readallpackets(self,packets):
         '''
         analyze each packet
@@ -180,7 +178,7 @@ class ReadPackets:
 
         return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp,_listurlhttp,_domains
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkpcapsig(self,data):
         '''
         check if mime is pcap
@@ -194,8 +192,8 @@ class ReadPackets:
         if data["Details"]["Properties"]["mime"] == "application/vnd.tcpdump.pcap":
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing PCAP file")
+
+    @verbose(True,verbose_flag,"Analyzing PCAP file")
     def getpacpdetails(self,data):
         '''
         start analyzing pcap logic, add descriptions and get words and wordsstripped from the file 

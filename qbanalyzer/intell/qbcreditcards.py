@@ -1,11 +1,10 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import I, compile, findall
 
 class QBCreditcards:
-    @progressbar(True,"Starting QBCreditcards")
+    @verbose(True,verbose_flag,"Starting QBCreditcards")
     def __init__(self):
         '''
         initialize class
@@ -17,8 +16,8 @@ class QBCreditcards:
         self.detectionjcb = compile(r'\b(?:2131|1800|35[0-9]{3})[0-9]{11}?\b',I)
         self.detectiondinersclub = compile(r'\b3(?:0[0-5]|[68][0-9])[0-9]{11}\b',I)
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding American Express Card patterns")
+
+    @verbose(True,verbose_flag,"Finding American Express Card patterns")
     def americanexpress(self,data):
         '''
         check if buffer contains american express card number 371642190784801
@@ -31,8 +30,8 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"AmericanExpress":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Visa Card patterns")
+
+    @verbose(True,verbose_flag,"Finding Visa Card patterns")
     def visa(self,data):
         '''
         check if buffer contains Visa card number 4035300539804083
@@ -46,8 +45,8 @@ class QBCreditcards:
             data.append({"Count":_List.count(x),"Visa":x})
 
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Master Card patterns")
+
+    @verbose(True,verbose_flag,"Finding Master Card patterns")
     def mastercard(self,data):
         '''
         check if buffer contains master card number 5168441223630339
@@ -60,8 +59,8 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"MasterCard":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Discover Card patterns")
+
+    @verbose(True,verbose_flag,"Finding Discover Card patterns")
     def discover(self,data):
         '''
         check if buffer contains Visa card number 6011988461284820
@@ -74,8 +73,8 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"Discover":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Jcb Card patterns")
+
+    @verbose(True,verbose_flag,"Finding Jcb Card patterns")
     def jcb(self,data):
         '''
         check if buffer contains Jcb card number 3538684728624673
@@ -88,8 +87,8 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"JCB":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Diners Club Card patterns")
+
+    @verbose(True,verbose_flag,"Finding Diners Club Card patterns")
     def dinersclub(self,data):
         '''
         check if buffer contains Diners Club card number 30043277253249
@@ -102,7 +101,7 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"DinersClub":x})
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkcreditcards(self,data):
         '''
         start pattern analysis for words and wordsstripped

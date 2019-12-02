@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from ..intell.qbdescription import adddescription
 from re import I, compile, findall
@@ -10,10 +9,8 @@ from nltk.tokenize import word_tokenize
 from binascii import unhexlify
 from ipaddress import ip_address
 
-#this module needs some optimization
-
 class QBPatterns:
-    @progressbar(True,"Starting QBPatterns")
+    @verbose(True,verbose_flag,"Starting QBPatterns")
     def __init__(self):
         '''
         initialize class and make refs path that contains References.db
@@ -27,8 +24,8 @@ class QBPatterns:
         self.html = compile(r'>([^<]*)<\/',I)
         self.hex = compile(r'([0-9a-fA-F]{4,})',I)
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding URLs patterns")
+
+    @verbose(True,verbose_flag,"Finding URLs patterns")
     def checklink(self,_data):
         '''
         check if buffer contains ips xxx://xxxxxxxxxxxxx.xxx
@@ -40,13 +37,13 @@ class QBPatterns:
                 try:
                     ip_address(_)
                     _List.append(_)
-                except ValueError:
+                except:
                     pass
         for x in set(_List):
             _data.append({"Count":_List.count(x),"Link":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding IP4s patterns")
+
+    @verbose(True,verbose_flag,"Finding IP4s patterns")
     def checkip4(self,_data):
         '''
         check if buffer contains ips x.x.x.x
@@ -58,13 +55,13 @@ class QBPatterns:
                 try:
                     ip_address(_)
                     _List.append(_)
-                except ValueError:
+                except:
                     pass
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding IP6s patterns")
+
+    @verbose(True,verbose_flag,"Finding IP6s patterns")
     def checkip6(self,_data):
         '''
         check if buffer contains ips x.x.x.x
@@ -77,8 +74,8 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding Emails patterns")
+
+    @verbose(True,verbose_flag,"Finding Emails patterns")
     def checkemail(self,_data):
         '''
         check if buffer contains email xxxxxxx@xxxxxxx.xxx
@@ -91,8 +88,8 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"EMAIL":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding TELs patterns")
+
+    @verbose(True,verbose_flag,"Finding TELs patterns")
     def checkphonenumber(self,_data):
         '''
         check if buffer contains tel numbers 012 1234 567
@@ -105,8 +102,8 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TEL":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding tags patterns")
+
+    @verbose(True,verbose_flag,"Finding tags patterns")
     def checktags(self,_data):
         '''
         check if buffer contains tags <>
@@ -119,8 +116,8 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TAG":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding HEX patterns")
+
+    @verbose(True,verbose_flag,"Finding HEX patterns")
     def checkhex(self,_data):
         '''
         check if buffer contains tags <>
@@ -131,11 +128,14 @@ class QBPatterns:
             for _ in x:
                 _List.append(_)
         for x in set(_List):
-            parsed = unhexlify(x)
-            _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed.decode('utf-8',errors="ignore")})
+            try:
+                parsed = unhexlify(x)
+                _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed.decode('utf-8',errors="ignore")})
+            except:
+                pass
 
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkpatterns(self,data):
         '''
         start pattern analysis for words and wordsstripped

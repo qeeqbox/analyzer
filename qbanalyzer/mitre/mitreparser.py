@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from json import loads, dumps,dump,load
 from urllib.request import urlretrieve
 from codecs import open
@@ -9,10 +8,8 @@ from re import findall,compile
 from collections import Counter
 from os import mkdir, path
 
-#need to optimize..
-
 class MitreParser():
-    @progressbar(True,"Starting MitreParser")
+    @verbose(True,verbose_flag,"Starting MitreParser")
     def __init__(self):
         '''
         initialize class, make mitrefiles path and have mitre links in the class
@@ -28,8 +25,8 @@ class MitreParser():
         self.enterpriseattackurl = "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
         self.setup(self.mitrepath)
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Parsing Mitre databases")
+
+    @verbose(True,verbose_flag,"Parsing Mitre databases")
     def setup(self,_path):
         '''
         check if there are enterprise-attack.json and pre-attack.json in the system
@@ -55,12 +52,12 @@ class MitreParser():
                 dump(self.fulldict,open(_path+"hardcoded_fulldict.json", 'w' ))
                 dump(self.usedict,open(_path+"hardcoded_usedict.json", 'w' ))
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def updatedict(self,d,s):
         for x in d:
             x.update(s)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def searchonce(self,s,d):
         try:
             for x in s:
@@ -69,7 +66,7 @@ class MitreParser():
         except:
             return None
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def searchinmitreandreturn(self,s,d,r):
         l = []
         for x in s:
@@ -77,7 +74,7 @@ class MitreParser():
                 l.append({key: x.get(key) for key in r})
         return l
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def nestedsearch(self,k, d):
         if k in d:
             return d[k]
@@ -87,7 +84,7 @@ class MitreParser():
                 if result:
                     return k, result
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findid(self,s,_print):
         l={}
         for x in s[0]:
@@ -103,10 +100,12 @@ class MitreParser():
             print(dumps(l, indent=4, sort_keys=True))
         else:
             return l
+
+    @verbose(True,verbose_flag,None)
     def countitem(self,_s,k):
         return Counter([d[k] for d in _s])
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def finduses(self):
         '''
         find all relationship_type uses value and parse them into hardcoded list 
@@ -137,7 +136,7 @@ class MitreParser():
                         ii['description'].append({'id':xx['external_references'][0]['external_id'],'name':x['name'],'type':x['type']})
         return d
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findapt(self,apt,_print=False):
         '''
         find an apt group from the hardocded list (Name is case sensitive)
@@ -149,7 +148,7 @@ class MitreParser():
         else:
             return [x,c]
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def listapts(self,_print=False):
         '''
         list all apts from hardocded list 
@@ -160,7 +159,7 @@ class MitreParser():
         else:
             return x
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findmalware(self,malware,_print=False):
         '''
         find malware from the hardocded list (Name is case sensitive)
@@ -174,7 +173,7 @@ class MitreParser():
                 return x
         return None
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findtool(self,tool,_print=False):
         '''
         find tool from the hardocded list (Name is case sensitive)
@@ -188,7 +187,7 @@ class MitreParser():
                 return x
         return None
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findword(self,word,_print=False):
         '''
         search for specific word in the files (case insensitive) 

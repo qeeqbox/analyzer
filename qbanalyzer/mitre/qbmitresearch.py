@@ -1,18 +1,14 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from nltk.corpus import words
 from nltk.tokenize import word_tokenize
 from json import loads
 from os import mkdir, path
 
-#this module need some optimization
-
 class QBMitresearch:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting QBMitresearch")
+    @verbose(True,verbose_flag,"Starting QBMitresearch")
     def __init__(self,mitre):
         '''
         initialize class, make mitrefiles path
@@ -23,7 +19,7 @@ class QBMitresearch:
         self.mitre = mitre
         self.parsediocs = self.mitrepath+"parsediocs.json"
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def searchinmitreandreturn(self,s,attack):
         '''
         get attack info from fulldict
@@ -34,8 +30,7 @@ class QBMitresearch:
                     return x
         return None
 
-    @progressbar(True,"Finding attack patterns")
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,"Finding attack patterns")
     def checkmitresimilarity(self,data):
         '''
         check detections from parsediocs.json against wordsstripped, if yes bring attack info
@@ -60,8 +55,7 @@ class QBMitresearch:
                                             "Description":"None"})
             _list = []
 
-    @progressbar(True,"Finding mitre artifacts")
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,"Finding mitre artifacts")
     def checkmitre(self,data):
         '''
         check if words are tools or malware listed in mitre 
@@ -81,8 +75,7 @@ class QBMitresearch:
                                             "Description":record["description"]})
         return True
 
-    @progressbar(True,"Analyzing with mitre")
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,"Analyzing with mitre")
     def checkwithmitre(self,data):
         '''
         start mitre analysis for words and wordsstripped

@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwordsmultifilesarray
 from email import message_from_bytes
 from hashlib import md5
@@ -14,14 +13,13 @@ from ssdeep import hash_from_file
 from mimetypes import guess_type
 
 class EmailParser():
-    @verbose(verbose_flag)
-    @progressbar(True, "Starting EmailParser")
+    @verbose(True,verbose_flag, "Starting EmailParser")
     def __init__(self):
         '''
         initialize class
         '''
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getattachment(self,data, msg) -> (list):
         '''
         get attachment of email
@@ -53,7 +51,7 @@ class EmailParser():
                     _Stream.append(buffer)
         return _Stream
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkattachmentandmakedir(self,data, msg) -> (bool):
         '''
         check if an email has attachments or not
@@ -66,7 +64,7 @@ class EmailParser():
                     mkdir(data["Location"]["Folder"])
                 return True
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkemailsig(self, data) -> bool:
         '''
         check mime if it contains message or not
@@ -75,8 +73,8 @@ class EmailParser():
             data["Location"]["Original"].endswith(".eml"):
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True, "Starting analyzing email")
+
+    @verbose(True,verbose_flag, "Starting analyzing email")
     def getemail(self, data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from array 

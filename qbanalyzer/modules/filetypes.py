@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords,getwordsmultifiles,getentropy
 from shutil import copyfile,rmtree
 from os import path,mkdir,walk
@@ -12,7 +11,7 @@ from ssdeep import hash_from_file
 from mimetypes import guess_type
 from re import match
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def checkpackedfiles(_path,files) -> bool:
     '''
     check if archive contains strings or not 
@@ -30,7 +29,7 @@ def checkpackedfiles(_path,files) -> bool:
     except:
         pass
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def dmgunpack(_path) -> str:
     '''
     convert dmg to img
@@ -40,7 +39,7 @@ def dmgunpack(_path) -> str:
     if b"dmg image is corrupted" not in output:
         return _path+".img"
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def unpackfile(data,_path):
     '''
     unpack files using 7z into temp folder
@@ -66,7 +65,7 @@ def unpackfile(data,_path):
     except:
         pass
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def convertsize(s):
     for u in ['B','KB','MB','GB']:
         if s < 1024.0:
@@ -75,12 +74,26 @@ def convertsize(s):
             s /= 1024.0
     return "File is too big"
 
+@verbose(True,verbose_flag,None)
+def checkbom(str):
+    if str[:3] == '\xEF\xBB\xBF':
+        return "UTF-8-SIG"
+    elif str[:4] == '\xFF\xFE\x00\x00':
+        return "UTF-32LE"
+    elif str[:4] == '\x00\x00\xFF\xFE':
+        return "UTF-32BE"
+    elif str[:2] == '\xFF\xFE':
+        return "UTF-16LE"
+    elif str[:2] == '\xFE\xFF':
+        return "UTF-16BE"
+    return "None"
+
 class FileTypes:
-    @progressbar(True,"Starting FileTypes")
+    @verbose(True,verbose_flag,"Starting FileTypes")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def setupmalwarefolder(self,folder):
         '''
         setup malware folder where files will be transferred and unpacked
@@ -89,7 +102,7 @@ class FileTypes:
         if not self.malwarefarm.endswith(path.sep): self.malwarefarm = self.malwarefarm+path.sep
         if not path.isdir(self.malwarefarm): mkdir(self.malwarefarm)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def createtempfolder(self,data,_path):
         '''
         create temp folder that has the md5 of the target file
@@ -108,7 +121,7 @@ class FileTypes:
                             "Folder":self.malwarefarm+md5+path.sep+"temp_unpacked"}
         data["FilesDumps"] = {self.malwarefarm+md5+path.sep+"temp":open(_path,"rb").read()}
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getdetailes(self,data,_path):
         '''
         get general details of file
@@ -116,6 +129,7 @@ class FileTypes:
         data["Details"] = {"Properties":{},
                            "_Properties":{}}
         f = open(_path,"rb").read()
+        fbom = open(_path,"rb").read(4)
         data["Details"]["Properties"]={ "Name": path.basename(_path),
                                         "md5": md5(f).hexdigest(),
                                         "sha1": sha1(f).hexdigest(),
@@ -125,10 +139,11 @@ class FileTypes:
                                         "mime":from_file(_path,mime=True),
                                         "extension":guess_type(_path)[0],
                                         "charset":Magic(mime_encoding=True).from_file(_path),
+                                        "ByteOrderMark":checkbom(fbom),
                                         "Entropy":getentropy(f)}
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Handling unknown format")
+
+    @verbose(True,verbose_flag,"Handling unknown format")
     def unknownfile(self,data):
         '''
         start unknown files logic, this file is not detected by otehr modules
@@ -143,7 +158,7 @@ class FileTypes:
         else:
             getwords(data,data["Location"]["File"])
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkfilesig(self,data,_path,folder) -> bool:
         '''
         first logic to execute, this will check if malware folder exists or not

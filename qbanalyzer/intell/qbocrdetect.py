@@ -1,21 +1,17 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import findall
 from PIL import Image
 from pytesseract import image_to_string
 from io import BytesIO
 
-#this module needs some optimization
-
 class QBOCRDetect:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting QBOCRDetect")
+    @verbose(True,verbose_flag,"Starting QBOCRDetect")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def mixandsetupfileocr(self,data,paths):
         '''
         loop paths, convert each image to RGBA, and read text from image
@@ -31,7 +27,7 @@ class QBOCRDetect:
             except:
                 pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkocrtext(self,data,_list):
         '''
         loop paths, convert each image to RGBA, and read text from image
@@ -41,8 +37,8 @@ class QBOCRDetect:
                 if len(word) > 0:
                     data.append({"Word":word,"File":words[1]})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing image with OCR")
+
+    @verbose(True,verbose_flag,"Analyzing image with OCR")
     def checkwithocr(self,data):
         '''
         start ocr reading logic for packed files only

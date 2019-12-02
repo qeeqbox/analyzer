@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwordsmultifilesarray,getwords,getwordsmultifiles
 from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
 from magic import from_buffer,Magic
@@ -9,15 +8,12 @@ from zlib import decompress
 from re import DOTALL, MULTILINE, compile, finditer, sub
 from binascii import unhexlify
 
-#this module need some optimization
-
 class RTFParser:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting RTFParser")
+    @verbose(True,verbose_flag,"Starting RTFParser")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getobjects(self,data,buffer) -> (list,list):
         '''
         get objects from rtf by regex
@@ -45,7 +41,7 @@ class RTFParser:
                     break
         return _List,_Listobjects
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkrtfsig(self,data) -> bool:
         '''
         check if mime is rtf
@@ -53,8 +49,7 @@ class RTFParser:
         if "text/rtf" == data["Details"]["Properties"]["mime"]:
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyze RTF file")
+    @verbose(True,verbose_flag,"Analyze RTF file")
     def checkrtf(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from buffers 

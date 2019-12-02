@@ -1,3 +1,11 @@
+#### 2019.V.01.07
+- Fixed bugs
+- Removed progressbar
+- Added Byte order mark detection
+- Analyze entire malware folder
+- Fixed html template
+- Clean up
+
 #### 2019.V.01.06
 - Fixed bugs
 - Added missing dependencies

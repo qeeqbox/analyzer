@@ -5,7 +5,7 @@ from re import findall
 from collections import Counter
 from math import log2
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getentropy(data) -> str:
     '''
     get entropy of buffer
@@ -26,7 +26,7 @@ def getentropy(data) -> str:
     except:
         return "None"
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getentropyfloatret(data) -> float:
     '''
     get entropy of buffer
@@ -47,13 +47,13 @@ def getentropyfloatret(data) -> float:
     except:
         return 0.0
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getentropyold(data):
     probabilities = [float(data.count(char)) / len(data) for char in dict.fromkeys(list(data))]
     entropy =- sum([probability * log2(probability) / log2(2.0) for probability in probabilities])
     return entropy
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def longtoip(decimal) -> str:
     '''
     decimal to ip
@@ -66,7 +66,7 @@ def longtoip(decimal) -> str:
     '''
     return inet_ntoa(pack("!L", decimal))
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def iptolong(ip) -> int:
     '''
     ip to decimal
@@ -79,7 +79,7 @@ def iptolong(ip) -> int:
     '''
     return unpack("!L", inet_aton(ip))[0]
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getwords(data,_path) -> (list,str):
     '''
     get all words of file
@@ -104,7 +104,7 @@ def getwords(data,_path) -> (list,str):
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getwordsmultifiles(data,arr) -> (list,str):
     '''
     get all words of multi files
@@ -133,7 +133,7 @@ def getwordsmultifiles(data,arr) -> (list,str):
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
 
-@verbose(verbose_flag)
+@verbose(True,verbose_flag,None)
 def getwordsmultifilesarray(data,arr) -> (list,str):
     '''
     get all words of buffers in an array

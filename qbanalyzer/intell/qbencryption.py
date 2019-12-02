@@ -1,15 +1,12 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import iptolong
 from re import I, compile, findall
 from base64 import b64decode,b64encode
 
-#each encryption has a function for each logic (further customization) 
-
 class QBEncryption:
-    @progressbar(True,"Starting QBEncryption")
+    @verbose(True,verbose_flag,"Starting QBEncryption")
     def __init__(self):
         '''
         initialize class
@@ -26,7 +23,7 @@ class QBEncryption:
         self.detectioncheckcrc = compile(r'\b0x[0-9a-fA-F]{1,16}\b',I)
         self.detectioncheckjwt = compile(r'\b[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?\b',I)
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkbase64(self,data):
         '''
         check if words are possible base64 or not 
@@ -42,7 +39,7 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"Base64":x.decode('utf-8',errors="ignore"),"Decoded":b64decode(x).decode('utf-8',errors="ignore")})
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def testbase64(self,w):
         '''
         match decoding base64 then encoding means most likely base64 
@@ -54,8 +51,8 @@ class QBEncryption:
         except:
             return False
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding MD5 patterns")
+
+    @verbose(True,verbose_flag,"Finding MD5 patterns")
     def checkmd5(self,data):
         '''
         check if buffer contains MD5 098F6BCD4621D373CADE4E832627B4F6
@@ -68,8 +65,8 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"MD5":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding SHA1 patterns")
+
+    @verbose(True,verbose_flag,"Finding SHA1 patterns")
     def checksha1(self,data):
         '''
         check if buffer contains SHA1 A94A8FE5CCB19BA61C4C0873D391E987982FBBD3
@@ -82,8 +79,8 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"SHA1":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding SHA256 patterns")
+
+    @verbose(True,verbose_flag,"Finding SHA256 patterns")
     def checksha256(self,data):
         '''
         check if buffer contains SHA256 9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08
@@ -97,8 +94,8 @@ class QBEncryption:
             data.append({"Count":_List.count(x),"SHA256":x})
 
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding SHA512 patterns")
+
+    @verbose(True,verbose_flag,"Finding SHA512 patterns")
     def checksha512(self,data):
         '''
         check if buffer contains SHA512 EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF
@@ -111,8 +108,8 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"SHA512":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding UUID patterns")
+
+    @verbose(True,verbose_flag,"Finding UUID patterns")
     def checkuuid(self,data):
         '''
         check if buffer contains UUID 1,2,3,4,5 and undefined ones
@@ -132,8 +129,8 @@ class QBEncryption:
             for x in set(_List):
                 data.append({"Count":_List.count(x),"Description":detection[0],"UUID":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding CRC patterns")
+
+    @verbose(True,verbose_flag,"Finding CRC patterns")
     def checkcrc(self,data):
         '''
         check if buffer contains CRC a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
@@ -147,8 +144,8 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"CRC":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding JWT patterns")
+
+    @verbose(True,verbose_flag,"Finding JWT patterns")
     def checkjwt(self,data):
         '''
         check if buffer contains JWT
@@ -161,12 +158,13 @@ class QBEncryption:
         for x in set(_List):
             data.append({"Count":_List.count(x),"JWT":x})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Finding encryptions")
+
+    @verbose(True,verbose_flag,"Finding encryptions")
     def checklogics(self,data):
         '''
         check if buffer contains encryption logic
         '''
+        _List = []
         detections = {  "MD2":rb"\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x02\x05\x00\x04\x10",
                         "MD5":rb"\x30\x20\x30\x0c\x06\x08\x2a\x86\x48\x86\xf7\x0d\x02\x05\x05\x00\x04\x10",
                         "SHA1" : rb"\x30\x21\x30\x09\x06\x05\x2b\x0e\x03\x02\x1a\x05\x00\x04\x14",
@@ -182,7 +180,7 @@ class QBEncryption:
             for x in set(_List):
                 data.append({"Count":_List.count(x),"Type":logic})
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkencryption(self,data):
         '''
         start pattern analysis for words and wordsstripped

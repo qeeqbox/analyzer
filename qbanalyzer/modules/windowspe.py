@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords,getentropy
 from ..intell.qbdescription import adddescription
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
@@ -11,12 +10,12 @@ from datetime import datetime
 from M2Crypto import BIO, m2, SMIME, X509
 
 class WindowsPe:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting WindowsPe")
+
+    @verbose(True,verbose_flag,"Starting WindowsPe")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def whattype(self,pe) -> str:
         '''
         check file exe or dll or driver
@@ -28,7 +27,7 @@ class WindowsPe:
         elif pe.is_driver():
             return "driver"
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkifsinged(self,pe) -> list:
         '''
         check file if it has Signature or not
@@ -105,7 +104,7 @@ class WindowsPe:
                           "SignatureHex":sighex})
         return _list,_extracted
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def findentrypointfunction(self,pe, rva) -> str:
         '''
         find entery point in sections
@@ -114,7 +113,7 @@ class WindowsPe:
             if section.contains_rva(rva):
                 return section
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getdlls(self,pe) -> list:
         '''
         get dlls
@@ -126,7 +125,7 @@ class WindowsPe:
                               "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsections(self,pe) -> list:
         '''
         get sections
@@ -139,7 +138,7 @@ class WindowsPe:
                             "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getimportedfunctions(self,pe) -> list:
         '''
         get import functions
@@ -154,7 +153,7 @@ class WindowsPe:
                                                 "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getexportedfunctions(self,pe) -> list:
         '''
         get export functions
@@ -166,7 +165,7 @@ class WindowsPe:
                                            "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getrecourse(self,pe) -> (list,str):
         '''
         get resources
@@ -201,9 +200,7 @@ class WindowsPe:
                                                     "Description":""})
         return _list,manifest
 
-
-
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getCharacteristics(self,pe) -> dict:
         '''
         get characteristics of file
@@ -220,7 +217,7 @@ class WindowsPe:
              "wdm Driver":pe.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_WDM_DRIVER}
         return x
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getdebug(self,pe) -> list:
         '''
         get debug directory 
@@ -232,7 +229,7 @@ class WindowsPe:
                                 "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkpesig(self,data) -> bool:
         '''
         check mime is exe or msi
@@ -241,8 +238,8 @@ class WindowsPe:
             data["Details"]["Properties"]["mime"] == "application/x-msi":
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing PE file")
+
+    @verbose(True,verbose_flag,"Analyzing PE file")
     def getpedeatils(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from the file 

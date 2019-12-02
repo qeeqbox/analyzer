@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getentropy,getwords
 from ..intell.qbdescription import adddescription
 from elftools.elf.elffile import ELFFile
@@ -12,12 +11,11 @@ from hashlib import md5
 from elftools.elf.sections import SymbolTableSection
 
 class LinuxELF:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting LinuxELF")
+    @verbose(True,verbose_flag,"Starting LinuxELF")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getrelocations(self,elf) -> list:
         '''
         get symbols locations
@@ -36,7 +34,7 @@ class LinuxELF:
                                         "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsymbols(self,elf) -> list:
         '''
         get symbols and types 
@@ -52,7 +50,7 @@ class LinuxELF:
                                     "Description":""})
             return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getdynamic(self,elf) -> list:
         '''
         get dynamic libraries 
@@ -67,7 +65,7 @@ class LinuxELF:
                                 "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getsection(self,elf) -> list:
         '''
         get all sections of elf 
@@ -81,7 +79,7 @@ class LinuxELF:
                                 "Description":""})
         return _list
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getiter(self,elf) -> str:
         '''
         get run-time linker 
@@ -90,7 +88,7 @@ class LinuxELF:
             if segment['p_type'] == 'PT_INTERP':
                 return segment.get_interp_name()
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkelfsig(self,data) -> bool:
         '''
         check if mime is linux type 
@@ -100,8 +98,8 @@ class LinuxELF:
             data["Details"]["Properties"]["mime"] == "application/x-executable":
             return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing ELF file")
+
+    @verbose(True,verbose_flag,"Analyzing ELF file")
     def getelfdeatils(self,data):
         '''
         start analyzing elf logic, add description to strings and get words and wordsstripped from the file 

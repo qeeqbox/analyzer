@@ -1,7 +1,6 @@
 __version__G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from re import compile, findall,I
 from tld import get_fld,get_tld
 from tld.utils import update_tld_names
@@ -17,8 +16,7 @@ from csv import reader
 #need refactoring
 
 class URLSimilarity:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting URLSimilarity")
+    @verbose(True,verbose_flag,"Starting URLSimilarity")
     def __init__(self):
         '''
         initialize class and get top 1m.csv from umbrella
@@ -30,9 +28,9 @@ class URLSimilarity:
         self.topsliced = None
         self.topdomains = None
         self.setup(self.refs)
-        update_tld_names()
+        #update_tld_names()
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def setup(self,_path):
         '''
         check if top-1m.csv exists or not, if not then download load
@@ -46,7 +44,7 @@ class URLSimilarity:
             self.topsliced = islice(reader(f), 10000)
             self.topdomains = [x[1] for x in self.topsliced]
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def geturls(self,data):
         '''
         check if root domain exists in the top 10000 or not
@@ -69,8 +67,8 @@ class URLSimilarity:
                 if dist <= 2:
                     data.append({"Distance":dist,"URL":root,"Similar":domain})
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analyzing URLs")
+
+    @verbose(True,verbose_flag,"Analyzing URLs")
     def checkwithurls(self,data):
         '''
         start finding urls in top 10000 list 

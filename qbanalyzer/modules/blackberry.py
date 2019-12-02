@@ -2,17 +2,15 @@ __G__ = "(G)bd249ce4"
 
 from ctypes import *
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.qprogressbar import progressbar
 from ..mics.funcs import getwords,getwordsmultifiles
 from re import findall
 
 class BBParser:
-    @verbose(verbose_flag)
-    @progressbar(True,"Starting BBParser")
+    @verbose(True,verbose_flag,"Starting BBParser")
     def __init__(self):
         pass
 
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def getfunctionsold(self,f) -> list:
         '''
         get function names and constant strings by regex
@@ -35,8 +33,7 @@ class BBParser:
                 pass
         return _list
 
-
-    @verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def checkbbsig(self,data) -> bool:
         '''
         check mime is cod or not
@@ -45,8 +42,8 @@ class BBParser:
             data["Location"]["Original"].endswith(".cod"):
                 return True
 
-    @verbose(verbose_flag)
-    @progressbar(True,"Analzying COD file")
+
+    @verbose(True,verbose_flag,"Analzying COD file")
     def getbbdeatils(self,_data):
         '''
         start analyzing cod logic, get words and wordsstripped from the file 
@@ -119,4 +116,4 @@ class BBParser:
             _data["COD"]["Resources"] = _temp
             file.seek(0)
             _data["COD"]["Symbols"] = self.getfunctionsold(file.read())
-            getwords(data,_data["Location"]["File"])
+            getwords(_data,_data["Location"]["File"])
