@@ -1404,16 +1404,6 @@ condition:
     $1 at pe.entry_point
 }
 
-rule Armadillo_v1_71_Detecton_1
-{
-meta:
-    description = "Armadillo v1.71"
-strings:
-    $1 = { 55 8B EC 6A FF 68 ?? ?? ?? ?? 68 ?? ?? ?? ?? 64 A1 }
-condition:
-    $1
-}
-
 rule Armadillo_v1_72_v1_73_Detecton_1
 {
 meta:
@@ -1550,16 +1540,6 @@ meta:
     description = "Armadillo v1.9x"
 strings:
     $1 = { 55 8B EC 6A FF 68 98 ?? ?? ?? 68 10 ?? ?? ?? 64 A1 ?? ?? ?? ?? 50 64 89 25 ?? ?? ?? ?? 83 EC 58 53 56 57 89 65 E8 FF 15 }
-condition:
-    $1 at pe.entry_point
-}
-
-rule Armadillo_v1_xx_v2_xx_Detecton_1
-{
-meta:
-    description = "Armadillo v1.xx - v2.xx"
-strings:
-    $1 = { 55 8B EC 53 8B 5D 08 56 8B 75 0C 57 8B 7D 10 85 F6 }
 condition:
     $1 at pe.entry_point
 }
