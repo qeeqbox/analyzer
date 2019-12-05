@@ -10,6 +10,7 @@ getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
 getLogger("pytesseract").setLevel(WARNING)
 getLogger("PIL").setLevel(WARNING)
+getLogger("chardet").setLevel(WARNING)
 
 class colors:
     Restore = '\033[0m'

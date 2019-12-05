@@ -84,10 +84,10 @@ class QBAnalyzer(Cmd):
             self.do_analyze(i)
 
     def do_exit(self, line):
-        exit()
+        return True
 
     def do_EOF(self, line):
-        exit()
+        return True
 
 if __name__ == '__main__':
     QBAnalyzer().cmdloop()

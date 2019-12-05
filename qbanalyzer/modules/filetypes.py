@@ -49,6 +49,9 @@ def unpackfile(data,_path):
                       "_Detected":["Name","Path"],
                       "_Files":["Name","Type","Extension","md5","Path"]}
     try:
+        p = Popen(["7z", "t", _path,"-pdummypassword2019!!"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        if b"ERROR: Wrong password" in err:return
         p = Popen(["7z", "x", _path,"-aoa","-o"+data["Location"]["Folder"]], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
         for currentpath, folders, files in walk(data["Location"]["Folder"]):
@@ -62,8 +65,8 @@ def unpackfile(data,_path):
                                                 "Path":path.join(currentpath, file),
                                                 "md5":_md5})
                 data["FilesDumps"].update({path.join(currentpath, file):f})
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 @verbose(True,verbose_flag,None)
 def convertsize(s):
