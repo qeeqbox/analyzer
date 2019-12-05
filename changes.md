@@ -1,3 +1,9 @@
+#### 2019.V.01.08
+- Fixed bugs
+- Added html parser
+- Added missing dependencies
+- Fixed qbimage
+
 #### 2019.V.01.07
 - Fixed bugs
 - Removed progressbar

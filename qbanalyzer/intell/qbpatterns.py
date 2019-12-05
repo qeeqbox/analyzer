@@ -34,11 +34,7 @@ class QBPatterns:
         x = list(set(findall(self.links,self.wordsstripped)))
         if len(x) > 0:
             for _ in x:
-                try:
-                    ip_address(_)
-                    _List.append(_)
-                except:
-                    pass
+                _List.append(_[0])
         for x in set(_List):
             _data.append({"Count":_List.count(x),"Link":x})
 

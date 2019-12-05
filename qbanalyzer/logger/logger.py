@@ -38,11 +38,13 @@ def verbose(OnOff=False,Verb=False,str=None):
     def decorator(func):
         def wrapper(*args, **kwargs):
             try:
-                if Verb: log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
-                if str: logstring(str,"Green")
+                if Verb:
+                    log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+                if str:
+                    logstring(str, "Green")
                 return func(*args, **kwargs)
             except:
-                logstring("{} failed..".format(func.__module__,func.__name__),"Red")
+                logstring("{} failed..".format(func.__module__, func.__name__), "Red")
                 return None
         return wrapper
     return decorator

@@ -39,7 +39,6 @@ class QBCountriesviz:
         '''
         start get countries flags logic
         '''
-
         data["Flags"] = {"Flags":[]}
         self.findflags(data["Flags"]["Flags"],data)
 
@@ -49,6 +48,5 @@ class QBCountriesviz:
         '''
         start get countries codes logic
         '''
-
         data["Codes"] = {"Codes":[]}
         self.findcodes(data["Codes"]["Codes"],data)

@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.07"
+__V__ = "2019.V.01.08"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -13,11 +13,11 @@ print("                                                                         
 print(" _____   _____   _____  __   _  _____        \\   / ______  ______  _____   ")
 print("|     | |_____] |_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
 print("|____\\| |_____] |     | |  \\_| |     | |_____  |   /_____ |______ |    \\")
-print("                                               |                         ")
-print("                                                                           ")
+print("      \\ V.01.08                                |                         ")
+print("                                   https://github.com/bd249ce4/QBAnalyzer")
+print("                                                                            ")
 
 class QBAnalyzer(Cmd):
-
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
     _analyze_parsergroupreq = _analyze_parser.add_argument_group('required arguments')
@@ -50,7 +50,7 @@ class QBAnalyzer(Cmd):
         try:
             ver = get("https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/version")
             if ver.ok and ver.text.strip() != __V__:
-                logstring("New version {} available, please update.. ".format(ver),"Red")
+                logstring("New version {} available, please update.. ".format(ver.text.strip()),"Red")
         except:
             logstring("Update failed","Red")
         self.san = StaticAnalyzer()

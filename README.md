@@ -26,6 +26,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 
 ### Features
 - Runs locally and easy to maintain
+- Analyze full folder or individual file
 - Generates HTML and JSON as output
 - Write your ideas under each output
 - General file information MD5, charset, mime, ssdeep
@@ -51,6 +52,8 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Credit cards patterns extraction
 - Encryption patterns (base64, md5, sha1..) detection
 - DGA (domain generation algorithm) patterns detection 
+- BOM detection
+- Credential extractor
 - Linux
     - ELF information
     - API functions descriptions
@@ -121,15 +124,21 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Archives
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
+- HTML
+    - Extract scripts, iframes, links and forms
+    - Decode/analyze links
+    - Script entropy
 
 ### Roadmap
 - ~~Reduce file I/O~~
 - ~~PDF module~~
 - ~~RTF module~~
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
+- ~~HTML module~~
+- ~~Refactoring modules v2~~
+- Web API
 - MS office module
-- Machine learning modules
-- Refactoring modules v2
+- Machine learning modules (2019)
 
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
@@ -140,7 +149,7 @@ Thank you for reaching out!! I have been getting requests to implement the follo
 - Cleaning up
 
 ### Depends on
-Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux Documentation, MacOS Documentation, Microsoft Docs, software77, Android Documentation, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and a lot of researches.
+Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux/MacOS/Windows/Android Documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and a lot of researches.
 
 ### Libs
 socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, locale, pathlib, csv, hmac, token, queue, scapy, html, types, inspect, functools, nltk, site, genericpath, secrets, re, os, sre_parse, qbanalyzer, threading, shutil, mimetypes, struct, optparse, pickle, cffi, cryptography, bdb, urllib, plistlib, zipimport, tempfile, sre_compile, runpy, opcode, elftools, magic, uu, sqlite3, ctypes, chardet, ntpath, enum, argparse, array, codeop, datetime, selectors, heapq, distutils, logging, posix, pytesseract, requests, jinja2, contextlib, cmd, collections, email, calendar, decimal, M2Crypto, unittest, swig_runtime_data4, tokenize, json, sitecustomize, grp, sysconfig, random, six, subprocess, pwd, ftplib, reprlib, ordlookup, ssdeep, cgi, PIL, ssl, sre_constants, gzip, apport_python_hook, tld, typing, warnings, platform, getopt, pyexpat, zlib, abc, idna, stringprep, select, cython_runtime, certifi, multiprocessing, keyword, r2pipe, sys, pdb, regex, resource, code, pydoc, copyreg, difflib, urllib3, uuid, ast, itertools, string, signal, fnmatch, xmlrpc, quopri, ipaddress, numbers, numpy, weakref, importlib, bz2, math, asyncio, binascii, traceback, encodings, pycparser, lzma, http, errno, glob, asn1crypto, gc, fcntl, bisect, unicodedata, textwrap, builtins, macholib, imp, marshal, pprint, yara, markupsafe, hashlib, linecache, posixpath, socket, base64, time, OpenSSL, asyncore, atexit, fractions, dis, copy, zipfile, pkgutil, gettext, webbrowser, netrc

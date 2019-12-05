@@ -28,6 +28,7 @@ class QBDGA:
             allngrams = []
             l = []
             for domain in domains:
+                domain = domain["domain"]
                 if len(domain) > 2: 
                     for length in range(2,len(domain)+1):
                         l.extend([domain[i: i + length] for i in range(len(domain) - length + 1)])
@@ -49,6 +50,7 @@ class QBDGA:
         loop sequences, find low frequency letters 
         '''
         for domain in domains:
+            domain = domain["domain"]
             x = findall(self.detectionlowfreq,domain)
             if len(x) > 4:
                 data.append({"Count":len(x),"Letters":''.join(x),"URL":domain})
@@ -60,6 +62,7 @@ class QBDGA:
         loop sequences, find consonants in row
         '''
         for domain in domains:
+            domain = domain["domain"]
             x = findall(self.detectionconsonantslettersinrow,domain)
             if len(x) > 2:
                 data.append({"Groups":"{} > 2 groups".format(len(x)),"Row":','.join(x),"URL":domain})
@@ -71,6 +74,7 @@ class QBDGA:
         loop sequences, find consonants 
         '''
         for domain in domains:
+            domain = domain["domain"]
             x = findall(self.detectionconsonants,domain)
             if len(x) > 8:
                 data.append({"Count":"{} > 8".format(len(x)),"Letters":''.join(x),"URL":domain})
@@ -82,6 +86,7 @@ class QBDGA:
         loop sequences, find encryptions 
         '''
         for domain in domains:
+            domain = domain["domain"]
             detection = search(self.detectionhex, domain)
             if detection is not None:
                 temp = ""
@@ -105,6 +110,7 @@ class QBDGA:
         loop sequences, find symbols 
         '''
         for domain in domains:
+            domain = domain["domain"]
             x = findall(self.detectionsymbols,domain)
             #group them
             if len(x) > 2:
@@ -117,6 +123,7 @@ class QBDGA:
         loop sequences, find numbers 
         '''
         for domain in domains:
+            domain = domain["domain"]
             x = findall(self.detectionnumbers,domain)
             if len(x) > 5:
                 data.append({"Count":"{} > 5".format(len(x)),"Numbers":''.join(x),"URL":domain})
@@ -128,6 +135,7 @@ class QBDGA:
         loop sequences, find long domains 
         '''
         for domain in domains:
+            domain = domain["domain"]
             if len(domain) > 13:
                 data.append({"Length":"{} > 13".format(len(domain)),"URL":domain})
 
@@ -138,6 +146,7 @@ class QBDGA:
         loop sequences, get entropy
         '''
         for domain in domains:
+            domain = domain["domain"]
             entropy = getentropyfloatret(domain)
             if entropy > 3.7:
                 data.append({"Entropy":"{0:.15f}".format(entropy),"URL":domain})

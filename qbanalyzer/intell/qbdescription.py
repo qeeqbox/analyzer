@@ -14,9 +14,7 @@ def adddescription(_type,data,keyword):
     '''
     add description to buffer
     '''
-
     global cursor
-
     if len(data) > 0:
         for x in data:
             try:

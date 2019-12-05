@@ -8,6 +8,7 @@ from binascii import hexlify
 from scapy.layers import http
 from datetime import datetime
 from re import compile,I,search
+from tldextract import extract
 
 class ReadPackets:
     @verbose(True,verbose_flag,"Starting ReadPackets")
@@ -41,6 +42,7 @@ class ReadPackets:
         _listreaddns = []
         _listreadhttp = []
         _listurlhttp = []
+        _tempdomains = []
         _domains = []
         _list = []
         _ports = []
@@ -78,8 +80,17 @@ class ReadPackets:
                                     "rrname":packet.an.rrname.decode("utf-8",errors="ignore"),
                                     "rdata":str(packet.an.rdata)[1:], #I know... do not ask, long story
                                     "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
-                    if packet.an.rrname.decode("utf-8",errors="ignore")[:-1] not in _domains:
-                        _domains.append(packet.an.rrname.decode("utf-8",errors="ignore")[:-1])
+                    if packet.an.rrname.decode("utf-8",errors="ignore")[:-1] not in _tempdomains:
+                        try:
+                            parsedhost = packet.an.rrname.decode("utf-8",errors="ignore")[:-1]
+                            s,d,t = extract(parsedhost)
+                            _tempdomains.append(parsedhost)
+                            _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                             "subdomain":s,
+                                             "domain":d,
+                                             "tld":t})
+                        except:
+                            pass
             if packet.haslayer(http.HTTPRequest):
                 for k in packet.getlayer(http.HTTPRequest).fields:
                     v = packet.getlayer(http.HTTPRequest).fields[k]
@@ -108,8 +119,13 @@ class ReadPackets:
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8",errors="ignore")
-                    if not search(self.ip, parsedhost) and parsedhost not in _domains:
-                        _domains.append(parsedhost)
+                    if not search(self.ip, parsedhost) and parsedhost not in _tempdomains:
+                        s,d,t = extract(parsedhost)
+                        _tempdomains.append(parsedhost)
+                        _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "subdomain":s,
+                                         "domain":d,
+                                         "tld":t})
                 except:
                     pass
 
@@ -142,8 +158,13 @@ class ReadPackets:
                                          "Host":fields["Host"].decode("utf-8",errors="ignore"),
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8",errors="ignore")
-                    if not search(self.ip, parsedhost) and parsedhost not in _domains:
-                        _domains.append(parsedhost)
+                    if not search(self.ip, parsedhost) and parsedhost not in _tempdomains:
+                        s,d,t = extract(parsedhost)
+                        _tempdomains.append(parsedhost)
+                        _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "subdomain":s,
+                                         "domain":d,
+                                         "tld":t})
                 except:
                     pass
 
@@ -182,12 +203,6 @@ class ReadPackets:
     def checkpcapsig(self,data):
         '''
         check if mime is pcap
-
-        Args:
-            data: data dict
-
-        Return:
-            true if pcap
         '''
         if data["Details"]["Properties"]["mime"] == "application/vnd.tcpdump.pcap":
             return True
@@ -198,8 +213,6 @@ class ReadPackets:
         '''
         start analyzing pcap logic, add descriptions and get words and wordsstripped from the file 
 
-        Args:
-            data: data dict
         '''
         data["PCAP"] = {"WAF":[],
                         "URLs":[],
@@ -212,6 +225,7 @@ class ReadPackets:
                         "IP4S":[],
                         "Flags":[],
                         "_WAF":["Matched","Required","WAF","Detected"],
+                        "_Domains":["Time","subdomain","domain","tld"],
                         "_URLs":["Time","src","Method","Host","Path"],
                         "_ARP":["Time","Type","PacketSoruce","PacketDestination","Macaddress"],
                         "_DNS":["Time","Type","Source","SourcePort","Destination","DestinationPort","qname","rrname","rdata"],

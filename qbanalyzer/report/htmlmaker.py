@@ -467,8 +467,8 @@ class HtmlMaker:
                     table +=self.makeworldimage(data["Codes"]["Codes"],"Worldmap","Worldmap",None,False,None)
             except:
                 pass
-
-        table += self.makeimagetablebase64(self.qbi.createimage(data["FilesDumps"][_path],"16","100"),"Image",None,False,None)
+        out,c = self.qbi.createimage(data["FilesDumps"][_path])
+        table += self.makeimagetablebase64(out,c,None,False,None)
         return table
 
     @verbose(True,verbose_flag,None)

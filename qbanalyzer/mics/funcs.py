@@ -9,9 +9,6 @@ from math import log2
 def getentropy(data) -> str:
     '''
     get entropy of buffer
-
-    Args:
-        data: buffer
     '''
     try:
         if not data:
@@ -30,9 +27,6 @@ def getentropy(data) -> str:
 def getentropyfloatret(data) -> float:
     '''
     get entropy of buffer
-
-    Args:
-        data: buffer
     '''
     try:
         if not data:
@@ -57,12 +51,6 @@ def getentropyold(data):
 def longtoip(decimal) -> str:
     '''
     decimal to ip
-
-    Args:
-        decimal: ip in decimal
-
-    Return:
-        regular ip
     '''
     return inet_ntoa(pack("!L", decimal))
 
@@ -70,12 +58,6 @@ def longtoip(decimal) -> str:
 def iptolong(ip) -> int:
     '''
     ip to decimal
-
-    Args:
-        ip: regular ip
-
-    Return:
-        decimal ip
     '''
     return unpack("!L", inet_aton(ip))[0]
 
@@ -83,10 +65,6 @@ def iptolong(ip) -> int:
 def getwords(data,_path) -> (list,str):
     '''
     get all words of file
-
-    Args:
-        _path: path of file
-
     '''
     words =[]
     wordsinsensitive = []
@@ -108,9 +86,6 @@ def getwords(data,_path) -> (list,str):
 def getwordsmultifiles(data,arr) -> (list,str):
     '''
     get all words of multi files
-
-    Args:
-        arr: dict contains Path keys
     '''
     words = []
     wordsstripped = ""
@@ -137,9 +112,6 @@ def getwordsmultifiles(data,arr) -> (list,str):
 def getwordsmultifilesarray(data,arr) -> (list,str):
     '''
     get all words of buffers in an array
-
-    Args:
-        arr: list contains buffer
     '''
     words = []
     wordsstripped = ""

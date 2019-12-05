@@ -15,16 +15,23 @@ class QBImage:
         for i in range(0, len(l), int(x)):
             yield l[i:i + int(x)]
 
-    #@verbose(verbose_flag)
+    @verbose(True,verbose_flag,None)
     def average(self,l):
         try:
             return sum(l) / len(l)
         except:
             return 0
 
+    @verbose(True,verbose_flag,None)
+    def convertsize(self,s):
+        x = 1
+        while s > 100000:
+            s /= 10
+            x *= 10
+        return x
 
-    @verbose(True,verbose_flag,"Making a visualized image")
-    def createimage(self,_buffer,_c,_s) -> str:
+    @verbose(True,verbose_flag,None)
+    def create(self,_buffer,_c,_s) -> str:
         x = [c for c in _buffer]
         _list = list(self.chunk(x,_c))
         out = list(self.chunk([int(self.average(l)) for l in _list],int(_s)))
@@ -54,3 +61,9 @@ class QBImage:
         bimage = b64encode(buffer.getvalue())
         output = "data:image/jpeg;base64, {}".format(bimage.decode("utf-8",errors="ignore"))
         return output
+
+    @verbose(True,verbose_flag,"Making a visualized image")
+    def createimage(self,_buffer) -> str:
+        l = self.convertsize(len(_buffer))
+        ret = self.create(_buffer,l,"100")
+        return ret,"class:{}".format(l)

@@ -13,6 +13,7 @@ from .modules.filetypes import FileTypes
 from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
 from .modules.rtfparser import RTFParser
+from .modules.htmlparser import HTMLParser
 from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
 from .intell.qbsuspicious import QBSuspicious
@@ -79,6 +80,7 @@ class StaticAnalyzer:
         self.qbsu = QBSuspicious()
         self.dga = QBDGA()
         self.qbcv = QBCountriesviz()
+        self.htm = HTMLParser()
 
 
     def analyze(self,parsed):
@@ -126,10 +128,10 @@ class StaticAnalyzer:
             self.ofx.checkofficex(data)
         elif self.rtf.checkrtfsig(data):
             self.rtf.checkrtf(data)
+        elif self.htm.checkhtmlsig(data):
+            self.htm.checkhtml(data)
         else:
             self.fty.unknownfile(data)
-        if parsed.yara or parsed.full:
-            self.yar.checkwithyara(data,None)
         if parsed.language or parsed.full:
             self.qbla.checkwithstring(data)
         if parsed.patterns or parsed.full:
@@ -148,6 +150,8 @@ class StaticAnalyzer:
             self.LD.checkwithdetections(data)
         if parsed.mitre or parsed.full:
             self.qbm.checkwithmitre(data)
+        if parsed.yara or parsed.full:
+            self.yar.checkwithyara(data,None)
         if parsed.visualize or parsed.full:
             self.qb3.makeartifactsd3(data)
         if parsed.flags or parsed.full:
