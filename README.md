@@ -156,7 +156,7 @@ socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, lo
 
 ### Disclaimer
 - This project:
-    - Is a result of compiling many researches/studies, use it in researching only (If i missed a reference/dependency, please let me know!) 
+    - Is a result of compiling many researches/studies (If i missed a reference/dependency, please let me know!) 
     - Is NOT an anti malware project and does not quarantine or delete malicious files (If you are interested in anti malware project, contact me and i will explain what dependencies/libs need be re-written)
     - Generates large html objects (You may need to wait few seconds on them to be load)
     
