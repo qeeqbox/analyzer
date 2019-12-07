@@ -4,7 +4,6 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ### Analyze file, folder or buffer
 ```
 (Cmd) analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
-(Cmd) analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
 (Cmd) analyze --file /malware/BrRAT.apk --full --json --print
 (Cmd) analyze --folder /malware --full --json --open
 (Cmd) analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
