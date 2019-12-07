@@ -63,7 +63,6 @@ class QBAnalyzer(Cmd):
         self._analyze_parser.print_help()
         example = '''\nExamples:
     analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
-    analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
     analyze --file /malware/BrRAT.apk --full --json --print
     analyze --folder /malware --full --json --open
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
