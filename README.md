@@ -60,6 +60,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - BOM detection
 - Interacting analysis
 - Credential extractor
+- URL shorteners extraction
 - Linux
     - ELF information
     - API functions descriptions
