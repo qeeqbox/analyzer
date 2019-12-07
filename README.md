@@ -5,7 +5,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
 
 ### E.g. HTML Outputs
-- [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
+- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.html)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
 - [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
 - [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.html)
@@ -17,7 +17,16 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
 
 ### E.g. Output json
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
+- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
+- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.json)
+- [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.json)
+- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.json)
+- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/GoziBankerISFB.exe.json)
+- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/Downloader.pdf.json)
+- [PCAP-dump](https://bd249ce4.github.io/pages/dump.pcap.json)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.json)
+- [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.json)
+- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.json)
 
 ---
 
