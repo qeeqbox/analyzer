@@ -12,7 +12,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.html)
 - [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.html)
 - [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.html)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.docx.html)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.html)
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.html)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.html)
 
@@ -24,7 +24,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.json)
 - [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.json)
 - [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.json)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.docx.json)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.json)
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
