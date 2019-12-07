@@ -148,7 +148,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Whitelist
 - MS office module
 - Web detections
-- Machine learning modules (2019)
+- Machine learning modules (2020)
 
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
