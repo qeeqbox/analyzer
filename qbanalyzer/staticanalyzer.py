@@ -18,7 +18,7 @@ from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
 from .intell.qbsuspicious import QBSuspicious
 from .intell.qbimage import QBImage
-from .intell.qbintell import QBIntell
+from .intell.qbbehavior import QBBehavior
 from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
@@ -44,20 +44,17 @@ class StaticAnalyzer:
         '''
         initialize class, and all modules 
         '''
-        self.mit = MitreParser()
-        self.qbm = QBMitresearch(self.mit)
+        self.qbm = QBMitresearch(MitreParser)
         self.wpe = WindowsPe()
         self.elf = LinuxELF()
         self.mac = Macho()
         self.apk = ApkParser()
         self.bbl = BBParser()
         self.yar = YaraParser()
-        self.waf = QBWafDetect()
-        self.rpc = ReadPackets(self.waf)
-        self.qbi = QBImage()
-        self.hge = HtmlMaker(self.qbi)
+        self.rpc = ReadPackets(QBWafDetect)
+        self.hge = HtmlMaker(QBImage)
         self.epa = EmailParser()
-        self.qbt = QBIntell()
+        self.qbt = QBBehavior()
         self.qb3 = QBD3generator()
         self.qoc = QBOCRDetect()
         self.urs = QBURLSimilarity()
@@ -87,7 +84,7 @@ class StaticAnalyzer:
             self.pdf.checkpdf(data)
         elif self.wpe.checkpesig(data):
             self.wpe.getpedeatils(data)
-            if parsed.intel or parsed.full:
+            if parsed.behavior or parsed.full:
                 self.qbt.checkwithqbintell(data,"winapi.json")
             if parsed.xref or parsed.full:
                 self.qb3.makexref(data)
@@ -95,7 +92,7 @@ class StaticAnalyzer:
             self.elf.getelfdeatils(data)
             if parsed.xref or parsed.full:
                 self.qb3.makexref(data)
-            if parsed.intel or parsed.full:
+            if parsed.behavior or parsed.full:
                 self.qbt.checkwithqbintell(data,"linux.json")
         elif self.mac.checkmacsig(data):
             self.mac.getmachodeatils(data)
@@ -103,11 +100,11 @@ class StaticAnalyzer:
             self.mac.getdmgdeatils(data)
         elif self.apk.checkapksig(data):
             self.apk.analyzeapk(data)
-            if parsed.intel or parsed.full:
+            if parsed.behavior or parsed.full:
                 self.qbt.checkwithqbintell(data,"android.json")
         elif self.apk.checkdexsig(data):
             self.apk.analyzedex(data)
-            if parsed.intel or parsed.full:
+            if parsed.behavior or parsed.full:
                 self.qbt.checkwithqbintell(data,"android.json")
         elif self.bbl.checkbbsig(data):
             self.bbl.getbbdeatils(data)
@@ -125,6 +122,10 @@ class StaticAnalyzer:
             self.htm.checkhtml(data)
         else:
             self.fty.unknownfile(data)
+            if parsed.behavior or parsed.full:
+                self.qbt.checkwithqbintell(data,"winapi.json")
+                self.qbt.checkwithqbintell(data,"linux.json")
+                self.qbt.checkwithqbintell(data,"android.json")
         if parsed.language or parsed.full:
             self.qbla.checkwithstring(data)
         if parsed.patterns or parsed.full:

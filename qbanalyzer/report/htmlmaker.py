@@ -18,7 +18,7 @@ class HtmlMaker:
         if not self.templates.endswith(path.sep): self.templates = self.templates+path.sep
         if not path.isdir(self.templates): mkdir(self.templates)
         self.template = self.templates + "template.html"
-        self.qbi = qbimage
+        self.qbi = qbimage()
         self.getmoudles()
 
     @verbose(True,verbose_flag,None)

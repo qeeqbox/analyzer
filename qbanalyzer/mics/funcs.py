@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from ..logger.logger import logstring,verbose,verbose_flag
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack

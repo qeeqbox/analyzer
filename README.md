@@ -1,18 +1,8 @@
 # QBAnalyzer
 QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IOCs from file/dump into readable format.
 
-### Analyze file, folder or buffer
-```
-(Cmd) analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
-(Cmd) analyze --file /malware/BrRAT.apk --full --json --print
-(Cmd) analyze --folder /malware --full --json --open
-(Cmd) analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
-(Cmd) analyze --buffer "google.com bit.ly" --topurl --html --open
-(Cmd) analyze --buffer "google.com bit.ly" --full --json --print
-```
-
 ### Running
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/intro.gif)
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
 
 ### E.g. HTML Outputs
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
@@ -31,13 +21,10 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 
 ---
 
-### Backstory
-Back in 2018, I used to analyze many files and dumps using my old automated tools I developed in the past. The main tool called (QManager) that interacted with the rest of them through Pipes, APIs, Events sand RAW Files. The interaction happened in phases using a queue due to the variation and availability of some tools. Then, results were handled by a parser that piped structured and unstructured information into centralized databases. Finally, it informed me with the end of the process by sending a notification message. This worked just fine until recently when I wanted to implement some machine learning and few other features to the process. After a lot of researching I came to the conclusion that the best way is rewriting most of those old tools, and implement different opensource packages into modules. Then, have them compiled into one framework for easy management by researchers.
-
 ### Features
 - Runs locally and easy to maintain
 - Analyze full folder or individual file
-- Generates HTML and JSON as output
+- Generates HTML or JSON as output
 - Write your ideas under each output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
@@ -75,6 +62,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
     - Symbs extraction
     - MITRE artifacts detection
     - Xref detection
+    - Behavior detections
 - macOS
     - DMG extraction
     - Shell code detection
@@ -147,8 +135,8 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
 - ~~HTML module~~
 - ~~Refactoring modules v2~~
-- 
 - Web API
+- Whitelist
 - MS office module
 - Machine learning modules (2019)
 
@@ -161,10 +149,10 @@ Thank you for reaching out!! I have been getting requests to implement the follo
 - Cleaning up
 
 ### Depends on
-Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux/MacOS/Windows/Android Documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and a lot of researches.
+Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux/MacOS/Windows/Android Documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and a tons of researches.
 
 ### Libs
-socketserver, zope, codecs, simplejson, concurrent, pefile, xml, shlex, mmap, locale, pathlib, csv, hmac, token, queue, scapy, html, types, inspect, functools, nltk, site, genericpath, secrets, re, os, sre_parse, qbanalyzer, threading, shutil, mimetypes, struct, optparse, pickle, cffi, cryptography, bdb, urllib, plistlib, zipimport, tempfile, sre_compile, runpy, opcode, elftools, magic, uu, sqlite3, ctypes, chardet, ntpath, enum, argparse, array, codeop, datetime, selectors, heapq, distutils, logging, posix, pytesseract, requests, jinja2, contextlib, cmd, collections, email, calendar, decimal, M2Crypto, unittest, swig_runtime_data4, tokenize, json, sitecustomize, grp, sysconfig, random, six, subprocess, pwd, ftplib, reprlib, ordlookup, ssdeep, cgi, PIL, ssl, sre_constants, gzip, apport_python_hook, tld, typing, warnings, platform, getopt, pyexpat, zlib, abc, idna, stringprep, select, cython_runtime, certifi, multiprocessing, keyword, r2pipe, sys, pdb, regex, resource, code, pydoc, copyreg, difflib, urllib3, uuid, ast, itertools, string, signal, fnmatch, xmlrpc, quopri, ipaddress, numbers, numpy, weakref, importlib, bz2, math, asyncio, binascii, traceback, encodings, pycparser, lzma, http, errno, glob, asn1crypto, gc, fcntl, bisect, unicodedata, textwrap, builtins, macholib, imp, marshal, pprint, yara, markupsafe, hashlib, linecache, posixpath, socket, base64, time, OpenSSL, asyncore, atexit, fractions, dis, copy, zipfile, pkgutil, gettext, webbrowser, netrc
+bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, markupsafe, quopri, platform, pkgutil, random, tldextract, typing, swig_runtime_data4, copyreg, glob, difflib, code, zipimport, stat, time, secrets, optparse, urllib, xml, M2Crypto, fractions, pydoc, PIL, abc, elftools, calendar, atexit, ctypes, datetime, fcntl, sre_constants, runpy, uu, sqlite3, sitecustomize, distutils, cgi, lzma, site, email, certifi, requests_file, jinja2, pycparser, selectors, unicodedata, pytesseract, gettext, encodings, nltk, select, apport_python_hook, linecache, itertools, tld, textwrap, cryptography, xmlrpc, zipfile, mmap, pefile, ftplib, socketserver, asyncio, asn1crypto, cython_runtime, uuid, bz2, webbrowser, chardet, functools, ipaddress, enum, hashlib, tempfile, queue, pathlib, base64, ordlookup, copy, getopt, scapy, ast, codecs, posix, marshal, urllib3, sre_parse, netrc, heapq, bs4, cffi, builtins, pickle, errno, grp, os, fnmatch, genericpath, qbanalyzer, shutil, magic, string, re, signal, decimal, pkg_resources, inspect, pdb, stringprep, binascii, argparse, sre_compile, http, opcode, plistlib, six, collections, gc, posixpath, ssl, asyncore, numpy, bisect, simplejson, ntpath, numbers, macholib, token, keyword, imp, traceback, zlib, logging, soupsieve, yara, requests, contextvars, ssdeep, pprint, sysconfig, tokenize, gzip, struct, csv, array, idna, shlex, warnings, dis, unittest, html, threading, weakref, locale, socket, json, resource, contextlib, hmac, reprlib, concurrent, types, subprocess, mimetypes
 
 ### Disclaimer
 - This project:

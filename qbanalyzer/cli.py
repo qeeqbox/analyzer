@@ -14,7 +14,7 @@ print("                                                                         
 print(" _____   _____   _____  __   _  _____        \\   / ______  ______  _____   ")
 print("|     | |_____] |_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
 print("|____\\| |_____] |     | |  \\_| |     | |_____  |   /_____ |______ |    \\")
-print("      \\ V.01.09                                |                         ")
+print("      \\ {}                           |                        ".format(__V__))
 print("                                   https://github.com/bd249ce4/QBAnalyzer")
 print("                                                                            ")
 
@@ -27,7 +27,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupreq.add_argument('--buffer', help="input buffer")
     _analyze_parsergroupdef = _analyze_parser.add_argument_group('Optional arguments')
     _analyze_parsergroupdef.add_argument('--output', help="path of output folder", required=False)
-    _analyze_parsergroupdef.add_argument('--intel',action='store_true', help="check with generic detections", required=False)
+    _analyze_parsergroupdef.add_argument('--behavior',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
     _analyze_parsergroupdef.add_argument('--yara',action='store_true', help="analyze with yara module (Disable this for big files)", required=False)
     _analyze_parsergroupdef.add_argument('--language',action='store_true', help="analyze words against english language", required=False)
@@ -87,7 +87,7 @@ class QBAnalyzer(Cmd):
             elif parsed.buffer:
                 self.do_buffer(parsed)
         else:
-            logstring("File or Folder or Buffer is missing","Red")
+            logstring("File, Folder or Buffer is missing","Red")
 
     def do_file(self,parsed):
         if not path.exists(parsed.file):

@@ -9,8 +9,6 @@ from zlib import decompress
 from xml.dom.minidom import parseString
 from xml.etree.cElementTree import XML as cetXML
 
-#this module need some optimization
-
 class Officex:
     @verbose(True,verbose_flag,"Starting Officex")
     def __init__(self):

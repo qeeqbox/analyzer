@@ -1,4 +1,4 @@
-__version__G__ = "(G)bd249ce4"
+__G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from re import compile, findall,I

@@ -6,8 +6,8 @@ from codecs import open as copen
 from json import loads
 from os import mkdir, path
 
-class QBIntell:
-    @verbose(True,verbose_flag,"Starting QBIntell")
+class QBBehavior:
+    @verbose(True,verbose_flag,"Starting QBBehavior")
     def __init__(self):
         '''
         initialize class and make detections path 
@@ -46,8 +46,12 @@ class QBIntell:
         '''
         start checking logic and setup words and wordsstripped
         '''
-        data["Intell"] = {"API":[],
-                          "_API":["Matched","Required","Behavior","Detected"]}
+        if "Behavior" not in data:
+            data["Behavior"] = {"Intell":[],
+                              "_Intell":["Matched","Required","Behavior","Detected"]}
+        temp = []
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.compileandfind(data["Intell"]["API"],self.intell+filename)
+        self.compileandfind(temp,self.intell+filename)
+        if len(temp) > 0:
+            data["Behavior"]["Intell"].extend(temp)

@@ -17,7 +17,7 @@ class ReadPackets:
         initialize class
         '''
         self.ip = compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])',I)
-        self.waf = waf
+        self.waf = waf()
 
     @verbose(True,verbose_flag,None)
     def getlayers(self,packet) -> str:

@@ -7,16 +7,16 @@ from nltk.tokenize import word_tokenize
 from json import loads
 from os import mkdir, path
 
-class QBMitresearch:
+class QBMitresearch():
     @verbose(True,verbose_flag,"Starting QBMitresearch")
-    def __init__(self,mitre):
+    def __init__(self,MitreParser):
         '''
         initialize class, make mitrefiles path
         '''
+        self.mitre = MitreParser()
         self.mitrepath = path.abspath(path.join(path.dirname( __file__ ),'mitrefiles'))
         if not self.mitrepath.endswith(path.sep): self.mitrepath = self.mitrepath+path.sep
         if not path.isdir(self.mitrepath): mkdir(self.mitrepath)
-        self.mitre = mitre
         self.parsediocs = self.mitrepath+"parsediocs.json"
 
     @verbose(True,verbose_flag,None)

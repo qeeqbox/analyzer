@@ -10,7 +10,6 @@ from datetime import datetime
 from M2Crypto import BIO, m2, SMIME, X509
 
 class WindowsPe:
-
     @verbose(True,verbose_flag,"Starting WindowsPe")
     def __init__(self):
         pass
