@@ -34,7 +34,6 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Runs locally and easy to maintain
 - Analyze full folder or individual file
 - Generates HTML or JSON as output
-- Write your ideas under each output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
