@@ -123,7 +123,7 @@ class HTMLParser():
         '''
         check if file is html/htm
         '''
-        if data["FilesDumps"][data["Location"]["File"]].lower()[:4] == b"<htm":
+        if data["FilesDumps"][data["Location"]["File"]].lower()[:4] == b"<htm" or data["FilesDumps"][data["Location"]["File"]].lower().startswith(b"<!doctype htm"):
             return True
         #if bool(BeautifulSoup(data["FilesDumps"][data["Location"]["File"]].lower(), "html.parser").find()):
         #    return True

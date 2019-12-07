@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.funcs import iptolong
+from ..mics.funcs import iptolong,checkurl
 from ..intell.qbdescription import adddescription
 from re import I, compile, findall
 from nltk.corpus import words
@@ -16,7 +16,7 @@ class QBPatterns:
         initialize class and make refs path that contains References.db
         get english words from corpus and open connection with References.db
         '''
-        self.links = compile(r"((http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9_\,\'/\+&amp;%#\$\?\=~\.\-])*)",I)
+        self.links = compile(r"((?:(http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
         self.ip4 = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
         self.ip6 = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
         self.email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
@@ -34,7 +34,8 @@ class QBPatterns:
         x = list(set(findall(self.links,self.wordsstripped)))
         if len(x) > 0:
             for _ in x:
-                _List.append(_[0])
+                if (checkurl(_[0])):
+                    _List.append(_[0])
         for x in set(_List):
             _data.append({"Count":_List.count(x),"Link":x})
 
@@ -159,6 +160,7 @@ class QBPatterns:
         self.checkemail(data["Patterns"]["EMAILS"])
         self.checktags(data["Patterns"]["TAGS"])
         self.checkhex(data["Patterns"]["HEX"])
+        adddescription("URLshorteners",data["Patterns"]["LINKS"],"Link")
         adddescription("DNS",data["Patterns"]["IP4S"],"IP")
         adddescription("IPs",data["Patterns"]["IP4S"],"IP")
         adddescription("IPPrivate",data["Patterns"]["IP4S"],"IP")

@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from .logger.logger import logstring,verbose,verbose_flag
-from .mics.funcs import getwords, getwordsmultifiles
+from .mics.funcs import getwords, getwordsmultifiles,openinbrowser
 from .modules.linuxelf import LinuxELF
 from .modules.macho import Macho
 from .modules.windowspe import WindowsPe
@@ -27,23 +27,16 @@ from .intell.qbcreditcards import QBCreditcards
 from .intell.qbpatterns import QBPatterns
 from .intell.qbdga import QBDGA
 from .intell.qbcountriesviz import QBCountriesviz
+from .intell.qburlsimilarity import QBURLSimilarity
 from .qbdetect.loaddetections import LoadDetections
-from .modules.urlsimilarity import URLSimilarity
 from .report.htmlmaker import HtmlMaker
+from .report.jsonmaker import JSONMaker
 from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
-from webbrowser import open_new_tab
 from os import path
 from sys import getsizeof
 from gc import collect
 from pickle import dump as pdump,HIGHEST_PROTOCOL
-from json import JSONEncoder,dump as jdump
-
-class ComplexEncoder(JSONEncoder):
-    def default(self, obj):
-        if not isinstance(obj, str):
-            return "Object type {} was removed..".format(type(obj))
-        return JSONEncoder.default(self, obj)
 
 class StaticAnalyzer:
     @verbose(True,verbose_flag,"Starting StaticAnalyzer")
@@ -67,7 +60,7 @@ class StaticAnalyzer:
         self.qbt = QBIntell()
         self.qb3 = QBD3generator()
         self.qoc = QBOCRDetect()
-        self.urs = URLSimilarity()
+        self.urs = QBURLSimilarity()
         self.fty = FileTypes()
         self.pdf = PDFParser()
         self.ofx = Officex()
@@ -81,7 +74,7 @@ class StaticAnalyzer:
         self.dga = QBDGA()
         self.qbcv = QBCountriesviz()
         self.htm = HTMLParser()
-
+        self.JSO = JSONMaker()
 
     def analyze(self,parsed):
         '''
@@ -161,16 +154,17 @@ class StaticAnalyzer:
         with open('temp.pickle', 'wb') as handle:
             pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
-        self.hge.rendertemplate(data,None,None)
-        if path.exists(data["Location"]["html"]):
-            logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
-            self.openinbrowser(data["Location"]["html"])
-        if parsed.json or parsed.full:
-            with open(data["Location"]["json"], 'w') as fp:
-                jdump(data, fp, cls=ComplexEncoder)
-
-    def openinbrowser(self,_path):
-        '''
-        open html file in default browser
-        '''
-        open_new_tab(_path)
+        if parsed.html:
+            self.hge.rendertemplate(data,None,None)
+            if path.exists(data["Location"]["html"]):
+                logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
+                if parsed.open:
+                    openinbrowser(data["Location"]["html"])
+        if parsed.json:
+            self.JSO.createjson(data)
+            if path.exists(data["Location"]["json"]):
+                logstring("Generated Html file {}".format(data["Location"]["json"]),"Yellow")
+                if parsed.open:
+                    openinbrowser(data["Location"]["json"])
+                if parsed.print:
+                    self.JSO.printjson(data)

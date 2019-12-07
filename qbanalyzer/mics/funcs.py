@@ -4,6 +4,29 @@ from struct import pack,unpack
 from re import findall
 from collections import Counter
 from math import log2
+from tld import get_fld,get_tld
+from webbrowser import open_new_tab
+
+@verbose(True,verbose_flag,None)
+def openinbrowser(_path):
+    '''
+    open html file in default browser
+    '''
+    open_new_tab(_path)
+
+@verbose(True,verbose_flag,None)
+def checkurl(url):
+    if not url.startswith(("http://","https://","ftp://")):
+        url = "http://"+url
+    if get_tld(url, fail_silently=True):
+        root = None
+        try:
+            root = get_fld(url,fix_protocol=True)
+        except:
+            pass
+        if root:
+            return True
+    return False
 
 @verbose(True,verbose_flag,None)
 def getentropy(data) -> str:

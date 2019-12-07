@@ -53,6 +53,10 @@ def adddescription(_type,data,keyword):
                         result = cursor.execute('SELECT * FROM AndroidPermissions WHERE permission= ?',(word.split("android.permission.")[1],)).fetchone()
                         if result:
                             description = result[3]
+                    elif _type == "URLshorteners":
+                        result = cursor.execute('SELECT * FROM URLshorteners WHERE URL= ?',(word,)).fetchone()
+                        if result:
+                            description = result[2]
                     elif _type == "Ports":
                         result = cursor.execute('SELECT * FROM Ports WHERE port= ?',(word,)).fetchone()
                         if result:

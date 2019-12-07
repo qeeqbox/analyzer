@@ -1,3 +1,9 @@
+#### 2019.V.01.09
+- Fixed bugs
+- Added URL Shortener
+- Added interacting analysis!!
+- JSON output clean up
+
 #### 2019.V.01.08
 - Fixed bugs
 - Added html parser

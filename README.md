@@ -53,6 +53,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - Encryption patterns (base64, md5, sha1..) detection
 - DGA (domain generation algorithm) patterns detection 
 - BOM detection
+- Interacting analysis
 - Credential extractor
 - Linux
     - ELF information
@@ -136,6 +137,7 @@ Back in 2018, I used to analyze many files and dumps using my old automated tool
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
 - ~~HTML module~~
 - ~~Refactoring modules v2~~
+- 
 - Web API
 - MS office module
 - Machine learning modules (2019)
