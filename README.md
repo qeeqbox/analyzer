@@ -98,7 +98,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Big functions identification 
     - Cross references detection
     - API Behavior detection
-- Iphone
+- IPhone
     - IPA information
 - BlackBerry (COD)
     - COD information
