@@ -189,5 +189,4 @@ sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/l
 ```
 
 ---
-
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png)
+<p align="center"> <img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png"></p>
