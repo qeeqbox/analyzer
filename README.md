@@ -19,7 +19,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
 
 ### E.g. Output json
-- [putty-clean](https://bd249ce4.github.io/pages/2019/putty.json.html)
+- [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.json)
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.json)
 - [Android-Ransom](https://bd249ce4.github.io/pages/2019/sexSimulator.apk.json)
