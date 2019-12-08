@@ -65,10 +65,10 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - ELF information
     - API functions descriptions
     - System commands descriptions
-    - Secitons descriptions
+    - Sections descriptions
     - Lib descriptions
     - Encrypted section detection
-    - Symbs extraction
+    - Symbols extraction
     - MITRE artifacts detection
     - Xref detection
     - Behavior detections
@@ -81,9 +81,9 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Windows
     - PE information
     - Encrypted section detection
-    - Secitons descriptions
+    - Sections descriptions
     - DLL descriptions
-    - Symbs extraction
+    - Symbols extraction
     - Signature extraction
     - API functions descriptions
     - PE ASLR, DEP, SEH and CFG detection
@@ -97,9 +97,9 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Manifest descriptions
     - Intent descriptions
     - Resources extraction
-    - Symbs extraction
+    - Symbols extraction
     - Classes extraction
-    - Big functinon identification 
+    - Big functions identification 
     - Xref detection
     - API Behavior detections
 - Iphone
