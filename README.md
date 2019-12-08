@@ -31,35 +31,33 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ---
 
 ### Features
-- Runs locally and easy to maintain
-- Analyze full folder or individual file
+- Runs locally
+- Analyze a buffer, individual file or full folder
+- Interacting analysis (Session is saved)
 - Generates HTML or JSON as output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
-- OCR words detections (!)
+- OCR words detections
 - IPS countries description
-- IPS reserved hints
-- World IPS countries image
-- World IPS countries flags
-- Ports description
+- IPS hints
+- Ports hints
+- World IPS countries image and flags
 - DNS servers description (Top servers)
 - Websites similarity detection (Top 10000)
 - Artifacts force directed image
-- Xrefs force directed image
-- Xrefs count table
+- Cross references force directed image and table
 - MITRE att&ck tools detection (could be FP)
 - MITRE att&ck patterns detection (could be FP)
-- Similarity image
-- Yara module and yara rules included
-- JSON editable records 
-- URL/EMAIL/TEL/Tags common patterns extraction
+- Similarity image divided to classes
+- YARA module and YARA rules included
+- YARA module includes conditions
+- URL/EMAIL/TEL/Tags patterns extraction
 - Credit cards patterns extraction
-- Encryption patterns (base64, md5, sha1..) detection
-- DGA (domain generation algorithm) patterns detection 
-- BOM detection
-- Interacting analysis
-- Credential extractor
+- Credential patterns extraction
+- Encryption patterns (base64, md5, sha1..) extraction
+- DGA (Domain Generation Algorithm) patterns extraction 
+- BOM (Byte Order Mark) detection
 - URL shorteners extraction
 - Linux
     - ELF information
@@ -70,7 +68,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Encrypted section detection
     - Symbols extraction
     - MITRE artifacts detection
-    - Xref detection
+    - Cross references detection
     - Behavior detections
 - macOS
     - DMG extraction
@@ -85,12 +83,12 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - DLL descriptions
     - Symbols extraction
     - Signature extraction
-    - API functions descriptions
+    - API descriptions
     - PE ASLR, DEP, SEH and CFG detection
     - MITRE artifacts detection
     - API Behavior detections (DLL injection, Process Hollowing, Process Doppelganging etc..)
-    - Xref detection
-    - icon extraction
+    - Cross references detection
+    - Icon extraction
 - Android
     - APK information
     - DEX information
@@ -133,6 +131,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Archives
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
+    - Encrypted archives 
 - HTML
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
