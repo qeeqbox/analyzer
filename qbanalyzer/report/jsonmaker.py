@@ -27,7 +27,7 @@ class JSONMaker:
         '''
         for x in data:
             for key in data[x].copy():
-                if key == "GRAPH" or key == "Flags":
+                if key == "GRAPH" or key == "Flags" or key == "ICONS":
                     del data[x][key]
                 elif not key.startswith("_"):
                     if len(data[x][key]) == 0:
