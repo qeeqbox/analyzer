@@ -1,5 +1,10 @@
 # QBAnalyzer
-QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format.
+<table border="0" style="border: none;">
+ <tr>
+    <td> QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format. </td>
+    <td><img src="https://img.shields.io/badge/ubuntu-passed-success.svg"><br><img src="https://img.shields.io/badge/docker-passed-success.svg"></td>
+ </tr>
+</table>
 
 ### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
@@ -28,6 +33,8 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
+### Status
+[![Generic badge](https://img.shields.io/badge/ubuntu-passed-success.svg)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/docker-passed-success.svg)](https://shields.io/)
 ---
 
 ### Features
