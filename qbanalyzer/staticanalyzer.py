@@ -18,6 +18,7 @@ from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
 from .intell.qbsuspicious import QBSuspicious
 from .intell.qbimage import QBImage
+from .intell.qbicons import QBIcons
 from .intell.qbbehavior import QBBehavior
 from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
@@ -52,7 +53,7 @@ class StaticAnalyzer:
         self.bbl = BBParser()
         self.yar = YaraParser()
         self.rpc = ReadPackets(QBWafDetect)
-        self.hge = HtmlMaker(QBImage)
+        self.hge = HtmlMaker(QBImage,QBIcons)
         self.epa = EmailParser()
         self.qbt = QBBehavior()
         self.qb3 = QBD3generator()
@@ -156,7 +157,7 @@ class StaticAnalyzer:
             pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         if parsed.html:
-            self.hge.rendertemplate(data,None,None)
+            self.hge.rendertemplate(data,None,None,parsed)
             if path.exists(data["Location"]["html"]):
                 logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
                 if parsed.open:

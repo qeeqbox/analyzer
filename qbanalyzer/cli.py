@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.09"
+__V__ = "2019.V.01.10"
 
 from .staticanalyzer import StaticAnalyzer
 from .logger.logger import logstring,verbose,verbose_flag
@@ -45,8 +45,10 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--plugins',action='store_true', help="scan with external plugins", required=False)
     _analyze_parsergroupdef.add_argument('--visualize',action='store_true', help="visualize some artifacts", required=False)
     _analyze_parsergroupdef.add_argument('--flags',action='store_true', help="add countries flags to html", required=False)
+    _analyze_parsergroupdef.add_argument('--icons',action='store_true', help="add executable icons to html", required=False)
     _analyze_parsergroupdef.add_argument('--print',action='store_true', help="print output to terminal", required=False)
     _analyze_parsergroupdef.add_argument('--worldmap',action='store_true', help="add world map to html", required=False)
+    _analyze_parsergroupdef.add_argument('--image',action='store_true', help="add similarity image to html", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
 
     def __init__(self):
@@ -90,30 +92,30 @@ class QBAnalyzer(Cmd):
             logstring("File, Folder or Buffer is missing","Red")
 
     def do_file(self,parsed):
-        if not path.exists(parsed.file):
-            logstring("Target File/dump is wrong..","Red")
-        else:
+        if path.exists(parsed.file) and path.isfile(parsed.file):
             self.san.analyze(parsed)
+        else:
+            logstring("Target File/dump is wrong..","Red")
 
     def do_folder(self,parsed):
-        if not path.exists(parsed.folder):
-            logstring("Target folder is wrong..","Red")
-        else:
+        if path.exists(parsed.folder) and path.isdir(parsed.folder):
             for f in listdir(parsed.folder):
                 fullpath = path.join(parsed.folder, f)
                 if path.isfile(fullpath):
                     parsed.file = fullpath
                     self.san.analyze(parsed)
+        else:
+            logstring("Target folder is wrong..","Red")
 
     def do_buffer(self,parsed):
-        if parsed.buffer == "":
-            logstring("Target buffer is empty..","Red")
-        else:
+        if parsed.buffer != "":
             tempname = NamedTemporaryFile().name
             with open(tempname,"w") as tempfile:
                 tempfile.write(parsed.buffer)
             parsed.file = tempname
             self.san.analyze(parsed)
+        else:
+            logstring("Target buffer is empty..","Red")
 
     def do_exit(self, line):
         return True

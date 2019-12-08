@@ -10,7 +10,7 @@ from os import mkdir, path
 
 class HtmlMaker:
     @verbose(True,verbose_flag,"Starting HtmlMaker")
-    def __init__(self,qbimage):
+    def __init__(self,qbimage,qbicons):
         '''
         initialize class
         '''
@@ -18,7 +18,8 @@ class HtmlMaker:
         if not self.templates.endswith(path.sep): self.templates = self.templates+path.sep
         if not path.isdir(self.templates): mkdir(self.templates)
         self.template = self.templates + "template.html"
-        self.qbi = qbimage()
+        self.qbim = qbimage()
+        self.qbic = qbicons()
         self.getmoudles()
 
     @verbose(True,verbose_flag,None)
@@ -69,7 +70,7 @@ class HtmlMaker:
             </thead>
             <tbody>
                    <tr>
-                        <td><img src="{{ data }}" /></td>
+                        <td><img class="fullsize" src="{{ data }}" /></td>
                     </tr>
             </tbody>
         </table>
@@ -77,6 +78,31 @@ class HtmlMaker:
         if textarea: temp += self.addtextarea()
         else: temp += self.emptytextarea()
         result = Template(temp).render(header=header,data=data)
+        return result
+
+    @verbose(True,verbose_flag,None)
+    def makeiconstablebase64(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render similarity image inside html table
+        '''
+        temp = """
+        <div class="tablewrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="1">{{ header }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                   <tr>
+                        <td class="icons">{% for item in data %}<img src="{{ item[0] }}" height="{{ item[1][0] }}" width="{{ item[1][1] }}"/>{% endfor %}</td>
+                    </tr>
+            </tbody>
+        </table>
+        </div>"""
+        if textarea: temp += self.addtextarea()
+        else: temp += self.emptytextarea()
+        result = Template(temp).render(header=header,data=data,size=len(data))
         return result
 
     @verbose(True,verbose_flag,None)
@@ -412,7 +438,7 @@ class HtmlMaker:
         return result
 
     @verbose(True,verbose_flag,"Making file tables")
-    def maketable(self,data,_path) -> str:
+    def maketable(self,data,_path,parsed) -> str:
         '''
         making tables of dict data
         '''
@@ -443,41 +469,40 @@ class HtmlMaker:
                 except:
                     pass
 
-        
-        keys = ["XREFS","REFS"]
-
-        for key in keys:
-            try:
+        if parsed.xref or parsed.full:
+            for key in ("XREFS","REFS"):
                 if key in data and "GRAPH" in data[key]:
                     if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
                         table +=self.makerefmapimage(data[key]["GRAPH"],key,key+"d3map",None,False,None)
-            except:
-                pass
 
-        if "Flags" in data:
-            try:
+        if parsed.flags or parsed.full:
+            if "Flags" in data:
                 if len(data["Flags"]["Flags"]) > 0:
                     table +=self.makeflags(data["Flags"]["Flags"],"Flags",None,False,None)
-            except:
-                pass
-    
-        if "Codes" in data:
-            try:
+
+        if parsed.worldmap or parsed.full:
+            if "Codes" in data:
                 if len(data["Codes"]["Codes"]) > 0:
                     table +=self.makeworldimage(data["Codes"]["Codes"],"Worldmap","Worldmap",None,False,None)
-            except:
-                pass
-        out,c = self.qbi.createimage(data["FilesDumps"][_path])
-        table += self.makeimagetablebase64(out,c,None,False,None)
+
+        if parsed.icons or parsed.full:
+            if "ICONS" in data:
+                if len(data["ICONS"]["ICONS"]) > 0:
+                    out = self.qbic.createicons(data["ICONS"]["ICONS"])
+                    table += self.makeiconstablebase64(out,"ICONS",None,False,None)                    
+
+        if parsed.image or parsed.full:
+            out,c = self.qbim.createimage(data["FilesDumps"][_path])
+            table += self.makeimagetablebase64(out,c,None,False,None)
         return table
 
     @verbose(True,verbose_flag,None)
-    def rendertemplate(self,data,header,footer):
+    def rendertemplate(self,data,header,footer,parsed):
         '''
         start making tables and save them into a html file
         '''
         footer = 'QBAnalyzer∞ generated this report at {} on {} - {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),platform(),self.d)
-        table = self.maketable(data,data["Location"]["File"])
+        table = self.maketable(data,data["Location"]["File"],parsed)
         table = "\n".join([line.rstrip() for line in table.splitlines() if line.strip()])
         with open(self.template) as file_:
             Template(file_.read()).stream(title=data["Details"]["Properties"]["md5"],content=table,footer=footer).dump(data["Location"]["html"])

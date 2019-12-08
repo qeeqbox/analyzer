@@ -5,19 +5,28 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
 
 ### E.g. HTML Outputs
-- [Linux-Xorddos](https://bd249ce4.github.io/pages/Xorddos.html)
-- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/BrRAT.apk.html)
-- [Android-Ransom](https://bd249ce4.github.io/pages/sexSimulator.apk.html)
-- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/BundloreAdware.dmg.html)
-- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/GoziBankerISFB.exe.html)
-- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/Downloader.pdf.html)
-- [PCAP-dump](https://bd249ce4.github.io/pages/dump.pcap.html)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/officejsdropper.docx.html)
-- [RTF-Downloader](https://bd249ce4.github.io/pages/f9boo3.doc.html)
-- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/Shaderansomwaremalspam.eml.html)
+- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.html)
+- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.html)
+- [Android-Ransom](https://bd249ce4.github.io/pages/2019/sexSimulator.apk.html)
+- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/2019/BundloreAdware.dmg.html)
+- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.html)
+- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.html)
+- [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.html)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.html)
+- [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.html)
+- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.html)
 
 ### E.g. Output json
-![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/json.gif)
+- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
+- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.json)
+- [Android-Ransom](https://bd249ce4.github.io/pages/2019/sexSimulator.apk.json)
+- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/2019/BundloreAdware.dmg.json)
+- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.json)
+- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.json)
+- [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.json)
+- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.json)
+- [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
+- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
 ---
 
@@ -25,7 +34,6 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Runs locally and easy to maintain
 - Analyze full folder or individual file
 - Generates HTML or JSON as output
-- Write your ideas under each output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
@@ -52,6 +60,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - BOM detection
 - Interacting analysis
 - Credential extractor
+- URL shorteners extraction
 - Linux
     - ELF information
     - API functions descriptions
@@ -138,7 +147,8 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Web API
 - Whitelist
 - MS office module
-- Machine learning modules (2019)
+- Web detections
+- Machine learning modules (2020)
 
 ### Update
 Thank you for reaching out!! I have been getting requests to implement the following:
@@ -176,3 +186,7 @@ python3 -m qbanalyzer.cli
 git clone https://github.com/bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
 ```
+
+---
+
+![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png)

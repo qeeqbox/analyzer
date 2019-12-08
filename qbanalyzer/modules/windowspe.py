@@ -171,6 +171,7 @@ class WindowsPe:
         '''
         manifest = ""
         _list = []
+        _icons = []
         if hasattr(pe, "DIRECTORY_ENTRY_RESOURCE"):
             for resource_type in pe.DIRECTORY_ENTRY_RESOURCE.entries:
                 if resource_type.name is not None:
@@ -197,7 +198,9 @@ class WindowsPe:
                                                     "MD5":md5(resourcedata).hexdigest(),
                                                     "Sig":sig,
                                                     "Description":""})
-        return _list,manifest
+                                if name == "RT_ICON":
+                                    _icons.append(resourcedata)
+        return _list,manifest,_icons
 
     @verbose(True,verbose_flag,None)
     def getCharacteristics(self,pe) -> dict:
@@ -265,12 +268,12 @@ class WindowsPe:
                         "_Exported functions":["Dll","Function","Description"],
                         "_Debug":["Name","Description"],
                         "_Manifest":""}
+        data["ICONS"] = {"ICONS":[]}
         pe = PE(data["Location"]["File"])
         ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
         section = self.findentrypointfunction(pe,ep)
         sig = section.get_data(ep, 12)
         singinhex = "".join("{:02x}".format(x) for x in sig)
-        #self.getdebug(pe)
         data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
                                     "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
                                     "Entrypoint Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
@@ -283,7 +286,7 @@ class WindowsPe:
         data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
         data["PE"]["Sections"] = self.getsections(pe)
         data["PE"]["Dlls"] = self.getdlls(pe)
-        data["PE"]["Resources"],data["PE"]["Manifest"] = self.getrecourse(pe)
+        data["PE"]["Resources"],data["PE"]["Manifest"],data["ICONS"]["ICONS"] = self.getrecourse(pe)
         data["PE"]["Imported functions"] = self.getimportedfunctions(pe)
         data["PE"]["Exported functions"] = self.getexportedfunctions(pe)
         adddescription("WinApis",data["PE"]["Imported functions"],"Function")

@@ -1,3 +1,7 @@
+#### 2019.V.01.10
+- Fixed bugs
+- Added Icon extraction
+
 #### 2019.V.01.09
 - Fixed bugs
 - Added URL Shortener
