@@ -1,16 +1,12 @@
 __G__ = "(G)bd249ce4"
 
-from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger
+from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
 from sys import stdout
+from os import path,mkdir
 
-verbose_flag = False
-
-getLogger("scapy.runtime").setLevel(ERROR)
-getLogger("requests").setLevel(WARNING)
-getLogger("urllib3").setLevel(WARNING)
-getLogger("pytesseract").setLevel(WARNING)
-getLogger("PIL").setLevel(WARNING)
-getLogger("chardet").setLevel(WARNING)
+log,verbose_flag = None, None
+if log == None:log = getLogger("qbanalyzerlogger")
+if verbose_flag == None:verbose_flag = False
 
 class colors:
     Restore = '\033[0m'
@@ -50,13 +46,21 @@ def verbose(OnOff=False,Verb=False,str=None):
         return wrapper
     return decorator
 
-#def exceptionhook(exc_type, exc_value, exc_traceback):
-#    error(colors.Red + "Uncaught exception" + colors.Restore,exc_info=(exc_type, exc_value, exc_traceback))
-#excepthook = exceptionhook
-
-log = getLogger()
-log.setLevel(DEBUG)
-formatter = Formatter('%(asctime)s %(message)s')
-SH = StreamHandler(stdout)
-SH.setFormatter(formatter)
-log.addHandler(SH)
+def setuplogger():
+    loggerpath = path.abspath(path.join(path.dirname( __file__ ),'logs'))
+    if not loggerpath.endswith(path.sep): loggerpath = loggerpath+path.sep
+    if not path.isdir(loggerpath): mkdir(loggerpath)
+    getLogger("scapy.runtime").setLevel(ERROR)
+    getLogger("requests").setLevel(WARNING)
+    getLogger("urllib3").setLevel(WARNING)
+    getLogger("pytesseract").setLevel(WARNING)
+    getLogger("PIL").setLevel(WARNING)
+    getLogger("chardet").setLevel(WARNING)
+    log.setLevel(DEBUG)
+    format = Formatter('%(asctime)s %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
+    shandler = StreamHandler(stdout)
+    shandler.setFormatter(format)
+    log.addHandler(shandler)
+    fhandler = handlers.RotatingFileHandler(loggerpath+"alllogs", maxBytes=(100*1024*1024), backupCount=3)
+    fhandler.setFormatter(format)
+    log.addHandler(fhandler)

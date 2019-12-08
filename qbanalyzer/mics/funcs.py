@@ -95,11 +95,15 @@ def getwords(data,_path) -> (list,str):
     wordsinsensitive = []
     wordssensitive = []
     wordsstripped = ""
-    words = findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][_path])
+    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
+    if encoding == "utf-16":
+        words = findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][_path])
+    else:
+        words = findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][_path])
     for x in words:
         try:
-            wordssensitive.append(x.decode('utf-8',errors="ignore"))
-            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
+            wordssensitive.append(x.decode(encoding,errors="ignore"))
+            wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
         except:
             pass
     wordsstripped = '\n'+'\n'.join(wordsinsensitive) + '\n'
@@ -116,16 +120,19 @@ def getwordsmultifiles(data,arr) -> (list,str):
     wordsstripped = ""
     wordsinsensitive = []
     wordssensitive = []
+    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
     for x in arr:
-        #if x["Path"].endswith(".xml"):
         try:
-            words.extend(findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][x["Path"]]))
+            if encoding == "utf-16":
+                words.extend(findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][x["Path"]]))
+            else:
+                words.extend(findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][x["Path"]]))
         except:
             pass
     for x in words:
         try:
-            wordssensitive.append(x.decode('utf-8',errors="ignore"))
-            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
+            wordssensitive.append(x.decode(encoding,errors="ignore"))
+            wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
         except:
             pass
     wordsstripped = '\n'.join(wordsinsensitive)
@@ -142,10 +149,14 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
     wordsstripped = ""
     wordsinsensitive = []
     wordssensitive = []
+    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
     for x in arr:
         #if x["Path"].endswith(".xml"):
         try:
-            words.extend(findall(b"[\x20-\x7e]{4,}",x))
+            if encoding == "utf-16":
+                words.extend(findall(b"[\x20-\x7e\x00]{4,}",x))
+            else:
+                words.extend(findall(b"[\x20-\x7e]{4,}",x))
         except:
             pass
     for x in words:

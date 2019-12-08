@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.10"
+__V__ = "2019.V.01.11"
 
 from .staticanalyzer import StaticAnalyzer
-from .logger.logger import logstring,verbose,verbose_flag
+from .logger.logger import logstring,verbose,verbose_flag,setuplogger
 from cmd import Cmd
 from os import path,listdir
 from argparse import ArgumentParser
@@ -19,14 +19,14 @@ print("                                   https://github.com/bd249ce4/QBAnalyzer
 print("                                                                            ")
 
 class QBAnalyzer(Cmd):
+    setuplogger()
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
-    _analyze_parsergroupreq = _analyze_parser.add_argument_group('Required arguments')
+    _analyze_parsergroupreq = _analyze_parser.add_argument_group('Input arguments')
     _analyze_parsergroupreq.add_argument('--file', help="path to file or dump")
     _analyze_parsergroupreq.add_argument('--folder', help="path to folder")
     _analyze_parsergroupreq.add_argument('--buffer', help="input buffer")
-    _analyze_parsergroupdef = _analyze_parser.add_argument_group('Optional arguments')
-    _analyze_parsergroupdef.add_argument('--output', help="path of output folder", required=False)
+    _analyze_parsergroupdef = _analyze_parser.add_argument_group('Analysis arguments')
     _analyze_parsergroupdef.add_argument('--behavior',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
     _analyze_parsergroupdef.add_argument('--yara',action='store_true', help="analyze with yara module (Disable this for big files)", required=False)
@@ -34,9 +34,6 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--mitre',action='store_true', help="map strings to mitre", required=False)
     _analyze_parsergroupdef.add_argument('--topurl',action='store_true', help="get urls and check them against top 10000", required=False)
     _analyze_parsergroupdef.add_argument('--ocr',action='store_true', help="get all ocr text", required=False)
-    _analyze_parsergroupdef.add_argument('--html',action='store_true', help="make html record", required=False)
-    _analyze_parsergroupdef.add_argument('--json',action='store_true', help="make json record", required=False)
-    _analyze_parsergroupdef.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
     _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="find encryptions", required=False)
     _analyze_parsergroupdef.add_argument('--cards',action='store_true', help="find credit cards", required=False)
     _analyze_parsergroupdef.add_argument('--patterns',action='store_true', help="find common patterns", required=False)
@@ -50,6 +47,14 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--worldmap',action='store_true', help="add world map to html", required=False)
     _analyze_parsergroupdef.add_argument('--image',action='store_true', help="add similarity image to html", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
+    _analyze_parsergroupdeb = _analyze_parser.add_argument_group('Force analysis arguments')
+    _analyze_parsergroupdeb.add_argument('--unicode',action='store_true', help="force extracting ascii", required=False)
+    _analyze_parsergroupdeb.add_argument('--bigfile',action='store_true', help="force analyze big files", required=False)
+    _analyze_parsergroupdeo = _analyze_parser.add_argument_group('Output arguments')
+    _analyze_parsergroupdeo.add_argument('--output', help="path of output folder", required=False)
+    _analyze_parsergroupdeo.add_argument('--html',action='store_true', help="make html record", required=False)
+    _analyze_parsergroupdeo.add_argument('--json',action='store_true', help="make json record", required=False)
+    _analyze_parsergroupdeo.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
 
     def __init__(self):
         super(QBAnalyzer, self).__init__()

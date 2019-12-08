@@ -2,6 +2,8 @@ __G__ = "(G)bd249ce4"
 
 from .logger.logger import logstring,verbose,verbose_flag
 from .mics.funcs import getwords, getwordsmultifiles,openinbrowser
+from .general.qbfile import QBFile
+from .general.qbencoding import QBEncdoing
 from .modules.linuxelf import LinuxELF
 from .modules.macho import Macho
 from .modules.windowspe import WindowsPe
@@ -9,7 +11,6 @@ from .modules.apkparser import ApkParser
 from .modules.blackberry import BBParser
 from .modules.readpackets import ReadPackets
 from .modules.emailparser import EmailParser
-from .modules.filetypes import FileTypes
 from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
 from .modules.rtfparser import RTFParser
@@ -45,6 +46,7 @@ class StaticAnalyzer:
         '''
         initialize class, and all modules 
         '''
+        self.fty = QBFile()
         self.qbm = QBMitresearch(MitreParser)
         self.wpe = WindowsPe()
         self.elf = LinuxELF()
@@ -59,7 +61,6 @@ class StaticAnalyzer:
         self.qb3 = QBD3generator()
         self.qoc = QBOCRDetect()
         self.urs = QBURLSimilarity()
-        self.fty = FileTypes()
         self.pdf = PDFParser()
         self.ofx = Officex()
         self.rtf = RTFParser()
@@ -73,14 +74,19 @@ class StaticAnalyzer:
         self.qbcv = QBCountriesviz()
         self.htm = HTMLParser()
         self.JSO = JSONMaker()
+        self.qbenc = QBEncdoing()
 
     def analyze(self,parsed):
         '''
         main analyze logic!
         '''
         data = {}
-        if not self.fty.checkfilesig(data,parsed.file,parsed.output):
-            return
+        
+        logstring("Start analyzing {}".format(parsed.file),"Green")
+
+        self.fty.checkfilesig(data,parsed.file,parsed.output)
+        self.qbenc.checkfile(data,parsed.file,parsed.unicode)
+        
         if self.pdf.checkpdfsig(data):
             self.pdf.checkpdf(data)
         elif self.wpe.checkpesig(data):

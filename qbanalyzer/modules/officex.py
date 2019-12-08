@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.funcs import getwordsmultifilesarray,getwords,getwordsmultifiles
-from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
+from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
 from re import sub
 from magic import from_buffer,Magic
 from zlib import decompress

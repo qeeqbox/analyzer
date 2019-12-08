@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.funcs import getwords,getwordsmultifiles,getentropy
-from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
+from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
 from ..intell.qbdescription import adddescription
 from macholib.MachO import LC_SEGMENT,LC_SEGMENT_64,LC_LOAD_DYLIB
 from macholib import MachO,SymbolTable

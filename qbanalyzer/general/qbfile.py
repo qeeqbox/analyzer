@@ -2,71 +2,14 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
 from ..mics.funcs import getwords,getwordsmultifiles,getentropy
+from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
 from shutil import copyfile,rmtree
-from os import path,mkdir,walk
-from subprocess import PIPE,Popen
+from os import mkdir, path
 from hashlib import md5, sha1, sha256
 from magic import from_file,Magic
 from ssdeep import hash_from_file
 from mimetypes import guess_type
 from re import match
-
-@verbose(True,verbose_flag,None)
-def checkpackedfiles(_path,files) -> bool:
-    '''
-    check if archive contains strings or not 
-    '''
-    try:
-        detect = 0
-        p = Popen(["7z", "l", _path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        output, err = p.communicate()
-        output = output.decode("utf-8",errors="ignore")
-        for _ in files:
-            if _.lower() in output.lower():
-                detect += 1
-        if detect == len(files):
-            return True
-    except:
-        pass
-
-@verbose(True,verbose_flag,None)
-def dmgunpack(_path) -> str:
-    '''
-    convert dmg to img
-    '''
-    p = Popen(["dmg2img",_path,_path+".img"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate()
-    if b"dmg image is corrupted" not in output:
-        return _path+".img"
-
-@verbose(True,verbose_flag,None)
-def unpackfile(data,_path):
-    '''
-    unpack files using 7z into temp folder
-    '''
-    data["Packed"] = {"Files":[],
-                      "Detected":[],
-                      "_Detected":["Name","Path"],
-                      "_Files":["Name","Type","Extension","md5","Path"]}
-    try:
-        p = Popen(["7z", "t", _path,"-pdummypassword2019!!"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        output, err = p.communicate()
-        if b"ERROR: Wrong password" in err:return
-        p = Popen(["7z", "x", _path,"-aoa","-o"+data["Location"]["Folder"]], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        output, err = p.communicate()
-        for currentpath, folders, files in walk(data["Location"]["Folder"]):
-            for file in files:
-                f = open(path.join(currentpath, file),"rb").read()
-                _md5 = md5(f).hexdigest()
-                mime = from_file(path.join(currentpath, file),mime=True)
-                data["Packed"]["Files"].append({"Name":file,
-                                                "Type":mime,
-                                                "Extension":guess_type(path.join(currentpath, file))[0],
-                                                "Path":path.join(currentpath, file),
-                                                "md5":_md5})
-                data["FilesDumps"].update({path.join(currentpath, file):f})
-    except Exception as e:
-        print(e)
 
 @verbose(True,verbose_flag,None)
 def convertsize(s):
@@ -77,22 +20,8 @@ def convertsize(s):
             s /= 1024.0
     return "File is too big"
 
-@verbose(True,verbose_flag,None)
-def checkbom(str):
-    if str[:3] == '\xEF\xBB\xBF':
-        return "UTF-8-SIG"
-    elif str[:4] == '\xFF\xFE\x00\x00':
-        return "UTF-32LE"
-    elif str[:4] == '\x00\x00\xFF\xFE':
-        return "UTF-32BE"
-    elif str[:2] == '\xFF\xFE':
-        return "UTF-16LE"
-    elif str[:2] == '\xFE\xFF':
-        return "UTF-16BE"
-    return "None"
-
-class FileTypes:
-    @verbose(True,verbose_flag,"Starting FileTypes")
+class QBFile:
+    @verbose(True,verbose_flag,"Starting QBFile")
     def __init__(self):
         pass
 
@@ -132,17 +61,16 @@ class FileTypes:
         data["Details"] = {"Properties":{},
                            "_Properties":{}}
         f = open(_path,"rb").read()
-        fbom = open(_path,"rb").read(4)
+        open(_path,"rb").read(4)
         data["Details"]["Properties"]={ "Name": path.basename(_path),
                                         "md5": md5(f).hexdigest(),
                                         "sha1": sha1(f).hexdigest(),
                                         "sha256": sha256(f).hexdigest(),
                                         "ssdeep":hash_from_file(_path),
                                         "size": convertsize(path.getsize(_path)),
+                                        "bytes": path.getsize(_path),
                                         "mime":from_file(_path,mime=True),
                                         "extension":guess_type(_path)[0],
-                                        "charset":Magic(mime_encoding=True).from_file(_path),
-                                        "ByteOrderMark":checkbom(fbom),
                                         "Entropy":getentropy(f)}
 
 
@@ -171,9 +99,5 @@ class FileTypes:
         self.setupmalwarefolder(folder)
         self.getdetailes(data,_path)
         self.createtempfolder(data,_path)
-        #if data["Details"]["Properties"]["size"] > 10242880:
-        #    logstring("File is too big!","Red")
-        #    return False
-        return True
 
         

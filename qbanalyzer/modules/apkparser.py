@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..modules.filetypes import checkpackedfiles,dmgunpack,unpackfile
+from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
 from ..mics.funcs import getwordsmultifiles,getwords
 from ..intell.qbdescription import adddescription
 from r2pipe import open as r2open

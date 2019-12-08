@@ -51,6 +51,7 @@ class QBURLSimilarity:
         roots = []
         _x =  list(set(findall(self.links,self.wordsstripped)))
         for _ in _x:
+            url = ""
             if not _[0].startswith(("http://","https://","ftp://")):
                 url = "http://"+_[0]
             if get_tld(url, fail_silently=True):

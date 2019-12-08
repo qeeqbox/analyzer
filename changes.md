@@ -1,3 +1,8 @@
+#### 2019.V.01.11
+- Fixed bugs
+- Force extracting printable from unicode
+- Fixed logger and filetype
+
 #### 2019.V.01.10
 - Fixed bugs
 - Added Icon extraction
