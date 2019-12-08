@@ -90,6 +90,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - MITRE artifacts detection
     - API Behavior detections (DLL injection, Process Hollowing, Process Doppelganging etc..)
     - Xref detection
+    - icon extraction
 - Android
     - APK information
     - DEX information
