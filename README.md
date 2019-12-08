@@ -1,5 +1,5 @@
 # QBAnalyzer
-QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IOCs from file/dump into readable format.
+QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format.
 
 ### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
@@ -32,28 +32,26 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 
 ### Features
 - Runs locally
-- Analyze a buffer, individual file or full folder
-- Interacting analysis (Session is saved)
+- Analyze buffer, file or full folder
+- Interactive analysis (Session is saved)
 - Generates HTML or JSON as output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
-- OCR words detections
-- IPS countries description
-- IPS hints
+- OCR words detection
+- IPS hints and countries description
 - Ports hints
-- World IPS countries image and flags
+- World IPS world image and flags
 - DNS servers description (Top servers)
 - Websites similarity detection (Top 10000)
 - Artifacts force directed image
 - Cross references force directed image and table
-- MITRE att&ck tools detection (could be FP)
-- MITRE att&ck patterns detection (could be FP)
+- MITRE att&ck tools and patterns detection (could be FP)
 - Similarity image divided to classes
 - YARA module and YARA rules included
 - YARA module includes conditions
 - URL/EMAIL/TEL/Tags patterns extraction
-- Credit cards patterns extraction
+- Credit Cards patterns extraction
 - Credential patterns extraction
 - Encryption patterns (base64, md5, sha1..) extraction
 - DGA (Domain Generation Algorithm) patterns extraction 
@@ -67,14 +65,14 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Lib descriptions
     - Encrypted section detection
     - Symbols extraction
-    - MITRE artifacts detection
+    - MITRE artifacts mapped to detection
     - Cross references detection
-    - Behavior detections
+    - Behavior detection
 - macOS
     - DMG extraction
     - Shell code detection
     - PLIST information
-    - MITRE artifacts detection
+    - MITRE artifacts mapped to detection
     - macOS information
 - Windows
     - PE information
@@ -82,11 +80,11 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Sections descriptions
     - DLL descriptions
     - Symbols extraction
-    - Signature extraction
+    - Signature extraction and validation
     - API descriptions
     - PE ASLR, DEP, SEH and CFG detection
-    - MITRE artifacts detection
-    - API Behavior detections (DLL injection, Process Hollowing, Process Doppelganging etc..)
+    - MITRE artifacts mapped to detection
+    - API Behavior detection (DLL injection, Process Hollowing, Process Doppelganging etc..)
     - Cross references detection
     - Icon extraction
 - Android
@@ -98,8 +96,8 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Symbols extraction
     - Classes extraction
     - Big functions identification 
-    - Xref detection
-    - API Behavior detections
+    - Cross references detection
+    - API Behavior detection
 - Iphone
     - IPA information
 - BlackBerry (COD)
@@ -112,10 +110,10 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - DNS filter
     - ARP filter
     - WAF detection
-    - DGA detction
+    - DGA detection
 - PDF
     - Objects enumeration
-    - Keys (javascript, js, OpenAction) enumeration
+    - Keys (javascript, js, OpenAction) extraction
     - Streams parsing
     - String analysis
 - Office[x]
@@ -137,6 +135,8 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Decode/analyze links
     - Script entropy
 
+And, much more!
+
 ### Roadmap 2019
 - ~~Reduce file I/O~~
 - ~~PDF module~~
@@ -145,7 +145,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - ~~HTML module~~
 - ~~Refactoring modules v2~~
 - Whitelist
-- Web detections
+- Web detection
 
 ### Roadmap 2020
 - MS office module
