@@ -57,6 +57,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - DGA (Domain Generation Algorithm) patterns extraction 
 - BOM (Byte Order Mark) detection
 - URL shorteners extraction
+- ASCII extraction from UNICODE
 - Linux
     - ELF information
     - API functions descriptions
