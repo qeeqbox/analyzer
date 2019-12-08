@@ -1,10 +1,5 @@
 # QBAnalyzer
-<table border="0" style="border: none;">
- <tr>
-    <td> QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format. </td>
-    <td><img src="https://img.shields.io/badge/ubuntu-passed-success.svg"><br><img src="https://img.shields.io/badge/docker-passed-success.svg"></td>
- </tr>
-</table>
+QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format
 
 ### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv1.09.gif)
@@ -33,8 +28,6 @@
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
-### Status
-[![Generic badge](https://img.shields.io/badge/ubuntu-passed-success.svg)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/docker-passed-success.svg)](https://shields.io/)
 ---
 
 ### Features
@@ -176,7 +169,7 @@ If i missed a reference/dependency, please let me know!
 This project is NOT an anti malware project and does not quarantine or delete malicious files (If you are interested in an anti malware project, contact me; I will explain what dependencies/libs need to be re-written)
     
 ---
-   
+
 ### Run it
 ```sh
 git clone https://github.com/bd249ce4/QBAnalyzer.git
@@ -191,6 +184,7 @@ python3 -m qbanalyzer.cli
 git clone https://github.com/bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
 ```
-
+### Last Status
+![Generic badge](https://img.shields.io/badge/ubuntu-passed-success.svg) ![Generic badge](https://img.shields.io/badge/docker-passed-success.svg)
 ---
 <p align="center"> <img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png"></p>
