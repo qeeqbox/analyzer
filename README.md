@@ -135,7 +135,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Decode/analyze links
     - Script entropy
 
-And, much more!
+And, much more..
 
 ### Roadmap 2019
 - ~~Reduce file I/O~~
@@ -149,6 +149,7 @@ And, much more!
 
 ### Roadmap 2020
 - MS office module
+- Web service and API
 - Phishing module
 - Machine learning modules
 
