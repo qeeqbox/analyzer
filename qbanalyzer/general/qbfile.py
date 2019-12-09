@@ -34,7 +34,7 @@ class QBFile:
         if not self.malwarefarm.endswith(path.sep): self.malwarefarm = self.malwarefarm+path.sep
         if not path.isdir(self.malwarefarm): mkdir(self.malwarefarm)
 
-    @verbose(True,verbose_flag,None)
+    @verbose(True,verbose_flag,"Setting up ouput folder")
     def createtempfolder(self,data,_path):
         '''
         create temp folder that has the md5 of the target file
@@ -53,7 +53,7 @@ class QBFile:
                             "Folder":self.malwarefarm+md5+path.sep+"temp_unpacked"}
         data["FilesDumps"] = {self.malwarefarm+md5+path.sep+"temp":open(_path,"rb").read()}
 
-    @verbose(True,verbose_flag,None)
+    @verbose(True,verbose_flag,"Getting file details")
     def getdetailes(self,data,_path):
         '''
         get general details of file

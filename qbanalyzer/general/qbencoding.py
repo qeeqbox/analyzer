@@ -1,7 +1,5 @@
 from ..logger.logger import logstring,verbose,verbose_flag
 from magic import from_file,Magic
-from ssdeep import hash_from_file
-
 
 class QBEncdoing:
     @verbose(True,verbose_flag,"Starting QBEncdoing")
@@ -22,8 +20,7 @@ class QBEncdoing:
             return "UTF-16BE"
         return "None"
 
-
-    @verbose(True,verbose_flag,None)
+    @verbose(True,verbose_flag,"Checking file encoding")
     def checkfile(self,data,_path,_unicode) -> bool:
 
         data["Encoding"] = {"Encoding":{},

@@ -146,7 +146,7 @@ class QBPatterns:
                              "HEX":[],
                              "_IP4S":["Count","IP","Code","Alpha2","Description"],
                              "_IP6S":["Count","IP","Code","Alpha2","Description"],
-                             "_LINKS":["Count","Link"],
+                             "_LINKS":["Count","Link","Description"],
                              "_EMAILS":["Count","EMAIL","Description"],
                              "_TELS":["Count","TEL","Description"],
                              "_TAGS":["Count","TAG","Description"],

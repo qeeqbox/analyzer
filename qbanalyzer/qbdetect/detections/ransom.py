@@ -2,13 +2,32 @@ __G__ = "(G)bd249ce4"
 
 from ...logger.logger import logstring,verbose,verbose_flag
 from itertools import combinations
+from re import I, compile, search
+from random import choice
 
-detections = {"Ransom" : ["doc","docx","xls","xlsx","ppt","pptx","pst","ost","msg","eml","vsd","vsdx","txt","csv","rtf","wks","wk1","pdf","dwg","onetoc2","snt","jpeg","jpg","docb","docm","dot","dotm","dotx","xlsm","xlsb","xlw","xlt","xlm","xlc","xltx","xltm","pptm","pot","pps","ppsm","ppsx","ppam","potx","potm","edb","hwp","602","sxi","sti","sldx","sldm","sldm","vdi","vmdk","vmx","gpg","aes","ARC","PAQ","bz2","tbk","bak","tar","tgz","rar","zip","backup","iso","vcd","bmp","png","gif","raw","cgm","tif","tiff","nef","psd","svg","djvu","m4u","m3u","mid","wma","flv","3g2","mkv","3gp","mp4","mov","avi","asf","mpeg","vob","mpg","wmv","fla","swf","wav","mp3","class","jar","java","asp","php","jsp","brd","sch","dch","dip","vb","vbs","ps1","bat","cmd","asm","pas","cpp","suo","sln","ldf","mdf","ibd","myi","myd","frm","odb","dbf","mdb","accdb","sql","sqlitedb","sqlite3","asc","lay6","lay","mml","sxm","otg","odg","uop","std","sxd","otp","odp","wb2","slk","dif","stc","sxc","ots","ods","3dm","max","3ds","uot","stw","sxw","ott","odt","pem","p12","csr","crt","key","pfx","der"]}
+detections = {"Ransom" : ['3dm', '3ds', '3g2', '3gp', '602', 'arc', 'paq', 'accdb', 'aes', 'asc', 'asf', 'asm', 'asp', 'avi', 'backup', 'bak', 'bat', 'bmp', 'brd', 'bz2', 'cgm', 'class', 'cmd', 'cpp', 'crt', 'csr', 'csv', 'dbf', 'dch', 'der', 'dif', 'dip', 'djvu', 'doc', 'docb', 'docm', 'docx', 'dot', 'dotm', 'dotx', 'dwg', 'edb', 'eml', 'fla', 'flv', 'frm', 'gif', 'gpg', 'hwp', 'ibd', 'iso', 'jar', 'java', 'jpeg', 'jpg', 'jsp', 'key', 'lay', 'lay6', 'ldf', 'm3u', 'm4u', 'max', 'mdb', 'mdf', 'mid', 'mkv', 'mml', 'mov', 'mp3', 'mp4', 'mpeg', 'mpg', 'msg', 'myd', 'myi', 'nef', 'odb', 'odg', 'odp', 'ods', 'odt', 'onetoc2', 'ost', 'otg', 'otp', 'ots', 'ott', 'p12', 'pas', 'pdf', 'pem', 'pfx', 'php', 'png', 'pot', 'potm', 'potx', 'ppam', 'pps', 'ppsm', 'ppsx', 'ppt', 'pptm', 'pptx', 'ps1', 'psd', 'pst', 'rar', 'raw', 'rtf', 'sch', 'sldm', 'sldm', 'sldx', 'slk', 'sln', 'snt', 'sql', 'sqlite3', 'sqlitedb', 'stc', 'std', 'sti', 'stw', 'suo', 'svg', 'swf', 'sxc', 'sxd', 'sxi', 'sxm', 'sxw', 'tar', 'tbk', 'tgz', 'tif', 'tiff', 'txt', 'uop', 'uot', 'vb', 'vbs', 'vcd', 'vdi', 'vmdk', 'vmx', 'vob', 'vsd', 'vsdx', 'wav', 'wb2', 'wk1', 'wks', 'wma', 'wmv', 'xlc', 'xlm', 'xls', 'xlsb', 'xlsm', 'xlsx', 'xlt', 'xltm', 'xltx', 'xlw', 'zip']}
 
 @verbose(True,verbose_flag,"Analyzing Ransom patterns")
 def startanalyzing(data):
 	for detectonroot in detections:
-		for pair in combinations(detections[detectonroot],2):
-			result = data["StringsRAW"]["wordsstripped"].find(pair[0]+" "+pair[1])
-			if result != -1:
-				data["QBDETECT"]["Detection"].append({"Count":"1(+)","Offset":result,"Rule":"Ransom","Match":pair[0]+" "+pair[1],"Parsed":None})
+		detect = 0
+		_List = []
+		for check in range(0,15):
+			randompick = choice(detections[detectonroot])
+			nextpick = detections[detectonroot][(detections[detectonroot].index(randompick) + 1) % len(detections[detectonroot])]
+			if search(compile(r"{}[ \x00\|]{}".format(randompick,nextpick),I),data["StringsRAW"]["wordsstripped"]):
+				_List.append("({} {})".format(randompick,nextpick))
+				detect +=1
+		if detect >= 5:
+			data["QBDETECT"]["Detection"].append({"Count":detect,"Offset":"Unavailable","Rule":"Ransom","Match":",".join(_List),"Parsed":None})
+		else:
+			detect = 0
+			_List = []
+			for check in range(0,15):
+				randompick1 = choice(detections[detectonroot])
+				randompick2 = choice(detections[detectonroot])
+				if search(compile(r"{}[ \x00\|]{}".format(randompick1,randompick2),I),data["StringsRAW"]["wordsstripped"]):
+					_List.append("({} {})".format(randompick1,randompick2))
+					detect +=1
+			if detect >= 5:
+				data["QBDETECT"]["Detection"].append({"Count":detect,"Offset":"Unavailable","Rule":"Ransom","Match":",".join(_List),"Parsed":None})

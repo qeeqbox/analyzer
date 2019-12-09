@@ -26,6 +26,7 @@ from .intell.qbocrdetect import QBOCRDetect
 from .intell.qbencryption import QBEncryption
 from .intell.qbwafdetect import QBWafDetect
 from .intell.qbcreditcards import QBCreditcards
+from .intell.qbcredentials import QBCredentials
 from .intell.qbpatterns import QBPatterns
 from .intell.qbdga import QBDGA
 from .intell.qbcountriesviz import QBCountriesviz
@@ -75,6 +76,7 @@ class StaticAnalyzer:
         self.htm = HTMLParser()
         self.JSO = JSONMaker()
         self.qbenc = QBEncdoing()
+        self.qbcs = QBCredentials()
 
     def analyze(self,parsed):
         '''
@@ -147,6 +149,8 @@ class StaticAnalyzer:
             self.qbe.checkencryption(data)
         if parsed.cards or parsed.full:
             self.qbcr.checkcreditcards(data)
+        if parsed.creds or parsed.full:
+            self.qbcs.checkcreds(data)
         if parsed.plugins or parsed.full:
             self.LD.checkwithdetections(data)
         if parsed.mitre or parsed.full:

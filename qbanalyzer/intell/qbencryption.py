@@ -178,7 +178,7 @@ class QBEncryption:
                 for _ in x:
                     _List.append(_)
             for x in set(_List):
-                data.append({"Count":_List.count(x),"Type":logic})
+                data.append({"Count":_List.count(x),"Logic":logic})
 
     @verbose(True,verbose_flag,None)
     def checkencryption(self,data):
@@ -202,7 +202,7 @@ class QBEncryption:
                                 "_CRCs":["Count","CRC","Description"],
                                 "_JWTs":["Count","JWT","Description"],
                                 "_BASE64s":["Count","Base64","Decoded"],
-                                "_Logics":["Count","Type"]}
+                                "_Logics":["Count","Logic"]}
 
         self.wordsinsensitive = data["StringsRAW"]["wordsinsensitive"]
         self.wordssensitive = data["StringsRAW"]["wordssensitive"]

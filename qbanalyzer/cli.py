@@ -36,6 +36,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--ocr',action='store_true', help="get all ocr text", required=False)
     _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="find encryptions", required=False)
     _analyze_parsergroupdef.add_argument('--cards',action='store_true', help="find credit cards", required=False)
+    _analyze_parsergroupdef.add_argument('--creds',action='store_true', help="find credit cards", required=False)
     _analyze_parsergroupdef.add_argument('--patterns',action='store_true', help="find common patterns", required=False)
     _analyze_parsergroupdef.add_argument('--suspicious',action='store_true', help="find suspicious strings", required=False)
     _analyze_parsergroupdef.add_argument('--dga',action='store_true', help="find Domain generation algorithms", required=False)
@@ -88,21 +89,21 @@ class QBAnalyzer(Cmd):
             parsed.output = gettempdir()
         if parsed.file or parsed.folder or parsed.buffer:
             if parsed.file:
-                self.do_file(parsed)
+                self.analyzefile(parsed)
             elif parsed.folder:
-                self.do_folder(parsed)
+                self.analyzefolder(parsed)
             elif parsed.buffer:
-                self.do_buffer(parsed)
+                self.analyzebuffer(parsed)
         else:
             logstring("File, Folder or Buffer is missing","Red")
 
-    def do_file(self,parsed):
+    def analyzefile(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
             self.san.analyze(parsed)
         else:
             logstring("Target File/dump is wrong..","Red")
 
-    def do_folder(self,parsed):
+    def analyzefolder(self,parsed):
         if path.exists(parsed.folder) and path.isdir(parsed.folder):
             for f in listdir(parsed.folder):
                 fullpath = path.join(parsed.folder, f)
@@ -112,7 +113,7 @@ class QBAnalyzer(Cmd):
         else:
             logstring("Target folder is wrong..","Red")
 
-    def do_buffer(self,parsed):
+    def analyzebuffer(self,parsed):
         if parsed.buffer != "":
             tempname = NamedTemporaryFile().name
             with open(tempname,"w") as tempfile:
