@@ -171,7 +171,7 @@ bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, mark
 If i missed a reference/dependency, please let me know!
 
 ### Disclaimer
-This project is NOT an anti malware project and does not quarantine or delete malicious files (If you are interested in an anti malware project, contact me; I will explain what dependencies/libs need to be re-written)
+This project is NOT an anti malware project and does not quarantine or delete malicious files
     
 ---
 
