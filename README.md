@@ -34,7 +34,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 ---
 
 ### Features
-- Runs locally
+- Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Interactive analysis (Session is saved)
 - Generates HTML or JSON as output
@@ -139,7 +139,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
     - Decode/analyze links
     - Script entropy
 
-And, much more..
+more..
 
 ### Roadmap 2019
 - ~~Reduce file I/O~~
@@ -163,7 +163,7 @@ Thank you for reaching out - I have been getting requests to implement the follo
 - ~~Making the current yara rules into individual modules for further customization~~ (rolled back but added extra plugins)
 
 ### Depends on
-Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and <ins>tons of researches</ins>.
+Docker, Python3, Bootstrap, Javascript, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css and tons of researches.
 
 ### Libs
 bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, markupsafe, quopri, platform, pkgutil, random, tldextract, typing, swig_runtime_data4, copyreg, glob, difflib, code, zipimport, stat, time, secrets, optparse, urllib, xml, M2Crypto, fractions, pydoc, PIL, abc, elftools, calendar, atexit, ctypes, datetime, fcntl, sre_constants, runpy, uu, sqlite3, sitecustomize, distutils, cgi, lzma, site, email, certifi, requests_file, jinja2, pycparser, selectors, unicodedata, pytesseract, gettext, encodings, nltk, select, apport_python_hook, linecache, itertools, tld, textwrap, cryptography, xmlrpc, zipfile, mmap, pefile, ftplib, socketserver, asyncio, asn1crypto, cython_runtime, uuid, bz2, webbrowser, chardet, functools, ipaddress, enum, hashlib, tempfile, queue, pathlib, base64, ordlookup, copy, getopt, scapy, ast, codecs, posix, marshal, urllib3, sre_parse, netrc, heapq, bs4, cffi, builtins, pickle, errno, grp, os, fnmatch, genericpath, qbanalyzer, shutil, magic, string, re, signal, decimal, pkg_resources, inspect, pdb, stringprep, binascii, argparse, sre_compile, http, opcode, plistlib, six, collections, gc, posixpath, ssl, asyncore, numpy, bisect, simplejson, ntpath, numbers, macholib, token, keyword, imp, traceback, zlib, logging, soupsieve, yara, requests, contextvars, ssdeep, pprint, sysconfig, tokenize, gzip, struct, csv, array, idna, shlex, warnings, dis, unittest, html, threading, weakref, locale, socket, json, resource, contextlib, hmac, reprlib, concurrent, types, subprocess, mimetypes.
