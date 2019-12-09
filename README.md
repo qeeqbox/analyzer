@@ -133,7 +133,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - Archives
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
-    - Encrypted archives 
+    - Encrypted archives detection
 - HTML
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
@@ -152,10 +152,10 @@ And, much more..
 - Web detection
 
 ### Roadmap 2020
+- Phishing module
 - MS office module
 - Web service and API
-- Phishing module
-- Machine learning modules
+- Machine learning modules (commercial)
 
 ### Update
 Thank you for reaching out - I have been getting requests to implement the following:
