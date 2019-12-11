@@ -135,7 +135,6 @@ class QBAnalyzer(Cmd):
             logstring("Target buffer is empty..","Red")
 
     def do_exit(self, line):
-        return True
         exit()
 
 if __name__ == '__main__':
