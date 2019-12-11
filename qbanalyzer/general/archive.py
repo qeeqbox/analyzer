@@ -59,5 +59,5 @@ def unpackfile(data,_path):
                                                 "Path":path.join(currentpath, file),
                                                 "md5":_md5})
                 data["FilesDumps"].update({path.join(currentpath, file):f})
-    except Exception as e:
-        print(e)
+    except:
+        pass

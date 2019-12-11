@@ -2,6 +2,7 @@ __G__ = "(G)bd249ce4"
 __V__ = "2019.V.01.11"
 
 from .staticanalyzer import StaticAnalyzer
+from .mics.funcs import killpythoncli,killprocessandsubs
 from .logger.logger import logstring,verbose,verbose_flag,setuplogger
 from cmd import Cmd
 from os import path,listdir
@@ -9,6 +10,13 @@ from argparse import ArgumentParser
 from shlex import split as ssplit
 from requests import get
 from tempfile import NamedTemporaryFile,gettempdir
+from sys import stdout
+from signal import signal,SIGTSTP,SIGINT
+
+def ctrlhandler(signum, frame):
+    stdout.write("\n")
+    logstring("Terminating..","Red")
+    killprocessandsubs()
 
 print("                                                                            ")
 print(" _____   _____   _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -19,7 +27,10 @@ print("                                   https://github.com/bd249ce4/QBAnalyzer
 print("                                                                            ")
 
 class QBAnalyzer(Cmd):
+    killpythoncli()
     setuplogger()
+    signal(SIGTSTP, ctrlhandler)
+    signal(SIGINT, ctrlhandler)
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
     _analyze_parsergroupreq = _analyze_parser.add_argument_group('Input arguments')
@@ -125,9 +136,7 @@ class QBAnalyzer(Cmd):
 
     def do_exit(self, line):
         return True
-
-    def do_EOF(self, line):
-        return True
+        exit()
 
 if __name__ == '__main__':
     QBAnalyzer().cmdloop()

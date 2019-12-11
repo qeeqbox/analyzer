@@ -23,7 +23,6 @@ class LoadDetections:
             except Exception:
                 logstring("Loading plugins failed","Red")
 
-
     @verbose(True,verbose_flag,"Loading extra plugins")
     def checkwithdetections(self,data):
         data["QBDETECT"] = {"Detection":[],

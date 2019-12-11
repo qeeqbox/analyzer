@@ -1,12 +1,14 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.funcs import getwords,getwordsmultifiles,getentropy
+from ..mics.funcs import getwords,getwordsmultifiles,getentropy,getentropyfloatret
 from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
 from ..intell.qbdescription import adddescription
 from macholib.MachO import LC_SEGMENT,LC_SEGMENT_64,LC_LOAD_DYLIB
 from macholib import MachO,SymbolTable
 from plistlib import readPlist
+from hashlib import md5
+from io import BytesIO
 
 class Macho:
     @verbose(True,verbose_flag,"Starting Macho")
@@ -52,20 +54,34 @@ class Macho:
         return _list
 
     @verbose(True,verbose_flag,None)
-    def getsections(self,machos) -> list:
+    def getsections(self,machos,fbuffer) -> list:
         '''
         get sections 
         '''
         _list = []
         for h in machos.headers:
             for lc, cmd, data in h.commands:
-                if lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
-                    for section in data:
-                        name = section.sectname[:section.sectname.find(b'\x00')].decode("utf-8",errors="ignore")
-                        seg = section.segname[:section.segname.find(b'\x00')].decode("utf-8",errors="ignore")
-                        _list.append({"Section":name,
-                                      "Address":hex(section.addr),
-                                      "Segment":seg,
+                if hasattr(cmd, "segname"):
+                    #fbuffer[cmd.fileoff:cmd.filesize]
+                    with BytesIO(fbuffer) as bio:
+                        bio.seek(cmd.fileoff)
+                        x = bio.read(cmd.filesize)
+                        sus = "No"
+                        entropy = getentropyfloatret(x)
+                        if entropy > 6 or entropy >= 0 and entropy <=1:
+                            sus = "True, {}".format(entropy)
+                        elif cmd.filesize == 0:
+                            sus = "True, section size 0"
+                        
+                        seg = cmd.segname[:cmd.segname.find(b'\x00')].decode("utf-8",errors="ignore")
+                        if seg == "__PAGEZERO":
+                            sus = ""
+                        
+                        _list.append({"Section":seg,
+                                      "Suspicious":sus,
+                                      "Size":cmd.filesize,
+                                      "Entropy":getentropy(x),
+                                      "MD5":md5(x).hexdigest(),
                                       "Description":""})
         return _list
 
@@ -208,26 +224,25 @@ class Macho:
             macho = MachO.MachO(data["Location"]["File"])
         except:
             return
+
+        fbuffer = data["FilesDumps"][data["Location"]["File"]]
         data["MACHO"] = {   "General":{},
                             "Sections":[],
                             "Libraries":[],
-                            "Segments":[],
                             "Symbols":[],
                             "Undefined Symbols":[],
                             "External Symbols":[],
                             "Local Symbols":[],
                             "General":{},
-                            "_Sections":["Section","Address","Segment","Description"],
+                            "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
                             "_Libraries":["Library","Description"],
-                            "_Segments":["Segment","Address","Description"],
                             "_Symbols":["Symbol","Description"],
                             "_Undefined Symbols":["Symbol","Description"],
                             "_External Symbols":["Symbol","Description"],
                             "_Local Symbols":["Symbol","Description"]}
         data["MACHO"]["General"]:{}
-        data["MACHO"]["Sections"] = self.getsections(macho)
+        data["MACHO"]["Sections"] = self.getsections(macho,fbuffer)
         data["MACHO"]["Libraries"] = self.getlibs(macho)
-        data["MACHO"]["Segments"] = self.getsegments(macho)
         data["MACHO"]["Symbols"] = self.getsymbols(macho)
         data["MACHO"]["Undefined Symbols"] = self.getundefsymbols(macho)
         data["MACHO"]["External Symbols"] = self.getextdefsymbols(macho)

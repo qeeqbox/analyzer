@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.funcs import getwords,getentropy
+from ..mics.funcs import getwords,getentropy,getentropyfloatret
 from ..intell.qbdescription import adddescription
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
@@ -131,7 +131,15 @@ class WindowsPe:
         '''
         _list = []
         for section in pe.sections:
+            sus = "No"
+            entropy = getentropyfloatret(section.get_data())
+            if entropy > 6 or entropy >= 0 and entropy <=1:
+                sus = "True, {}".format(entropy)
+            elif section.SizeOfRawData == 0:
+                sus = "True, section size 0"
             _list.append({  "Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
+                            "Suspicious":sus,
+                            "Size":section.SizeOfRawData,
                             "MD5":section.get_hash_md5(),
                             "Entropy":getentropy(section.get_data()),
                             "Description":""})
@@ -240,7 +248,6 @@ class WindowsPe:
             data["Details"]["Properties"]["mime"] == "application/x-msi":
             return True
 
-
     @verbose(True,verbose_flag,"Analyzing PE file")
     def getpedeatils(self,data):
         '''
@@ -261,7 +268,7 @@ class WindowsPe:
                         "_Characteristics": {},
                         "_Singed":["Wrong","SignatureHex"],
                         "__SignatureExtracted":{},
-                        "_Sections":["Section","MD5","Entropy","Description"],
+                        "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
                         "_Dlls":["Dll","Description"],
                         "_Resources":["Resource","Offset","MD5","Sig","Description"],
                         "_Imported functions":["Dll","Function","Description"],
@@ -277,7 +284,9 @@ class WindowsPe:
         data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
                                     "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
                                     "Entrypoint Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
-                                    "verify checksum":pe.verify_checksum(),
+                                    "Header checksum": hex(pe.OPTIONAL_HEADER.CheckSum),
+                                    "Verify checksum": hex(pe.generate_checksum()),
+                                    "Match checksum":pe.verify_checksum(),
                                     "Sig":singinhex,
                                     "imphash":pe.get_imphash(),
                                     "warning":pe.get_warnings() if len(pe.get_warnings())> 0 else "None",

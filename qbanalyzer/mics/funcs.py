@@ -8,6 +8,26 @@ from collections import Counter
 from math import log2
 from tld import get_fld,get_tld
 from webbrowser import open_new_tab
+from psutil import process_iter,Process,wait_procs
+from os import getpid
+
+def killprocessandsubs():
+    proc = Process(getpid())
+    subprocs = proc.children()
+    for subproc in subprocs:
+        subproc.terminate()
+    stillalive = wait_procs(subprocs, timeout=2)[1]
+    for p in stillalive:
+        p.kill()
+    proc.kill()
+
+@verbose(True,verbose_flag,None)
+def killpythoncli():
+    current = getpid()
+    for p in process_iter():
+        cmdline = p.cmdline()
+        if " ".join(cmdline) == "python3 -m qbanalyzer.cli" and p.pid != current:
+            p.kill()
 
 @verbose(True,verbose_flag,None)
 def openinbrowser(_path):

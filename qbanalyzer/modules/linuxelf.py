@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import logstring,verbose,verbose_flag
-from ..mics.funcs import getentropy,getwords
+from ..mics.funcs import getentropy,getwords,getentropyfloatret
 from ..intell.qbdescription import adddescription
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
@@ -73,7 +73,15 @@ class LinuxELF:
         _list = []
         for section in elf.iter_sections():
             if section.name != "":
+                sus = "No"
+                entropy = getentropyfloatret(section.data())
+                if entropy > 6 or entropy >= 0 and entropy <=1:
+                    sus = "True, {}".format(entropy)
+                elif section.data_size == 0:
+                    sus = "True, section size 0"
                 _list.append({  "Section":section.name,
+                                "Suspicious":sus,
+                                "Size":section.data_size,
                                 "MD5":md5(section.data()).hexdigest(),
                                 "Entropy":getentropy(section.data()),
                                 "Description":""})
@@ -111,7 +119,7 @@ class LinuxELF:
                             "Symbols":[],
                             "Relocations":[],
                             "_General":{},
-                            "_Sections":["Section","MD5","Entropy","Description"],
+                            "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
                             "_Dynamic":["Needed","Description"],
                             "_Symbols":["Type","Symbol","Description"],
                             "_Relocations":["Section","Name","Description"]}

@@ -1,3 +1,10 @@
+#### 2019.V.01.12
+- Fixed bugs
+- Fixed pdfparser
+- Section's entropy added macos,win and elf
+- Startup checkup
+- Exit checkup
+
 #### 2019.V.01.11
 - Fixed bugs
 - Force extracting printable from unicode

@@ -179,6 +179,8 @@ class ApkParser:
         data[k]["Suspicious"] = self.checksus(r2p)
         getwords(data,data["Location"]["File"])
 
+        #future plan; force closing - try,except
+        r2p.quit()
 
     @verbose(True,verbose_flag,"Analyzing APK file")
     def analyzeapk(self,data):
@@ -216,3 +218,6 @@ class ApkParser:
                 data[k]["Suspicious"] = self.checksus(r2p)
         adddescription("AndroidPermissions",data["APK"]["Permissions"],"Permission")
         getwordsmultifiles(data,data["Packed"]["Files"])
+
+        #future plan; force closing - try,except
+        r2p.quit()
