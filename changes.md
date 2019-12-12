@@ -4,6 +4,7 @@
 - Section's entropy added macos,win and elf
 - Startup checkup
 - Exit checkup
+- Fedora is supported
 
 #### 2019.V.01.11
 - Fixed bugs
