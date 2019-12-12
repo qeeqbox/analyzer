@@ -16,7 +16,6 @@ class QBCreditcards:
         self.detectionjcb = compile(r'\b(?:2131|1800|35[0-9]{3})[0-9]{11}?\b',I)
         self.detectiondinersclub = compile(r'\b3(?:0[0-5]|[68][0-9])[0-9]{11}\b',I)
 
-
     @verbose(True,verbose_flag,"Finding American Express Card patterns")
     def americanexpress(self,data):
         '''
@@ -29,7 +28,6 @@ class QBCreditcards:
                 _List.append(_)
         for x in set(_List):
             data.append({"Count":_List.count(x),"AmericanExpress":x})
-
 
     @verbose(True,verbose_flag,"Finding Visa Card patterns")
     def visa(self,data):
@@ -44,8 +42,6 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"Visa":x})
 
-
-
     @verbose(True,verbose_flag,"Finding Master Card patterns")
     def mastercard(self,data):
         '''
@@ -58,7 +54,6 @@ class QBCreditcards:
                 _List.append(_)
         for x in set(_List):
             data.append({"Count":_List.count(x),"MasterCard":x})
-
 
     @verbose(True,verbose_flag,"Finding Discover Card patterns")
     def discover(self,data):
@@ -73,7 +68,6 @@ class QBCreditcards:
         for x in set(_List):
             data.append({"Count":_List.count(x),"Discover":x})
 
-
     @verbose(True,verbose_flag,"Finding Jcb Card patterns")
     def jcb(self,data):
         '''
@@ -86,7 +80,6 @@ class QBCreditcards:
                 _List.append(_)
         for x in set(_List):
             data.append({"Count":_List.count(x),"JCB":x})
-
 
     @verbose(True,verbose_flag,"Finding Diners Club Card patterns")
     def dinersclub(self,data):
