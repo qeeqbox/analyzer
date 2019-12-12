@@ -43,7 +43,6 @@ class QBDGA:
         except:
             pass
 
-
     @verbose(True,verbose_flag,"DGA-Find low frequency letters")
     def findlowfreqletters(self,data,domains):
         '''
@@ -54,7 +53,6 @@ class QBDGA:
             x = findall(self.detectionlowfreq,domain)
             if len(x) > 4:
                 data.append({"Count":len(x),"Letters":''.join(x),"URL":domain})
-
 
     @verbose(True,verbose_flag,"DGA-Find consonants letters in row")
     def findconsonantslettersinrow(self,data,domains):
@@ -67,7 +65,6 @@ class QBDGA:
             if len(x) > 2:
                 data.append({"Groups":"{} > 2 groups".format(len(x)),"Row":','.join(x),"URL":domain})
 
-
     @verbose(True,verbose_flag,"DGA-Find consonants letters")
     def findconsonantsletters(self,data,domains):
         '''
@@ -78,7 +75,6 @@ class QBDGA:
             x = findall(self.detectionconsonants,domain)
             if len(x) > 8:
                 data.append({"Count":"{} > 8".format(len(x)),"Letters":''.join(x),"URL":domain})
-
 
     @verbose(True,verbose_flag,"DGA-Find encryptions")
     def findencryptionpatterns(self,data,domains):
@@ -103,7 +99,6 @@ class QBDGA:
 
                 data.append({"Type":temp,"Detected":detection.group(),"URL":domain})
 
-
     @verbose(True,verbose_flag,"DGA-Find symbols")
     def findallsymbols(self,data,domains):
         '''
@@ -116,7 +111,6 @@ class QBDGA:
             if len(x) > 2:
                 data.append({"Count":"{} > 2".format(len(x)),"Symbols":''.join(x),"URL":domain})
 
-
     @verbose(True,verbose_flag,"DGA-Find numbers")
     def findallnumbers(self,data,domains):
         '''
@@ -128,7 +122,6 @@ class QBDGA:
             if len(x) > 5:
                 data.append({"Count":"{} > 5".format(len(x)),"Numbers":''.join(x),"URL":domain})
 
-
     @verbose(True,verbose_flag,"DGA-Find long domains")
     def URLlength(self,data,domains):
         '''
@@ -138,7 +131,6 @@ class QBDGA:
             domain = domain["domain"]
             if len(domain) > 13:
                 data.append({"Length":"{} > 13".format(len(domain)),"URL":domain})
-
 
     @verbose(True,verbose_flag,"DGA-Get entropies of domains")
     def checkentropy(self,data,domains):
