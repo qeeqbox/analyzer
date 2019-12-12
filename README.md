@@ -178,7 +178,16 @@ This project is NOT an anti malware project and does not quarantine or delete ma
 git clone https://github.com/bd249ce4/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
-./install.sh
+./install.sh ubuntu
+python3 -m qbanalyzer.cli
+```
+
+### Run it with Fedora [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
+```sh
+git clone https://github.com/bd249ce4/QBAnalyzer.git
+cd QBAnalyzer
+chmod +x install.sh
+./install.sh fedora
 python3 -m qbanalyzer.cli
 ```
 
