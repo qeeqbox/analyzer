@@ -33,7 +33,6 @@ class QBCountriesviz:
             except:
                 pass
 
-
     @verbose(True,verbose_flag,"Get countries flags")
     def getflagsfromcodes(self,data):
         '''
@@ -41,7 +40,6 @@ class QBCountriesviz:
         '''
         data["Flags"] = {"Flags":[]}
         self.findflags(data["Flags"]["Flags"],data)
-
 
     @verbose(True,verbose_flag,"Get countries flags")
     def getallcodes(self,data):
