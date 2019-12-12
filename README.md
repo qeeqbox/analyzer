@@ -173,7 +173,7 @@ This project is NOT an anti malware project and does not quarantine or delete ma
     
 ---
 
-### Run it with ubuntu [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
+### Run it with Ubuntu [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
 ```sh
 git clone https://github.com/bd249ce4/QBAnalyzer.git
 cd QBAnalyzer
@@ -191,7 +191,7 @@ chmod +x install.sh
 python3 -m qbanalyzer.cli
 ```
 
-### Run it with docker [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
+### Run it with Docker [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
 ```docker
 git clone https://github.com/bd249ce4/QBAnalyzer.git
 sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
