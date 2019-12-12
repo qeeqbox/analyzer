@@ -191,6 +191,15 @@ chmod +x install.sh
 python3 -m qbanalyzer.cli
 ```
 
+### Run it with Kali [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
+```sh
+git clone https://github.com/bd249ce4/QBAnalyzer.git
+cd QBAnalyzer
+chmod +x install.sh
+./install.sh kali
+python3 -m qbanalyzer.cli
+```
+
 ### Run it with Docker [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/bd249ce4/QBAnalyzer/)
 ```docker
 git clone https://github.com/bd249ce4/QBAnalyzer.git
