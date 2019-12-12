@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2019.V.01.11"
+__V__ = "2019.V.01.12"
 
 from .staticanalyzer import StaticAnalyzer
 from .mics.funcs import killpythoncli,killprocessandsubs
