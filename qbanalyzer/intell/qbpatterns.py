@@ -16,14 +16,13 @@ class QBPatterns:
         initialize class and make refs path that contains References.db
         get english words from corpus and open connection with References.db
         '''
-        self.links = compile(r"((?:(http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
+        self.links = compile(r"((?:(smb|srm|ssh|ftps|file|http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
         self.ip4 = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
         self.ip6 = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
         self.email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
         self.tel = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
         self.html = compile(r'>([^<]*)<\/',I)
         self.hex = compile(r'([0-9a-fA-F]{4,})',I)
-
 
     @verbose(True,verbose_flag,"Finding URLs patterns")
     def checklink(self,_data):
@@ -38,7 +37,6 @@ class QBPatterns:
                     _List.append(_[0])
         for x in set(_List):
             _data.append({"Count":_List.count(x),"Link":x})
-
 
     @verbose(True,verbose_flag,"Finding IP4s patterns")
     def checkip4(self,_data):
@@ -57,7 +55,6 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
-
     @verbose(True,verbose_flag,"Finding IP6s patterns")
     def checkip6(self,_data):
         '''
@@ -70,7 +67,6 @@ class QBPatterns:
                 _List.append(_)
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
-
 
     @verbose(True,verbose_flag,"Finding Emails patterns")
     def checkemail(self,_data):
@@ -85,7 +81,6 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"EMAIL":x})
 
-
     @verbose(True,verbose_flag,"Finding TELs patterns")
     def checkphonenumber(self,_data):
         '''
@@ -99,7 +94,6 @@ class QBPatterns:
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TEL":x})
 
-
     @verbose(True,verbose_flag,"Finding tags patterns")
     def checktags(self,_data):
         '''
@@ -112,7 +106,6 @@ class QBPatterns:
                 _List.append(_)
         for x in set(_List):
             _data.append({"Count":_List.count(x),"TAG":x})
-
 
     @verbose(True,verbose_flag,"Finding HEX patterns")
     def checkhex(self,_data):
@@ -130,7 +123,6 @@ class QBPatterns:
                 _data.append({"Count":_List.count(x),"HEX":x,"Parsed":parsed.decode('utf-8',errors="ignore")})
             except:
                 pass
-
 
     @verbose(True,verbose_flag,None)
     def checkpatterns(self,data):
