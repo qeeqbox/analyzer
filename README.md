@@ -207,7 +207,7 @@ python3 -m app.cli
 ### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
 ```docker
 git clone https://github.com/qeeqbox/analyzer.git
-sudo docker build . -t qbanalyzer && sudo docker run -it -v /home/localfolder:/localfolder qbanalyzer
+sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
 ```
 
 ---
