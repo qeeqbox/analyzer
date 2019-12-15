@@ -179,8 +179,8 @@ This project is NOT an anti malware project and does not quarantine or delete ma
 git clone https://github.com/qeeqbox/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
-./install.sh initdb
 ./install.sh ubuntu
+./install.sh initdb
 python3 -m app.cli
 ```
 
@@ -189,8 +189,8 @@ python3 -m app.cli
 git clone https://github.com/qeeqbox/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
-./install.sh initdb
 ./install.sh fedora
+./install.sh initdb
 python3 -m app.cli
 ```
 
@@ -199,8 +199,8 @@ python3 -m app.cli
 git clone https://github.com/qeeqbox/QBAnalyzer.git
 cd QBAnalyzer
 chmod +x install.sh
-./install.sh initdb
 ./install.sh kali
+./install.sh initdb
 python3 -m app.cli
 ```
 
