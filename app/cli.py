@@ -76,7 +76,7 @@ class QBAnalyzer(Cmd):
     def __init__(self):
         super(QBAnalyzer, self).__init__()
         try:
-            ver = get("https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/version")
+            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/version")
             if ver.ok and ver.text.strip() != __V__:
                 logstring("New version {} available, please update.. ".format(ver.text.strip()),"Red")
         except:
