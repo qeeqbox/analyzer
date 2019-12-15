@@ -1,5 +1,5 @@
 # QBAnalyzer
-QBAnalyzer is an open source threat intelligence framework that automates extracting artifacts and IoCs from file/dump into readable format
+QBAnalyzer (QeeqBoxAnalyzer) is an open source threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif)
