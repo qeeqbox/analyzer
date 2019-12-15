@@ -61,6 +61,7 @@ QBAnalyzer is an open source threat intelligence framework that automates extrac
 - BOM (Byte Order Mark) detection
 - URL shorteners extraction
 - ASCII extraction from UNICODE
+- Whitelist implemented (Windows7,8 and 10 files)
 - Linux
     - ELF information
     - API functions descriptions
@@ -148,7 +149,7 @@ more..
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
 - ~~HTML module~~
 - ~~Refactoring modules v2~~
-- Whitelist
+- ~~Whitelist~~
 - Web detection
 
 ### Roadmap 2020
