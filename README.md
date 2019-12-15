@@ -61,7 +61,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
 - BOM (Byte Order Mark) detection
 - URL shorteners extraction
 - ASCII extraction from UNICODE
-- Whitelist implemented (Windows7,8 and 10 files)
+- Whitelist implemented (Windows7, 8 and 10 files)
 - Linux
     - ELF information
     - API functions descriptions
@@ -139,8 +139,6 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
     - Script entropy
-
-more..
 
 ### Roadmap 2019
 - ~~Reduce file I/O~~
