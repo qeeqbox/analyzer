@@ -1,3 +1,14 @@
+#### 2020.V.02.00b
+- Fixed bugs
+- Switched to mongodb :)
+- Added whitelist
+
+#### 2019.V.01.13
+- Fixed bugs
+- Added timeout logic
+- Mass analyzing included
+- kali is supported
+
 #### 2019.V.01.12
 - Fixed bugs
 - Fixed pdfparser

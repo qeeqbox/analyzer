@@ -1,0 +1,922 @@
+{
+  "Partof": ["bd249ce4/QBAnalyzer - Still beta"],
+  "t1002": [
+    "zip ",
+    "Compress-Archive",
+    "-Recurse",
+    "rar ",
+    "gzip ",
+    "tar "
+  ],
+  "t1003": [
+    "ProgramData\\Mail\\MailAg",
+    "\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data",
+    "reg save",
+    "sekurlsa::logonPasswords",
+    "procdump",
+    "/proc//maps",
+    "sekurlsa::Minidumplsassdump.dmp",
+    "procdump "
+  ],
+  "t1004": [
+    "CurrentVersion\\Winlogon"
+  ],
+  "t1005": [
+    "grep "
+  ],
+  "t1007": [
+    "sc query",
+    "tasklist",
+    "net start",
+    "sc start",
+    "sc stop",
+    "wmic service",
+    "net.exe start"
+  ],
+  "t1009": [
+    "dd "
+  ],
+  "t1010": [
+    "csc.exe "
+  ],
+  "t1012": [
+    "regkeyenum",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa Name",
+    "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0 ProcessorNameString",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
+    "System\\CurrentControlSet\\Services\\mssmbios\\Data\\SMBiosData",
+    "Software\\Microsoft\\Windows NT\\CurrentVersion ProductName",
+    "Software\\Bitcoin\\Bitcoin-Qt",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+    "rem reg query",
+    "reg query",
+    "Software\\Microsoft\\Terminal Server Client\\Default",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\InternetSettings",
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\Load",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+  ],
+  "t1013": [
+    "\\Windows\\System32",
+    "SYSTEM\\CurrentControlSet\\Control\\Print\\Monitors"
+  ],
+  "t1014": [
+    "modprobe",
+    "insmod",
+    "puppetstrings"
+  ],
+  "t1015": [
+    "\\Windows\\System32\\utilman.exe",
+    "\\Windows\\System32\\osk.exe",
+    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+    "\\Windows\\System32\\Magnify.exe",
+    "\\Windows\\System32\\Narrator.exe",
+    "\\Windows\\System32\\AtBroker.exe",
+    "\\Windows\\System32\\sethc.exe",
+    "\\Windows\\System32\\DisplaySwitch.exe",
+    "%systemdir%"
+  ],
+  "t1016": [
+    "arp -a",
+    "net config workstation",
+    "GetAdaptersInfo",
+    "netsh interface show",
+    "/parentdomain",
+    "nbtscan",
+    "ipconfig",
+    "nbtstat -s",
+    "net config",
+    "ipconfig -all",
+    "getmac",
+    "nbtstat -n",
+    "route print",
+    "cmd.exe /c ipconfig /all",
+    "ifconfig"
+  ],
+  "t1018": [
+    "C$",
+    "arp -a",
+    "etc/hosts",
+    "ping",
+    "/dsgetdc",
+    "ADMIN$",
+    "/dclist",
+    "bonjour",
+    "net view /domain",
+    "net view",
+    "do ping -c",
+    "\\Windows\\System32\\Drivers\\etc\\hosts"
+  ],
+  "t1022": [
+    "--password"
+  ],
+  "t1023": [
+    "Start Menu\\Programs\\Startup\\Realtek"
+  ],
+  "t1027": [
+    "Out-EncryptedScript.ps1",
+    "Invoke-Obfuscation",
+    "base64 -d"
+  ],
+  "t1028": [
+    "ExecuteShellCommand",
+    "winrm",
+    "Enable-PSRemoting",
+    "invoke-command -computer_name"
+  ],
+  "t1030": [
+    "split -b"
+  ],
+  "t1031": [
+    "sc config",
+    "SYSTEM\\CurrentControlSet\\Services"
+  ],
+  "t1033": [
+    "letmein",
+    "systeminfo",
+    "net config workstation",
+    "cmd.exe /C whoami",
+    "who",
+    "whoami",
+    "users",
+    "query user"
+  ],
+  "t1034": [
+    "%SystemRoot%\\system32",
+    "\\program.exe",
+    "cmd.exe /C net user",
+    "\\Windows\\system32",
+    "\\example path",
+    "\\unsafe path with space\\program.exe",
+    "\\program files\\myapp.exe",
+    "net user"
+  ],
+  "t1035": [
+    "net stop",
+    "net start"
+  ],
+  "t1036": [
+    "ren",
+    "CSIDL_APPDATA\\microsoft\\security",
+    "/bin",
+    "%ALLUSERPROFILE%\\Application Data\\Microsoft\\MediaPlayer\\updatewindws.exe",
+    "%ProgramFiles%\\Microsoft\\Exchange Server\\ClientAccess\\Owa\\",
+    "winmail.dat",
+    "Office365DCOMCheck.ps1",
+    "\\Windows\\System32",
+    "SystemDiskClean.ps1"
+  ],
+  "t1037": [
+    "UserInitMprLogonScript"
+  ],
+  "t1038": [
+    "\\WINDOWS\\ntshrui.dll",
+    "%SYSTEMROOT%",
+    "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\SafeDLLSearchMode"
+  ],
+  "t1039": [
+    "net use"
+  ],
+  "t1040": [
+    "tcpdump",
+    "tshark"
+  ],
+  "t1042": [
+    "txtfile\\shell\\print\\command",
+    "txtfile\\shell\\open\\command",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts",
+    "\\command",
+    "txtfile\\shell\\printto\\command",
+    "HKEY_CLASSES_ROOT.txt",
+    "HKEY_CLASSES_ROOT.",
+    "assoc "
+  ],
+  "t1044": [
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    "EnableInstallerDetection",
+    "ConsentPromptBehaviorUser",
+    "EnableInstallerDetection",
+    "%TEMP%"
+  ],
+  "t1046": [
+    "nmap",
+    "nc ",
+    "Test-NetConnection",
+    "dev/tcp"
+  ],
+  "t1047": [
+    "Invoke-WmiCommand",
+    "wmic"
+  ],
+  "t1049": [
+    "net use",
+    "who -a",
+    "lsof",
+    "netstat",
+    "arp -a",
+    "net session",
+    "GetTcpTable2",
+    "net file",
+    "Get-NetTCPConnection"
+  ],
+  "t1050": [
+    "net start",
+    "Nwsapagent"
+  ],
+  "t1053": [
+    "%appdata%\\Roaming\\Microsoft\\Templates",
+    "New-UserPersistenceOption",
+    "svchost",
+    "SchTasks",
+    "%systemroot%\\System32\\Tasks",
+    "taskeng",
+    "schtasks /create",
+    "sc ONLOGON",
+    "/interactive",
+    "/ST ",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\SubmitControl"
+  ],
+  "t1055": [
+    "Invoke-PSInject",
+    "mavinject",
+    "ld.so.preload",
+    "Invoke-ReflectivePEInjection.ps1"
+  ],
+  "t1056": [
+    "\\log.txt",
+    "Get-Keystrokes"
+  ],
+  "t1057": [
+    "ps ",
+    "tasklist",
+    "Get-ProcessTokenPrivilege",
+    "tasklist /v",
+    "wmic process get Capture, ExecutablePath"
+  ],
+  "t1058": [
+    "FailureCommand",
+    "SYSTEM\\CurrentControlSet\\Services"
+  ],
+  "t1059": [
+    "cmd.exe",
+    "netsh",
+    "cmd.exe /c",
+    "\\Windows\\System32\\cmd.exe"
+  ],
+  "t1060": [
+    "autocheck autochk ",
+    "CurrentVersion\\Run",
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\Load",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders",
+    "Software\\Microsoft\\Windows\\Run",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx",
+    "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\BootExecute",
+    "New-UserPersistenceOption",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    "Software\\Run auto_update",
+    "wdm",
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell"
+  ],
+  "t1062": [
+    "Install Hyper-V",
+    "Hyper-V"
+  ],
+  "t1063": [
+    "netsh advfirewall firewall",
+    "CbOsxSensorService"
+  ],
+  "t1064": [
+    "powershell.exe -WindowStyle Hidden"
+  ],
+  "t1066": [
+    "Find-AVSignature"
+  ],
+  "t1069": [
+    "Get-LocAdm",
+    "groups",
+    "ldapsearch",
+    "net localgroup",
+    "net group",
+    "dscl . -list /Groups",
+    "dscacheutil -q group",
+    "get-localgroup",
+    "get-ADPrinicipalGroupMembership"
+  ],
+  "t1070": [
+    "wevtutil cl application",
+    "wevtutil cl system",
+    "wevtutil cl",
+    "wevtutil cl Security",
+    "var/log/"
+  ],
+  "t1074": [
+    "\\Windows\\ServiceProfiles\\NetworkService\\appdata\\Local\\Temp",
+    "%USERPROFILE%\\AppData\\Local",
+    "AppData\\Local\\Microsoft\\Windows\\Explorer",
+    "%temp%\\SMB",
+    "\\system"
+  ],
+  "t1075": [
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LocalAccountTokenFilterPolicy",
+    "SEKURLSA::Pth"
+  ],
+  "t1076": [
+    "tscon.exe",
+    "tscon"
+  ],
+  "t1077": [
+    "C$",
+    "IPC$",
+    "net use",
+    "ADMIN$",
+    "New-PSDrive"
+  ],
+  "t1078": [
+    "wmic"
+  ],
+  "t1081": [
+    "DPAPI",
+    "invoke-mimikittenz",
+    "mimikatz"
+  ],
+  "t1082": [
+    "ver ",
+    "Get-ComputerInfo",
+    "hostname",
+    "ls -la /Applications",
+    "systeminfo",
+    "net config workstation",
+    "systemsetup",
+    "/proc/cpuinfo",
+    "GetComputerName",
+    "system_profiler",
+    "dir ",
+    "SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum",
+    "date /t"
+  ],
+  "t1083": [
+    "find ",
+    "dir ",
+    "echo %APPDATA%",
+    "ls ",
+    "locate",
+    "tree "
+  ],
+  "t1084": [
+    "CommandLineEventConsumer",
+    "__InstanceModificationEvent"
+  ],
+  "t1085": [
+    "Control_RunDLL",
+    "rundll32.exe",
+    "wmic",
+    "rundll32.exe javascript",
+    "Control_RunDLLAsUser"
+  ],
+  "t1086": [
+    "powershell"
+  ],
+  "t1087": [
+    "dscl . list /Groups",
+    "net localgroup",
+    "net group",
+    "id ",
+    "net user",
+    "etc/master.passwd",
+    "Get-ProcessTokenGroup",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI\\EnumerateAdministrators",
+    "/domain",
+    "dscacheutil",
+    "net users",
+    "groups ",
+    "etc/passwd"
+  ],
+  "t1088": [
+    "sdclt",
+    "Software\\Classes\\",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\",
+    "eventvwr"
+  ],
+  "t1089": [
+    "taskkill",
+    "setenforce 0"
+  ],
+  "t1090": [
+    "netsh firewall add portopening TCP"
+  ],
+  "t1093": [
+    "Syswow64\\userinit.exe",
+    "System32\\userinit.exe"
+  ],
+  "t1096": [
+    "file.ext:ads.ext",
+    "%PROGRAMDATA%\\Windows",
+    "-stream",
+    "dir /r"
+  ],
+  "t1097": [
+    "KERBEROS::Golden",
+    "KERBEROS::PTT",
+    "LSADUMP::DCSync"
+  ],
+  "t1098": [
+    "LSADUMP::SetNTLM",
+    "LSADUMP::ChangeNTLM"
+  ],
+  "t1099": [
+    "touch ",
+    "date -s"
+  ],
+  "t1100": [
+    "<?php "
+  ],
+  "t1101": [
+    "Install-SSP",
+    "Invoke-Mimikatz",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\RunAsPPL",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\OSConfig\\Security Packages",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\Security Packages",
+    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\LSASS.exe"
+  ],
+  "t1102": [
+    "net use"
+  ],
+  "t1103": [
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows",
+    "AppInit_DLLs",
+    "pserver32.dll",
+    "Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Windows"
+  ],
+  "t1105": [
+    "rsync -r",
+    "scp ",
+    "sftp ",
+    "bitsadmin.exe "
+  ],
+  "t1106": [
+    "cmd.exe",
+    "powershell.exe",
+    "CreateProcess"
+  ],
+  "t1107": [
+    "shred ",
+    "rm ",
+    "del "
+  ],
+  "t1110": [
+    "net use"
+  ],
+  "t1112": [
+    "\\InprocServer32",
+    "autocheck autoche ",
+    "SOFTWARE\\Microsoft\\WABE\\DataPath",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LocalAccountTokenFilterPolicy",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellCompatibility\\Applications\\laxhost.dll",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PrintConfigs",
+    "Software\\Classes",
+    "Software\\Microsoft\\Internet Explorer\\ PhishingFilter",
+    "autocheck autochk ",
+    "SYSTEM\\CurrentContorlSet\\Control\\WMI\\Security",
+    "SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfileGloballyOpenPorts\\List",
+    "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\BootExecute",
+    "Software\\DC3_FEXEC",
+    "Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\Load",
+    "Software\\Classes\\Applications\\rundll32.exe\\shell\\open",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    "EnableLUA",
+    "Software\\Microsoft\\Office"
+  ],
+  "t1113": [
+    "\\system\\screenshot",
+    "Get-TimedScreenshot",
+    "$screenshot",
+    "screencapture",
+    "xwd "
+  ],
+  "t1115": [
+    "pbpaste"
+  ],
+  "t1118": [
+    "System.ComponentModel.RunInstaller",
+    "\\Windows\\Microsoft.NET\\Framework\\v\\InstallUtil.exe",
+    "\\Windows\\Microsoft.NET\\Framework64\\v\\InstallUtil.exe"
+  ],
+  "t1120": [
+    "ls -la ~/Library/Application\\ Support/MobileSync/Backup/"
+  ],
+  "t1121": [
+    "ComUnregisterFunction",
+    "ComRegisterFunction"
+  ],
+  "t1122": [
+    "42aedc87-2188-41fd-b9a3-0c966feabec1",
+    "F3130CDB-AA52-4C3A-AB32-85FFC23AF9C1",
+    "SOFTWARE\\Classes\\CLSID",
+    "InprocServer32",
+    "MMDeviceEnumerator"
+  ],
+  "t1123": [
+    "Get-MicrophoneAudio",
+    "%APPDATA%\\Intel\\Skype"
+  ],
+  "t1124": [
+    "net time \\127.0.0.1",
+    "net time",
+    "w32tm /tz"
+  ],
+  "t1125": [
+    "%APPDATA%\\Intel\\Skype"
+  ],
+  "t1126": [
+    "net use"
+  ],
+  "t1128": [
+    "SOFTWARE\\Microsoft\\Netsh"
+  ],
+  "t1129": [
+    "loadFrom",
+    "%ProgramFiles%",
+    "%SystemRoot%"
+  ],
+  "t1130": [
+    "Microsoft\\SystemCertificates\\Root\\Certificates",
+    "SOFTWARE\\Microsoft\\EnterpriseCertificates\\Root\\Certificates",
+    "add-trusted-cert",
+    "certutil",
+    "SOFTWARE\\Policies\\Microsoft\\SystemCertificates\\Root\\ProtectedRoots"
+  ],
+  "t1131": [
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa",
+    "Authentication Packages",
+    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\LSASS.exe",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\RunAsPPL"
+  ],
+  "t1134": [
+    "CreateProcessAsUser",
+    "CreateProcessWithToken",
+    "SetThreadToken",
+    "Invoke-TokenManipulation",
+    "DuplicateTokenEx",
+    "runas",
+    "DuplicateToken",
+    "ImpersonateLoggedOnUser",
+    "Invoke-RunAs",
+    "LogonUser"
+  ],
+  "t1135": [
+    "net share",
+    "netview",
+    "net view \\remotesystem",
+    "df -aH"
+  ],
+  "t1136": [
+    "support_388945a0",
+    "net user"
+  ],
+  "t1137": [
+    "AppData\\Roaming\\Microsoft\\Excel\\XLSTART",
+    "AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm",
+    "Software\\Microsoft\\Office test\\Special\\Perf",
+    "Software\\Microsoft\\Office test\\Special\\Perf"
+  ],
+  "t1138": [
+    "%WINDIR%\\AppPatch\\sysmain.sdb",
+    "software\\microsoft\\windows nt\\currentversion\\appcompatflags\\custom",
+    "%WINDIR%\\AppPatch\\custom & %WINDIR%\\AppPatch\\AppPatch64\\Custom",
+    "software\\microsoft\\windows nt\\currentversion\\appcompatflags\\installedsdb"
+  ],
+  "t1139": [
+    "unset HISTFILE",
+    "set -o history",
+    "cat ~/.bash_history",
+    "set +o history",
+    ".bash_history",
+    "/dev/null",
+    "ln -s /dev/null ~/.bash_history"
+  ],
+  "t1140": [
+    "certutil -decode",
+    "certutil",
+    "copy /b"
+  ],
+  "t1142": [
+    "/Library/Keychains/",
+    "/Network/Library/Keychains/",
+    "security"
+  ],
+  "t1143": [
+    "apple.awt.UIElement"
+  ],
+  "t1144": [
+    "xattr ",
+    "com.apple.quarantine"  ],
+  "t1145": [
+    "CRYPTO::Extract",
+    ".ssh",
+    "Invoke-SessionGopher"
+  ],
+  "t1146": [
+    "unset HISTFILE",
+    "export HISTFILESIZE=0",
+    "history -c",
+    "rm ~/.bash_history",
+    "HISTFILE"
+  ],
+  "t1147": [
+    "/Library/Preferences/com.apple.loginwindow",
+    "sudo dscl . -create /Users/username UniqueID 401",
+    "Hide500Users"
+  ],
+  "t1148": [
+    ".bash_history",
+    "HISTCONTROL",
+    "history"
+  ],
+  "t1150": [
+    "/Library/Preferences"
+  ],
+  "t1152": [
+    "launchctl submit -l"
+  ],
+  "t1153": [
+    "source"
+  ],
+  "t1154": [
+    "trap",
+    "ctrl+d",
+    "trap 'command list' signals",
+    "ctrl+c"
+  ],
+  "t1155": [
+    "osalang",
+    "osascript"
+  ],
+  "t1156": [
+    "etc/rc.local",
+    "~/.bashrc",
+    "~/.bash_profile"
+  ],
+  "t1158": [
+    "defaults write com.apple.finder AppleShowAllFiles YES",
+    "ls a",
+    "/Users/Shared/.local/",
+    "attrib +h",
+    "\\ProgramData\\Apple\\Updates",
+    "dir /a",
+    "~/Library/.DS_Stores/"
+  ],
+  "t1159": [
+    "$HOME/Library/LaunchAgents/com.apple.updates.plist",
+    "/System/Library/LaunchAgents",
+    "launchctl load -w ~/Library/LaunchAgents/com.apple.updates.plist",
+    "/Library/LaunchAgents",
+    "$HOME/Library/LaunchAgents"
+  ],
+  "t1160": [
+    "/Library/LaunchDaemons",
+    "/System/Library/LaunchDaemons"
+  ],
+  "t1162": [
+    "~/Library/Preferences/",
+    "com.apple.loginitems.plist",
+    " SMLoginItemSetEnabled ",
+    " Contents/Library/LoginItems "
+  ],
+  "t1163": [
+    "etc/rc.common",
+    "source etc/rc.common"
+  ],
+  "t1164": [
+    "~/Library/Preferences/ByHost/com.apple.loginwindow.* .plist",
+    "~/Library/Preferences/com.apple.loginwindow.plist",
+    "defaults write -g ApplePersistence -bool no"
+  ],
+  "t1165": [
+    "/Library/StartupItems",
+    "StartupParameters.plist"
+  ],
+  "t1166": [
+    "chmod ",
+    "ls -l"
+  ],
+  "t1168": [
+    "etc/cron.d/",
+    "etc/crontab",
+    "StartCalendarInterval"
+  ],
+  "t1169": [
+    "etc/sudoers",
+    "user1 ALL=(ALL) NOPASSWD: ALL"
+  ],
+  "t1170": [
+    "mshta http",
+    "mshta vbscript",
+    ".hta"
+  ],
+  "t1171": [
+    "Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
+  ],
+  "t1174": [
+    "\\Windows\\System32",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\Notification Packages"
+  ],
+  "t1175": [
+    "SOFTWARE\\Microsoft\\Ole",
+    "SOFTWARE\\Classes\\AppID",
+    "Invoke-DCOM"
+  ],
+  "t1177": [
+    "System\\CurrentControlSet\\Control\\Session Manager\\SafeDllSearchMode",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\RunAsPPL"
+  ],
+  "t1178": [
+    "DsAddSidHistory",
+    "MISC::AddSid",
+    "netdom trust  /domain: /quarantine:yes"
+  ],
+  "t1179": [
+    "CredEnumerateA"
+  ],
+  "t1180": [
+    "SCRNSAVE.exe",
+    "Control Panel\\Desktop",
+    "ScreenSaverTimeout",
+    "ScreenSaveActive",
+    "ScreenSaverIsSecure",
+    "\\Windows\\sysWOW64",
+    "\\Windows\\System32"
+  ],
+  "t1182": [
+    "System\\CurrentControlSet\\Control\\Session Manager",
+    "CreateProcessAsUser"
+  ],
+  "t1183": [
+    "Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit",
+    "MonitorProcess",
+    "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+    "Debugger",
+    "DEBUG_ONLY_THIS_PROCESS",
+    "DEBUG_PROCESS",
+    "GlobalFlag",
+    "ReportingMode"
+  ],
+  "t1187": [
+    "file:"
+  ],
+  "t1191": [
+    "cmstp"
+  ],
+  "t1196": [
+    "rundll32.exe shell32.dll,Control_RunDLL",
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Control Panel",
+    "HKEY_CLASSES_ROOT\\CLSID",
+    "Shellex\\PropertySheetHandlers",
+    "Extended Properties",
+    "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel\\NameSpace",
+    "\\Windows",
+    "WinExec(",
+    "control.exe",
+    "cpl ",
+    "Cpls "
+  ],
+  "t1197": [
+    "Software\\Policies\\Microsoft\\Windows\\BITS",
+    "bitsadmin /list /allusers /verbose",
+    "JobInactivityTimeout",
+    "MaxDownloadTime",
+    "sc query bits"
+  ],
+  "t1198": [
+    "Microsoft\\Cryptography\\OID\\EncodingType 0\\CryptSIPDllGetSignedDataMsg",
+    "Microsoft\\Cryptography\\OID\\EncodingType 0\\CryptSIPDllVerifyIndirectData",
+    "FuncName",
+    "Microsoft\\Cryptography\\Providers\\Trust\\FinalPolicy"
+  ],
+  "t1201": [
+    "\\Windows\\System32",
+    "cat etc/pam.d/common-password",
+    "pwpolicy getaccountpolicies",
+    "net accounts /domain",
+    "SYSTEM\\CurrentControlSet\\Control\\Lsa\\Notification Packages",
+    "chage -l ",
+    "net accounts",
+    "Get-PassPol"
+  ],
+  "t1206": [
+    "tty_tickets",
+    "sudo ",
+    "etc/sudoers",
+    "/var/db/sudo",
+    "etc/sudoers"
+  ],
+  "t1207": [
+    "LSADUMP::DCShadow"
+  ],
+  "t1208": [
+    "Invoke-Kerberoast"
+  ],
+  "t1209": [
+    "System\\CurrentControlSet\\Services\\W32Time\\TimeProviders"
+  ],
+  "t1214": [
+    "Get-UnattendedInstallFile",
+    "Get-ApplicationHost",
+    "Get-RegistryAutoLogon",
+    "Get-CachedGPPPassword",
+    "Software\\SimonTatham\\Putty\\Sessions",
+    "Get-SiteListPassword",
+    "reg query HKLM /f password /t REG_SZ /s",
+    "reg query HKCU /f password /t REG_SZ /s",
+    "Get-Webconfig"
+  ],
+  "t1215": [
+    "kextload",
+    "modprobe insmod lsmod rmmod modinfo",
+    "apt-get install linux-headers-$(uname -r)",
+    "kextunload",
+    "/lib/modules",
+    "yum install kernel-devel-$(uname -r)"
+  ],
+  "t1216": [
+    "cscript"
+  ],
+  "t1218": [
+    "msiexec.exe",
+    "MavInject32.exe",
+    "INJECTRUNNING",
+    "odbcconf"
+  ],
+  "t1220": [
+    "msxsl.exe",
+    "wmic process list",
+    "wmic os get"
+  ],
+  "t1222": [
+    "attrib",
+    "icacls"
+  ],
+  "t1424": [
+    "ps ",
+    "hidepid",
+    "/proc"
+  ],
+  "t1453": [
+    "DevicePolicyManager",
+    "setPermittedAccessibliityServices"
+  ],
+  "t1482": [
+    "dsquery",
+    "(objectClass=trustedDomain)",
+    "Get-NetDomainTrust",
+    "Get-NetForestTrust",
+    "nltest /domain_trusts"
+  ],
+  "t1484": [
+    "Machine\\Preferences\\ScheduledTasks\\ScheduledTasks.xml",
+    "New-GPOImmediateTask",
+    "MACHINE\\Microsoft\\Windows NT\\SecEdit\\GptTmpl.inf",
+    "SYSVOL"
+  ],
+  "t1485": [
+    "rm",
+    "\\Windows\\System32",
+    "del"
+  ],
+  "t1489": [
+    "SYSTEM\\CurrentControlSet\\Services",
+    "MSExchangeIS",
+    "ChangeServiceConfigW"
+  ],
+  "t1490": [
+    "wmic",
+    "bootstatuspolicy",
+    "ignoreallfailures",
+    "recoveryenable",
+    "vssadmin",
+    "bcdedit",
+    "wbadmin",
+    "Software\\Policies\\Microsoft\\PreviousVersions\\DisableLocalPage"
+  ],
+  "t1497": [
+    "SOFTWARE\\Oracle\\VirtualBox Guest Additions",
+    "HARDWARE\\Description\\System",
+    "SystemBiosVersion",
+    "VMWARE",
+    "WINDOWS\\system32\\drivers\\vmmouse.sys",
+    "WINDOWS\\system32\\vboxhook.dll",
+    "Win32_Fan",
+    "Windows\\system32\\vboxdisp.dll",
+    "HARDWARE\\ACPI\\DSDT\\BOX_",
+    "MSAcpi_ThermalZoneTemperature"
+  ],
+  "t1501": [
+    "etc/systemd/system",
+    "systemctl list-units -type=service all",
+    ".service",
+    ".config/systemd/user/",
+    "/usr/lib/systemd/system",
+    "/usr/sbin/service"
+  ]
+}
