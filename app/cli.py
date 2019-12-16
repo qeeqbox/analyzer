@@ -126,7 +126,7 @@ class QBAnalyzer(Cmd):
         else:
             logstring("File, Folder or Buffer is missing","Red")
 
-    @verbose(True,verbose_flag,verbose_timeout,"Loading extra plugins")
+    @verbose(True,verbose_flag,verbose_timeout,"Saving to results to db")
     def savetodb(self,data,parsed):
         if parsed.db:
             if len(data)>0:
