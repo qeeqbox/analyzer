@@ -1,4 +1,4 @@
-# QBAnalyzer (QeeqBoxAnalyzer) 
+# QeeqBoxAnalyzer
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif)
@@ -34,7 +34,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 ## Features
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
-- Interactive analysis (Session is saved)
+- Intime analysis (Session is saved)
+- 2 modes (Interactive and silent)
 - Generates HTML or JSON as output
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
@@ -196,6 +197,95 @@ python3 -m app.cli --interactive
 git clone https://github.com/qeeqbox/analyzer.git
 sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
 ```
+
+## Intro options
+```
+ _____  __   _  _____        \   / ______  ______  _____   
+|_____| | \  | |_____| |      \_/   ____/ |______ |_____/
+|     | |  \_| |     | |_____  |   /_____ |______ |    \ 2020.V.02.01b
+                               |  https://github.com/QeeqBox/Analyzer
+                                                            
+Please choose a mode:
+--interactive         Run this framework as an application
+--silent              Run this framework as service (Required an interface for interaction)
+
+Examples:
+python3 -m app.cli --local
+python3 -m app.cli --service
+```
+
+## Interactive mode
+```
+(interactive) help analyze
+usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
+               [--behavior] [--xref] [--yara] [--language] [--mitre]
+               [--topurl] [--ocr] [--enc] [--cards] [--creds] [--patterns]
+               [--suspicious] [--dga] [--plugins] [--visualize] [--flags]
+               [--icons] [--print] [--worldmap] [--image] [--full] [--unicode]
+               [--bigfile] [--w_internal] [--w_original] [--w_hash]
+               [--w_words] [--w_all] [--output OUTPUT] [--html] [--json]
+               [--open] [--db]
+
+Input arguments:
+  --file FILE      path to file or dump
+  --folder FOLDER  path to folder
+  --buffer BUFFER  input buffer
+
+Analysis switches:
+  --behavior       check with generic detections
+  --xref           get cross references
+  --yara           analyze with yara module (Disable this for big files)
+  --language       analyze words against english language
+  --mitre          map strings to mitre
+  --topurl         get urls and check them against top 10000
+  --ocr            get all ocr text
+  --enc            find encryptions
+  --cards          find credit cards
+  --creds          find credit cards
+  --patterns       find common patterns
+  --suspicious     find suspicious strings
+  --dga            find Domain generation algorithms
+  --plugins        scan with external plugins
+  --visualize      visualize some artifacts
+  --flags          add countries flags to html
+  --icons          add executable icons to html
+  --print          print output to terminal
+  --worldmap       add world map to html
+  --image          add similarity image to html
+  --full           analyze using all modules
+
+Force analysis switches:
+  --unicode        force extracting ascii
+  --bigfile        force analyze big files
+
+Whitelist switches:
+  --w_internal     find it in white list by internal name
+  --w_original     find it in white list by original name
+  --w_hash         find it in white list by hash
+  --w_words        check extracted words against whitelist
+  --w_all          find it in white list
+
+Output arguments and switches:
+  --output OUTPUT  path of output folder
+  --html           make html record
+  --json           make json record
+  --open           open the report in webbroswer
+
+Database options:
+  --db             turn on database option
+
+Examples:
+    analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
+    analyze --file /malware/BrRAT.apk --full --json --print
+    analyze --folder /malware --full --json --open
+    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
+    analyze --buffer "google.com bit.ly" --topurl --html --open
+    analyze --buffer "google.com bit.ly" --full --json --print
+
+```
+
+## Silent mode
+You can add tasks to this queue by using insert from qbjobqueue (I'll add additional details later on)
 
 ## Disclaimer
 This project is NOT an anti malware project and does not quarantine or delete malicious files
