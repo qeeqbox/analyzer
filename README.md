@@ -1,10 +1,10 @@
 # QBAnalyzer (QeeqBoxAnalyzer) 
 An open source threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
-### Running
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif)
 
-### E.g. HTML Outputs
+## Output
+### HTML Outputs
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.html)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.html)
@@ -18,7 +18,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.html)
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
 
-### E.g. Output json
+### Output json
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.json)
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.json)
@@ -31,9 +31,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
----
-
-### Features
+## Features
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Interactive analysis (Session is saved)
@@ -92,6 +90,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
     - API Behavior detection (DLL injection, Process Hollowing, Process Doppelganging etc..)
     - Cross references detection
     - Icon extraction
+    - Extract String file info (FileDescription, FileDescription etc..)
 - Android
     - APK information
     - DEX information
@@ -140,37 +139,30 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
     - Decode/analyze links
     - Script entropy
 
-### Roadmap 2019
+## Roadmap
 - ~~Reduce file I/O~~
 - ~~PDF module~~
 - ~~RTF module~~
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
 - ~~HTML module~~
 - ~~Refactoring modules v2~~
-- ~~Whitelist~~
+- ~~Converting some yara rules into individual modules (Requested by users)~~
+- ~~Whitelist (Requested by users)~~
+- ~~Switching to mongodb (Requested by users)~~
 - Web detection
-
-### Roadmap 2020
 - Phishing module
+- Curling some TIPs (Requested by users)
 - MS office module
 - Web service and API
 - Machine learning modules (maybe commercial)
 
-### Update
-Thank you for reaching out - I have been getting requests to implement the following:
-- Curling info from virustotal, hybridanalysis, Any.Run and Jotti through their apis
-- ~~Making the current yara rules into individual modules for further customization~~ (rolled back but added extra plugins)
+## All dependencies
+Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Mongodb, Wikipedia, Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css, bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, markupsafe, quopri, platform, pkgutil, random, tldextract, typing, swig_runtime_data4, copyreg, glob, difflib, code, zipimport, stat, time, secrets, optparse, urllib, xml, M2Crypto, fractions, pydoc, PIL, abc, elftools, calendar, atexit, ctypes, datetime, fcntl, sre_constants, runpy, uu, sqlite3, sitecustomize, distutils, cgi, lzma, site, email, certifi, requests_file, jinja2, pycparser, selectors, unicodedata, pytesseract, gettext, encodings, nltk, select, apport_python_hook, linecache, itertools, tld, textwrap, cryptography, xmlrpc, zipfile, mmap, pefile, ftplib, socketserver, asyncio, asn1crypto, cython_runtime, uuid, bz2, webbrowser, chardet, functools, ipaddress, enum, hashlib, tempfile, queue, pathlib, base64, ordlookup, copy, getopt, scapy, ast, codecs, posix, marshal, urllib3, sre_parse, netrc, heapq, bs4, cffi, builtins, pickle, errno, grp, os, fnmatch, genericpath, qbanalyzer, shutil, magic, string, re, signal, decimal, pkg_resources, inspect, pdb, stringprep, binascii, argparse, sre_compile, http, opcode, plistlib, six, collections, gc, posixpath, ssl, asyncore, numpy, bisect, simplejson, ntpath, numbers, macholib, token, keyword, imp, traceback, zlib, logging, soupsieve, yara, requests, contextvars, ssdeep, pprint, sysconfig, tokenize, gzip, struct, csv, array, idna, shlex, warnings, dis, unittest, html, threading, weakref, locale, socket, json, resource, contextlib, hmac, reprlib, concurrent, types, subprocess, mimetypes, psutil and tons of researches.. (If i missed a reference/dependency, please let me know!)
 
-### All dependencies
-Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Mongodb, Wikipedia, Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css, bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, markupsafe, quopri, platform, pkgutil, random, tldextract, typing, swig_runtime_data4, copyreg, glob, difflib, code, zipimport, stat, time, secrets, optparse, urllib, xml, M2Crypto, fractions, pydoc, PIL, abc, elftools, calendar, atexit, ctypes, datetime, fcntl, sre_constants, runpy, uu, sqlite3, sitecustomize, distutils, cgi, lzma, site, email, certifi, requests_file, jinja2, pycparser, selectors, unicodedata, pytesseract, gettext, encodings, nltk, select, apport_python_hook, linecache, itertools, tld, textwrap, cryptography, xmlrpc, zipfile, mmap, pefile, ftplib, socketserver, asyncio, asn1crypto, cython_runtime, uuid, bz2, webbrowser, chardet, functools, ipaddress, enum, hashlib, tempfile, queue, pathlib, base64, ordlookup, copy, getopt, scapy, ast, codecs, posix, marshal, urllib3, sre_parse, netrc, heapq, bs4, cffi, builtins, pickle, errno, grp, os, fnmatch, genericpath, qbanalyzer, shutil, magic, string, re, signal, decimal, pkg_resources, inspect, pdb, stringprep, binascii, argparse, sre_compile, http, opcode, plistlib, six, collections, gc, posixpath, ssl, asyncore, numpy, bisect, simplejson, ntpath, numbers, macholib, token, keyword, imp, traceback, zlib, logging, soupsieve, yara, requests, contextvars, ssdeep, pprint, sysconfig, tokenize, gzip, struct, csv, array, idna, shlex, warnings, dis, unittest, html, threading, weakref, locale, socket, json, resource, contextlib, hmac, reprlib, concurrent, types, subprocess, mimetypes, psutil and tons of researches..
-
-
-If i missed a reference/dependency, please let me know!
-
-### Disclaimer
+## Disclaimer
 This project is NOT an anti malware project and does not quarantine or delete malicious files
     
----
+## Running as application
 
 ### [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Ubuntu 
 ```sh
@@ -179,7 +171,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh ubuntu
 ./install.sh initdb
-python3 -m app.cli
+python3 -m app.cli --interactive
 ```
 
 ### [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Fedora 
@@ -189,7 +181,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh fedora
 ./install.sh initdb
-python3 -m app.cli
+python3 -m app.cli --interactive
 ```
 
 ### [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Kali
@@ -199,7 +191,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh kali
 ./install.sh initdb
-python3 -m app.cli
+python3 -m app.cli --interactive
 ```
 
 ### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
