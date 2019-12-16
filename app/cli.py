@@ -178,5 +178,5 @@ if __name__ == '__main__':
     print("--silent              Run this framework as service (Required an interface for interaction)")
     print()
     print("Examples:")
-    print("python3 -m app.cli --local")
-    print("python3 -m app.cli --service\n")
+    print("python3 -m app.cli --interactive")
+    print("python3 -m app.cli --silent\n")
