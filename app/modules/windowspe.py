@@ -211,6 +211,19 @@ class WindowsPe:
         return _list,manifest,_icons
 
     @verbose(True,verbose_flag,verbose_timeout,None)
+    def getstringfileinfo(self,pe) -> dict:
+        _dict  = {}
+        pe.parse_data_directories(directories=[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_RESOURCE']])
+        for fileinfo in pe.FileInfo[0]:
+            if fileinfo.Key.decode() == 'StringFileInfo':
+                for st in fileinfo.StringTable:
+                    for entry in st.entries.items():
+                        _dict.update({(entry[0].decode("utf-8",errors="ignore")):entry[1].decode("utf-8",errors="ignore")})
+                if len(_dict) > 0:
+                    return _dict
+        return _dict
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
     def getCharacteristics(self,pe) -> dict:
         '''
         get characteristics of file
@@ -257,6 +270,7 @@ class WindowsPe:
                         "Characteristics":{},
                         "Singed":[],
                         "SignatureExtracted":{},
+                        "Stringfileinfo":{},
                         "Sections":[],
                         "Dlls":[],
                         "Resources":[],
@@ -268,6 +282,7 @@ class WindowsPe:
                         "_Characteristics": {},
                         "_Singed":["Wrong","SignatureHex"],
                         "__SignatureExtracted":{},
+                        "_Stringfileinfo":{},
                         "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
                         "_Dlls":["Dll","Description"],
                         "_Resources":["Resource","Offset","MD5","Sig","Description"],
@@ -293,6 +308,7 @@ class WindowsPe:
                                     "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
         data["PE"]["Characteristics"] = self.getCharacteristics(pe)
         data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
+        data["PE"]["Stringfileinfo"] = self.getstringfileinfo(pe)
         data["PE"]["Sections"] = self.getsections(pe)
         data["PE"]["Dlls"] = self.getdlls(pe)
         data["PE"]["Resources"],data["PE"]["Manifest"],data["ICONS"]["ICONS"] = self.getrecourse(pe)

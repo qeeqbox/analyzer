@@ -1,0 +1,53 @@
+from datetime import datetime
+from pymongo import CursorType, MongoClient
+from pymongo.errors import ConnectionFailure
+from time import sleep
+from threading import Event
+
+# make sure we implement function whitelist
+
+class qbworker():
+    def __init__(self, name, func,wait):
+        self.conn = MongoClient('mongodb://localhost:27017/')
+        if bool(name in self.conn.list_database_names()):
+            self.cur = self.conn[name]['jobs']
+            self.func = func
+            self.daemon = True
+            self.cancel = Event()
+            self.wait = 2
+            self.runworker()
+        else:
+            print('DB error')
+
+    def checkconnection(conn):
+        try:
+            conn.admin.command('ismaster')
+            return True
+        except ConnectionFailure:
+            print('Server not available')
+            return False
+
+    def runworker(self):
+        cursor = self.cur.find({'status': 'wait'},cursor_type=CursorType.TAILABLE_AWAIT)
+        while cursor.alive and not self.cancel.isSet():
+            try:
+                record = cursor.next()
+                self.executetask(record)
+            except:
+                print('Waiting')
+                sleep(self.wait)
+
+    def executetask(self, record):
+        self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'work', 'started': datetime.now()}})
+        if record['data'] is not '':
+            func, *params = record['data'].split()
+            self.func(record['data'])
+            self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'done','finished': datetime.now()}})
+            return True
+        else:
+            self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'issue','finished': datetime.now()}})
+            return False
+
+
+
+			

@@ -5,5 +5,5 @@ RUN python -m nltk.downloader words
 RUN ln -s /usr/local/lib/python3.7/site-packages/usr/local/lib/libyara.so /usr/local/lib/libyara.so
 RUN pip install --global-option="build" --global-option="--enable-cuckoo" --global-option="--enable-magic" yara-python
 WORKDIR /app
-COPY qbanalyzer qbanalyzer
-CMD ["python", "-m","qbanalyzer.cli"]
+COPY analyzer analyzer
+CMD ["python", "-m","app.cli","--interactive"]

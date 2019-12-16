@@ -1,3 +1,8 @@
+#### 2020.V.02.01
+- Fixed bugs
+- Silent mode implemented
+- Added serialization
+
 #### 2020.V.02.00b
 - Fixed bugs
 - Switched to mongodb :)

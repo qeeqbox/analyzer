@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
 from .logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from .mics.funcs import getwords, getwordsmultifiles,openinbrowser
+from .mics.funcs import getwords, getwordsmultifiles,openinbrowser,serializeobj
 from .general.qbfile import QBFile
 from .general.qbencoding import QBEncdoing
 from .modules.linuxelf import LinuxELF
@@ -83,8 +83,9 @@ class StaticAnalyzer:
         '''
         main analyze logic!
         '''
+
         data = {}
-        
+
         logstring("Start analyzing {}".format(parsed.file),"Green")
 
         self.fty.checkfilesig(data,parsed.file,parsed.output)
@@ -166,8 +167,6 @@ class StaticAnalyzer:
             self.qbcv.getflagsfromcodes(data)
         if parsed.worldmap or parsed.full:
             self.qbcv.getallcodes(data)
-        #with open('temp.pickle', 'wb') as handle:
-        #    pdump(data, handle, protocol=HIGHEST_PROTOCOL)
         logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
         if parsed.html:
             self.hge.rendertemplate(data,None,None,parsed)
@@ -175,11 +174,15 @@ class StaticAnalyzer:
                 logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
                 if parsed.open:
                     openinbrowser(data["Location"]["html"])
+        data = serializeobj(data)
+        self.JSO.cleandata(data)
         if parsed.json:
-            self.JSO.createjson(data)
-            if path.exists(data["Location"]["json"]):
-                logstring("Generated JSON file {}".format(data["Location"]["json"]),"Yellow")
-                if parsed.open:
-                    openinbrowser(data["Location"]["json"])
-                if parsed.print:
-                    self.JSO.printjson(data)
+            self.JSO.dumpjson(data)
+            if parsed.json:
+                if path.exists(data["Location"]["json"]):
+                    logstring("Generated JSON file {}".format(data["Location"]["json"]),"Yellow")
+                    if parsed.open:
+                        openinbrowser(data["Location"]["json"])
+                    if parsed.print:
+                        self.JSO.printjson(data)
+        return data

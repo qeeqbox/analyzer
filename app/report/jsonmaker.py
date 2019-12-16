@@ -7,6 +7,8 @@ class ComplexEncoder(JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, str):
             return "Object type {} was removed..".format(type(obj))
+        if isinstance(obj, long):
+            return str(obj)
         return JSONEncoder.default(self, obj)
 
 class JSONMaker:
@@ -21,7 +23,7 @@ class JSONMaker:
         logstring(jdumps(data, indent=4, sort_keys=True,cls=ComplexEncoder),"Yellow")
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def createjson(self,data):
+    def cleandata(self,data):
         '''
         start making json output file
         '''
@@ -42,6 +44,12 @@ class JSONMaker:
         for x in data.copy():
             if len(data[x]) == 0:
                 del data[x]
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def dumpjson(self,data):
+        '''
+        start making json output file
+        '''
 
         with open(data["Location"]["json"], 'w') as fp:
             jdump(data, fp, cls=ComplexEncoder)

@@ -8,7 +8,7 @@ import signal
 log,verbose_flag,verbose_timeout = None, None, None
 if log == None:log = getLogger("qbanalyzerlogger")
 if verbose_flag == None:verbose_flag = False
-if verbose_timeout == None: verbose_timeout = 20
+if verbose_timeout == None: verbose_timeout = 10
 
 class colors:
     Restore = '\033[0m'
@@ -29,11 +29,12 @@ def logstring(_str,color):
     if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"X",colors.Restore,_str))
     elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,">",colors.Restore,_str))
     elif color == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
+    elif color == "Yellow_#": log.info('{}{}{} {}'.format(colors.Yellow,"#",colors.Restore,_str))
 
 class TimeoutException(Exception):   # Custom exception class
     pass
 
-def verbose(OnOff=False,Verb=False,timeout=20,str=None):
+def verbose(OnOff=False,Verb=False,timeout=10,str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
     '''    

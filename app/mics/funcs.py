@@ -189,3 +189,17 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
+
+@verbose(True,verbose_flag,verbose_timeout,None)
+def serializeobj(obj):
+    if type(obj) == dict:
+        for key, value in obj.items():
+            obj[key] = serializeobj(value)
+    elif type(obj) == list:
+        for i, item in enumerate(obj):
+            obj[i] = serializeobj(item)
+    elif type(obj) == None:
+        obj = "None"
+    else:
+        obj = str(obj)
+    return obj
