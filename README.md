@@ -4,7 +4,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif)
 
 ## Output
-### HTML Outputs
+#### HTML Outputs
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.html)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.html)
@@ -18,7 +18,7 @@ An open source threat intelligence framework for extracting artifacts and IoCs f
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.html)
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
 
-### Output json
+#### Output json
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.json)
 - [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
 - [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.json)
@@ -161,7 +161,7 @@ Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Mongodb, Wiki
 
 ## Running as application
 
-### [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Ubuntu 
+#### [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Ubuntu 
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -171,7 +171,7 @@ chmod +x install.sh
 python3 -m app.cli --interactive
 ```
 
-### [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Fedora 
+#### [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Fedora 
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -181,7 +181,7 @@ chmod +x install.sh
 python3 -m app.cli --interactive
 ```
 
-### [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Kali
+#### [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Kali
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -191,7 +191,7 @@ chmod +x install.sh
 python3 -m app.cli --interactive
 ```
 
-### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
+#### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
 ```docker
 git clone https://github.com/qeeqbox/analyzer.git
 sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
