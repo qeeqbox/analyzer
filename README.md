@@ -210,8 +210,8 @@ Please choose a mode:
 --silent              Run this framework as service (Required an interface for interaction)
 
 Examples:
-python3 -m app.cli --local
-python3 -m app.cli --service
+python3 -m app.cli --interactive
+python3 -m app.cli --silent
 ```
 
 ## Interactive mode
