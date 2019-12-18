@@ -1,4 +1,4 @@
-# QeeqBox.Analyzer
+# QeeqBox Analyzer
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ![](https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif)
