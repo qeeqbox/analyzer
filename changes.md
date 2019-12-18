@@ -1,3 +1,8 @@
+#### 2020.V.02.02
+- Fixed bugs
+- Dump json files into db
+- Fixed loggers
+
 #### 2020.V.02.01
 - Fixed bugs
 - Silent mode implemented
