@@ -274,7 +274,8 @@ Output arguments and switches:
   --open           open the report in webbroswer
 
 Database options:
-  --db             turn on database option
+  --db_result      save results to db (<16mg)
+  --db_dump        save json dump tp db
 
 Examples:
     analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
