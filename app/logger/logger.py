@@ -3,10 +3,11 @@ __G__ = "(G)bd249ce4"
 from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
 from sys import stdout
 from os import path,mkdir
-import signal
+from signal import signal,alarm,SIGALRM
 
-log,verbose_flag,verbose_timeout = None, None, None
-if log == None:log = getLogger("qbanalyzerlogger")
+logterminal,logfile,verbose_flag,verbose_timeout = None,None, None, None
+if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
+if logfile == None:logfile = getLogger("qbanalyzerlogfile")
 if verbose_flag == None:verbose_flag = False
 if verbose_timeout == None: verbose_timeout = 10
 
@@ -26,10 +27,10 @@ def logstring(_str,color):
     output str with color and symbol (they are all as info)
     '''
     stdout.flush()
-    if color == "Green": log.info('{}{}{} {}'.format(colors.Green,"X",colors.Restore,_str))
-    elif color == "Yellow": log.info('{}{}{} {}'.format(colors.Yellow,">",colors.Restore,_str))
-    elif color == "Red": log.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
-    elif color == "Yellow_#": log.info('{}{}{} {}'.format(colors.Yellow,"#",colors.Restore,_str))
+    if color == "Green": logterminal.info('{}{}{} {}'.format(colors.Green,"X",colors.Restore,_str))
+    elif color == "Yellow": logterminal.info('{}{}{} {}'.format(colors.Yellow,">",colors.Restore,_str))
+    elif color == "Red": logterminal.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
+    elif color == "Yellow_#": logterminal.info('{}{}{} {}'.format(colors.Yellow,"#",colors.Restore,_str))
 
 class TimeoutException(Exception):   # Custom exception class
     pass
@@ -44,42 +45,43 @@ def verbose(OnOff=False,Verb=False,timeout=10,str=None):
     def decorator(func):
         def wrapper(*args, **kwargs):
             try:
-                signal.signal(signal.SIGALRM, timeout_handler)
-                signal.alarm(timeout)
+                signal(SIGALRM, timeout_handler)
+                alarm(timeout)
                 if Verb:
-                    log.info("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+                    logstring("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
                 if str:
                     logstring(str, "Green")
                 ret =  func(*args, **kwargs)
-                signal.alarm(0)
+                alarm(0)
                 return ret
             except TimeoutException:
                 logstring("{}.{} > {}s.. Timeout".format(func.__module__, func.__name__,timeout), "Red")
-                signal.alarm(0)
+                alarm(0)
                 return None
-            except Exception:
-                #print(e)
+            except Exception as e:
                 logstring("{}.{} Failed".format(func.__module__, func.__name__), "Red")
-                signal.alarm(0)
+                logfile.info("{}.{} Failed -> {}".format(func.__module__, func.__name__,e))
+                alarm(0)
                 return None
         return wrapper
     return decorator
 
 def setuplogger():
-    loggerpath = path.abspath(path.join(path.dirname( __file__ ),'logs'))
-    if not loggerpath.endswith(path.sep): loggerpath = loggerpath+path.sep
-    if not path.isdir(loggerpath): mkdir(loggerpath)
+    logterminalgerpath = path.abspath(path.join(path.dirname( __file__ ),'logs'))
+    if not logterminalgerpath.endswith(path.sep): logterminalgerpath = logterminalgerpath+path.sep
+    if not path.isdir(logterminalgerpath): mkdir(logterminalgerpath)
     getLogger("scapy.runtime").setLevel(ERROR)
     getLogger("requests").setLevel(WARNING)
     getLogger("urllib3").setLevel(WARNING)
     getLogger("pytesseract").setLevel(WARNING)
     getLogger("PIL").setLevel(WARNING)
     getLogger("chardet").setLevel(WARNING)
-    log.setLevel(DEBUG)
+    logterminal.setLevel(DEBUG)
     format = Formatter('%(asctime)s %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
     shandler = StreamHandler(stdout)
     shandler.setFormatter(format)
-    log.addHandler(shandler)
-    fhandler = handlers.RotatingFileHandler(loggerpath+"alllogs", maxBytes=(100*1024*1024), backupCount=3)
+    logterminal.addHandler(shandler)
+    logfile.setLevel(DEBUG)
+    fhandler = handlers.RotatingFileHandler(logterminalgerpath+"alllogterminals", maxBytes=(100*1024*1024), backupCount=3)
     fhandler.setFormatter(format)
-    log.addHandler(fhandler)
+    logfile.addHandler(fhandler)

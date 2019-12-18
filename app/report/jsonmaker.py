@@ -53,3 +53,10 @@ class JSONMaker:
 
         with open(data["Location"]["json"], 'w') as fp:
             jdump(data, fp, cls=ComplexEncoder)
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def dumpjsonandreturn(self,data):
+        '''
+        start making json output file
+        '''
+        return jdumps(data, cls=ComplexEncoder)

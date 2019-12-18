@@ -1,9 +1,9 @@
 from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
 from pymongo import MongoClient
+from gridfs import GridFS
 
 client = None
 if client == None:client = MongoClient('mongodb://localhost:27017/')
-
 
 def updateitem(db,col,_id,_set):
     item = client[db][col].find_one_and_update({'_id': _id},{'$set': _set})
@@ -39,3 +39,10 @@ def finditems(db,_set):
         return _list
     else:
         return ""
+
+def additemfs(db,filebuffer,name,_set):
+    item = GridFS(client[db]).put(filebuffer,filename=name,metadata=_set,encoding='utf-8')
+    if item != None:
+        return item
+    else:
+        return False

@@ -1,11 +1,12 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.01b"
+__V__ = "2020.V.02.02"
 
 from .staticanalyzer import StaticAnalyzer
 from .mics.funcs import killpythoncli,killprocessandsubs
 from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
 from .logger.logger import logstring,verbose,verbose_flag,verbose_timeout,setuplogger
+from .report.reporthandler import ReportHandler
 from cmd import Cmd
 from os import path,listdir
 from argparse import ArgumentParser
@@ -14,7 +15,6 @@ from requests import get
 from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
 from signal import signal,SIGTSTP,SIGINT
-from .mics.connection import additem,updateitem
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -76,7 +76,8 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdeo.add_argument('--json',action='store_true', help="make json record", required=False)
     _analyze_parsergroupdeo.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
     _analyze_parsergroupded = _analyze_parser.add_argument_group('Database options')
-    _analyze_parsergroupded.add_argument('--db',action='store_true', help="turn on database option", required=False)
+    _analyze_parsergroupded.add_argument('--db_result',action='store_true', help="turn on database option", required=False)
+    _analyze_parsergroupded.add_argument('--db_dump',action='store_true', help="turn on database option", required=False)
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
@@ -89,6 +90,10 @@ class QBAnalyzer(Cmd):
             logstring("Update failed","Red")
 
         self.san = StaticAnalyzer()
+        self.rep = ReportHandler()
+
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/hello.exe --full --json --db_dump --open")
+
         if mode == "--silent":
             qbjobqueue("jobsqueue",True)
             qbworker("jobsqueue",self.do_analyze,3)
@@ -126,20 +131,10 @@ class QBAnalyzer(Cmd):
         else:
             logstring("File, Folder or Buffer is missing","Red")
 
-    @verbose(True,verbose_flag,verbose_timeout,"Saving results to db")
-    def savetodb(self,data,parsed):
-        if parsed.db:
-            if len(data)>0:
-                _id = additem("tasks","results",data)
-                if _id:
-                    logstring("Results added to db","Green")
-                else:
-                    logstring("Unable to add result to db","Red")
-
     def analyzefile(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
             data = self.san.analyze(parsed)
-            self.savetodb(data,parsed)
+            self.rep.checkoutput(data,parsed)
         else:
             logstring("Target File/dump is wrong..","Red")
 
@@ -150,7 +145,7 @@ class QBAnalyzer(Cmd):
                 if path.isfile(fullpath):
                     parsed.file = fullpath
                     data = self.san.analyze(parsed)
-                    self.savetodb(data,parsed)
+                    self.rep.checkoutput(data,parsed)
         else:
             logstring("Target folder is wrong..","Red")
 
@@ -161,7 +156,7 @@ class QBAnalyzer(Cmd):
                 tempfile.write(parsed.buffer)
             parsed.file = tempname
             data = self.san.analyze(parsed)
-            self.savetodb(data,parsed)
+            self.rep.checkoutput(data,parsed)
         else:
             logstring("Target buffer is empty..","Red")
 

@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
 from .logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from .mics.funcs import getwords, getwordsmultifiles,openinbrowser,serializeobj
 from .general.qbfile import QBFile
 from .general.qbencoding import QBEncdoing
 from .modules.linuxelf import LinuxELF
@@ -18,8 +17,6 @@ from .modules.htmlparser import HTMLParser
 from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
 from .intell.qbsuspicious import QBSuspicious
-from .intell.qbimage import QBImage
-from .intell.qbicons import QBIcons
 from .intell.qbbehavior import QBBehavior
 from .intell.qbd3generator import QBD3generator
 from .intell.qbocrdetect import QBOCRDetect
@@ -33,12 +30,8 @@ from .intell.qbcountriesviz import QBCountriesviz
 from .intell.qburlsimilarity import QBURLSimilarity
 from .intell.qbwhitelist import QBWhitelist
 from .qbdetect.loaddetections import LoadDetections
-from .report.htmlmaker import HtmlMaker
-from .report.jsonmaker import JSONMaker
 from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
-from os import path
-from sys import getsizeof
 from gc import collect
 
 class StaticAnalyzer:
@@ -56,7 +49,6 @@ class StaticAnalyzer:
         self.bbl = BBParser()
         self.yar = YaraParser()
         self.rpc = ReadPackets(QBWafDetect)
-        self.hge = HtmlMaker(QBImage,QBIcons)
         self.epa = EmailParser()
         self.qbt = QBBehavior()
         self.qb3 = QBD3generator()
@@ -73,13 +65,12 @@ class StaticAnalyzer:
         self.qbsu = QBSuspicious()
         self.dga = QBDGA()
         self.qbcv = QBCountriesviz()
-        self.htm = HTMLParser()
-        self.JSO = JSONMaker()
         self.qbenc = QBEncdoing()
         self.qbcs = QBCredentials()
         self.qbwi = QBWhitelist()
+        self.htm = HTMLParser()
 
-    def analyze(self,parsed):
+    def analyze(self,parsed) -> dict:
         '''
         main analyze logic!
         '''
@@ -167,22 +158,4 @@ class StaticAnalyzer:
             self.qbcv.getflagsfromcodes(data)
         if parsed.worldmap or parsed.full:
             self.qbcv.getallcodes(data)
-        logstring("Size of data is ~{} bytes".format(getsizeof(str(data))),"Yellow")
-        if parsed.html:
-            self.hge.rendertemplate(data,None,None,parsed)
-            if path.exists(data["Location"]["html"]):
-                logstring("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
-                if parsed.open:
-                    openinbrowser(data["Location"]["html"])
-        data = serializeobj(data)
-        self.JSO.cleandata(data)
-        if parsed.json:
-            self.JSO.dumpjson(data)
-            if parsed.json:
-                if path.exists(data["Location"]["json"]):
-                    logstring("Generated JSON file {}".format(data["Location"]["json"]),"Yellow")
-                    if parsed.open:
-                        openinbrowser(data["Location"]["json"])
-                    if parsed.print:
-                        self.JSO.printjson(data)
         return data

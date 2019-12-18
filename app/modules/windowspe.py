@@ -213,14 +213,15 @@ class WindowsPe:
     @verbose(True,verbose_flag,verbose_timeout,None)
     def getstringfileinfo(self,pe) -> dict:
         _dict  = {}
-        pe.parse_data_directories(directories=[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_RESOURCE']])
-        for fileinfo in pe.FileInfo[0]:
-            if fileinfo.Key.decode() == 'StringFileInfo':
-                for st in fileinfo.StringTable:
-                    for entry in st.entries.items():
-                        _dict.update({(entry[0].decode("utf-8",errors="ignore")):entry[1].decode("utf-8",errors="ignore")})
-                if len(_dict) > 0:
-                    return _dict
+        if hasattr(pe, "IMAGE_DIRECTORY_ENTRY_RESOURCE"):
+            pe.parse_data_directories(directories=[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_RESOURCE']])
+            for fileinfo in pe.FileInfo[0]:
+                if fileinfo.Key.decode() == 'StringFileInfo':
+                    for st in fileinfo.StringTable:
+                        for entry in st.entries.items():
+                            _dict.update({(entry[0].decode("utf-8",errors="ignore")):entry[1].decode("utf-8",errors="ignore")})
+                    if len(_dict) > 0:
+                        return _dict
         return _dict
 
     @verbose(True,verbose_flag,verbose_timeout,None)
