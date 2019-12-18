@@ -37,6 +37,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Intime analysis (Session is saved)
 - 2 modes (Interactive and silent)
 - Generates HTML or JSON as output
+- Dump output file with details to mongodb
+- Save output result to mongodb
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
