@@ -1,4 +1,4 @@
-#  QeeqBox Analyzer ![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)
+#  QeeqBox Analyzer [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
 
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
