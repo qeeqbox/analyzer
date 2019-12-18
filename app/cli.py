@@ -92,8 +92,6 @@ class QBAnalyzer(Cmd):
         self.san = StaticAnalyzer()
         self.rep = ReportHandler()
 
-        self.do_analyze("--file /home/a8b2bd81cf1e/malware/hello.exe --full --json --db_dump --open")
-
         if mode == "--silent":
             qbjobqueue("jobsqueue",True)
             qbworker("jobsqueue",self.do_analyze,3)
