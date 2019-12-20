@@ -76,7 +76,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdeo.add_argument('--json',action='store_true', help="make json record", required=False)
     _analyze_parsergroupdeo.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
     _analyze_parsergroupded = _analyze_parser.add_argument_group('Database options')
-    _analyze_parsergroupded.add_argument('--db_result',action='save results to db (<16mg)', required=False)
+    _analyze_parsergroupded.add_argument('--db_result',action='store_true',help='save results to db (<16mg)', required=False)
     _analyze_parsergroupded.add_argument('--db_dump',action='store_true', help="save json dump tp db", required=False)
 
     def __init__(self,mode):
