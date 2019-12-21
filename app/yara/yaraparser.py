@@ -1,16 +1,17 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from yara import compile
 from glob import glob
 from os import mkdir, path
+from copy import deepcopy
 
 class YaraParser:
     @verbose(True,verbose_flag,verbose_timeout,"Starting YaraParser")
     def __init__(self):
-        '''
-        initialize class and make rules folder, get all conditions from .yar
-        '''
+        self.datastruct = { "Matches":[],
+                            "_Matches":["Count","Offset","Rule","Patteren","Parsed","Condition"]}
+
         self.yarapath = path.abspath(path.join(path.dirname( __file__ ),'rules'))
         if not self.yarapath.endswith(path.sep): self.yarapath = self.yarapath+path.sep
         if not path.isdir(self.yarapath): mkdir(self.yarapath)
@@ -35,8 +36,7 @@ class YaraParser:
         '''
         check file with compiled yara detection and append results into list
         '''
-        data["Yara"] = {"Matches":[],
-                        "_Matches":["Count","Offset","Rule","Patteren","Parsed","Condition"]}
+        data["Yara"] = deepcopy(self.datastruct)
         matches = self.rules.match(data["Location"]["File"])
         if len(matches) > 0:
             for match in matches:

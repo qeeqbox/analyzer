@@ -63,7 +63,7 @@
   },
   {
     "Extra": "",
-    "Header_Detection": "AWS",
+    "Header_Detection": "AWS|x-amzn",
     "Name": "Amazon Web Services Web Application Firewall",
     "Options": {
       "Flag": 2,
@@ -85,8 +85,20 @@
   },
   {
     "Extra": "",
-    "Header_Detection": "BigIP|X-Cnection:|X-WA-Info",
+    "Header_Detection": "BigIP|X-Cnection:|X-WA-Info|bigipserver",
     "Name": "BIGIP Application Security Manager",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
+    "Extra": "",
+    "Content_Detection": "CloudProxy - Access Denied",
+    "Header_Detection": "sucuri|cloudproxy",
+    "Name": "Sucuri WAF",
     "Options": {
       "Flag": 2,
       "Required": 1,
@@ -151,8 +163,30 @@
   },
   {
     "Extra": "",
+    "Header_Detection": "Imunify360",
+    "Name": "Imunify360 WAF",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
+    "Extra": "",
     "Header_Detection": "Protected by COMODO WAF",
     "Name": "Comodo Web Application Firewall",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
+    "Extra": "",
+    "Header_Detection": "better-wp-security",
+    "Name": "WP WAF",
     "Options": {
       "Flag": 2,
       "Required": 1,
@@ -175,6 +209,28 @@
     "Extra": "",
     "Header_Detection": "X-Backside-Transport",
     "Name": "IBM WebSphere DataPower",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
+    "Extra": "",
+    "Header_Detection": "X-Dis-Request-Id",
+    "Name": "StackPath WAF",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
+    "Extra": "",
+    "Header_Detection": "imperva",
+    "Name": "Imperva WAF",
     "Options": {
       "Flag": 2,
       "Required": 1,
@@ -219,7 +275,7 @@
   {
     "Content_Detection": "ID:EdgeCast",
     "Extra": "",
-    "Header_Detection": "ECS ",
+    "Header_Detection": "ECS |ecdf",
     "Name": "EdgeCast Web Application Security",
     "Options": {
       "Flag": 2,
@@ -241,7 +297,7 @@
   },
   {
     "Extra": "",
-    "Header_Detection": "FORTIWAFSID=",
+    "Header_Detection": "FORTIWAFSID=|fortiwafsid",
     "Name": "FortiWeb Web Application Firewall",
     "Options": {
       "Flag": 2,
@@ -287,7 +343,7 @@
   {
     "Content_Detection": "notice-jiasule",
     "Extra": "",
-    "Header_Detection": "jiasule-WAF|__jsluid",
+    "Header_Detection": "jiasule-WAF|__jsluid|jsl_tracking",
     "Name": "Jiasule Web Application Firewall",
     "Options": {
       "Flag": 2,
@@ -354,7 +410,7 @@
   {
     "Content_Detection": "citrix",
     "Extra": "",
-    "Header_Detection": "NS-CACHE",
+    "Header_Detection": "ns_af|NS-CACHE|citrix_ns_id|NSC_",
     "Name": "NetScaler networking products",
     "Options": {
       "Flag": 2,
@@ -498,10 +554,21 @@
     "Type": "WQREGEX"
   },
   {
+    "Extra": "",
+    "Content_Detection": "SiteLock Incident ID",
+    "Name": "TrueShield WAF",
+    "Options": {
+      "Flag": 2,
+      "Required": 1,
+      "Word": "Normal"
+    },
+    "Type": "WQREGEX"
+  },
+  {
     "Content_Detection": "SonicWALL",
     "Extra": "",
     "Header_Detection": "SonicWALL",
-    "Name": "TrueShield Web Application Firewall",
+    "Name": "SonicWALL WAF",
     "Options": {
       "Flag": 2,
       "Required": 1,
@@ -668,7 +735,7 @@
   },
   {
     "Extra": "",
-    "Header_Detection": "yunjiasu-nginx",
+    "Header_Detection": "yunjiasu-nginx|fh1",
     "Name": "Baidu Web Application Firewall",
     "Options": {
       "Flag": 2,

@@ -1,11 +1,11 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.02"
+__V__ = "2020.V.02.03"
 
 from .staticanalyzer import StaticAnalyzer
-from .mics.funcs import killpythoncli,killprocessandsubs
+from .mics.funcs import kill_python_cli,kill_process_and_subs
 from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
-from .logger.logger import logstring,verbose,verbose_flag,verbose_timeout,setuplogger
+from .logger.logger import log_string,verbose,verbose_flag,verbose_timeout,setup_logger
 from .report.reporthandler import ReportHandler
 from cmd import Cmd
 from os import path,listdir
@@ -18,8 +18,8 @@ from signal import signal,SIGTSTP,SIGINT
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
-    logstring("Terminating..","Red")
-    killprocessandsubs()
+    log_string("Terminating..","Red")
+    kill_process_and_subs()
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -29,8 +29,8 @@ print("                               |  https://github.com/QeeqBox/Analyzer")
 print("                                                            ")
 
 class QBAnalyzer(Cmd):
-    killpythoncli()
-    setuplogger()
+    kill_python_cli()
+    setup_logger()
     signal(SIGTSTP, ctrlhandler)
     signal(SIGINT, ctrlhandler)
     _analyze_parser = ArgumentParser(prog="analyze")
@@ -82,12 +82,12 @@ class QBAnalyzer(Cmd):
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
         try:
-            logstring("Checking updates","Green")
-            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/version")
-            if ver.ok and ver.text.strip() != __V__:
-                logstring("New version {} available, please update.. ".format(ver.text.strip()),"Red")
+            log_string("Checking updates","Green")
+            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/info")
+            if ver.ok and ver.json()["version"] != __V__:
+                log_string("New version {} available, please update.. ".format(ver.json()["version"]),"Red")
         except:
-            logstring("Update failed","Red")
+            log_string("Update failed","Red")
 
         self.san = StaticAnalyzer()
         self.rep = ReportHandler()
@@ -95,7 +95,7 @@ class QBAnalyzer(Cmd):
         if mode == "--silent":
             qbjobqueue("jobsqueue",True)
             qbworker("jobsqueue",self.do_analyze,3)
-            killprocessandsubs()
+            kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
 
@@ -127,14 +127,14 @@ class QBAnalyzer(Cmd):
             elif parsed.buffer:
                 self.analyzebuffer(parsed)
         else:
-            logstring("File, Folder or Buffer is missing","Red")
+            log_string("File, Folder or Buffer is missing","Red")
 
     def analyzefile(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
             data = self.san.analyze(parsed)
-            self.rep.checkoutput(data,parsed)
+            self.rep.check_output(data,parsed)
         else:
-            logstring("Target File/dump is wrong..","Red")
+            log_string("Target File/dump is wrong..","Red")
 
     def analyzefolder(self,parsed):
         if path.exists(parsed.folder) and path.isdir(parsed.folder):
@@ -143,9 +143,9 @@ class QBAnalyzer(Cmd):
                 if path.isfile(fullpath):
                     parsed.file = fullpath
                     data = self.san.analyze(parsed)
-                    self.rep.checkoutput(data,parsed)
+                    self.rep.check_output(data,parsed)
         else:
-            logstring("Target folder is wrong..","Red")
+            log_string("Target folder is wrong..","Red")
 
     def analyzebuffer(self,parsed):
         if parsed.buffer != None:
@@ -154,9 +154,9 @@ class QBAnalyzer(Cmd):
                 tempfile.write(parsed.buffer)
             parsed.file = tempname
             data = self.san.analyze(parsed)
-            self.rep.checkoutput(data,parsed)
+            self.rep.check_output(data,parsed)
         else:
-            logstring("Target buffer is empty..","Red")
+            log_string("Target buffer is empty..","Red")
 
     def do_exit(self, line):
         exit()

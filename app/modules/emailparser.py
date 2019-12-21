@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwordsmultifilesarray
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray
 from email import message_from_bytes
 from hashlib import md5
 from random import choice
@@ -11,16 +11,18 @@ from re import match
 from magic import from_file,Magic
 from ssdeep import hash_from_file
 from mimetypes import guess_type
+from copy import deepcopy
 
 class EmailParser():
     @verbose(True,verbose_flag,verbose_timeout,"Starting EmailParser")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = { "General": {},
+                            "_General": {},
+                            "Attachments": [],
+                            "_Attachments": ["Name","Type","Extension","md5","Path"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getattachment(self,data, msg) -> (list):
+    def get_attachment(self,data, msg) -> (list):
         '''
         get attachment of email
         '''
@@ -52,7 +54,7 @@ class EmailParser():
         return _Stream
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkattachmentandmakedir(self,data, msg) -> (bool):
+    def check_attachment_and_make_dir(self,data, msg) -> (bool):
         '''
         check if an email has attachments or not
         '''
@@ -65,7 +67,7 @@ class EmailParser():
                 return True
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkemailsig(self, data) -> bool:
+    def check_sig(self, data) -> bool:
         '''
         check mime if it contains message or not
         '''
@@ -75,19 +77,16 @@ class EmailParser():
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Starting analyzing email")
-    def getemail(self, data):
+    def analyze(self, data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from array 
         '''
-        data["EMAIL"] = { "General": {},
-                         "_General": {},
-                         "Attachments": [],
-                         "_Attachments": ["Name","Type","Extension","md5","Path"]}
+        data["EMAIL"] = deepcopy(self.datastruct)
         f = data["FilesDumps"][data["Location"]["File"]]
         message = message_from_bytes(f)
-        if self.checkattachmentandmakedir(data,message):
+        if self.check_attachment_and_make_dir(data,message):
             Attachments = True
-            Streams = self.getattachment(data,message)
+            Streams = self.get_attachment(data,message)
         else:
             Attachments = False
         data["EMAIL"]["General"] = {"From": message['From'],
@@ -101,4 +100,4 @@ class EmailParser():
                                     "Message-ID": message['Message-ID'],
                                     "Attachments":Attachments}
         if len(Streams) > 0:
-            getwordsmultifilesarray(data,Streams)
+            get_words_multi_filesarray(data,Streams)

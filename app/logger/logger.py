@@ -22,7 +22,7 @@ class colors:
     Cyan="\033[36m"
     White="\033[37m"
 
-def logstring(_str,color):
+def log_string(_str,color):
     '''
     output str with color and symbol (they are all as info)
     '''
@@ -48,25 +48,26 @@ def verbose(OnOff=False,Verb=False,timeout=10,str=None):
                 signal(SIGALRM, timeout_handler)
                 alarm(timeout)
                 if Verb:
-                    logstring("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+                    log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
                 if str:
-                    logstring(str, "Green")
+                    log_string(str, "Green")
                 ret =  func(*args, **kwargs)
                 alarm(0)
                 return ret
             except TimeoutException:
-                logstring("{}.{} > {}s.. Timeout".format(func.__module__, func.__name__,timeout), "Red")
+                log_string("{}.{} > {}s.. Timeout".format(func.__module__, func.__name__,timeout), "Red")
                 alarm(0)
                 return None
             except Exception as e:
-                logstring("{}.{} Failed".format(func.__module__, func.__name__), "Red")
+                #print(e)
+                log_string("{}.{} Failed".format(func.__module__, func.__name__), "Red")
                 logfile.info("{}.{} Failed -> {}".format(func.__module__, func.__name__,e))
                 alarm(0)
                 return None
         return wrapper
     return decorator
 
-def setuplogger():
+def setup_logger():
     logterminalgerpath = path.abspath(path.join(path.dirname( __file__ ),'logs'))
     if not logterminalgerpath.endswith(path.sep): logterminalgerpath = logterminalgerpath+path.sep
     if not path.isdir(logterminalgerpath): mkdir(logterminalgerpath)

@@ -64,6 +64,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - URL shorteners extraction
 - ASCII extraction from UNICODE
 - Whitelist implemented (Windows7, 8 and 10 files)
+- Check WAF and bypass proxy
 - Linux
     - ELF information
     - API functions descriptions

@@ -1,17 +1,58 @@
 __G__ = "(G)bd249ce4"
 
 from ctypes import *
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwords,getwordsmultifiles
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words,get_words_multi_files
 from re import findall
+from copy import deepcopy
+
+class Header(Structure):
+    _fields_ = [("Flashid",c_uint32),
+                ("Sectionnumber",c_uint32),
+                ("Vtablepointer",c_uint32),
+                ("Timestamp",c_uint32),
+                ("Userversion",c_uint32),
+                ("Fieldrefpointer",c_uint32),
+                ("Maxtypelistsize",c_uint16),
+                ("Reserved",c_uint16),
+                ("Datasection",c_uint32),
+                ("Moduleinfo",c_uint32),
+                ("Version",c_uint16),
+                ("Codesize",c_uint16),
+                ("Datasize",c_uint16),
+                ("Flags",c_uint16)]
+class _Data(Structure):
+    _fields_ = [("Flags",c_uint8),
+                ("Version",c_uint8),
+                ("Numberofimportedcalls",c_uint16),
+                ("Numberofmodules",c_uint8),
+                ("Numberofclasses",c_uint8),
+                ("Exportedstringoffset",c_uint16),
+                ("Databytesoffset",c_uint16),
+                ("Emptyfield",c_uint16),
+                ("Classdefinitions",c_uint16),
+                ("Unknwon1",c_uint8*14),
+                ("Aliases",c_uint16),
+                ("Unknwon2",c_uint8*22)]
+class ResourceData(Structure):
+    _fields_ = [("TypePointer",c_uint16),
+                 ("Size",c_uint16),
+                 ("DataPointer",c_uint16)]
 
 class BBParser:
     @verbose(True,verbose_flag,verbose_timeout,"Starting BBParser")
     def __init__(self):
-        pass
+        self.datastruct = { "Header" : {},
+                            "Data":{},
+                            "Resources":[],
+                            "Symbols":[],
+                            "_Header" : {},
+                            "data":{},
+                            "_Resources":["DataPointer","Size","Sig","Data"],
+                            "_Symbols":["Type","Name"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getfunctionsold(self,f) -> list:
+    def get_functions_old(self,f) -> list:
         '''
         get function names and constant strings by regex
         '''
@@ -34,7 +75,7 @@ class BBParser:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkbbsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check mime is cod or not
         '''
@@ -44,59 +85,21 @@ class BBParser:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analzying COD file")
-    def getbbdeatils(self,_data):
+    def analyze(self,data):
         '''
         start analyzing cod logic, get words and wordsstripped from the file 
         '''
-        with open(_data["Location"]["File"], 'rb') as file:
-            class Header(Structure):
-                _fields_ = [("Flashid",c_uint32),
-                            ("Sectionnumber",c_uint32),
-                            ("Vtablepointer",c_uint32),
-                            ("Timestamp",c_uint32),
-                            ("Userversion",c_uint32),
-                            ("Fieldrefpointer",c_uint32),
-                            ("Maxtypelistsize",c_uint16),
-                            ("Reserved",c_uint16),
-                            ("Datasection",c_uint32),
-                            ("Moduleinfo",c_uint32),
-                            ("Version",c_uint16),
-                            ("Codesize",c_uint16),
-                            ("Datasize",c_uint16),
-                            ("Flags",c_uint16)]
-            class Data(Structure):
-                _fields_ = [("Flags",c_uint8),
-                            ("Version",c_uint8),
-                            ("Numberofimportedcalls",c_uint16),
-                            ("Numberofmodules",c_uint8),
-                            ("Numberofclasses",c_uint8),
-                            ("Exportedstringoffset",c_uint16),
-                            ("Databytesoffset",c_uint16),
-                            ("Emptyfield",c_uint16),
-                            ("Classdefinitions",c_uint16),
-                            ("Unknwon1",c_uint8*14),
-                            ("Aliases",c_uint16),
-                            ("Unknwon2",c_uint8*22)]
-            class ResourceData(Structure):
-                _fields_ = [("TypePointer",c_uint16),
-                             ("Size",c_uint16),
-                             ("DataPointer",c_uint16)]
-            _data["COD"] = {"Header" : {},
-                            "Data":{},
-                            "Resources":[],
-                            "Symbols":[],
-                            "_Header" : {},
-                            "_Data":{},
-                            "_Resources":["DataPointer","Size","Sig","Data"],
-                            "_Symbols":["Type","Name"]}
+        with open(data["Location"]["File"], 'rb') as file:
+
+            data["COD"] = deepcopy(self.datastruct)
             _temp = []
             f = file.read(sizeof(Header))
             header = Header.from_buffer_copy(f)
             file.read(header.Codesize)
             dataraw = file.read(header.Datasize)
-            data = Data.from_buffer_copy(dataraw)
-            Roffset = data.Exportedstringoffset
-            rall = int((data.Databytesoffset-data.Exportedstringoffset)/sizeof(ResourceData))
+            _data = _Data.from_buffer_copy(dataraw)
+            Roffset = _data.Exportedstringoffset
+            rall = int((_data.Databytesoffset-_data.Exportedstringoffset)/sizeof(ResourceData))
             for _ in range(rall):
                 Sig = ""
                 R = ResourceData.from_buffer_copy(dataraw[Roffset:])
@@ -109,11 +112,11 @@ class BBParser:
                 Roffset = Roffset + sizeof(ResourceData)
             for x,y in header._fields_:
                 if isinstance(getattr(header,x),int):
-                    _data["COD"]["Header"].update({x:hex(getattr(header,x))})
-            for x,y in data._fields_:
-                if isinstance(getattr(data,x),int):
-                    _data["COD"]["Data"].update({x:hex(getattr(data,x))})
-            _data["COD"]["Resources"] = _temp
+                    data["COD"]["Header"].update({x:hex(getattr(header,x))})
+            for x,y in _data._fields_:
+                if isinstance(getattr(_data,x),int):
+                    data["COD"]["Data"].update({x:hex(getattr(_data,x))})
+            data["COD"]["Resources"] = _temp
             file.seek(0)
-            _data["COD"]["Symbols"] = self.getfunctionsold(file.read())
-            getwords(_data,_data["Location"]["File"])
+            data["COD"]["Symbols"] = self.get_functions_old(file.read())
+            get_words(data,data["Location"]["File"])

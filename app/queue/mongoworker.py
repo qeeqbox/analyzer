@@ -15,11 +15,11 @@ class qbworker():
             self.daemon = True
             self.cancel = Event()
             self.wait = 2
-            self.runworker()
+            self.run_worker()
         else:
             print('DB error')
 
-    def checkconnection(conn):
+    def check_connection(conn):
         try:
             conn.admin.command('ismaster')
             return True
@@ -27,17 +27,17 @@ class qbworker():
             print('Server not available')
             return False
 
-    def runworker(self):
+    def run_worker(self):
         cursor = self.cur.find({'status': 'wait'},cursor_type=CursorType.TAILABLE_AWAIT)
         while cursor.alive and not self.cancel.isSet():
             try:
                 record = cursor.next()
-                self.executetask(record)
+                self.execute_task(record)
             except:
                 print('Waiting')
                 sleep(self.wait)
 
-    def executetask(self, record):
+    def execute_task(self, record):
         self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'work', 'started': datetime.now()}})
         if record['data'] is not '':
             func, *params = record['data'].split()

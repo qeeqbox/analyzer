@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from base64 import b64encode
 from PIL import Image,ImageFile
 from io import BytesIO
@@ -13,7 +13,7 @@ class QBIcons:
         pass
 
     @verbose(True,verbose_flag,verbose_timeout,"Making a ICON image")
-    def createicons(self,icons) -> list:
+    def create(self,icons) -> list:
         _tempicons = []
         for icon in icons:
             buffer = BytesIO()

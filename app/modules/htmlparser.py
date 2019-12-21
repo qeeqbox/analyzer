@@ -1,11 +1,12 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwords,getentropy
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words,get_entropy
 from magic import from_file,Magic
 from ssdeep import hash_from_file
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
+from copy import deepcopy
 
 class HTMLParser():
     @verbose(True,verbose_flag,verbose_timeout,"Starting HTMLParser")
@@ -13,9 +14,24 @@ class HTMLParser():
         '''
         initialize class
         '''
+        self.datastruct = {  "A": [],
+                             "Scripts":[],
+                             "Iframes":[],
+                             "Links":[],
+                             "Forms":[],
+                             "hrefs":[],
+                             "srcs":[],
+                             "_hrefs":["line","href"],
+                             "_srcs":["line","src"],
+                             "_A": ["line","type","href","title","text"],
+                             "_Scripts":["line","Entropy","type","src","text"],
+                             "_Iframes":["line","frameborder","widthxheight","scr","text"],
+                             "_Links":["line","type","rel","href","text"],
+                             "_Forms":["line","action","type","id","name","value","text"]}
+
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def geta(self,data,soup):
+    def get_a(self,data,soup):
         links = soup.findAll("a")
         for link in links:
             temp = "Anchor"
@@ -51,11 +67,11 @@ class HTMLParser():
                          "text":link.text})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getscripts(self,data,soup):
+    def get_scripts(self,data,soup):
         scripts = soup.findAll("script")
         for script in scripts:
             if script.text != "":
-                entropy = getentropy(script.text)
+                entropy = get_entropy(script.text)
             else: 
                 entropy = None
             data.append({"line":script.sourceline,
@@ -65,7 +81,7 @@ class HTMLParser():
                          "text":script.text})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getiframes(self,data,soup):
+    def get_iframes(self,data,soup):
         iframes = soup.findAll("iframe")
         for iframe in iframes:
             data.append({"line":iframe.sourceline,
@@ -75,7 +91,7 @@ class HTMLParser():
                          "text":iframe.text})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getlinks(self,data,soup):
+    def get_links(self,data,soup):
         links = soup.findAll("link")
         for link in links:
             data.append({"line":link.sourceline,
@@ -85,7 +101,7 @@ class HTMLParser():
                          "text":link.text})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getforms(self,data,soup):
+    def get_forms(self,data,soup):
         forms = soup.findAll("form")
         for form in forms:
             inputs = form.findAll('input')
@@ -99,27 +115,27 @@ class HTMLParser():
                              "text":input.text})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getallhrefs(self,data,soup):
+    def get_all_hrefs(self,data,soup):
         hrefs = soup.findAll(href=True)
         for href in hrefs:
             data.append({"line":href.sourceline,
-                         "href":self.unquotefunc(href.get("href"),10)})
+                         "href":self.unquote_func(href.get("href"),10)})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getallsrcs(self,data,soup):
+    def get_all_srcs(self,data,soup):
         srcs = soup.findAll(src=True)
         for src in srcs:
             data.append({"line":src.sourceline,
-                         "src":self.unquotefunc(src.get("src"),10)})
+                         "src":self.unquote_func(src.get("src"),10)})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def unquotefunc(self,str,num):
+    def unquote_func(self,str,num):
         while num > 0:
-            return self.unquotefunc(unquote(str),num-1)
+            return self.unquote_func(unquote(str),num-1)
         return str
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkhtmlsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check if file is html/htm
         '''
@@ -129,32 +145,18 @@ class HTMLParser():
         #    return True
 
     @verbose(True,verbose_flag,verbose_timeout,"Starting analyzing html/htm")
-    def checkhtml(self, data):
+    def analyze(self, data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from array 
         '''
-        data["HTML"] = { "A": [],
-                         "Scripts":[],
-                         "Iframes":[],
-                         "Links":[],
-                         "Forms":[],
-                         "hrefs":[],
-                         "srcs":[],
-                         "_hrefs":["line","href"],
-                         "_srcs":["line","src"],
-                         "_A": ["line","type","href","title","text"],
-                         "_Scripts":["line","Entropy","type","src","text"],
-                         "_Iframes":["line","frameborder","widthxheight","scr","text"],
-                         "_Links":["line","type","rel","href","text"],
-                         "_Forms":["line","action","type","id","name","value","text"]}
-
+        data["HTML"] = deepcopy(self.datastruct)
         f = data["FilesDumps"][data["Location"]["File"]].lower()
         soup = BeautifulSoup(f, 'html.parser')
-        self.getallhrefs(data["HTML"]["hrefs"],soup)
-        self.getallsrcs(data["HTML"]["srcs"],soup)
-        self.geta(data["HTML"]["A"],soup)
-        self.getscripts(data["HTML"]["Scripts"],soup)
-        self.getiframes(data["HTML"]["Iframes"],soup)
-        self.getlinks(data["HTML"]["Links"],soup)
-        self.getforms(data["HTML"]["Forms"],soup)
-        getwords(data,data["Location"]["File"])
+        self.get_all_hrefs(data["HTML"]["hrefs"],soup)
+        self.get_all_srcs(data["HTML"]["srcs"],soup)
+        self.get_a(data["HTML"]["A"],soup)
+        self.get_scripts(data["HTML"]["Scripts"],soup)
+        self.get_iframes(data["HTML"]["Iframes"],soup)
+        self.get_links(data["HTML"]["Links"],soup)
+        self.get_forms(data["HTML"]["Forms"],soup)
+        get_words(data,data["Location"]["File"])

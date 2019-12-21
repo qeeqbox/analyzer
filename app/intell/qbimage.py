@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from PIL import Image, ImageDraw
 from io import BytesIO
 from base64 import b64encode
@@ -11,19 +11,19 @@ class QBImage:
         pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def chunk(self,l, x):
+    def chunk_list(self,l, x):
         for i in range(0, len(l), int(x)):
             yield l[i:i + int(x)]
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def average(self,l):
+    def get_average(self,l):
         try:
             return sum(l) / len(l)
         except:
             return 0
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def convertsize(self,s):
+    def convert_size(self,s):
         x = 1
         while s > 100000:
             s /= 10
@@ -31,10 +31,10 @@ class QBImage:
         return x
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def create(self,_buffer,_c,_s) -> str:
+    def create_image(self,_buffer,_c,_s) -> str:
         x = [c for c in _buffer]
-        _list = list(self.chunk(x,_c))
-        out = list(self.chunk([int(self.average(l)) for l in _list],int(_s)))
+        _list = list(self.chunk_list(x,_c))
+        out = list(self.chunk_list([int(self.get_average(l)) for l in _list],int(_s)))
         _x = 10
         h = len(out)* _x
         w = int(_s) * _x
@@ -63,7 +63,7 @@ class QBImage:
         return output
 
     @verbose(True,verbose_flag,verbose_timeout,"Making a visualized image")
-    def createimage(self,_buffer) -> str:
-        l = self.convertsize(len(_buffer))
-        ret = self.create(_buffer,l,"100")
+    def create(self,_buffer) -> str:
+        l = self.convert_size(len(_buffer))
+        ret = self.create_image(_buffer,l,"100")
         return ret,"class:{}".format(l)

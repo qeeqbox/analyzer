@@ -1,21 +1,31 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong,checkurl
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long,check_url
+from ..intell.qbdescription import add_description
 from re import I, compile, findall
-from nltk.corpus import words
-from nltk.tokenize import word_tokenize
 from binascii import unhexlify
 from ipaddress import ip_address
+from copy import deepcopy
 
 class QBPatterns:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBPatterns")
     def __init__(self):
-        '''
-        initialize class and make refs path that contains References.db
-        get english words from corpus and open connection with References.db
-        '''
+        self.datastruct = {  "IP4S":[],
+                             "IP6S":[],
+                             "LINKS":[],
+                             "EMAILS":[],
+                             "TELS":[],
+                             "TAGS":[],
+                             "HEX":[],
+                             "_IP4S":["Count","IP","Code","Alpha2","Description"],
+                             "_IP6S":["Count","IP","Code","Alpha2","Description"],
+                             "_LINKS":["Count","Link","Description"],
+                             "_EMAILS":["Count","EMAIL","Description"],
+                             "_TELS":["Count","TEL","Description"],
+                             "_TAGS":["Count","TAG","Description"],
+                             "_HEX":["Count","HEX","Parsed"]}
+
         self.links = compile(r"((?:(smb|srm|ssh|ftps|file|http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
         self.ip4 = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
         self.ip6 = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
@@ -25,7 +35,7 @@ class QBPatterns:
         self.hex = compile(r'([0-9a-fA-F]{4,})',I)
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding URLs patterns")
-    def checklink(self,_data):
+    def check_link(self,_data):
         '''
         check if buffer contains ips xxx://xxxxxxxxxxxxx.xxx
         '''
@@ -33,13 +43,13 @@ class QBPatterns:
         x = list(set(findall(self.links,self.wordsstripped)))
         if len(x) > 0:
             for _ in x:
-                if (checkurl(_[0])):
+                if (check_url(_[0])):
                     _List.append(_[0])
         for x in set(_List):
             _data.append({"Count":_List.count(x),"Link":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding IP4s patterns")
-    def checkip4(self,_data):
+    def check_ip4(self,_data):
         '''
         check if buffer contains ips x.x.x.x
         '''
@@ -56,7 +66,7 @@ class QBPatterns:
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding IP6s patterns")
-    def checkip6(self,_data):
+    def check_ip6(self,_data):
         '''
         check if buffer contains ips x.x.x.x
         '''
@@ -69,7 +79,7 @@ class QBPatterns:
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding Emails patterns")
-    def checkemail(self,_data):
+    def check_email(self,_data):
         '''
         check if buffer contains email xxxxxxx@xxxxxxx.xxx
         '''
@@ -82,7 +92,7 @@ class QBPatterns:
             _data.append({"Count":_List.count(x),"EMAIL":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding TELs patterns")
-    def checkphonenumber(self,_data):
+    def check_phone_number(self,_data):
         '''
         check if buffer contains tel numbers 012 1234 567
         '''
@@ -95,7 +105,7 @@ class QBPatterns:
             _data.append({"Count":_List.count(x),"TEL":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding tags patterns")
-    def checktags(self,_data):
+    def check_tags(self,_data):
         '''
         check if buffer contains tags <>
         '''
@@ -108,7 +118,7 @@ class QBPatterns:
             _data.append({"Count":_List.count(x),"TAG":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding HEX patterns")
-    def checkhex(self,_data):
+    def check_hex(self,_data):
         '''
         check if buffer contains tags <>
         '''
@@ -125,34 +135,20 @@ class QBPatterns:
                 pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkpatterns(self,data):
+    def analyze(self,data):
         '''
         start pattern analysis for words and wordsstripped
         '''
-        data["Patterns"] = { "IP4S":[],
-                             "IP6S":[],
-                             "LINKS":[],
-                             "EMAILS":[],
-                             "TELS":[],
-                             "TAGS":[],
-                             "HEX":[],
-                             "_IP4S":["Count","IP","Code","Alpha2","Description"],
-                             "_IP6S":["Count","IP","Code","Alpha2","Description"],
-                             "_LINKS":["Count","Link","Description"],
-                             "_EMAILS":["Count","EMAIL","Description"],
-                             "_TELS":["Count","TEL","Description"],
-                             "_TAGS":["Count","TAG","Description"],
-                             "_HEX":["Count","HEX","Parsed"]}
-
+        data["Patterns"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.checklink(data["Patterns"]["LINKS"])
-        self.checkip4(data["Patterns"]["IP4S"])
-        self.checkip6(data["Patterns"]["IP6S"])
-        self.checkemail(data["Patterns"]["EMAILS"])
-        self.checktags(data["Patterns"]["TAGS"])
-        self.checkhex(data["Patterns"]["HEX"])
-        adddescription("URLshorteners",data["Patterns"]["LINKS"],"Link")
-        adddescription("DNSServers",data["Patterns"]["IP4S"],"IP")
-        adddescription("ReservedIP",data["Patterns"]["IP4S"],"IP")
-        adddescription("CountriesIPs",data["Patterns"]["IP4S"],"IP")
+        self.check_link(data["Patterns"]["LINKS"])
+        self.check_ip4(data["Patterns"]["IP4S"])
+        self.check_ip6(data["Patterns"]["IP6S"])
+        self.check_email(data["Patterns"]["EMAILS"])
+        self.check_tags(data["Patterns"]["TAGS"])
+        self.check_hex(data["Patterns"]["HEX"])
+        add_description("URLshorteners",data["Patterns"]["LINKS"],"Link")
+        add_description("DNSServers",data["Patterns"]["IP4S"],"IP")
+        add_description("ReservedIP",data["Patterns"]["IP4S"],"IP")
+        add_description("CountriesIPs",data["Patterns"]["IP4S"],"IP")

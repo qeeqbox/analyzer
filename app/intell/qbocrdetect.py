@@ -1,18 +1,20 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from re import findall
 from PIL import Image
 from pytesseract import image_to_string
 from io import BytesIO
+from copy import deepcopy
 
 class QBOCRDetect:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBOCRDetect")
     def __init__(self):
-        pass
+        self.datastruct = { "OCR":[],
+                            "_OCR":["Word","File"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def mixandsetupfileocr(self,data,paths):
+    def mix_and_setup_file_ocr(self,data,paths):
         '''
         loop paths, convert each image to RGBA, and read text from image
         '''
@@ -28,7 +30,7 @@ class QBOCRDetect:
                 pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkocrtext(self,data,_list):
+    def check_ocr_text(self,data,_list):
         '''
         loop paths, convert each image to RGBA, and read text from image
         '''
@@ -39,16 +41,15 @@ class QBOCRDetect:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing image with OCR")
-    def checkwithocr(self,data):
+    def analyze(self,data):
         '''
         start ocr reading logic for packed files only
         '''
         self.words = []
-        data["OCR"] = { "OCR":[],
-                        "_OCR":["Word","File"]}
+        data["OCR"] = deepcopy(self.datastruct)
         try:
             if len(data["Packed"]["Files"]) > 0:
-                self.mixandsetupfileocr(data,data["Packed"]["Files"])
-                self.checkocrtext(data["OCR"]["OCR"],self.words)           
+                self.mix_and_setup_file_ocr(data,data["Packed"]["Files"])
+                self.check_ocr_text(data["OCR"]["OCR"],self.words)           
         except:
             pass

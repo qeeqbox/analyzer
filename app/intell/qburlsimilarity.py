@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from re import compile, findall,I
 from tld import get_fld,get_tld
 from tld.utils import update_tld_names
@@ -12,13 +12,14 @@ from shutil import copyfileobj
 from os import path
 from itertools import islice
 from csv import reader
+from copy import deepcopy
 
 class QBURLSimilarity:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBURLSimilarity")
     def __init__(self):
-        '''
-        initialize class and get top 1m.csv from umbrella
-        '''
+        self.datastruct = {"URLs":[],
+                           "_URLs":["Distance","URL","Similar"]}
+
         self.refs = path.abspath(path.join(path.dirname( __file__ ),"..", 'refs'))
         if not self.refs.endswith(path.sep): self.refs = self.refs+path.sep
         self.links = compile(r"((?:(http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
@@ -43,7 +44,7 @@ class QBURLSimilarity:
             self.topdomains = [x[1] for x in self.topsliced]
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def geturls(self,data):
+    def get_urls(self,data):
         '''
         check if root domain exists in the top 10000 or not
         if yes appened it to list 
@@ -70,12 +71,11 @@ class QBURLSimilarity:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing URLs")
-    def checkwithurls(self,data):
+    def analyze(self,data):
         '''
         start finding urls in top 10000 list 
         '''
+        data["URLs"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        data["URLs"] = {"URLs":[],
-                          "_URLs":["Distance","URL","Similar"]}
-        self.geturls(data["URLs"]["URLs"])
+        self.get_urls(data["URLs"]["URLs"])

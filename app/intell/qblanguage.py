@@ -1,23 +1,22 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from nltk.corpus import words
-from nltk.tokenize import word_tokenize
-from binascii import unhexlify
+from copy import deepcopy
 
 class QBLanguage:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBLanguage")
     def __init__(self):
-        '''
-        initialize class and make refs path that contains References.db
-        get english words from corpus and open connection with References.db
-        '''
+        self.datastruct = {  "English":[],
+                             "UnKnown":[],
+                             "Partly English":[],
+                             "_English":["Count","Word"],
+                             "_UnKnown":["Count","Word"],
+                             "_Partly English":["Count","Word"]}
         self.english_words = set(words.words())
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding english strings")
-    def checkwithenglish(self,_data):
+    def check_with_english(self,_data):
         '''
         check if words are english words or not
         '''
@@ -29,21 +28,15 @@ class QBLanguage:
                 _data["UnKnown"].append({"Count":"Unavailable","Word":_word})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def sortbylen(self,_dict):
+    def sort_by_len(self,_dict):
         return sorted(_dict, key=lambda l: (len(str(l))))
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkwithstring(self,data):
+    def analyze(self,data):
         '''
         start pattern analysis for words and wordsstripped
         '''
-        data["Language"] = {  "English":[],
-                             "UnKnown":[],
-                             "Partly English":[],
-                             "_English":["Count","Word"],
-                             "_UnKnown":["Count","Word"],
-                             "_Partly English":["Count","Word"]}
-
+        data["Language"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.checkwithenglish(data["Language"])
+        self.check_with_english(data["Language"])

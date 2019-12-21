@@ -1,16 +1,33 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long
 from re import I, compile, findall
 from base64 import b64decode,b64encode
+from copy import deepcopy
 
 class QBEncryption:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBEncryption")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = { "MD5s":[],
+                            "SHA1s":[],
+                            "SHA256s":[],
+                            "SHA512s":[],
+                            "UUIDs":[],
+                            "CRCs":[],
+                            "JWTs":[],
+                            "BASE64s":[],
+                            "Logics":[],
+                            "_MD5s":["Count","MD5","Description"],
+                            "_SHA1s":["Count","SHA1","Description"],
+                            "_SHA256s":["Count","SHA256","Description"],
+                            "_SHA512s":["Count","SHA512","Description"],
+                            "_UUIDs":["Count","Description","UUID"],
+                            "_CRCs":["Count","CRC","Description"],
+                            "_JWTs":["Count","JWT","Description"],
+                            "_BASE64s":["Count","Base64","Decoded"],
+                            "_Logics":["Count","Logic"]}
+
         self.detectioncheckmd5 = compile(r'\b[0-9a-fA-F]{32}\b',I)
         self.detectionchecksha1 = compile(r'\b[0-9a-fA-F]{40}\b',I)
         self.detectionchecksha256 = compile(r'\b[0-9a-fA-F]{64}\b',I)
@@ -24,7 +41,7 @@ class QBEncryption:
         self.detectioncheckjwt = compile(r'\b[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?\b',I)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkbase64(self,data):
+    def check_base64(self,data):
         '''
         check if words are possible base64 or not 
         '''
@@ -33,14 +50,14 @@ class QBEncryption:
             for _word in self.wordssensitive:
                 word = _word.encode()
                 if  word.endswith(b"="):  #needs to include all options
-                    b = self.testbase64(word)
+                    b = self.test_base64(word)
                     if b != None and b != False:
                         _List.append(word)
         for x in set(_List):
             data.append({"Count":_List.count(x),"Base64":x.decode('utf-8',errors="ignore"),"Decoded":b64decode(x).decode('utf-8',errors="ignore")})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def testbase64(self,w):
+    def test_base64(self,w):
         '''
         match decoding base64 then encoding means most likely base64 
         '''
@@ -53,7 +70,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding MD5 patterns")
-    def checkmd5(self,data):
+    def check_md5(self,data):
         '''
         check if buffer contains MD5 098F6BCD4621D373CADE4E832627B4F6
         '''
@@ -67,7 +84,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding SHA1 patterns")
-    def checksha1(self,data):
+    def check_sha1(self,data):
         '''
         check if buffer contains SHA1 A94A8FE5CCB19BA61C4C0873D391E987982FBBD3
         '''
@@ -81,7 +98,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding SHA256 patterns")
-    def checksha256(self,data):
+    def check_sha256(self,data):
         '''
         check if buffer contains SHA256 9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08
         '''
@@ -96,7 +113,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding SHA512 patterns")
-    def checksha512(self,data):
+    def check_sha512(self,data):
         '''
         check if buffer contains SHA512 EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF
         '''
@@ -110,7 +127,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding UUID patterns")
-    def checkuuid(self,data):
+    def check_uuid(self,data):
         '''
         check if buffer contains UUID 1,2,3,4,5 and undefined ones
         5c10f566-2963-1311-bde5-f367e8bc6e17
@@ -131,7 +148,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding CRC patterns")
-    def checkcrc(self,data):
+    def check_crc(self,data):
         '''
         check if buffer contains CRC a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
         '''
@@ -146,7 +163,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding JWT patterns")
-    def checkjwt(self,data):
+    def check_jwt(self,data):
         '''
         check if buffer contains JWT
         '''
@@ -160,7 +177,7 @@ class QBEncryption:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding encryptions")
-    def checklogics(self,data):
+    def get_logics(self,data):
         '''
         check if buffer contains encryption logic
         '''
@@ -181,42 +198,24 @@ class QBEncryption:
                 data.append({"Count":_List.count(x),"Logic":logic})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkencryption(self,data):
+    def analyze(self,data):
         '''
         start pattern analysis for words and wordsstripped
         '''
-        data["Encryption"] = {  "MD5s":[],
-                                "SHA1s":[],
-                                "SHA256s":[],
-                                "SHA512s":[],
-                                "UUIDs":[],
-                                "CRCs":[],
-                                "JWTs":[],
-                                "BASE64s":[],
-                                "Logics":[],
-                                "_MD5s":["Count","MD5","Description"],
-                                "_SHA1s":["Count","SHA1","Description"],
-                                "_SHA256s":["Count","SHA256","Description"],
-                                "_SHA512s":["Count","SHA512","Description"],
-                                "_UUIDs":["Count","Description","UUID"],
-                                "_CRCs":["Count","CRC","Description"],
-                                "_JWTs":["Count","JWT","Description"],
-                                "_BASE64s":["Count","Base64","Decoded"],
-                                "_Logics":["Count","Logic"]}
-
+        data["Encryption"] = deepcopy(self.datastruct)
         self.wordsinsensitive = data["StringsRAW"]["wordsinsensitive"]
         self.wordssensitive = data["StringsRAW"]["wordssensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.buffer =  data["FilesDumps"][data["Location"]["File"]]
-        self.checkmd5(data["Encryption"]["MD5s"])
-        self.checksha1(data["Encryption"]["SHA1s"])
-        self.checksha256(data["Encryption"]["SHA256s"])
-        self.checksha512(data["Encryption"]["SHA512s"])
-        self.checkcrc(data["Encryption"]["CRCs"])
+        self.check_md5(data["Encryption"]["MD5s"])
+        self.check_sha1(data["Encryption"]["SHA1s"])
+        self.check_sha256(data["Encryption"]["SHA256s"])
+        self.check_sha512(data["Encryption"]["SHA512s"])
+        self.check_crc(data["Encryption"]["CRCs"])
         #self.checkjwt(data["Encryption"]["JWTs"])
-        self.checkbase64(data["Encryption"]["BASE64s"])
-        self.checkuuid(data["Encryption"]["UUIDs"])
-        self.checklogics(data["Encryption"]["Logics"])
+        self.check_base64(data["Encryption"]["BASE64s"])
+        self.check_uuid(data["Encryption"]["UUIDs"])
+        self.get_logics(data["Encryption"]["Logics"])
 
 
 

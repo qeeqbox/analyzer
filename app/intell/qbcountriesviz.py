@@ -1,16 +1,15 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from copy import deepcopy
 
 class QBCountriesviz:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBCountriesviz")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = {"Codes":[]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def findflags(self,flags,data):
+    def find_flags(self,flags,data):
         keys = ["PCAP","Patterns"]
         for key in keys:
             try:
@@ -22,7 +21,7 @@ class QBCountriesviz:
                 pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def findcodes(self,codes,data):
+    def find_codes(self,codes,data):
         keys = ["PCAP","Patterns"]
         for key in keys:
             try:
@@ -34,17 +33,17 @@ class QBCountriesviz:
                 pass
 
     @verbose(True,verbose_flag,verbose_timeout,"Get countries flags")
-    def getflagsfromcodes(self,data):
+    def get_flags_from_codes(self,data):
         '''
         start get countries flags logic
         '''
         data["Flags"] = {"Flags":[]}
-        self.findflags(data["Flags"]["Flags"],data)
+        self.find_flags(data["Flags"]["Flags"],data)
 
     @verbose(True,verbose_flag,verbose_timeout,"Get countries flags")
-    def getallcodes(self,data):
+    def get_all_codes(self,data):
         '''
         start get countries codes logic
         '''
-        data["Codes"] = {"Codes":[]}
-        self.findcodes(data["Codes"]["Codes"],data)
+        data["Codes"] = deepcopy(self.datastruct)
+        self.find_codes(data["Codes"]["Codes"],data)

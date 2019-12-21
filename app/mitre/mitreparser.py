@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from json import loads, dumps,dump,load
 from urllib.request import urlretrieve
 from codecs import open

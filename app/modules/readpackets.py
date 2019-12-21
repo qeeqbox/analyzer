@@ -1,26 +1,44 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwords
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words
+from ..intell.qbdescription import add_description
 from scapy import all as scapy
 from binascii import hexlify
 from scapy.layers import http
 from datetime import datetime
 from re import compile,I,search
 from tldextract import extract
+from copy import deepcopy
 
 class ReadPackets:
     @verbose(True,verbose_flag,verbose_timeout,"Starting ReadPackets")
     def __init__(self,waf):
-        '''
-        initialize class
-        '''
+        self.datastruct = { "WAF":[],
+                            "URLs":[],
+                            "Domains":[],
+                            "ARP":[],
+                            "DNS":[],
+                            "HTTP":[],
+                            "ALL":[],
+                            "PORTS":[],
+                            "IP4S":[],
+                            "Flags":[],
+                            "_WAF":["Matched","Required","WAF","Detected"],
+                            "_Domains":["Time","subdomain","domain","tld"],
+                            "_URLs":["Time","src","Method","Host","Path"],
+                            "_ARP":["Time","Type","PacketSoruce","PacketDestination","Macaddress"],
+                            "_DNS":["Time","Type","Source","SourcePort","Destination","DestinationPort","qname","rrname","rdata"],
+                            "_HTTP":["Time","Type","Source","SourcePort","Destination","DestinationPort","fields","payload"],
+                            "_ALL":["Time","ProtocolsFrame","Source","SourcePort","SPDescription","Destination","DestinationPort","DPDescription"],
+                            "_PORTS":["Port","Description"],
+                            "_IP4S":["IP","Code","Alpha2","Description"]}
+
         self.ip = compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])',I)
         self.waf = waf()
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getlayers(self,packet) -> str:
+    def get_layers(self,packet) -> str:
         '''
         get layers
         '''
@@ -34,7 +52,7 @@ class ReadPackets:
         return ":".join(_temp)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def readallpackets(self,packets):
+    def read_all_packets(self,packets):
         '''
         analyze each packet
         '''
@@ -168,7 +186,7 @@ class ReadPackets:
                 except:
                     pass
 
-            packetlayers = self.getlayers(packet)
+            packetlayers = self.get_layers(packet)
             #packetdata = hexlify(bytes(packet))
             if hasattr(packet.payload, "sport"):
                 _list.append({  "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
@@ -200,7 +218,7 @@ class ReadPackets:
         return _list,_ports,_ips,_listreadarp,_listreaddns,_listreadhttp,_listurlhttp,_domains
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkpcapsig(self,data):
+    def check_sig(self,data):
         '''
         check if mime is pcap
         '''
@@ -209,33 +227,14 @@ class ReadPackets:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing PCAP file")
-    def getpacpdetails(self,data):
+    def analyze(self,data):
         '''
         start analyzing pcap logic, add descriptions and get words and wordsstripped from the file 
 
         '''
-        data["PCAP"] = {"WAF":[],
-                        "URLs":[],
-                        "Domains":[],
-                        "ARP":[],
-                        "DNS":[],
-                        "HTTP":[],
-                        "ALL":[],
-                        "PORTS":[],
-                        "IP4S":[],
-                        "Flags":[],
-                        "_WAF":["Matched","Required","WAF","Detected"],
-                        "_Domains":["Time","subdomain","domain","tld"],
-                        "_URLs":["Time","src","Method","Host","Path"],
-                        "_ARP":["Time","Type","PacketSoruce","PacketDestination","Macaddress"],
-                        "_DNS":["Time","Type","Source","SourcePort","Destination","DestinationPort","qname","rrname","rdata"],
-                        "_HTTP":["Time","Type","Source","SourcePort","Destination","DestinationPort","fields","payload"],
-                        "_ALL":["Time","ProtocolsFrame","Source","SourcePort","SPDescription","Destination","DestinationPort","DPDescription"],
-                        "_PORTS":["Port","Description"],
-                        "_IP4S":["IP","Code","Alpha2","Description"]}
-
+        data["PCAP"] = deepcopy(self.datastruct)
         packets = scapy.rdpcap(data["Location"]["File"])
-        all,ports,ips,rarp,rdns,http,urlshttp,domains = self.readallpackets(packets)
+        all,ports,ips,rarp,rdns,http,urlshttp,domains = self.read_all_packets(packets)
         data["PCAP"]["Domains"] = domains
         data["PCAP"]["URLs"] = urlshttp
         data["PCAP"]["ARP"] = rarp
@@ -244,11 +243,11 @@ class ReadPackets:
         data["PCAP"]["ALL"] = all
         data["PCAP"]["PORTS"] = ports
         data["PCAP"]["IP4S"] = ips
-        self.waf.checkpacketsforwaf(data["PCAP"]["HTTP"],data["PCAP"]["WAF"],"waf.json")
-        adddescription("Ports",data["PCAP"]["ALL"],"SourcePort")
-        adddescription("Ports",data["PCAP"]["ALL"],"DestinationPort")
-        adddescription("Ports",data["PCAP"]["PORTS"],"Port")
-        adddescription("DNSServers",data["PCAP"]["IP4S"],"IP")
-        adddescription("ReservedIP",data["PCAP"]["IP4S"],"IP")
-        adddescription("CountriesIPs",data["PCAP"]["IP4S"],"IP")
-        getwords(data,data["Location"]["File"])
+        self.waf.analyze(data["PCAP"]["HTTP"],data["PCAP"]["WAF"],"waf.json")
+        add_description("Ports",data["PCAP"]["ALL"],"SourcePort")
+        add_description("Ports",data["PCAP"]["ALL"],"DestinationPort")
+        add_description("Ports",data["PCAP"]["PORTS"],"Port")
+        add_description("DNSServers",data["PCAP"]["IP4S"],"IP")
+        add_description("ReservedIP",data["PCAP"]["IP4S"],"IP")
+        add_description("CountriesIPs",data["PCAP"]["IP4S"],"IP")
+        get_words(data,data["Location"]["File"])

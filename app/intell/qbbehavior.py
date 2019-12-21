@@ -1,23 +1,24 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from re import compile, search
 from codecs import open as copen
 from json import loads
 from os import mkdir, path
+from copy import deepcopy
 
 class QBBehavior:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBBehavior")
     def __init__(self):
-        '''
-        initialize class and make detections path 
-        '''
+        self.datastruct = {"Intell":[],
+                          "_Intell":["Matched","Required","Behavior","Detected"]}
+
         self.intell = path.abspath(path.join(path.dirname( __file__ ),'detections'))
         if not self.intell.endswith(path.sep): self.intell = self.intell+path.sep
         if not path.isdir(self.intell): mkdir(self.intell)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def compileandfind(self,data,filename):
+    def compile_and_find(self,data,filename):
         '''
         parse the detections and check them against wordsstripped
         '''
@@ -42,16 +43,15 @@ class QBBehavior:
                     pass
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing behaviors")
-    def checkwithqbintell(self,data,filename):
+    def analyze(self,data,filename):
         '''
         start checking logic and setup words and wordsstripped
         '''
         if "Behavior" not in data:
-            data["Behavior"] = {"Intell":[],
-                              "_Intell":["Matched","Required","Behavior","Detected"]}
+            data["Behavior"] = deepcopy(self.datastruct)
         temp = []
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.compileandfind(temp,self.intell+filename)
+        self.compile_and_find(temp,self.intell+filename)
         if len(temp) > 0:
             data["Behavior"]["Intell"].extend(temp)

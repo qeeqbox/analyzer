@@ -1,4 +1,4 @@
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from magic import from_file,Magic
 
 class QBEncdoing:
@@ -7,7 +7,7 @@ class QBEncdoing:
         pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkbom(self,str):
+    def check_bom(self,str):
         if str[:3] == '\xEF\xBB\xBF':
             return "UTF-8-SIG"
         elif str[:4] == '\xFF\xFE\x00\x00':
@@ -21,7 +21,7 @@ class QBEncdoing:
         return "None"
 
     @verbose(True,verbose_flag,verbose_timeout,"Checking file encoding")
-    def checkfile(self,data,_path,_unicode) -> bool:
+    def analyze(self,data,_path,_unicode) -> bool:
 
         data["Encoding"] = {"Encoding":{},
                            "_Encoding":{}}
@@ -34,6 +34,6 @@ class QBEncdoing:
         else:
             encoding = "utf-8"
 
-        data["Encoding"]["Encoding"]={  "charset":Magic(mime_encoding=True).from_file(_path),
+        data["Encoding"]["Encoding"]={ "charset":Magic(mime_encoding=True).from_file(_path),
                                        "ForceEncoding":encoding,
-                                       "ByteOrderMark":self.checkbom(fbom)}
+                                       "ByteOrderMark":self.check_bom(fbom)}

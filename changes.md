@@ -1,3 +1,9 @@
+#### 2020.V.02.03
+- Fixed bugs
+- Formatting and cleaning up
+- Added more WAF detections
+- Added bypass proxy checkup 
+
 #### 2020.V.02.02
 - Fixed bugs
 - Dump json files into db

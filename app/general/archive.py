@@ -1,4 +1,4 @@
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from os import path, walk
 from subprocess import PIPE,Popen
 from hashlib import md5
@@ -6,7 +6,7 @@ from magic import from_file,Magic
 from mimetypes import guess_type
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def checkpackedfiles(_path,files) -> bool:
+def check_packed_files(_path,files) -> bool:
     '''
     check if archive contains strings or not 
     '''
@@ -24,7 +24,7 @@ def checkpackedfiles(_path,files) -> bool:
         pass
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def dmgunpack(_path) -> str:
+def dmg_unpack(_path) -> str:
     '''
     convert dmg to img
     '''
@@ -34,7 +34,7 @@ def dmgunpack(_path) -> str:
         return _path+".img"
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def unpackfile(data,_path):
+def unpack_file(data,_path):
     '''
     unpack files using 7z into temp folder
     '''
@@ -48,16 +48,16 @@ def unpackfile(data,_path):
         if b"ERROR: Wrong password" in err:return
         p = Popen(["7z", "x", _path,"-aoa","-o"+data["Location"]["Folder"]], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
-        for currentpath, folders, files in walk(data["Location"]["Folder"]):
+        for currentp_ath, folders, files in walk(data["Location"]["Folder"]):
             for file in files:
-                f = open(path.join(currentpath, file),"rb").read()
+                f = open(path.join(currentp_ath, file),"rb").read()
                 _md5 = md5(f).hexdigest()
-                mime = from_file(path.join(currentpath, file),mime=True)
+                mime = from_file(path.join(currentp_ath, file),mime=True)
                 data["Packed"]["Files"].append({"Name":file,
                                                 "Type":mime,
-                                                "Extension":guess_type(path.join(currentpath, file))[0],
-                                                "Path":path.join(currentpath, file),
+                                                "Extension":guess_type(path.join(currentp_ath, file))[0],
+                                                "Path":path.join(currentp_ath, file),
                                                 "md5":_md5})
-                data["FilesDumps"].update({path.join(currentpath, file):f})
+                data["FilesDumps"].update({path.join(currentp_ath, file):f})
     except:
         pass

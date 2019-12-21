@@ -1,14 +1,40 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwordsmultifilesarray,getwords
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray,get_words
 from re import DOTALL, MULTILINE, compile, findall
 from magic import from_buffer,Magic
 from zlib import decompress
+from copy import deepcopy
 
 class PDFParser:
     @verbose(True,verbose_flag,verbose_timeout,"Starting PDFParser")
     def __init__(self):
+        self.datastruct = {  "Count":{},
+                             "Object":[],
+                             "Stream":[],
+                             "JS":[],
+                             "Javascript":[],
+                             "OpenAction":[],
+                             "Launch":[],
+                             "URI":[],
+                             "Action":[],
+                             "GoToR":[],
+                             "RichMedia":[],
+                             "AA":[],
+                             "_Count":{},
+                             "_Object":["Object","Value"],
+                             "_Stream":["Stream","Parsed","Value"],
+                             "_JS":["Key","Value"],
+                             "_Javascript":["Key","Value"],
+                             "_Launch":["Key","Value"],
+                             "_OpenAction":["Key","Value"],
+                             "_URI":["Key","Value"],
+                             "_Action":["Key","Value"],
+                             "_GoToR":["Key","Value"],
+                             "_RichMedia":["Key","Value"],
+                             "_AA":["Key","Value"]}
+
         self.Objectsdetection = compile(b'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj',DOTALL|MULTILINE)
         self.Streamdetection = compile(b'.*?FlateDecode.*?stream(.*?)endstream', DOTALL|MULTILINE)
         self.jsdetection = compile(b'/JS([\S][^>]+)',DOTALL|MULTILINE)
@@ -21,8 +47,9 @@ class PDFParser:
         self.RichMediadetection = compile(b'/RichMedia([\S][^>]+)',DOTALL|MULTILINE)
         self.AAdetection = compile(b'/AA([\S][^>]+)',DOTALL|MULTILINE)
 
+
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getobject(self,pdf) -> (str,list):
+    def get_object(self,pdf) -> (str,list):
         '''
         get objects from pdf by regex
         '''
@@ -33,7 +60,7 @@ class PDFParser:
         return len(Objects),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getstream(self,pdf) -> (str,list,list):
+    def get_stream(self,pdf) -> (str,list,list):
         '''
         get streams from pdf by regex
         '''
@@ -53,7 +80,7 @@ class PDFParser:
         return len(Streams),_List,_Streams
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getjs(self,pdf) -> (str,list):
+    def get_js(self,pdf) -> (str,list):
         '''
         get JS from pdf by regex
         '''
@@ -64,7 +91,7 @@ class PDFParser:
         return len(jslist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getjavascript(self,pdf) -> (str,list):
+    def get_javascript(self,pdf) -> (str,list):
         '''
         get JavaScript from pdf by regex
         '''
@@ -75,7 +102,7 @@ class PDFParser:
         return len(Javascriptlist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getopenaction(self,pdf) -> (str,list):
+    def get_openaction(self,pdf) -> (str,list):
         '''
         get openactions from pdf by regex
         '''
@@ -86,7 +113,7 @@ class PDFParser:
         return len(OpenActionlist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getlunch(self,pdf) -> (str,list):
+    def get_lunch(self,pdf) -> (str,list):
         '''
         get Launch from pdf by regex
         '''
@@ -97,7 +124,7 @@ class PDFParser:
         return len(Launchlist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def geturi(self,pdf) -> (str,list):
+    def get_uri(self,pdf) -> (str,list):
         '''
         get URI from pdf by regex
         '''
@@ -108,7 +135,7 @@ class PDFParser:
         return len(URIlist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getaction(self,pdf) -> (str,list):
+    def get_action(self,pdf) -> (str,list):
         '''
         get Action from pdf by regex
         '''
@@ -119,7 +146,7 @@ class PDFParser:
         return len(Actionlist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getgotor(self,pdf) -> (str,list):
+    def get_gotor(self,pdf) -> (str,list):
         '''
         get GoToR from pdf by regex
         '''
@@ -131,7 +158,7 @@ class PDFParser:
 
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getrichmedia(self,pdf) -> (str,list):
+    def get_richmedia(self,pdf) -> (str,list):
         '''
         get RichMedia from pdf by regex
         '''
@@ -142,7 +169,7 @@ class PDFParser:
         return len(Richmedialist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getaa(self,pdf) -> (str,list):
+    def get_aa(self,pdf) -> (str,list):
         '''
         get AA from pdf by regex
         '''
@@ -153,7 +180,7 @@ class PDFParser:
         return len(aalist),_List
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkpdfsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check if mime is pdf
         '''
@@ -162,51 +189,26 @@ class PDFParser:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing PDF file")
-    def checkpdf(self,data):
+    def analyze(self,data):
         '''
         start analyzing pdf logic, get pdf objects, 
         get words and wordsstripped from buffers if streams exist 
         otherwise get words and wordsstripped from file
         '''
         _Streams = []
-        data["PDF"] = {  "Count":{},
-                         "Object":[],
-                         "Stream":[],
-                         "JS":[],
-                         "Javascript":[],
-                         "OpenAction":[],
-                         "Launch":[],
-                         "URI":[],
-                         "Action":[],
-                         "GoToR":[],
-                         "RichMedia":[],
-                         "AA":[],
-                         "_Count":{},
-                         "_Object":["Object","Value"],
-                         "_Stream":["Stream","Parsed","Value"],
-                         "_JS":["Key","Value"],
-                         "_Javascript":["Key","Value"],
-                         "_Launch":["Key","Value"],
-                         "_OpenAction":["Key","Value"],
-                         "_URI":["Key","Value"],
-                         "_Action":["Key","Value"],
-                         "_GoToR":["Key","Value"],
-                         "_RichMedia":["Key","Value"],
-                         "_AA":["Key","Value"]}
-
+        data["PDF"] = deepcopy(self.datastruct)
         f = data["FilesDumps"][data["Location"]["File"]]
-
-        objlen,objs = self.getobject(f)
-        strlen,strs,_Streams = self.getstream(f)
-        jslen,jslist = self.getjs(f)
-        jalen,jaslist = self.getjavascript(f)
-        oalen,oalist = self.getopenaction(f)
-        llen,llist = self.getlunch(f)
-        ulen,ulist = self.geturi(f)
-        alen,alist = self.getaction(f)
-        gtrlen,gtrlist = self.getgotor(f)
-        rmlen,rmlist = self.getrichmedia(f)
-        aalen,aalist = self.getaa(f)
+        objlen,objs = self.get_object(f)
+        strlen,strs,_Streams = self.get_stream(f)
+        jslen,jslist = self.get_js(f)
+        jalen,jaslist = self.get_javascript(f)
+        oalen,oalist = self.get_openaction(f)
+        llen,llist = self.get_lunch(f)
+        ulen,ulist = self.get_uri(f)
+        alen,alist = self.get_action(f)
+        gtrlen,gtrlist = self.get_gotor(f)
+        rmlen,rmlist = self.get_richmedia(f)
+        aalen,aalist = self.get_aa(f)
 
         data["PDF"]["Count"] = { "Object" : objlen,
                                   "Stream" : strlen,
@@ -233,6 +235,6 @@ class PDFParser:
         data["PDF"]["Stream"] = strs
 
         if len(_Streams) > 0:
-            getwordsmultifilesarray(data,_Streams)
+            get_words_multi_filesarray(data,_Streams)
         else:
-            getwords(data,_Streams)
+            get_words(data,_Streams)

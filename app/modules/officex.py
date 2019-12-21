@@ -1,21 +1,27 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwordsmultifilesarray,getwords,getwordsmultifiles
-from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray,get_words,get_words_multi_files
+from ..general.archive import check_packed_files,dmg_unpack,unpack_file
 from re import sub
 from magic import from_buffer,Magic
 from zlib import decompress
 from xml.dom.minidom import parseString
 from xml.etree.cElementTree import XML as cetXML
+from copy import deepcopy
 
 class Officex:
     @verbose(True,verbose_flag,verbose_timeout,"Starting Officex")
     def __init__(self):
-        pass
+        self.datastruct ={   "General":{},
+                             "Hyper":[],
+                             "Other":[],
+                             "_General":{},
+                             "_Hyper":["Count","Link"],
+                             "_Other":["Count","Link"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def officeanalysis(self,data) -> dict:
+    def office_analysis(self,data) -> dict:
         '''
         get hyber links or other links by regex
         '''
@@ -37,7 +43,7 @@ class Officex:
         return _temp
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def officereadbin(self,data):
+    def office_read_bin(self,data):
         '''
         get all bins from office
         '''
@@ -51,7 +57,7 @@ class Officex:
                 data[k]["Bin_Printable"] = sub(r'[^\x20-\x7F]+','', x)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def officemetainfo(self,data) -> dict:
+    def office_meta_info(self,data) -> dict:
         '''
         get office meta data
         '''
@@ -69,29 +75,24 @@ class Officex:
         return _dict
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkofficexsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check if file is office or contains [Content_Types].xml
         '''
         if "application/vnd.openxmlformats-officedocument" in data["Details"]["Properties"]["mime"] or \
-            checkpackedfiles(data["Location"]["File"],["[Content_Types].xml"]):
-                unpackfile(data,data["Location"]["File"])
+            check_packed_files(data["Location"]["File"],["[Content_Types].xml"]):
+                unpack_file(data,data["Location"]["File"])
                 return True
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing office[x] file")
-    def checkofficex(self,data):
+    def analyze(self,data):
         '''
         start analyzing office logic, get office meta informations add description 
         to strings, get words and wordsstripped from the packed files 
         '''
-        data["Office"] ={"General":{},
-                         "Hyper":[],
-                         "Other":[],
-                         "_General":{},
-                         "_Hyper":["Count","Link"],
-                         "_Other":["Count","Link"]}
-        data["Office"]["General"] = self.officemetainfo(data)
-        data["Office"].update(self.officeanalysis(data))
-        self.officereadbin(data)
-        getwordsmultifiles(data,data["Packed"]["Files"])
+        data["Office"] = deepcopy(self.datastruct)
+        data["Office"]["General"] = self.office_meta_info(data)
+        data["Office"].update(self.office_analysis(data))
+        self.office_read_bin(data)
+        get_words_multi_files(data,data["Packed"]["Files"])

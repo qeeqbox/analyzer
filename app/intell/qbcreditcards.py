@@ -1,14 +1,25 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from re import I, compile, findall
+from copy import deepcopy
 
 class QBCreditcards:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBCreditcards")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = { "AMERICANEXPRESS":[],
+                            "VISA":[],
+                            "MASTERCARD":[],
+                            "DISCOVER":[],
+                            "JCB":[],
+                            "DINERSCLUB":[],
+                            "_AMERICANEXPRESS":["Count","AmericanExpress"],
+                            "_VISA":["Count","Visa"],
+                            "_MASTERCARD":["Count","MasterCard"],
+                            "_DISCOVER":["Count","Discover"],
+                            "_JCB":["Count","JCB"],
+                            "_DINERSCLUB":["Count","DinersClub"]}
+
         self.detectionamericanexpress = compile(r'\b(?:3[47][0-9]{13})\b',I)
         self.detectionvisa = compile(r'\b(?:4[0-9]{12})(?:[0-9]{3})?\b',I)
         self.detectionmastercard = compile(r'\b(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}\b',I)
@@ -95,23 +106,11 @@ class QBCreditcards:
             data.append({"Count":_List.count(x),"DinersClub":x})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkcreditcards(self,data):
+    def analyze(self,data):
         '''
         start pattern analysis for words and wordsstripped
         '''
-        data["CARDS"] = {   "AMERICANEXPRESS":[],
-                            "VISA":[],
-                            "MASTERCARD":[],
-                            "DISCOVER":[],
-                            "JCB":[],
-                            "DINERSCLUB":[],
-                            "_AMERICANEXPRESS":["Count","AmericanExpress"],
-                            "_VISA":["Count","Visa"],
-                            "_MASTERCARD":["Count","MasterCard"],
-                            "_DISCOVER":["Count","Discover"],
-                            "_JCB":["Count","JCB"],
-                            "_DINERSCLUB":["Count","DinersClub"]}
-
+        data["CARDS"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.americanexpress(data["CARDS"]["AMERICANEXPRESS"])

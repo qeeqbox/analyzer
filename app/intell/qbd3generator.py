@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long
 from r2pipe import open as r2open
 from re import search
 from ast import literal_eval
@@ -18,7 +18,7 @@ class QBD3generator:
         pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkfunc(self,func,str) -> bool:
+    def check_func(self,func,str) -> bool:
         '''
         check if functions are not sub or sym 
         '''
@@ -34,7 +34,7 @@ class QBD3generator:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Making symbol xrefs")
-    def makexref(self,data):
+    def create_d3_ref(self,data):
         '''
         get cross references from file using radare2 
         '''
@@ -64,7 +64,7 @@ class QBD3generator:
                         _list.append({"From":func["fcn_name"],"To":funcfromopcode})
 
         for xfunc in _list:
-            if self.checkfunc(xfunc["From"],sym):
+            if self.check_func(xfunc["From"],sym):
                 if xfunc["From"] not in _temp:
                     _temp.append(xfunc["From"])
                     _node.append({"func":xfunc["From"]})
@@ -87,7 +87,7 @@ class QBD3generator:
             data["XREFS"]["TEXT"] = _list
 
     @verbose(True,verbose_flag,verbose_timeout,"Making artifacts xrefs")
-    def makeartifactsd3(self,data) -> bool:
+    def create_d3_artifacts(self,data) -> bool:
         '''
         get artifacts from data and generate d3
         '''

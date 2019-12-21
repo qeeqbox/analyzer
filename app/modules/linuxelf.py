@@ -1,22 +1,32 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getentropy,getwords,getentropyfloatret
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_entropy,get_words,get_entropy_float_ret
+from ..intell.qbdescription import add_description
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from elftools.elf.descriptions import describe_reloc_type
 from elftools.elf.descriptions import describe_symbol_type
 from hashlib import md5
 from elftools.elf.sections import SymbolTableSection
+from copy import deepcopy
 
 class LinuxELF:
     @verbose(True,verbose_flag,verbose_timeout,"Starting LinuxELF")
     def __init__(self):
-        pass
+        self.datastruct = { "General":{},
+                            "Sections":[],
+                            "Dynamic":[],
+                            "Symbols":[],
+                            "Relocations":[],
+                            "_General":{},
+                            "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
+                            "_Dynamic":["Needed","Description"],
+                            "_Symbols":["Type","Symbol","Description"],
+                            "_Relocations":["Section","Name","Description"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getrelocations(self,elf) -> list:
+    def get_relocations(self,elf) -> list:
         '''
         get symbols locations
         '''
@@ -35,7 +45,7 @@ class LinuxELF:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getsymbols(self,elf) -> list:
+    def get_symbols(self,elf) -> list:
         '''
         get symbols and types 
         '''
@@ -51,7 +61,7 @@ class LinuxELF:
             return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getdynamic(self,elf) -> list:
+    def get_dynamic(self,elf) -> list:
         '''
         get dynamic libraries 
         '''
@@ -66,7 +76,7 @@ class LinuxELF:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getsection(self,elf) -> list:
+    def get_section(self,elf) -> list:
         '''
         get all sections of elf 
         '''
@@ -74,7 +84,7 @@ class LinuxELF:
         for section in elf.iter_sections():
             if section.name != "":
                 sus = "No"
-                entropy = getentropyfloatret(section.data())
+                entropy = get_entropy_float_ret(section.data())
                 if entropy > 6 or entropy >= 0 and entropy <=1:
                     sus = "True, {}".format(entropy)
                 elif section.data_size == 0:
@@ -83,12 +93,12 @@ class LinuxELF:
                                 "Suspicious":sus,
                                 "Size":section.data_size,
                                 "MD5":md5(section.data()).hexdigest(),
-                                "Entropy":getentropy(section.data()),
+                                "Entropy":get_entropy(section.data()),
                                 "Description":""})
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getiter(self,elf) -> str:
+    def get_iter(self,elf) -> str:
         '''
         get run-time linker 
         '''
@@ -97,7 +107,7 @@ class LinuxELF:
                 return segment.get_interp_name()
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkelfsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check if mime is linux type 
         '''
@@ -108,31 +118,22 @@ class LinuxELF:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing ELF file")
-    def getelfdeatils(self,data):
+    def analyze(self,data):
         '''
         start analyzing elf logic, add description to strings and get words and wordsstripped from the file 
         '''
         with open(data["Location"]["File"], 'rb') as f, open(data["Location"]["File"], 'rb') as ff:
-            data["ELF"] = { "General":{},
-                            "Sections":[],
-                            "Dynamic":[],
-                            "Symbols":[],
-                            "Relocations":[],
-                            "_General":{},
-                            "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
-                            "_Dynamic":["Needed","Description"],
-                            "_Symbols":["Type","Symbol","Description"],
-                            "_Relocations":["Section","Name","Description"]}
+            data["ELF"] = deepcopy(self.datastruct)
             elf = ELFFile(f)
             data["ELF"]["General"] = {  "ELF Type" : elf.header.e_type,
                                         "ELF Machine" : elf.header.e_machine,
-                                        "Entropy": getentropy(ff.read()),
+                                        "Entropy": get_entropy(ff.read()),
                                         "Entrypoint": hex(elf.header.e_entry),
-                                        "Interpreter":self.getiter(elf)}
-            data["ELF"]["Sections"] = self.getsection(elf)
-            data["ELF"]["Dynamic"] = self.getdynamic(elf)
-            data["ELF"]["Symbols"] = self.getsymbols(elf)
-            data["ELF"]["Relocations"] = self.getrelocations(elf)
-            adddescription("ManHelp",data["ELF"]["Symbols"],"Symbol")
-            adddescription("LinuxSections",data["ELF"]["Sections"],"Section")
-            getwords(data,data["Location"]["File"])
+                                        "Interpreter":self.get_iter(elf)}
+            data["ELF"]["Sections"] = self.get_section(elf)
+            data["ELF"]["Dynamic"] = self.get_dynamic(elf)
+            data["ELF"]["Symbols"] = self.get_symbols(elf)
+            data["ELF"]["Relocations"] = self.get_relocations(elf)
+            add_description("ManHelp",data["ELF"]["Symbols"],"Symbol")
+            add_description("LinuxSections",data["ELF"]["Sections"],"Section")
+            get_words(data,data["Location"]["File"])

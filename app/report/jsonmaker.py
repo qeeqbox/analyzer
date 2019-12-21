@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from json import JSONEncoder,dump as jdump,dumps as jdumps
 
 class ComplexEncoder(JSONEncoder):
@@ -19,11 +19,11 @@ class JSONMaker:
         '''
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def printjson(self,data):
-        logstring(jdumps(data, indent=4, sort_keys=True,cls=ComplexEncoder),"Yellow")
+    def print_json(self,data):
+        log_string(jdumps(data, indent=4, sort_keys=True,cls=ComplexEncoder),"Yellow")
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def cleandata(self,data):
+    def clean_data(self,data):
         '''
         start making json output file
         '''
@@ -46,7 +46,7 @@ class JSONMaker:
                 del data[x]
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def dumpjson(self,data):
+    def dump_json(self,data):
         '''
         start making json output file
         '''
@@ -55,7 +55,7 @@ class JSONMaker:
             jdump(data, fp, cls=ComplexEncoder)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def dumpjsonandreturn(self,data):
+    def dump_json_and_return(self,data):
         '''
         start making json output file
         '''

@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
@@ -11,7 +11,7 @@ from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
 
-def killprocessandsubs():
+def kill_process_and_subs():
     proc = Process(getpid())
     subprocs = proc.children()
     for subproc in subprocs:
@@ -22,7 +22,7 @@ def killprocessandsubs():
     proc.kill()
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def killpythoncli():
+def kill_python_cli():
     current = getpid()
     for p in process_iter():
         cmdline = p.cmdline()
@@ -30,14 +30,14 @@ def killpythoncli():
             p.kill()
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def openinbrowser(_path):
+def open_in_browser(_path):
     '''
     open html file in default browser
     '''
     open_new_tab(_path)
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def checkurl(url):
+def check_url(url):
     if not url.startswith(("http://","https://","ftp://")):
         url = "http://"+url
     if get_tld(url, fail_silently=True):
@@ -51,7 +51,7 @@ def checkurl(url):
     return False
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getentropy(data) -> str:
+def get_entropy(data) -> str:
     '''
     get entropy of buffer
     '''
@@ -69,7 +69,7 @@ def getentropy(data) -> str:
         return "None"
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getentropyfloatret(data) -> float:
+def get_entropy_float_ret(data) -> float:
     '''
     get entropy of buffer
     '''
@@ -87,27 +87,27 @@ def getentropyfloatret(data) -> float:
         return 0.0
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getentropyold(data):
+def get_entropyold(data):
     probabilities = [float(data.count(char)) / len(data) for char in dict.fromkeys(list(data))]
     entropy =- sum([probability * log2(probability) / log2(2.0) for probability in probabilities])
     return entropy
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def longtoip(decimal) -> str:
+def long_to_ip(decimal) -> str:
     '''
     decimal to ip
     '''
     return inet_ntoa(pack("!L", decimal))
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def iptolong(ip) -> int:
+def ip_to_long(ip) -> int:
     '''
     ip to decimal
     '''
     return unpack("!L", inet_aton(ip))[0]
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getwords(data,_path) -> (list,str):
+def get_words(data,_path) -> (list,str):
     '''
     get all words of file
     '''
@@ -132,7 +132,7 @@ def getwords(data,_path) -> (list,str):
                             "wordsstripped": wordsstripped }
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getwordsmultifiles(data,arr) -> (list,str):
+def get_words_multi_files(data,arr) -> (list,str):
     '''
     get all words of multi files
     '''
@@ -161,7 +161,7 @@ def getwordsmultifiles(data,arr) -> (list,str):
                             "wordsstripped": wordsstripped }
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def getwordsmultifilesarray(data,arr) -> (list,str):
+def get_words_multi_filesarray(data,arr) -> (list,str):
     '''
     get all words of buffers in an array
     '''
@@ -191,16 +191,16 @@ def getwordsmultifilesarray(data,arr) -> (list,str):
                             "wordsstripped": wordsstripped }
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def serializeobj(obj):
+def serialize_obj(obj):
     '''
     recursive str serialization obj
     '''
     if type(obj) == dict:
         for key, value in obj.items():
-            obj[key] = serializeobj(value)
+            obj[key] = serialize_obj(value)
     elif type(obj) == list:
         for i, item in enumerate(obj):
-            obj[i] = serializeobj(item)
+            obj[i] = serialize_obj(item)
     else:
         obj = str(obj)
     return obj

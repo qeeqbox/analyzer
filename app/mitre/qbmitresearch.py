@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long
 from nltk.corpus import words
 from nltk.tokenize import word_tokenize
 from json import loads
@@ -20,7 +20,7 @@ class QBMitresearch():
         self.parsediocs = self.mitrepath+"parsediocs.json"
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def searchinmitreandreturn(self,s,attack):
+    def search_in_mitre_and_return(self,s,attack):
         '''
         get attack info from fulldict
         '''
@@ -31,7 +31,7 @@ class QBMitresearch():
         return None
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding attack patterns")
-    def checkmitresimilarity(self,data):
+    def check_mitre_similarity(self,data):
         '''
         check detections from parsediocs.json against wordsstripped, if yes bring attack info
         '''
@@ -42,7 +42,7 @@ class QBMitresearch():
                 if ioc.lower() in self.wordsstripped and len(ioc.lower()) > 3: # added > 3 less FB 
                     _list.append(ioc.lower())
             if len(_list) > 0:
-                x = self.searchinmitreandreturn(self.mitre.fulldict,attack)
+                x = self.search_in_mitre_and_return(self.mitre.fulldict,attack)
                 if x:
                     data["Attack"].append({ "Id":attack,
                                             "Name":x["name"],
@@ -56,7 +56,7 @@ class QBMitresearch():
             _list = []
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding mitre artifacts")
-    def checkmitre(self,data):
+    def check_mitre(self,data):
         '''
         check if words are tools or malware listed in mitre 
         '''
@@ -76,7 +76,7 @@ class QBMitresearch():
         return True
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing with mitre")
-    def checkwithmitre(self,data):
+    def analyze(self,data):
         '''
         start mitre analysis for words and wordsstripped
         '''
@@ -86,5 +86,5 @@ class QBMitresearch():
                          "Attack":[],
                          "_Binary":["Word","Name","Description"],
                          "_Attack":["Id","Name","Detected","Description"]}
-        self.checkmitre(data["MITRE"])
-        self.checkmitresimilarity(data["MITRE"])
+        self.check_mitre(data["MITRE"])
+        self.check_mitre_similarity(data["MITRE"])

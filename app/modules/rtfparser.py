@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwordsmultifilesarray,getwords,getwordsmultifiles
-from ..general.archive import checkpackedfiles,dmgunpack,unpackfile
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray,get_words,get_words_multi_files
+from ..general.archive import check_packed_files,dmg_unpack,unpack_file
 from magic import from_buffer,Magic
 from zlib import decompress
 from re import DOTALL, MULTILINE, compile, finditer, sub
@@ -11,10 +11,13 @@ from binascii import unhexlify
 class RTFParser:
     @verbose(True,verbose_flag,verbose_timeout,"Starting RTFParser")
     def __init__(self):
-        pass
+        self.datastruct ={   "General":{},
+                             "Objects":[],
+                             "_General":{},
+                             "_Objects":["Len","Parsed"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getobjects(self,data,buffer) -> (list,list):
+    def get_objects(self,data,buffer) -> (list,list):
         '''
         get objects from rtf by regex
         '''
@@ -42,7 +45,7 @@ class RTFParser:
         return _List,_Listobjects
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkrtfsig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check if mime is rtf
         '''
@@ -50,15 +53,12 @@ class RTFParser:
             return True
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyze RTF file")
-    def checkrtf(self,data):
+    def analyze(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from buffers 
         '''
-        data["RTF"] ={"General":{},
-                         "Objects":[],
-                         "_General":{},
-                         "_Objects":["Len","Parsed"]}
+        data["RTF"]=self.datastruct
         f = data["FilesDumps"][data["Location"]["File"]]
-        data["RTF"]["Objects"],objects = self.getobjects(data,f)
+        data["RTF"]["Objects"],objects = self.get_objects(data,f)
         data["RTF"]["General"] = {"Objects":len(objects)}
-        getwordsmultifilesarray(data,objects)
+        get_words_multi_filesarray(data,objects)

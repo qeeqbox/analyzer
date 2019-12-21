@@ -1,21 +1,45 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import getwords,getentropy,getentropyfloatret
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import get_words,get_entropy,get_entropy_float_ret
+from ..intell.qbdescription import add_description
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
 from magic import from_file
 from datetime import datetime
 from M2Crypto import BIO, m2, SMIME, X509
+from copy import deepcopy
 
 class WindowsPe:
     @verbose(True,verbose_flag,verbose_timeout,"Starting WindowsPe")
     def __init__(self):
-        pass
+        self.datastruct = { "General" : {},
+                            "Characteristics":{},
+                            "Singed":[],
+                            "SignatureExtracted":{},
+                            "Stringfileinfo":{},
+                            "Sections":[],
+                            "Dlls":[],
+                            "Resources":[],
+                            "Imported functions":[],
+                            "Exported functions":[],
+                            "Debug":[],
+                            "Manifest":"",
+                            "_General": {},
+                            "_Characteristics": {},
+                            "_Singed":["Wrong","SignatureHex"],
+                            "__SignatureExtracted":{},
+                            "_Stringfileinfo":{},
+                            "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
+                            "_Dlls":["Dll","Description"],
+                            "_Resources":["Resource","Offset","MD5","Sig","Description"],
+                            "_Imported functions":["Dll","Function","Description"],
+                            "_Exported functions":["Dll","Function","Description"],
+                            "_Debug":["Name","Description"],
+                            "_Manifest":""}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def whattype(self,pe) -> str:
+    def what_type(self,pe) -> str:
         '''
         check file exe or dll or driver
         '''
@@ -27,7 +51,7 @@ class WindowsPe:
             return "driver"
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkifsinged(self,pe) -> list:
+    def check_if_singed(self,pe) -> list:
         '''
         check file if it has Signature or not
         '''
@@ -104,7 +128,7 @@ class WindowsPe:
         return _list,_extracted
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def findentrypointfunction(self,pe, rva) -> str:
+    def find_entry_point_function(self,pe, rva) -> str:
         '''
         find entery point in sections
         '''
@@ -113,7 +137,7 @@ class WindowsPe:
                 return section
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getdlls(self,pe) -> list:
+    def get_dlls(self,pe) -> list:
         '''
         get dlls
         '''
@@ -125,14 +149,14 @@ class WindowsPe:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getsections(self,pe) -> list:
+    def get_sections(self,pe) -> list:
         '''
         get sections
         '''
         _list = []
         for section in pe.sections:
             sus = "No"
-            entropy = getentropyfloatret(section.get_data())
+            entropy = get_entropy_float_ret(section.get_data())
             if entropy > 6 or entropy >= 0 and entropy <=1:
                 sus = "True, {}".format(entropy)
             elif section.SizeOfRawData == 0:
@@ -141,12 +165,12 @@ class WindowsPe:
                             "Suspicious":sus,
                             "Size":section.SizeOfRawData,
                             "MD5":section.get_hash_md5(),
-                            "Entropy":getentropy(section.get_data()),
+                            "Entropy":get_entropy(section.get_data()),
                             "Description":""})
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getimportedfunctions(self,pe) -> list:
+    def get_imported_functions(self,pe) -> list:
         '''
         get import functions
         '''
@@ -161,7 +185,7 @@ class WindowsPe:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getexportedfunctions(self,pe) -> list:
+    def get_exported_functions(self,pe) -> list:
         '''
         get export functions
         '''
@@ -173,7 +197,7 @@ class WindowsPe:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getrecourse(self,pe) -> (list,str):
+    def get_recourse(self,pe) -> (list,str):
         '''
         get resources
         '''
@@ -211,7 +235,7 @@ class WindowsPe:
         return _list,manifest,_icons
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getstringfileinfo(self,pe) -> dict:
+    def get_string_file_info(self,pe) -> dict:
         _dict  = {}
         if hasattr(pe, "IMAGE_DIRECTORY_ENTRY_RESOURCE"):
             pe.parse_data_directories(directories=[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_RESOURCE']])
@@ -225,7 +249,7 @@ class WindowsPe:
         return _dict
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getCharacteristics(self,pe) -> dict:
+    def get_characteristics(self,pe) -> dict:
         '''
         get characteristics of file
         '''
@@ -242,7 +266,7 @@ class WindowsPe:
         return x
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def getdebug(self,pe) -> list:
+    def get_debug(self,pe) -> list:
         '''
         get debug directory 
         '''
@@ -254,7 +278,7 @@ class WindowsPe:
         return _list
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkpesig(self,data) -> bool:
+    def check_sig(self,data) -> bool:
         '''
         check mime is exe or msi
         '''
@@ -263,41 +287,18 @@ class WindowsPe:
             return True
 
     @verbose(True,verbose_flag,verbose_timeout,"Analyzing PE file")
-    def getpedeatils(self,data):
+    def analyze(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from the file 
         '''
-        data["PE"] = {  "General" : {},
-                        "Characteristics":{},
-                        "Singed":[],
-                        "SignatureExtracted":{},
-                        "Stringfileinfo":{},
-                        "Sections":[],
-                        "Dlls":[],
-                        "Resources":[],
-                        "Imported functions":[],
-                        "Exported functions":[],
-                        "Debug":[],
-                        "Manifest":"",
-                        "_General": {},
-                        "_Characteristics": {},
-                        "_Singed":["Wrong","SignatureHex"],
-                        "__SignatureExtracted":{},
-                        "_Stringfileinfo":{},
-                        "_Sections":["Section","Suspicious","Size","Entropy","MD5","Description"],
-                        "_Dlls":["Dll","Description"],
-                        "_Resources":["Resource","Offset","MD5","Sig","Description"],
-                        "_Imported functions":["Dll","Function","Description"],
-                        "_Exported functions":["Dll","Function","Description"],
-                        "_Debug":["Name","Description"],
-                        "_Manifest":""}
+        data["PE"] = deepcopy(self.datastruct)
         data["ICONS"] = {"ICONS":[]}
         pe = PE(data["Location"]["File"])
         ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
-        section = self.findentrypointfunction(pe,ep)
+        section = self.find_entry_point_function(pe,ep)
         sig = section.get_data(ep, 12)
         singinhex = "".join("{:02x}".format(x) for x in sig)
-        data["PE"]["General"] = {   "PE Type" : self.whattype(pe),
+        data["PE"]["General"] = {   "PE Type" : self.what_type(pe),
                                     "Entrypoint": pe.OPTIONAL_HEADER.AddressOfEntryPoint,
                                     "Entrypoint Section":section.Name.decode("utf-8",errors="ignore").strip("\00"),
                                     "Header checksum": hex(pe.OPTIONAL_HEADER.CheckSum),
@@ -307,17 +308,17 @@ class WindowsPe:
                                     "imphash":pe.get_imphash(),
                                     "warning":pe.get_warnings() if len(pe.get_warnings())> 0 else "None",
                                     "Timestamp":datetime.fromtimestamp(pe.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
-        data["PE"]["Characteristics"] = self.getCharacteristics(pe)
-        data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.checkifsinged(pe)
-        data["PE"]["Stringfileinfo"] = self.getstringfileinfo(pe)
-        data["PE"]["Sections"] = self.getsections(pe)
-        data["PE"]["Dlls"] = self.getdlls(pe)
-        data["PE"]["Resources"],data["PE"]["Manifest"],data["ICONS"]["ICONS"] = self.getrecourse(pe)
-        data["PE"]["Imported functions"] = self.getimportedfunctions(pe)
-        data["PE"]["Exported functions"] = self.getexportedfunctions(pe)
-        adddescription("WinApis",data["PE"]["Imported functions"],"Function")
-        adddescription("ManHelp",data["PE"]["Imported functions"],"Function")
-        adddescription("WinDlls",data["PE"]["Dlls"],"Dll")
-        adddescription("WinSections",data["PE"]["Sections"],"Section")
-        adddescription("WinResources",data["PE"]["Resources"],"Resource")
-        getwords(data,data["Location"]["File"])
+        data["PE"]["Characteristics"] = self.get_characteristics(pe)
+        data["PE"]["Singed"],data["PE"]["SignatureExtracted"] = self.check_if_singed(pe)
+        data["PE"]["Stringfileinfo"] = self.get_string_file_info(pe)
+        data["PE"]["Sections"] = self.get_sections(pe)
+        data["PE"]["Dlls"] = self.get_dlls(pe)
+        data["PE"]["Resources"],data["PE"]["Manifest"],data["ICONS"]["ICONS"] = self.get_recourse(pe)
+        data["PE"]["Imported functions"] = self.get_imported_functions(pe)
+        data["PE"]["Exported functions"] = self.get_exported_functions(pe)
+        add_description("WinApis",data["PE"]["Imported functions"],"Function")
+        add_description("ManHelp",data["PE"]["Imported functions"],"Function")
+        add_description("WinDlls",data["PE"]["Dlls"],"Dll")
+        add_description("WinSections",data["PE"]["Sections"],"Section")
+        add_description("WinResources",data["PE"]["Resources"],"Resource")
+        get_words(data,data["Location"]["File"])

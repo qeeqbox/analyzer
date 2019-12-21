@@ -1,26 +1,33 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong,checkurl
-from ..intell.qbdescription import adddescription
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long,check_url
+from ..intell.qbdescription import add_description
 from re import I, compile, findall
 from nltk.corpus import words
 from nltk.tokenize import word_tokenize
 from binascii import unhexlify
+from copy import deepcopy
 
 class QBCredentials:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBCredentials")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = {  "SNNs":[],
+                             "SPs":[],
+                             "Users":[],
+                             "Logins":[],
+                             "_SNNs":["Count","SSN"],
+                             "_SPs":["Count","PASS"],
+                             "_Users":["Count","USER"],
+                             "_Logins":["Count","UserPass"]}
+
         self.ssn = compile(r"(\d{3}-\d{2}-\d{4})",I)
         self.strongpasswords = compile(r"((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\`\{\|\}\~])[A-Za-z\d \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\`\{\|\}\~]{10,24})")
         self.username = compile(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,24}")
         self.logins = compile(r"((user|pass|login|sign)(.*)[^A-Za-z\d \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\`\{\|\}\~])")
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding SSN patterns")
-    def checkssn(self,_data):
+    def check_ssn(self,_data):
         '''
         check if buffer contains ssn 123-45-6789
         '''
@@ -34,7 +41,7 @@ class QBCredentials:
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding strong passwords patterns")
-    def checkstrongpassword(self,_data):
+    def check_strong_password(self,_data):
         '''
         check if buffer contains strong passwords
         '''
@@ -47,7 +54,7 @@ class QBCredentials:
             _data.append({"Count":_List.count(x),"StrongPassword":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding strong usernames")
-    def checkusernames(self,_data):
+    def check_usernames(self,_data):
         '''
         check if buffer contains usernames
         '''
@@ -60,7 +67,7 @@ class QBCredentials:
             _data.append({"Count":_List.count(x),"USER":x})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding logins")
-    def checklogins(self,_data):
+    def check_logins(self,_data):
         '''
         check if buffer contains login
         '''
@@ -73,22 +80,14 @@ class QBCredentials:
             _data.append({"Count":_List.count(x),"UserPass":x})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def checkcreds(self,data):
+    def analyze(self,data):
         '''
         start pattern analysis for words and wordsstripped
         '''
-        data["Creds"] = {   "SNNs":[],
-                            "SPs":[],
-                             "Users":[],
-                             "Logins":[],
-                             "_SNNs":["Count","SSN"],
-                             "_SPs":["Count","PASS"],
-                             "_Users":["Count","USER"],
-                             "_Logins":["Count","UserPass"]}
-
+        data["Creds"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.checkssn(data["Creds"]["SNNs"])
+        self.check_ssn(data["Creds"]["SNNs"])
         #self.checkstrongpassword(data["Creds"]["SPs"])
         #self.checkusernames(data["Creds"]["Users"])
-        self.checklogins(data["Creds"]["Logins"])
+        self.check_logins(data["Creds"]["Logins"])

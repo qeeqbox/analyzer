@@ -1,16 +1,33 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import logstring,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import iptolong,getentropyfloatret
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..mics.funcs import ip_to_long,get_entropy_float_ret
 from itertools import chain,takewhile
 from re import I, compile, findall, search
+from copy import deepcopy
 
 class QBDGA:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBDGA")
     def __init__(self):
-        '''
-        initialize class
-        '''
+        self.datastruct = {  "Repeated":[],
+                             "LowFreqLetters":[],
+                             "ConsonantsRow":[],
+                             "Consonants":[],
+                             "Encryption":[],
+                             "Symbols":[],
+                             "Numbers":[],
+                             "Long":[],
+                             "Entropy":[],
+                             "_Repeated":["Length","Repeated"],
+                             "_LowFreqLetters":["Count","Letters","URL"],
+                             "_ConsonantsRow":["Groups","Row","URL"],
+                             "_Consonants":["Count","Letters","URL"],
+                             "_Encryption":["Type","Detected","URL"],
+                             "_Symbols":["Count","Symbols","URL"],
+                             "_Numbers":["Count","Numbers","URL"],
+                             "_Long":["Length","URL"],
+                             "_Entropy":["Entropy","URL"]}
+
         self.detectionlowfreq = compile(r"[vkjxqz]")
         self.detectionconsonantslettersinrow = compile(r"[bcdfghjklmnpqrstvwxyz]{4,}")
         self.detectionconsonants = compile(r"[bcdfghjklmnpqrstvwxyz]")
@@ -19,7 +36,7 @@ class QBDGA:
         self.detectionnumbers = compile(r'[\d]',I)
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find repeated patterns")
-    def seqstongrams(self,data,domains):
+    def seq_stongrams(self,data,domains):
         '''
         loop sequences, converts sequences to ngrams. map all of them and get thier intersection
         then, return the max item
@@ -44,7 +61,7 @@ class QBDGA:
             pass
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find low frequency letters")
-    def findlowfreqletters(self,data,domains):
+    def find_low_freq_letters(self,data,domains):
         '''
         loop sequences, find low frequency letters 
         '''
@@ -55,7 +72,7 @@ class QBDGA:
                 data.append({"Count":len(x),"Letters":''.join(x),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find consonants letters in row")
-    def findconsonantslettersinrow(self,data,domains):
+    def find_consonants_letters_in_row(self,data,domains):
         '''
         loop sequences, find consonants in row
         '''
@@ -66,7 +83,7 @@ class QBDGA:
                 data.append({"Groups":"{} > 2 groups".format(len(x)),"Row":','.join(x),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find consonants letters")
-    def findconsonantsletters(self,data,domains):
+    def find_consonants_letters(self,data,domains):
         '''
         loop sequences, find consonants 
         '''
@@ -77,7 +94,7 @@ class QBDGA:
                 data.append({"Count":"{} > 8".format(len(x)),"Letters":''.join(x),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find encryptions")
-    def findencryptionpatterns(self,data,domains):
+    def find_encryption_patterns(self,data,domains):
         '''
         loop sequences, find encryptions 
         '''
@@ -100,7 +117,7 @@ class QBDGA:
                 data.append({"Type":temp,"Detected":detection.group(),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find symbols")
-    def findallsymbols(self,data,domains):
+    def find_all_symbols(self,data,domains):
         '''
         loop sequences, find symbols 
         '''
@@ -112,7 +129,7 @@ class QBDGA:
                 data.append({"Count":"{} > 2".format(len(x)),"Symbols":''.join(x),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find numbers")
-    def findallnumbers(self,data,domains):
+    def find_all_numbers(self,data,domains):
         '''
         loop sequences, find numbers 
         '''
@@ -123,7 +140,7 @@ class QBDGA:
                 data.append({"Count":"{} > 5".format(len(x)),"Numbers":''.join(x),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Find long domains")
-    def URLlength(self,data,domains):
+    def URL_length(self,data,domains):
         '''
         loop sequences, find long domains 
         '''
@@ -133,43 +150,25 @@ class QBDGA:
                 data.append({"Length":"{} > 13".format(len(domain)),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"DGA-Get entropies of domains")
-    def checkentropy(self,data,domains):
+    def check_entropy(self,data,domains):
         '''
         loop sequences, get entropy
         '''
         for domain in domains:
             domain = domain["domain"]
-            entropy = getentropyfloatret(domain)
+            entropy = get_entropy_float_ret(domain)
             if entropy > 3.7:
                 data.append({"Entropy":"{0:.15f}".format(entropy),"URL":domain})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding Domain Generational Algorithm patterns")
-    def checkdga(self,data):
-        data["DGA"] = {  "Repeated":[],
-                         "LowFreqLetters":[],
-                         "ConsonantsRow":[],
-                         "Consonants":[],
-                         "Encryption":[],
-                         "Symbols":[],
-                         "Numbers":[],
-                         "Long":[],
-                         "Entropy":[],
-                         "_Repeated":["Length","Repeated"],
-                         "_LowFreqLetters":["Count","Letters","URL"],
-                         "_ConsonantsRow":["Groups","Row","URL"],
-                         "_Consonants":["Count","Letters","URL"],
-                         "_Encryption":["Type","Detected","URL"],
-                         "_Symbols":["Count","Symbols","URL"],
-                         "_Numbers":["Count","Numbers","URL"],
-                         "_Long":["Length","URL"],
-                         "_Entropy":["Entropy","URL"]}
-
-        self.seqstongrams(data["DGA"]["Repeated"],data["PCAP"]["Domains"])
-        self.findlowfreqletters(data["DGA"]["LowFreqLetters"],data["PCAP"]["Domains"])
-        self.findconsonantslettersinrow(data["DGA"]["ConsonantsRow"],data["PCAP"]["Domains"])
-        self.findconsonantsletters(data["DGA"]["Consonants"],data["PCAP"]["Domains"])
-        self.findencryptionpatterns(data["DGA"]["Encryption"],data["PCAP"]["Domains"])
-        self.findallsymbols(data["DGA"]["Symbols"],data["PCAP"]["Domains"])
-        self.findallnumbers(data["DGA"]["Numbers"],data["PCAP"]["Domains"])
-        self.URLlength(data["DGA"]["Long"],data["PCAP"]["Domains"])
-        self.checkentropy(data["DGA"]["Entropy"],data["PCAP"]["Domains"])
+    def analyze(self,data):
+        data["DGA"] = deepcopy(self.datastruct)
+        self.seq_stongrams(data["DGA"]["Repeated"],data["PCAP"]["Domains"])
+        self.find_low_freq_letters(data["DGA"]["LowFreqLetters"],data["PCAP"]["Domains"])
+        self.find_consonants_letters_in_row(data["DGA"]["ConsonantsRow"],data["PCAP"]["Domains"])
+        self.find_consonants_letters(data["DGA"]["Consonants"],data["PCAP"]["Domains"])
+        self.find_encryption_patterns(data["DGA"]["Encryption"],data["PCAP"]["Domains"])
+        self.find_all_symbols(data["DGA"]["Symbols"],data["PCAP"]["Domains"])
+        self.find_all_numbers(data["DGA"]["Numbers"],data["PCAP"]["Domains"])
+        self.URL_length(data["DGA"]["Long"],data["PCAP"]["Domains"])
+        self.check_entropy(data["DGA"]["Entropy"],data["PCAP"]["Domains"])
