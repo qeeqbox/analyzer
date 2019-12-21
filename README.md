@@ -154,6 +154,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ~~Converting some yara rules into individual modules (Requested by users)~~
 - ~~Whitelist (Requested by users)~~
 - ~~Switching to mongodb (Requested by users)~~
+- ~~Cleaning up v2~~ (needs more)
 - Web detection
 - Phishing module
 - Curling some TIPs (Requested by users)
