@@ -1,10 +1,20 @@
 from datetime import datetime
 from pymongo import MongoClient
 from uuid import uuid4
+from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 
 class qbjobqueue:
+    @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")
     def __init__(self, name, init=True):
         self.conn = MongoClient('mongodb://localhost:27017/')
+        self.db = None
+        self.col = None
+        self.cur = None
+        if self.check_connection():
+            self.init_database(name,init)
+
+    @verbose(True,verbose_flag,verbose_timeout,"Initializing database")
+    def init_database(self,name, init=True):
         self.db = self.conn[name]
         if init:
             self.db.drop_collection('jobs')
@@ -13,16 +23,24 @@ class qbjobqueue:
             if bool('jobs' in self.db.list_collection_names()):
                 self.col = self.db['jobs']
             else:
-                return
+                return False
         self.col.insert_one({ 'jobID': str(uuid4()),
                               'status': 'dumy',
                               'created': datetime.now(),
                               'started': datetime.now(),
                               'finished': datetime.now(),'data': ''})
         self.cur = self.db['jobs']
+        return True
+
+    def check_connection(self):
+        try:
+            self.conn.admin.command('ismaster')
+            return True
+        except ConnectionFailure:
+            return False
 
     def insert(self, data):
-        if len(data) > 0:
+        if len(data) > 0 and self.col != None:
             jobID = str(uuid4())
             data.update({"uuid":jobID})
             setadd = { 'jobID': jobID,
@@ -37,15 +55,18 @@ class qbjobqueue:
         return False
 
     def count(self):
-        cursor = self.col.find({'status': 'wait'})
-        if cursor:
-            return cursor.count()
+        if self.col != None:
+            cursor = self.col.find({'status': 'wait'})
+            if cursor:
+                return cursor.count()
 
     def clear(self):
-        self.col.drop()
+        if self.col != None:
+            self.col.drop()
 
     def status(self, JobID):
-        return self.col.find_one({'jobID': JobID})['status']
+        if self.col != None:
+            return self.col.find_one({'jobID': JobID})['status']
 
 
       

@@ -111,7 +111,7 @@ class QBAnalyzer(Cmd):
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
-    analyze --file /malware/GoziBankerISFB.exe --full --disk_dump_html --disk_dump_json --print --open
+    analyze --folder /home/a8b2bd81cf1e/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
     analyze --file /malware/BrRAT.apk --full --db_dump_json --print
     analyze --folder /malware --full --db_dump_json --open
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
@@ -130,7 +130,7 @@ class QBAnalyzer(Cmd):
                     parsed.disk_dump_html = False
                     parsed.disk_dump_json = False
                     parsed.open = False
-                    parsed.print_json = False
+                    parsed.print = False
                     if not parsed.db_dump_json and not parsed.db_dump_html:
                         parsed.db_dump_json = True
                         parsed.db_dump_html = True
@@ -142,7 +142,7 @@ class QBAnalyzer(Cmd):
         except:
             return
 
-        log_string("Task {} (Started)".format(parsed.uuid),"Yellow_#")
+        log_string("Task {} (Started)".format(parsed.uuid),"Yellow")
 
         if not parsed.output:
             parsed.output = gettempdir()
@@ -156,7 +156,7 @@ class QBAnalyzer(Cmd):
         else:
             log_string("File, Folder or Buffer is missing","Red")
 
-        log_string("Task {} (Finished)".format(parsed.uuid),"Yellow_#")
+        log_string("Task {} (Finished)".format(parsed.uuid),"Green")
 
     def analyzefile(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):

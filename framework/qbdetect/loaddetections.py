@@ -19,7 +19,7 @@ class LoadDetections:
         self.imported = []
         for x in self.modules:
             try:
-                mod = import_module(".qbdetect.detections.{}".format(path.basename(x)[:-3]),package="app")
+                mod = import_module(".qbdetect.detections.{}".format(path.basename(x)[:-3]),package="framework")
                 self.imported.append(getattr(mod,"startanalyzing"))
             except Exception:
                 log_string("Loading plugins failed","Red")

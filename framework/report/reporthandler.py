@@ -43,20 +43,20 @@ class ReportHandler:
                 dataserialized = serialize_obj(data)
                 _id = add_item("tasks","results",dataserialized)
                 if _id:
-                    log_string("JSON result added to db","Green")
+                    log_string("JSON result added to db","Yellow")
                 else:
                     log_string("Unable to add JSON result to db","Red")
             if parsed.db_dump_json:
                 datajson = self.jsonmaker.dump_json_and_return(data)
                 _id = add_item_fs("dumps",datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"JSON")
                 if _id:
-                    log_string("JSON result dumped into db","Green")
+                    log_string("JSON result dumped into db","Yellow")
                 else:
                     log_string("Unable to dump JSON result to db","Red")
             if parsed.db_dump_html:
                 datajson = self.jsonmaker.dump_json_and_return(data)
                 _id = add_item_fs("dumps",renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"HTML")
                 if _id:
-                    log_string("HTML result dumped into db","Green")
+                    log_string("HTML result dumped into db","Yellow")
                 else:
                     log_string("Unable to dump HTML result to db","Red")

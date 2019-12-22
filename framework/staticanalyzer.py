@@ -77,7 +77,7 @@ class StaticAnalyzer:
 
         data = {}
 
-        log_string("Start analyzing {}".format(parsed.file),"Green")
+        log_string("Start analyzing {}".format(parsed.file),"Yellow")
 
         self.qbfile.analyze(data,parsed.file,parsed.output)
         self.qbencoding.analyze(data,parsed.file,parsed.unicode)

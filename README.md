@@ -181,7 +181,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh ubuntu
 ./install.sh initdb
-python3 -m app.cli --interactive
+python3 -m framework.cli --interactive
 ```
 
 #### [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Fedora 
@@ -191,7 +191,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh fedora
 ./install.sh initdb
-python3 -m app.cli --interactive
+python3 -m framework.cli --interactive
 ```
 
 #### [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Kali
@@ -201,7 +201,7 @@ cd analyzer
 chmod +x install.sh
 ./install.sh kali
 ./install.sh initdb
-python3 -m app.cli --interactive
+python3 -m framework.cli --interactive
 ```
 
 #### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
@@ -223,8 +223,8 @@ Please choose a mode:
 --silent              Run this framework as service (Required an interface for interaction)
 
 Examples:
-python3 -m app.cli --interactive
-python3 -m app.cli --silent
+python3 -m framework.cli --interactive
+python3 -m framework.cli --silent
 ```
 
 ## Interactive mode

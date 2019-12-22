@@ -2,7 +2,9 @@ from threading import Thread
 from flask import Flask, jsonify, make_response, request
 from werkzeug.exceptions import HTTPException
 from ..mics.connection import get_it_fs
+from ..mics.certmaker import create_dummy_certificate
 from ..queue.mongoqueue import qbjobqueue
+from os import mkdir, path
 
 app = Flask(__name__)
 queue = qbjobqueue("jobsqueue", False)
@@ -48,8 +50,11 @@ for cls in HTTPException.__subclasses__():
 
 #do not use in production
 def runwebapi():
-    Thread(target=app.run,kwargs={"host": "127.0.0.1", "port": 8001, "use_reloader": False},).start()
-
+    certsdir = path.abspath(path.join(path.dirname( __file__ ),'certs'))
+    if not certsdir.endswith(path.sep): certsdir = certsdir+path.sep
+    if not path.isdir(certsdir): mkdir(certsdir)
+    if create_dummy_certificate('cert.pem', 'key.pem',certsdir,False):
+        Thread(target=app.run,kwargs={"host": "127.0.0.1", "port": 8001, "use_reloader": False,"ssl_context":(certsdir+'cert.pem', certsdir+'key.pem')},).start()
 
 # curl localhost:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json
 # curl localhost:8001/qeeqbox/analyzer/tasks/get/809cad06-917f-43e1-b02c-8aab68e17110
