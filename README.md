@@ -293,7 +293,7 @@ Examples:
 ## Silent mode
 Create task
 ```sh
-curl localserver:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json
+curl localserver:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json'
 ```
 The response will
 ```json
