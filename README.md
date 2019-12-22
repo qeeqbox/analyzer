@@ -295,11 +295,11 @@ Create task
 ```sh
 curl localserver:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json'
 ```
-The response will
+The response will be
 ```json
 {"task":"809cad06-917f-43e1-b02c-8aab68e17110"}
 ```
-Get  the task output
+Get the task output
 ```sh
 curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110
 ``` 
