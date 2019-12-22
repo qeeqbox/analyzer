@@ -1,4 +1,4 @@
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+#from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from pymongo import MongoClient
 from gridfs import GridFS
 
@@ -40,9 +40,16 @@ def find_items(db,_set):
     else:
         return ""
 
-def add_item_fs(db,filebuffer,name,_set):
-    item = GridFS(client[db]).put(filebuffer,filename=name,metadata=_set,encoding='utf-8')
+def add_item_fs(db,filebuffer,name,_set,uuid,_type):
+    item = GridFS(client[db]).put(filebuffer,filename=name,metadata=_set,uuid=uuid,type=_type,encoding='utf-8')
     if item != None:
         return item
+    else:
+        return False
+
+def get_it_fs(db,_set):
+    item = GridFS(client[db]).find_one(_set)
+    if item != None:
+        return item.read()
     else:
         return False

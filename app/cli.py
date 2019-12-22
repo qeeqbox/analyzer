@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.03"
+__V__ = "2020.V.02.04"
 
 from .staticanalyzer import StaticAnalyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
@@ -7,6 +7,7 @@ from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
 from .logger.logger import log_string,verbose,verbose_flag,verbose_timeout,setup_logger
 from .report.reporthandler import ReportHandler
+from .webapi.api import runwebapi
 from cmd import Cmd
 from os import path,listdir
 from argparse import ArgumentParser
@@ -15,11 +16,16 @@ from requests import get
 from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
 from signal import signal,SIGTSTP,SIGINT
+from uuid import uuid4
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
     log_string("Terminating..","Red")
     kill_process_and_subs()
+
+class Namespace:
+    def __init__(self, kwargs):
+        self.__dict__.update(kwargs)
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -57,10 +63,10 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--visualize',action='store_true', help="visualize some artifacts", required=False)
     _analyze_parsergroupdef.add_argument('--flags',action='store_true', help="add countries flags to html", required=False)
     _analyze_parsergroupdef.add_argument('--icons',action='store_true', help="add executable icons to html", required=False)
-    _analyze_parsergroupdef.add_argument('--print',action='store_true', help="print output to terminal", required=False)
     _analyze_parsergroupdef.add_argument('--worldmap',action='store_true', help="add world map to html", required=False)
     _analyze_parsergroupdef.add_argument('--image',action='store_true', help="add similarity image to html", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
+    _analyze_parsergroupdef.add_argument('--uuid',help="task id", required=False)
     _analyze_parsergroupdeb = _analyze_parser.add_argument_group('Force analysis switches')
     _analyze_parsergroupdeb.add_argument('--unicode',action='store_true', help="force extracting ascii", required=False)
     _analyze_parsergroupdeb.add_argument('--bigfile',action='store_true', help="force analyze big files", required=False)
@@ -72,12 +78,14 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdew.add_argument('--w_all',action='store_true', help="find it in white list", required=False)
     _analyze_parsergroupdeo = _analyze_parser.add_argument_group('Output arguments and switches')
     _analyze_parsergroupdeo.add_argument('--output', help="path of output folder", required=False)
-    _analyze_parsergroupdeo.add_argument('--html',action='store_true', help="make html record", required=False)
-    _analyze_parsergroupdeo.add_argument('--json',action='store_true', help="make json record", required=False)
+    _analyze_parsergroupdeo.add_argument('--disk_dump_html',action='store_true', help="save html record to disk", required=False)
+    _analyze_parsergroupdeo.add_argument('--disk_dump_json',action='store_true', help="save json record to disk", required=False)
     _analyze_parsergroupdeo.add_argument('--open',action='store_true', help="open the report in webbroswer", required=False)
+    _analyze_parsergroupdef.add_argument('--print_json',action='store_true', help="print output to terminal", required=False)
     _analyze_parsergroupded = _analyze_parser.add_argument_group('Database options')
     _analyze_parsergroupded.add_argument('--db_result',action='store_true',help='save results to db (<16mg)', required=False)
-    _analyze_parsergroupded.add_argument('--db_dump',action='store_true', help="save json dump tp db", required=False)
+    _analyze_parsergroupded.add_argument('--db_dump_html',action='store_true', help="save html dump tp db", required=False)
+    _analyze_parsergroupded.add_argument('--db_dump_json',action='store_true', help="save json dump tp db", required=False)
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
@@ -94,6 +102,7 @@ class QBAnalyzer(Cmd):
 
         if mode == "--silent":
             qbjobqueue("jobsqueue",True)
+            runwebapi()
             qbworker("jobsqueue",self.do_analyze,3)
             kill_process_and_subs()
         else:
@@ -102,20 +111,38 @@ class QBAnalyzer(Cmd):
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
-    analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
-    analyze --file /malware/BrRAT.apk --full --json --print
-    analyze --folder /malware --full --json --open
-    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
-    analyze --buffer "google.com bit.ly" --topurl --html --open
-    analyze --buffer "google.com bit.ly" --full --json --print
+    analyze --file /malware/GoziBankerISFB.exe --full --disk_dump_html --disk_dump_json --print --open
+    analyze --file /malware/BrRAT.apk --full --db_dump_json --print
+    analyze --folder /malware --full --db_dump_json --open
+    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
+    analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
+    analyze --buffer "google.com bit.ly" --full --print
     '''
         print(example)
 
-    def do_analyze(self,line):
+    def do_analyze(self,line,silent=False):
         try:
-            parsed = self._analyze_parser.parse_args(ssplit(line))
-        except SystemExit:
+            if silent:
+                #little workaround for now, and hardcoded options..
+                parsed_args = vars(self._analyze_parser.parse_args(""))
+                parsed = Namespace({**parsed_args,**line})
+                if parsed.uuid:
+                    parsed.disk_dump_html = False
+                    parsed.disk_dump_json = False
+                    parsed.open = False
+                    parsed.print = False
+                    if not parsed.db_dump_json and not parsed.db_dump_html:
+                        parsed.db_dump_json = True
+                        parsed.db_dump_html = True
+                else:
+                    return
+            else:
+                parsed = self._analyze_parser.parse_args(ssplit(line))
+                parsed.uuid = str(uuid4())
+        except:
             return
+
+        log_string("Task {} (Started)".format(parsed.uuid),"Yellow_#")
 
         if not parsed.output:
             parsed.output = gettempdir()
@@ -128,6 +155,8 @@ class QBAnalyzer(Cmd):
                 self.analyzebuffer(parsed)
         else:
             log_string("File, Folder or Buffer is missing","Red")
+
+        log_string("Task {} (Finished)".format(parsed.uuid),"Yellow_#")
 
     def analyzefile(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):

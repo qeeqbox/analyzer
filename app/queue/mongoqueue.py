@@ -14,22 +14,23 @@ class qbjobqueue:
                 self.col = self.db['jobs']
             else:
                 return
-        self.col.insert_one({ 'JobID': str(uuid4()),
+        self.col.insert_one({ 'jobID': str(uuid4()),
                               'status': 'dumy',
                               'created': datetime.now(),
                               'started': datetime.now(),
-                              'finished': datetime.now(),'data': '',})
+                              'finished': datetime.now(),'data': ''})
         self.cur = self.db['jobs']
 
-    def insert(self, jobID, data):
-        if jobID != '':
+    def insert(self, data):
+        if len(data) > 0:
+            jobID = str(uuid4())
+            data.update({"uuid":jobID})
             setadd = { 'jobID': jobID,
                        'status': 'wait',
                        'created': datetime.now(),
                        'started': datetime.now(),
                        'finished': datetime.now(),
-                       'data': data,
-                       }
+                       'data': data}
             id = self.col.insert_one(setadd)
             if id:
                 return jobID
@@ -43,13 +44,8 @@ class qbjobqueue:
     def clear(self):
         self.col.drop()
 
-    def stop(self):
-        self.cancel.set()
-
     def status(self, JobID):
         return self.col.find_one({'jobID': JobID})['status']
-
-#qbjobqueue("jobsqueue",False).insert("111","--buffer \"google.com bit.ly\" --full --json")
 
 
       

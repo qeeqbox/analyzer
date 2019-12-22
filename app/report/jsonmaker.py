@@ -2,6 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from json import JSONEncoder,dump as jdump,dumps as jdumps
+from os import path
 
 class ComplexEncoder(JSONEncoder):
     def default(self, obj):
@@ -53,6 +54,9 @@ class JSONMaker:
 
         with open(data["Location"]["json"], 'w') as fp:
             jdump(data, fp, cls=ComplexEncoder)
+            if path.exists(data["Location"]["json"]):
+                return True
+        return False
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def dump_json_and_return(self,data):

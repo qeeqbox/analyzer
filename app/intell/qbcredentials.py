@@ -4,9 +4,6 @@ from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from ..mics.funcs import ip_to_long,check_url
 from ..intell.qbdescription import add_description
 from re import I, compile, findall
-from nltk.corpus import words
-from nltk.tokenize import word_tokenize
-from binascii import unhexlify
 from copy import deepcopy
 
 class QBCredentials:

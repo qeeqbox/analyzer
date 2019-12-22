@@ -501,12 +501,20 @@ class HtmlMaker:
         return table
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def render_template(self,data,header,footer,parsed):
+    def render_template(self,data,header,footer,parsed,dump=False):
         '''
         start making tables and save them into a html file
         '''
         footer = 'QBAnalyzer∞ generated this report at {} on {} - {}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),platform(),self.d)
         table = self.make_table(data,data["Location"]["File"],parsed)
         table = "\n".join([line.rstrip() for line in table.splitlines() if line.strip()])
-        with open(self.template) as file_:
-            Template(file_.read()).stream(title=data["Details"]["Properties"]["md5"],content=table,footer=footer).dump(data["Location"]["html"])
+        if dump:
+            with open(self.template) as file:
+                Template(file.read()).stream(title=data["Details"]["Properties"]["md5"],content=table,footer=footer).dump(data["Location"]["html"])
+                if path.exists(data["Location"]["html"]):
+                    return True
+        else:
+            with open(self.template) as file:
+                rendered = Template(file.read()).render(title=data["Details"]["Properties"]["md5"],content=table,footer=footer)
+                return rendered
+        return None
