@@ -305,7 +305,7 @@ The response will be
 ```
 Get the task output
 ```sh
-curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
+curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
 ``` 
 
 ## Other use
