@@ -205,9 +205,10 @@ sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/loc
 
 ## Intro options
 ```
+                                                            
  _____  __   _  _____        \   / ______  ______  _____   
 |_____| | \  | |_____| |      \_/   ____/ |______ |_____/
-|     | |  \_| |     | |_____  |   /_____ |______ |    \ 2020.V.02.01b
+|     | |  \_| |     | |_____  |   /_____ |______ |    \ 2020.V.02.04
                                |  https://github.com/QeeqBox/Analyzer
                                                             
 Please choose a mode:
@@ -226,74 +227,77 @@ usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
                [--behavior] [--xref] [--yara] [--language] [--mitre]
                [--topurl] [--ocr] [--enc] [--cards] [--creds] [--patterns]
                [--suspicious] [--dga] [--plugins] [--visualize] [--flags]
-               [--icons] [--print] [--worldmap] [--image] [--full] [--unicode]
-               [--bigfile] [--w_internal] [--w_original] [--w_hash]
-               [--w_words] [--w_all] [--output OUTPUT] [--html] [--json]
-               [--open] [--db]
+               [--icons] [--worldmap] [--image] [--full] [--uuid UUID]
+               [--unicode] [--bigfile] [--w_internal] [--w_original]
+               [--w_hash] [--w_words] [--w_all] [--output OUTPUT]
+               [--disk_dump_html] [--disk_dump_json] [--open] [--print_json]
+               [--db_result] [--db_dump_html] [--db_dump_json]
 
 Input arguments:
-  --file FILE      path to file or dump
-  --folder FOLDER  path to folder
-  --buffer BUFFER  input buffer
+  --file FILE       path to file or dump
+  --folder FOLDER   path to folder
+  --buffer BUFFER   input buffer
 
 Analysis switches:
-  --behavior       check with generic detections
-  --xref           get cross references
-  --yara           analyze with yara module (Disable this for big files)
-  --language       analyze words against english language
-  --mitre          map strings to mitre
-  --topurl         get urls and check them against top 10000
-  --ocr            get all ocr text
-  --enc            find encryptions
-  --cards          find credit cards
-  --creds          find credit cards
-  --patterns       find common patterns
-  --suspicious     find suspicious strings
-  --dga            find Domain generation algorithms
-  --plugins        scan with external plugins
-  --visualize      visualize some artifacts
-  --flags          add countries flags to html
-  --icons          add executable icons to html
-  --print          print output to terminal
-  --worldmap       add world map to html
-  --image          add similarity image to html
-  --full           analyze using all modules
+  --behavior        check with generic detections
+  --xref            get cross references
+  --yara            analyze with yara module (Disable this for big files)
+  --language        analyze words against english language
+  --mitre           map strings to mitre
+  --topurl          get urls and check them against top 10000
+  --ocr             get all ocr text
+  --enc             find encryptions
+  --cards           find credit cards
+  --creds           find credit cards
+  --patterns        find common patterns
+  --suspicious      find suspicious strings
+  --dga             find Domain generation algorithms
+  --plugins         scan with external plugins
+  --visualize       visualize some artifacts
+  --flags           add countries flags to html
+  --icons           add executable icons to html
+  --worldmap        add world map to html
+  --image           add similarity image to html
+  --full            analyze using all modules
+  --uuid UUID       task id
+  --print_json      print output to terminal
 
 Force analysis switches:
-  --unicode        force extracting ascii
-  --bigfile        force analyze big files
+  --unicode         force extracting ascii
+  --bigfile         force analyze big files
 
 Whitelist switches:
-  --w_internal     find it in white list by internal name
-  --w_original     find it in white list by original name
-  --w_hash         find it in white list by hash
-  --w_words        check extracted words against whitelist
-  --w_all          find it in white list
+  --w_internal      find it in white list by internal name
+  --w_original      find it in white list by original name
+  --w_hash          find it in white list by hash
+  --w_words         check extracted words against whitelist
+  --w_all           find it in white list
 
 Output arguments and switches:
-  --output OUTPUT  path of output folder
-  --html           make html record
-  --json           make json record
-  --open           open the report in webbroswer
+  --output OUTPUT   path of output folder
+  --disk_dump_html  save html record to disk
+  --disk_dump_json  save json record to disk
+  --open            open the report in webbroswer
 
 Database options:
-  --db_result      save results to db (<16mg)
-  --db_dump        save json dump tp db
+  --db_result       save results to db (<16mg)
+  --db_dump_html    save html dump tp db
+  --db_dump_json    save json dump tp db
 
 Examples:
-    analyze --file /malware/GoziBankerISFB.exe --full --html --json --print --open
-    analyze --file /malware/BrRAT.apk --full --json --print
-    analyze --folder /malware --full --json --open
-    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --json --open
-    analyze --buffer "google.com bit.ly" --topurl --html --open
-    analyze --buffer "google.com bit.ly" --full --json --print
+    analyze --folder /home/a8b2bd81cf1e/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
+    analyze --file /malware/BrRAT.apk --full --db_dump_json --print
+    analyze --folder /malware --full --db_dump_json --open
+    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
+    analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
+    analyze --buffer "google.com bit.ly" --full --print
 
 ```
 
 ## Silent mode
 Create task
 ```sh
-curl localserver:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json'
+curl https://localhost:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json' --insecure
 ```
 The response will be
 ```json
@@ -301,7 +305,7 @@ The response will be
 ```
 Get the task output
 ```sh
-curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110
+curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
 ``` 
 
 ## Other use
