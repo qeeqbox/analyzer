@@ -291,7 +291,22 @@ Examples:
 ```
 
 ## Silent mode
-You can add tasks to this queue by using insert from qbjobqueue (I'll add additional details later on)
+>> Create task
+```sh
+curl localserver:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json
+```
+<< The response will
+```json
+{"task":"809cad06-917f-43e1-b02c-8aab68e17110"}
+```
+>> Get  the task output
+```sh
+curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110
+```
+<< 
+
+## Other use
+I have spent a very long time making many features of this project adoptable in different project, if you are interested in that, please mention this source somewhere in your project.
 
 ## Disclaimer
 This project is NOT an anti malware project and does not quarantine or delete malicious files
