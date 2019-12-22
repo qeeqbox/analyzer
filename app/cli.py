@@ -130,7 +130,7 @@ class QBAnalyzer(Cmd):
                     parsed.disk_dump_html = False
                     parsed.disk_dump_json = False
                     parsed.open = False
-                    parsed.print = False
+                    parsed.print_json = False
                     if not parsed.db_dump_json and not parsed.db_dump_html:
                         parsed.db_dump_json = True
                         parsed.db_dump_html = True
