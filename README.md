@@ -39,7 +39,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - 2 modes (Interactive and silent)
 - Generates HTML or JSON as output
 - Dump output file with details to mongodb
-- Save output result to mongodb
+- Save json result to mongodb
 - General file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
@@ -65,6 +65,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ASCII extraction from UNICODE
 - Whitelist implemented (Windows7, 8 and 10 files)
 - Check WAF and bypass proxy
+- Webapi example included
 - Linux
     - ELF information
     - API functions descriptions
