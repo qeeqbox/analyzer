@@ -32,15 +32,15 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
-## Features
+## General Features
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Intime analysis (Session is saved)
 - 2 modes (Interactive and silent)
 - Generates HTML or JSON as output
 - Dump output file with details to mongodb
-- Save json result to mongodb
-- General file information MD5, charset, mime, ssdeep
+- Save raw json result to mongodb
+- Basic file information MD5, charset, mime, ssdeep
 - Different string/patterns analysis methods
 - NL English words detection
 - OCR words detection
@@ -65,7 +65,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ASCII extraction from UNICODE
 - Whitelist implemented (Windows7, 8 and 10 files)
 - Check WAF and bypass proxy
-- Webapi example included
+
+## Other Features
 - Linux
     - ELF information
     - API functions descriptions
@@ -144,6 +145,12 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
     - Script entropy
+
+## Web api and interface
+- Testing or researching only
+- Track tasks by uuid
+- https (auto generate self signed certificate)
+- Dump json or html from mongodb database
 
 ## Roadmap
 - ~~Reduce file I/O~~
