@@ -305,7 +305,7 @@ curl localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8a
 ``` 
 
 ## Other use
-I have spent a very long time making many features of this project adoptable in different project, if you are interested in that, please mention this source somewhere in your project.
+It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
 
 ## Disclaimer
 This project is NOT an anti malware project and does not quarantine or delete malicious files
