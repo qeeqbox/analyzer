@@ -65,6 +65,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ASCII extraction from UNICODE
 - Whitelist implemented (Windows7, 8 and 10 files)
 - Check WAF and bypass proxy
+- Free/Fake email extraction
 
 ## Other Features
 - Linux
