@@ -111,7 +111,7 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
-        self.do_analyze("--file /home/a8b2bd81cf1e/malware/Shaderansomwaremalspam.eml --full --disk_dump_html --open")
+        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/Shaderansomwaremalspam.eml --full --disk_dump_html --open")
 
     def help_analyze(self):
         self._analyze_parser.print_help()
