@@ -1,4 +1,5 @@
-#  QeeqBox Analyzer [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
+#  QeeqBox Analyzer
+[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/)
 
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
@@ -184,7 +185,7 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 
 ## Running as application
 
-#### [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Ubuntu 
+#### Run it in Ubuntu 
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -194,7 +195,7 @@ chmod +x install.sh
 python3 -m framework.cli --interactive
 ```
 
-#### [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Fedora 
+#### Run it in Fedora 
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -204,7 +205,7 @@ chmod +x install.sh
 python3 -m framework.cli --interactive
 ```
 
-#### [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Kali
+#### Run it in Kali
 ```sh
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
@@ -214,7 +215,7 @@ chmod +x install.sh
 python3 -m framework.cli --interactive
 ```
 
-#### [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) Run it in Docker
+#### Run it in Docker
 ```docker
 git clone https://github.com/qeeqbox/analyzer.git
 sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
