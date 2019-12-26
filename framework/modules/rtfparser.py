@@ -1,10 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import get_words_multi_filesarray,get_words,get_words_multi_files
-from ..general.archive import check_packed_files,dmg_unpack,unpack_file
-from magic import from_buffer,Magic
-from zlib import decompress
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray
 from re import DOTALL, MULTILINE, compile, finditer, sub
 from binascii import unhexlify
 

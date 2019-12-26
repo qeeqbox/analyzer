@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ...logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from itertools import combinations
+from ...logger.logger import verbose, verbose_flag, verbose_timeout
 from re import I, compile, search
 from random import choice
 

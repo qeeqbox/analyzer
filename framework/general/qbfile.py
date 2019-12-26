@@ -1,12 +1,12 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import get_words,get_words_multi_files,get_entropy
-from ..general.archive import check_packed_files,dmg_unpack,unpack_file
+from ..general.archive import unpack_file
 from shutil import copyfile,rmtree
 from os import mkdir, path
 from hashlib import md5, sha1, sha256
-from magic import from_file,Magic
+from magic import from_file
 from ssdeep import hash_from_file
 from mimetypes import guess_type
 from re import match

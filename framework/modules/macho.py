@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import get_words,get_words_multi_files,get_entropy,get_entropy_float_ret
 from ..general.archive import check_packed_files,dmg_unpack,unpack_file
 from ..intell.qbdescription import add_description

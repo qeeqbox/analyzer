@@ -1,9 +1,9 @@
 from OpenSSL.SSL import FILETYPE_PEM
-from OpenSSL.crypto import dump_certificate, X509, X509Name,  PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension
+from OpenSSL.crypto import PKey, TYPE_RSA, X509, X509Extension, dump_certificate, dump_privatekey
 from uuid import uuid4
 from os import path,remove
 
-def create_dummy_certificate(certname,keyname,_dir, force=False):
+def create_dummy_certificate(certname,keyname,_dir, force=False) -> bool:
     if certname and keyname and _dir:
         if path.exists(_dir+keyname) and path.exists(_dir+certname) and not force:
             return True

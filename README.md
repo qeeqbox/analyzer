@@ -162,15 +162,21 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ~~Converting some yara rules into individual modules (Requested by users)~~
 - ~~Whitelist (Requested by users)~~
 - ~~Switching to mongodb (Requested by users)~~
+- ~~Phishing module~~
+- ~~Web service and API~~
 - Web detection
-- Phishing module
 - Curling some TIPs (Requested by users)
 - MS office module
-- Web service and API
 - Machine learning modules (maybe commercial)
 
-## All dependencies
-Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Mongodb, Wikipedia, Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css, bdb, r2pipe, operator, codeop, pwd, sys, pyexpat, math, cmd, importlib, io, markupsafe, quopri, platform, pkgutil, random, tldextract, typing, swig_runtime_data4, copyreg, glob, difflib, code, zipimport, stat, time, secrets, optparse, urllib, xml, M2Crypto, fractions, pydoc, PIL, abc, elftools, calendar, atexit, ctypes, datetime, fcntl, sre_constants, runpy, uu, sqlite3, sitecustomize, distutils, cgi, lzma, site, email, certifi, requests_file, jinja2, pycparser, selectors, unicodedata, pytesseract, gettext, encodings, nltk, select, apport_python_hook, linecache, itertools, tld, textwrap, cryptography, xmlrpc, zipfile, mmap, pefile, ftplib, socketserver, asyncio, asn1crypto, cython_runtime, uuid, bz2, webbrowser, chardet, functools, ipaddress, enum, hashlib, tempfile, queue, pathlib, base64, ordlookup, copy, getopt, scapy, ast, codecs, posix, marshal, urllib3, sre_parse, netrc, heapq, bs4, cffi, builtins, pickle, errno, grp, os, fnmatch, genericpath, qbanalyzer, shutil, magic, string, re, signal, decimal, pkg_resources, inspect, pdb, stringprep, binascii, argparse, sre_compile, http, opcode, plistlib, six, collections, gc, posixpath, ssl, asyncore, numpy, bisect, simplejson, ntpath, numbers, macholib, token, keyword, imp, traceback, zlib, logging, soupsieve, yara, requests, contextvars, ssdeep, pprint, sysconfig, tokenize, gzip, struct, csv, array, idna, shlex, warnings, dis, unittest, html, threading, weakref, locale, socket, json, resource, contextlib, hmac, reprlib, concurrent, types, subprocess, mimetypes, psutil and tons of researches.. (If i missed a reference/dependency, please let me know!)
+## Prerequisites
+```sh
+apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb
+```
+
+```sh
+pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL
+```
 
 ## Running as application
 
@@ -231,19 +237,21 @@ python3 -m framework.cli --silent
 ```
 (interactive) help analyze
 usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
-               [--behavior] [--xref] [--yara] [--language] [--mitre]
-               [--topurl] [--ocr] [--enc] [--cards] [--creds] [--patterns]
-               [--suspicious] [--dga] [--plugins] [--visualize] [--flags]
-               [--icons] [--worldmap] [--image] [--full] [--uuid UUID]
-               [--unicode] [--bigfile] [--w_internal] [--w_original]
-               [--w_hash] [--w_words] [--w_all] [--output OUTPUT]
-               [--disk_dump_html] [--disk_dump_json] [--open] [--print_json]
-               [--db_result] [--db_dump_html] [--db_dump_json]
+               [--type TYPE] [--behavior] [--xref] [--yara] [--language]
+               [--mitre] [--topurl] [--ocr] [--enc] [--cards] [--creds]
+               [--patterns] [--suspicious] [--dga] [--plugins] [--visualize]
+               [--flags] [--icons] [--worldmap] [--spelling] [--image]
+               [--full] [--phishing] [--uuid UUID] [--unicode] [--bigfile]
+               [--w_internal] [--w_original] [--w_hash] [--w_words] [--w_all]
+               [--output OUTPUT] [--disk_dump_html] [--disk_dump_json]
+               [--open] [--print_json] [--db_result] [--db_dump_html]
+               [--db_dump_json]
 
 Input arguments:
   --file FILE       path to file or dump
   --folder FOLDER   path to folder
   --buffer BUFFER   input buffer
+  --type TYPE       force input type
 
 Analysis switches:
   --behavior        check with generic detections
@@ -264,8 +272,10 @@ Analysis switches:
   --flags           add countries flags to html
   --icons           add executable icons to html
   --worldmap        add world map to html
+  --spelling        force spelling check
   --image           add similarity image to html
   --full            analyze using all modules
+  --phishing        analyze phishing content
   --uuid UUID       task id
   --print_json      print output to terminal
 
@@ -292,12 +302,12 @@ Database options:
   --db_dump_json    save json dump tp db
 
 Examples:
-    analyze --folder /home/a8b2bd81cf1e/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
-    analyze --file /malware/BrRAT.apk --full --db_dump_json --print
+    analyze --folder /home/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
+    analyze --file /malware/BrRAT.apk --full --db_dump_json --print_json
     analyze --folder /malware --full --db_dump_json --open
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
-    analyze --buffer "google.com bit.ly" --full --print
+    analyze --buffer "google.com bit.ly" --full --print_json
 
 ```
 
@@ -317,6 +327,9 @@ curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1
 
 ## Other use
 It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
+
+## Awesome Resources
+Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID and tons of researches.. (If i missed a resource/dependency, please let me know!)
 
 ## Disclaimer
 This project is NOT an anti malware project and does not quarantine or delete malicious files

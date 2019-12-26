@@ -1,10 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import get_words
 from ..intell.qbdescription import add_description
 from scapy import all as scapy
-from binascii import hexlify
 from scapy.layers import http
 from datetime import datetime
 from re import compile,I,search

@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
@@ -37,7 +37,7 @@ def open_in_browser(_path):
     open_new_tab(_path)
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def check_url(url):
+def check_url(url) -> bool:
     if not url.startswith(("http://","https://","ftp://")):
         url = "http://"+url
     if get_tld(url, fail_silently=True):
@@ -121,11 +121,9 @@ def get_words(data,_path) -> (list,str):
     else:
         words = findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][_path])
     for x in words:
-        try:
-            wordssensitive.append(x.decode(encoding,errors="ignore"))
-            wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
-        except:
-            pass
+        wordssensitive.append(x.decode(encoding,errors="ignore"))
+        wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
+
     wordsstripped = '\n'+'\n'.join(wordsinsensitive) + '\n'
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
@@ -142,19 +140,13 @@ def get_words_multi_files(data,arr) -> (list,str):
     wordssensitive = []
     encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
     for x in arr:
-        try:
-            if encoding == "utf-16":
-                words.extend(findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][x["Path"]]))
-            else:
-                words.extend(findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][x["Path"]]))
-        except:
-            pass
+        if encoding == "utf-16":
+            words.extend(findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][x["Path"]]))
+        else:
+            words.extend(findall(b"[\x20-\x7e]{4,}",data["FilesDumps"][x["Path"]]))
     for x in words:
-        try:
-            wordssensitive.append(x.decode(encoding,errors="ignore"))
-            wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
-        except:
-            pass
+        wordssensitive.append(x.decode(encoding,errors="ignore"))
+        wordsinsensitive.append(x.lower().decode(encoding,errors="ignore"))
     wordsstripped = '\n'.join(wordsinsensitive)
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,
@@ -172,19 +164,13 @@ def get_words_multi_filesarray(data,arr) -> (list,str):
     encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
     for x in arr:
         #if x["Path"].endswith(".xml"):
-        try:
-            if encoding == "utf-16":
-                words.extend(findall(b"[\x20-\x7e\x00]{4,}",x))
-            else:
-                words.extend(findall(b"[\x20-\x7e]{4,}",x))
-        except:
-            pass
+        if encoding == "utf-16":
+            words.extend(findall(b"[\x20-\x7e\x00]{4,}",x))
+        else:
+            words.extend(findall(b"[\x20-\x7e]{4,}",x))
     for x in words:
-        try:
-            wordssensitive.append(x.decode('utf-8',errors="ignore"))
-            wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
-        except:
-            pass
+        wordssensitive.append(x.decode('utf-8',errors="ignore"))
+        wordsinsensitive.append(x.lower().decode('utf-8',errors="ignore"))
     wordsstripped = '\n'.join(wordsinsensitive)
     data["StringsRAW"] = {  "wordssensitive": wordssensitive,
                             "wordsinsensitive": wordsinsensitive,

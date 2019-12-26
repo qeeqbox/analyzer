@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import ip_to_long
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from r2pipe import open as r2open
 from re import search
 from ast import literal_eval

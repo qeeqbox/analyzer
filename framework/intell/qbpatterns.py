@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import ip_to_long,check_url
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..mics.funcs import check_url
 from ..intell.qbdescription import add_description
 from re import I, compile, findall
 from binascii import unhexlify
@@ -152,3 +152,4 @@ class QBPatterns:
         add_description("DNSServers",data["Patterns"]["IP4S"],"IP")
         add_description("ReservedIP",data["Patterns"]["IP4S"],"IP")
         add_description("CountriesIPs",data["Patterns"]["IP4S"],"IP")
+        add_description("Emails",data["Patterns"]["EMAILS"],"EMAIL")

@@ -5,7 +5,7 @@ from .staticanalyzer import StaticAnalyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
 from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
-from .logger.logger import log_string,verbose,verbose_flag,verbose_timeout,setup_logger
+from .logger.logger import log_string, setup_logger
 from .report.reporthandler import ReportHandler
 from .webapi.api import runwebapi
 from cmd import Cmd
@@ -45,6 +45,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupreq.add_argument('--file', help="path to file or dump")
     _analyze_parsergroupreq.add_argument('--folder', help="path to folder")
     _analyze_parsergroupreq.add_argument('--buffer', help="input buffer")
+    _analyze_parsergroupreq.add_argument('--type', help="force input type")
     _analyze_parsergroupdef = _analyze_parser.add_argument_group('Analysis switches')
     _analyze_parsergroupdef.add_argument('--behavior',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
@@ -64,8 +65,10 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--flags',action='store_true', help="add countries flags to html", required=False)
     _analyze_parsergroupdef.add_argument('--icons',action='store_true', help="add executable icons to html", required=False)
     _analyze_parsergroupdef.add_argument('--worldmap',action='store_true', help="add world map to html", required=False)
+    _analyze_parsergroupdef.add_argument('--spelling',action='store_true', help="force spelling check", required=False)
     _analyze_parsergroupdef.add_argument('--image',action='store_true', help="add similarity image to html", required=False)
     _analyze_parsergroupdef.add_argument('--full',action='store_true', help="analyze using all modules", required=False)
+    _analyze_parsergroupdef.add_argument('--phishing',action='store_true', help="analyze phishing content", required=False)
     _analyze_parsergroupdef.add_argument('--uuid',help="task id", required=False)
     _analyze_parsergroupdeb = _analyze_parser.add_argument_group('Force analysis switches')
     _analyze_parsergroupdeb.add_argument('--unicode',action='store_true', help="force extracting ascii", required=False)
@@ -108,15 +111,17 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/Shaderansomwaremalspam.eml --full --disk_dump_html --open")
+
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
-    analyze --folder /home/a8b2bd81cf1e/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
-    analyze --file /malware/BrRAT.apk --full --db_dump_json --print
+    analyze --folder /home/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
+    analyze --file /malware/BrRAT.apk --full --db_dump_json --print_json
     analyze --folder /malware --full --db_dump_json --open
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
-    analyze --buffer "google.com bit.ly" --full --print
+    analyze --buffer "google.com bit.ly" --full --print_json
     '''
         print(example)
 
@@ -173,6 +178,7 @@ class QBAnalyzer(Cmd):
                     parsed.file = fullpath
                     data = self.san.analyze(parsed)
                     self.rep.check_output(data,parsed)
+                    parsed.extra = ""
         else:
             log_string("Target folder is wrong..","Red")
 

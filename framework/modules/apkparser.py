@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..general.archive import check_packed_files,dmg_unpack,unpack_file
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..general.archive import check_packed_files, unpack_file
 from ..mics.funcs import get_words_multi_files,get_words
 from ..intell.qbdescription import add_description
 from r2pipe import open as r2open

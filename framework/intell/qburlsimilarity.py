@@ -1,9 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from re import compile, findall,I
 from tld import get_fld,get_tld
-from tld.utils import update_tld_names
 from nltk import edit_distance
 from requests import get
 from io import BytesIO

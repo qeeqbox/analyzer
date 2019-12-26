@@ -1,5 +1,5 @@
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from magic import from_file,Magic
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from magic import Magic
 
 class QBEncdoing:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBEncdoing")
@@ -7,7 +7,7 @@ class QBEncdoing:
         pass
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def check_bom(self,str):
+    def check_bom(self,str) -> str:
         if str[:3] == '\xEF\xBB\xBF':
             return "UTF-8-SIG"
         elif str[:4] == '\xFF\xFE\x00\x00':

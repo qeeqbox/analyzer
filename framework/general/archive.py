@@ -1,8 +1,8 @@
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from os import path, walk
 from subprocess import PIPE,Popen
 from hashlib import md5
-from magic import from_file,Magic
+from magic import from_file
 from mimetypes import guess_type
 
 @verbose(True,verbose_flag,verbose_timeout,None)

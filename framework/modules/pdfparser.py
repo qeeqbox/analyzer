@@ -1,9 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import get_words_multi_filesarray,get_words
 from re import DOTALL, MULTILINE, compile, findall
-from magic import from_buffer,Magic
+from magic import from_buffer
 from zlib import decompress
 from copy import deepcopy
 
@@ -19,7 +19,7 @@ class PDFParser:
                              "Launch":[],
                              "URI":[],
                              "Action":[],
-                             "GoToR":[],
+                             "GoTo":[],
                              "RichMedia":[],
                              "AA":[],
                              "_Count":{},
@@ -31,7 +31,7 @@ class PDFParser:
                              "_OpenAction":["Key","Value"],
                              "_URI":["Key","Value"],
                              "_Action":["Key","Value"],
-                             "_GoToR":["Key","Value"],
+                             "_GoTo":["Key","Value"],
                              "_RichMedia":["Key","Value"],
                              "_AA":["Key","Value"]}
 
@@ -43,7 +43,7 @@ class PDFParser:
         self.Launchdetection = compile(b'/Launch([\S][^>]+)',DOTALL|MULTILINE)
         self.URIdetection = compile(b'/URI([\S][^>]+)',DOTALL|MULTILINE)
         self.Actiondetection = compile(b'/Action([\S][^>]+)',DOTALL|MULTILINE)
-        self.GoToRdetection = compile(b'/GoToR([\S][^>]+)',DOTALL|MULTILINE)
+        self.GoTodetection = compile(b'/GoTo([\S][^>]+)',DOTALL|MULTILINE)
         self.RichMediadetection = compile(b'/RichMedia([\S][^>]+)',DOTALL|MULTILINE)
         self.AAdetection = compile(b'/AA([\S][^>]+)',DOTALL|MULTILINE)
 
@@ -151,7 +151,7 @@ class PDFParser:
         get GoToR from pdf by regex
         '''
         _List = []
-        Gotorlist = findall(self.GoToRdetection,pdf)
+        Gotorlist = findall(self.GoTodetection,pdf)
         for _ in Gotorlist:
             _List.append({"Key":"/GoToR","Value":_.decode("utf-8",errors="ignore")})
         return len(Gotorlist),_List
@@ -218,7 +218,7 @@ class PDFParser:
                                   "Launch" : llen,
                                   "URI" : ulen,
                                   "Action" : alen,
-                                  "GoToR" : gtrlen,
+                                  "GoTo" : gtrlen,
                                   "RichMedia" : rmlen,
                                   "AA" : aalen}
 
@@ -229,7 +229,7 @@ class PDFParser:
         data["PDF"]["Launch"] = llist
         data["PDF"]["URI"] = ulist
         data["PDF"]["Action"] = alist
-        data["PDF"]["GoToR"] = gtrlist
+        data["PDF"]["GoTo"] = gtrlist
         data["PDF"]["RichMedia"] = rmlist
         data["PDF"]["AA"] = aalist
         data["PDF"]["Stream"] = strs

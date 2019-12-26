@@ -3,7 +3,7 @@ from pymongo import CursorType, MongoClient
 from pymongo.errors import ConnectionFailure
 from time import sleep
 from threading import Event
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import log_string
 
 class qbworker():
     def __init__(self, name, func, wait):

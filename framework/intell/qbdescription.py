@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import ip_to_long
 from ..mics.connection import find_item
 
@@ -58,6 +58,10 @@ def add_description(_type,data,keyword):
                             description = result1["description"]
                     elif _type == "URLshorteners":
                         result1 = find_item("QBResearches","URLshorteners",{"URL":word})
+                        if result1:
+                            description = result1["description"]
+                    elif _type == "Emails":
+                        result1 = find_item("QBResearches","Emails",{"email":word.split("@")[1]})
                         if result1:
                             description = result1["description"]
                     elif _type == "Ports":

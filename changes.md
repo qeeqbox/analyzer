@@ -1,3 +1,15 @@
+#### 2020.V.02.05
+- Fixed bugs
+- Fixed emailparser
+- Added qbphishing module
+
+#### 2020.V.02.04
+- Fixed bugs
+- Added webapi example
+- Added dummy self signed certificate
+- Added Free/Fake email extraction
+- Added missing dependencies
+
 #### 2020.V.02.03
 - Fixed bugs
 - Formatting and cleaning up

@@ -1,9 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import ip_to_long
-from nltk.corpus import words
-from nltk.tokenize import word_tokenize
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from json import loads
 from os import mkdir, path
 

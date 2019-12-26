@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import ip_to_long
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from re import I, compile, findall
 from base64 import b64decode,b64encode
 from copy import deepcopy
@@ -51,13 +50,13 @@ class QBEncryption:
                 word = _word.encode()
                 if  word.endswith(b"="):  #needs to include all options
                     b = self.test_base64(word)
-                    if b != None and b != False:
+                    if b != "":
                         _List.append(word)
         for x in set(_List):
             data.append({"Count":_List.count(x),"Base64":x.decode('utf-8',errors="ignore"),"Decoded":b64decode(x).decode('utf-8',errors="ignore")})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def test_base64(self,w):
+    def test_base64(self,w) -> str:
         '''
         match decoding base64 then encoding means most likely base64 
         '''
@@ -66,7 +65,8 @@ class QBEncryption:
             if b64encode(y) == w:
                 return y
         except:
-            return False
+            pass
+        return ""
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding MD5 patterns")

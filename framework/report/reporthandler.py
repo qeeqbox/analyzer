@@ -1,11 +1,10 @@
 from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import get_words, get_words_multi_files,open_in_browser,serialize_obj
+from ..mics.funcs import open_in_browser, serialize_obj
 from ..report.htmlmaker import HtmlMaker
 from ..report.jsonmaker import JSONMaker
 from ..mics.connection import add_item,add_item_fs
 from ..intell.qbimage import QBImage
 from ..intell.qbicons import QBIcons
-from os import path
 
 class ReportHandler:
     @verbose(True,verbose_flag,verbose_timeout,"Starting ReportHandler")

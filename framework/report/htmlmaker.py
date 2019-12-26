@@ -1,7 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from yara import compile
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from jinja2 import Template
 from platform import platform
 from datetime import datetime
@@ -209,6 +208,45 @@ class HtmlMaker:
         if textarea: temp += self.add_text_area()
         else: temp += self.empty_text_area()
         result = Template(temp).render(header=header,data=data,_safe=_safe)
+        return result
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def make_list_set_table_new4(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render dict into html table
+        '''
+        temp = """
+        <div class="tablewrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    {% for key, value in item.items() %}
+                       {% if key not in exclude%}
+                           <tr>
+                           {% if _safe == None %}
+                                <td>{{key|e}}</td>
+                                <td>{{value|e}}</td>
+                            {% else %}
+                                <td>{{key|safe}}</td>
+                                <td>{{value|safe}}</td>
+                            {% endif %}
+                        </tr>
+                       {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>"""
+        if textarea: temp += self.add_text_area()
+        else: temp += self.empty_text_area()
+        result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
     @verbose(True,verbose_flag,verbose_timeout,None)
@@ -446,7 +484,10 @@ class HtmlMaker:
         for x in data:
             for key in data[x]:
                 try:
-                    if key.startswith("___"):
+                    if key.startswith("____"):
+                        if len(data[x][key[4:]]) > 0:
+                            table += self.make_list_set_table_new4(data[x][key[4:]],["key","value"],None,False,None)
+                    elif key.startswith("___"):
                         if len(data[x][key[3:]]) > 0:
                             for item in data[x][key[3:]]:
                                 table += self.make_list_set_table_new2(item,["key","value"],None,False,None)

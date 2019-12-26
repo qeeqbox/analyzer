@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ctypes import *
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import get_words,get_words_multi_files
+from ctypes import Structure, c_uint16, c_uint32, c_uint8, sizeof
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..mics.funcs import get_words
 from re import findall
 from copy import deepcopy
 

@@ -29,10 +29,10 @@ from .intell.qbdga import QBDGA
 from .intell.qbcountriesviz import QBCountriesviz
 from .intell.qburlsimilarity import QBURLSimilarity
 from .intell.qbwhitelist import QBWhitelist
+from .intell.qbphishing import QBPhishing
 from .qbdetect.loaddetections import LoadDetections
 from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
-from gc import collect
 
 class StaticAnalyzer:
     @verbose(True,verbose_flag,verbose_timeout,"Starting StaticAnalyzer")
@@ -69,6 +69,7 @@ class StaticAnalyzer:
         self.qbcreditcardsedentials = QBCredentials()
         self.qbwhitelist = QBWhitelist()
         self.htmlparser = HTMLParser()
+        self.qbphising = QBPhishing()
 
     def analyze(self,parsed) -> dict:
         '''
@@ -111,7 +112,7 @@ class StaticAnalyzer:
         elif self.blackberry.check_sig(data):
             self.blackberry.analyze(data)
         elif self.emailparser.check_sig(data):
-            self.emailparser.analyze(data)
+            self.emailparser.analyze(data,parsed)
         elif self.readpackets.check_sig(data):
             self.readpackets.analyze(data)
             if parsed.dga or parsed.full:
@@ -131,7 +132,9 @@ class StaticAnalyzer:
         if parsed.w_internal or parsed.w_original or parsed.w_hash or parsed.w_words or parsed.w_all or parsed.full:
             self.qbwhitelist.analyze(data,parsed)
         if parsed.language or parsed.full:
-            self.qblanguage.analyze(data)
+            self.qblanguage.analyze(data,parsed)
+        if parsed.phishing or parsed.full:
+            self.qbphising.analyze(data,parsed)
         if parsed.patterns or parsed.full:
             self.qbpatterns.analyze(data)
         if parsed.suspicious or parsed.full:

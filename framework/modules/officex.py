@@ -1,11 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import get_words_multi_filesarray,get_words,get_words_multi_files
-from ..general.archive import check_packed_files,dmg_unpack,unpack_file
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..mics.funcs import get_words_multi_files
+from ..general.archive import check_packed_files, unpack_file
 from re import sub
-from magic import from_buffer,Magic
-from zlib import decompress
 from xml.dom.minidom import parseString
 from xml.etree.cElementTree import XML as cetXML
 from copy import deepcopy

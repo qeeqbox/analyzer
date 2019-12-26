@@ -1,7 +1,7 @@
 from datetime import datetime
 from pymongo import MongoClient
 from uuid import uuid4
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
 
 class qbjobqueue:
     @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")

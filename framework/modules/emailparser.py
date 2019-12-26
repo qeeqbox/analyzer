@@ -1,28 +1,30 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import get_words_multi_filesarray
-from email import message_from_bytes
+from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from ..mics.funcs import get_words_multi_filesarray,get_words
+from email import message_from_bytes,policy
+from email.parser import BytesParser
 from hashlib import md5
 from random import choice
 from os import path,mkdir
 from string import ascii_lowercase
 from re import match
-from magic import from_file,Magic
-from ssdeep import hash_from_file
+from magic import from_file
 from mimetypes import guess_type
 from copy import deepcopy
 
 class EmailParser():
     @verbose(True,verbose_flag,verbose_timeout,"Starting EmailParser")
     def __init__(self):
-        self.datastruct = { "General": {},
-                            "_General": {},
+        self.datastruct = { "General": [],
+                            "Parsed":"",
                             "Attachments": [],
+                            "_General": ["Key","Value","descriptions"],
+                            "_Parsed":"",
                             "_Attachments": ["Name","Type","Extension","md5","Path"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
-    def get_attachment(self,data, msg) -> (list):
+    def get_attachment(self,data, msg) -> list:
         '''
         get attachment of email
         '''
@@ -66,6 +68,64 @@ class EmailParser():
                     mkdir(data["Location"]["Folder"])
                 return True
 
+    @verbose(True,verbose_flag,verbose_timeout,"Getting email content")
+    def get_content_multi(self,data, msg) -> list:
+        '''
+        get email content multipart
+        '''
+        _Parts = []
+        counter = 1
+        if msg.is_multipart():
+            for part in msg.get_payload():
+                tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
+                temppart = "Part {}".format(counter)
+                data[tempstring] = { temppart:"",
+                                     "_"+temppart:""}
+                data[tempstring][temppart] = part.get_payload()
+                _Parts.append(bytes(part.get_payload(), 'utf8'))
+                counter += 1
+        else:
+            body = msg.get_payload()
+            tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
+            temppart = "Part {}".format(counter)
+            data[tempstring] = { temppart:"",
+                                 "_"+temppart:""}
+            data[tempstring][temppart] = body.get_payload()
+            _Parts.append(bytes(body.get_payload(), 'utf8'))
+            counter += 1
+
+        return _Parts
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def get_content(self,data,path) -> str:
+        '''
+        get email content parsed
+        '''
+        with open(path, 'rb') as file:
+            msg = BytesParser(policy=policy.default).parse(file)
+            data["Parsed"] = msg.get_body(preferencelist=('plain')).get_content()
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def get_headers(self,data,msg) -> list:
+        '''
+        get email headers by buffer
+        '''
+
+        _Headers = []
+
+        #with open(path, 'r') as file:
+        #    headers = HeaderParser().parse(file, headersonly=True)
+        #    for key, value in headers.items():
+        #        data.update({key:value.replace('\n', ' ').replace('\t',' ').replace('\r',' ')})
+
+        for key, value in msg.items():
+            data.append({"Key":key,"Value":value,"descriptions":""})
+            try:
+                _Headers.append(str.encode(value)) # convert to bytes...
+            except:
+                pass
+        return _Headers
+
     @verbose(True,verbose_flag,verbose_timeout,None)
     def check_sig(self, data) -> bool:
         '''
@@ -75,29 +135,28 @@ class EmailParser():
             data["Location"]["Original"].endswith(".eml"):
             return True
 
-
     @verbose(True,verbose_flag,verbose_timeout,"Starting analyzing email")
-    def analyze(self, data):
+    def analyze(self, data, parsed):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from array 
         '''
+        Streams = []
+        Parts = []
+        Mixed = []
+        Headers = []
         data["EMAIL"] = deepcopy(self.datastruct)
         f = data["FilesDumps"][data["Location"]["File"]]
         message = message_from_bytes(f)
+        Headers = self.get_headers(data["EMAIL"]["General"],message)
+        self.get_content(data["EMAIL"],data["Location"]["File"])
+        Parts = self.get_content_multi(data,message)
         if self.check_attachment_and_make_dir(data,message):
-            Attachments = True
             Streams = self.get_attachment(data,message)
         else:
-            Attachments = False
-        data["EMAIL"]["General"] = {"From": message['From'],
-                                    "To": message['To'],
-                                    "Subject": message['Subject'],
-                                    "Sender": message['Sender'],
-                                    "X-Mailer": message['X-Mailer'],
-                                    "MIME-Version": message['MIME-Version'],
-                                    "Content-Type": message['Content-Type'],
-                                    "Date": message['Date'],
-                                    "Message-ID": message['Message-ID'],
-                                    "Attachments":Attachments}
-        if len(Streams) > 0:
-            get_words_multi_filesarray(data,Streams)
+            pass
+        Mixed = Streams + Parts + Headers
+        if len(Mixed) > 0:
+            get_words_multi_filesarray(data,Mixed) #have to be bytes < will check this later on
+        else:
+            get_words(data,data["Location"]["File"])
+        parsed.type = "email"
