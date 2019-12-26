@@ -140,6 +140,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - EMAIL
     - Header information
     - Attachment extraction and parsing 
+    - Phishing patterns check
 - Archives
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
