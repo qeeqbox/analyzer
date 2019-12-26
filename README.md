@@ -331,7 +331,7 @@ curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1
 ## Other use
 It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
 
-## Awesome Resources
+## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID and tons of researches.. (If i missed a resource/dependency, please let me know!)
 
 ## Disclaimer
