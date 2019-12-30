@@ -222,7 +222,6 @@ sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/loc
 ```
 
 ## Intro options
-```sh
                                                             
  _____  __   _  _____        \   / ______  ______  _____   
 |_____| | \  | |_____| |      \_/   ____/ |______ |_____/
@@ -236,10 +235,8 @@ Please choose a mode:
 Examples:
 python3 -m framework.cli --interactive
 python3 -m framework.cli --silent
-```
 
 ## Interactive mode
-```sh
 (interactive) help analyze
 usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
                [--type TYPE] [--behavior] [--xref] [--yara] [--language]
@@ -313,8 +310,6 @@ Examples:
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
     analyze --buffer "google.com bit.ly" --full --print_json
-
-```
 
 ## Silent mode
 Create task
