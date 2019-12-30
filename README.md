@@ -222,7 +222,7 @@ sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/loc
 ```
 
 ## Intro options
-```sh
+<code>
                                                             
  _____  __   _  _____        \   / ______  ______  _____   
 |_____| | \  | |_____| |      \_/   ____/ |______ |_____/
@@ -236,10 +236,10 @@ Please choose a mode:
 Examples:
 python3 -m framework.cli --interactive
 python3 -m framework.cli --silent
-```
+</code>
 
 ## Interactive mode
-```sh
+<code>
 (interactive) help analyze
 usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
                [--type TYPE] [--behavior] [--xref] [--yara] [--language]
@@ -313,21 +313,21 @@ Examples:
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
     analyze --buffer "google.com bit.ly" --full --print_json
-```
+</code>
 
 ## Silent mode
 Create task
-```sh
+<code>
 curl https://localhost:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json' --insecure
-```
+</code>
 The response will be
-```json
+<code>
 {"task":"809cad06-917f-43e1-b02c-8aab68e17110"}
-```
+</code>
 Get the task output
-```sh
+<code>
 curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
-``` 
+</code>
 
 ## Other use
 It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
