@@ -175,54 +175,56 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Machine learning modules (maybe commercial)
 
 ## Prerequisites
-```sh
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb
-```
+</pre></code>
 
-```sh
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL
-```
+</pre></code>
 
 ## Running as application
 
 #### Run it in Ubuntu 
-```sh
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 chmod +x install.sh
 ./install.sh ubuntu
 ./install.sh initdb
 python3 -m framework.cli --interactive
-```
+</pre></code>
 
 #### Run it in Fedora 
-```sh
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 chmod +x install.sh
 ./install.sh fedora
 ./install.sh initdb
 python3 -m framework.cli --interactive
-```
+</pre></code>
 
 #### Run it in Kali
-```sh
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 chmod +x install.sh
 ./install.sh kali
 ./install.sh initdb
 python3 -m framework.cli --interactive
-```
+</pre></code>
+
 
 #### Run it in Docker
-```docker
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 git clone https://github.com/qeeqbox/analyzer.git
 sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
-```
+</pre></code>
+
 
 ## Intro options
-<code>
+<code style="background-color:#EEEEEE;font-family:Monaco"><pre>
                                                             
  _____  __   _  _____        \   / ______  ______  _____   
 |_____| | \  | |_____| |      \_/   ____/ |______ |_____/
@@ -236,10 +238,10 @@ Please choose a mode:
 Examples:
 python3 -m framework.cli --interactive
 python3 -m framework.cli --silent
-</code>
+</pre></code>
 
 ## Interactive mode
-<code>
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 (interactive) help analyze
 usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
                [--type TYPE] [--behavior] [--xref] [--yara] [--language]
@@ -313,21 +315,21 @@ Examples:
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
     analyze --buffer "google.com bit.ly" --full --print_json
-</code>
+</pre></code>
 
 ## Silent mode
 Create task
-<code>
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 curl https://localhost:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json' --insecure
-</code>
+</pre></code>
 The response will be
-<code>
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 {"task":"809cad06-917f-43e1-b02c-8aab68e17110"}
-</code>
+</pre></code>
 Get the task output
-<code>
+<code style="background-color:#EEEEEE;font-family:Consolas,Monaco"><pre>
 curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
-</code>
+</pre></code>
 
 ## Other use
 It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
