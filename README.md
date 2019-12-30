@@ -222,7 +222,7 @@ sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/loc
 ```
 
 ## Intro options
-```
+```sh
                                                             
  _____  __   _  _____        \   / ______  ______  _____   
 |_____| | \  | |_____| |      \_/   ____/ |______ |_____/
@@ -239,7 +239,7 @@ python3 -m framework.cli --silent
 ```
 
 ## Interactive mode
-```
+```sh
 (interactive) help analyze
 usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
                [--type TYPE] [--behavior] [--xref] [--yara] [--language]
