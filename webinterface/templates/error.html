@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        
+        body {
+            display: table;
+        }
+        
+        .typewriter {
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle;
+        }
+        
+        .typewriter h1 {
+            border-right: 5px solid orange;
+            font-family: monospace;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 4s steps(30, end), blinkingcursor .5s step-end infinite;
+        }
+        
+        @keyframes blinkingcursor {
+            from,
+            to {
+                border-color: transparent
+            }
+            50% {
+                border-color: orange;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="typewriter">
+        <h1>What have you done?!</h1>
+        <br>
+        {{ uuid }} 
+    </div>
+</body>
+</html>

@@ -2,9 +2,10 @@ from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from ..mics.funcs import open_in_browser, serialize_obj
 from ..report.htmlmaker import HtmlMaker
 from ..report.jsonmaker import JSONMaker
-from ..mics.connection import add_item,add_item_fs
+from ..mics.connection import add_item_fs
 from ..intell.qbimage import QBImage
 from ..intell.qbicons import QBIcons
+from datetime import datetime
 
 class ReportHandler:
     @verbose(True,verbose_flag,verbose_timeout,"Starting ReportHandler")
@@ -39,22 +40,22 @@ class ReportHandler:
     def save_output(self,data,renderedhtml,parsed):
         if len(data)>0:
             if parsed.db_result:
-                dataserialized = serialize_obj(data)
-                _id = add_item("tasks","results",dataserialized)
-                if _id:
-                    log_string("JSON result added to db","Yellow")
-                else:
-                    log_string("Unable to add JSON result to db","Red")
+                serialize_obj(data)
+                #_id = add_item("tasks","results",dataserialized)
+                #if _id:
+                #    log_string("JSON result added to db","Yellow")
+                #else:
+                #    log_string("Unable to add JSON result to db","Red")
             if parsed.db_dump_json:
                 datajson = self.jsonmaker.dump_json_and_return(data)
-                _id = add_item_fs("dumps",datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"JSON")
+                _id = add_item_fs("webinterface","reports",datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"application/json",datetime.now())
                 if _id:
                     log_string("JSON result dumped into db","Yellow")
                 else:
                     log_string("Unable to dump JSON result to db","Red")
             if parsed.db_dump_html:
                 datajson = self.jsonmaker.dump_json_and_return(data)
-                _id = add_item_fs("dumps",renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"HTML")
+                _id = add_item_fs("webinterface","reports",renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"text/html",datetime.now())
                 if _id:
                     log_string("HTML result dumped into db","Yellow")
                 else:

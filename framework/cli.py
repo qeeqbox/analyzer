@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.05"
+__V__ = "2020.V.02.06b"
 
 from .staticanalyzer import StaticAnalyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
@@ -7,7 +7,6 @@ from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
 from .logger.logger import log_string, setup_logger
 from .report.reporthandler import ReportHandler
-from .webapi.api import runwebapi
 from cmd import Cmd
 from os import path,listdir
 from argparse import ArgumentParser
@@ -105,13 +104,10 @@ class QBAnalyzer(Cmd):
 
         if mode == "--silent":
             qbjobqueue("jobsqueue",True)
-            runwebapi()
             qbworker("jobsqueue",self.do_analyze,3)
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
-
-        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/Shaderansomwaremalspam.eml --full --disk_dump_html --open")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

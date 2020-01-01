@@ -29,14 +29,16 @@ class qbworker():
 
     def run_worker(self):
         if self.cur != None:
+            log_string("Waiting for tasks..","Green")
             cursor = self.cur.find({'status': 'wait'},cursor_type=CursorType.TAILABLE_AWAIT)
-            while cursor.alive and not self.cancel.isSet():
+            while cursor.alive and not self.cancel.isSet() and self.cur.find_one({'status': 'ON__'}):
                 try:
                     record = cursor.next()
                     self.execute_task(record)
                 except:
-                    #print('Waiting')
                     sleep(self.wait)
+        else:
+            log_string("Worker failed","Red")
 
     def execute_task(self, record):
         if self.cur != None:
@@ -48,7 +50,3 @@ class qbworker():
             else:
                 self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'issue','finished': datetime.now()}})
                 return False
-
-
-
-			

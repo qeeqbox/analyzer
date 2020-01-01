@@ -1,0 +1,139 @@
+{% extends 'admin/base.html' %}
+{% block head_css %}
+{{ super() }}
+
+<style>
+
+html, body {
+    height: 100%;
+    width: 100%
+    margin: 0;
+    font-family: monospace;
+}
+
+.center-block {
+    float: none !important
+}
+
+a, .btn {
+   outline: none !important;
+}
+
+.container {
+	padding: 10px 30px 10px 30px;
+	width:auto;
+	font-size: 12px;
+}
+
+td:last-child {
+  word-break:break-word;
+}
+
+table {
+	width: 100%;
+}
+
+.login * {
+    width: 100%
+}
+
+.upload, .buffer {
+  text-align: center;
+}
+
+.upload select, .upload button {
+  width: 100%;
+}
+
+.buffer textarea, .buffer select, .buffer button {
+  width: 100%;
+}
+
+.buffer textarea{
+  text-align: left;
+}
+
+.options *{
+  width: 100%;
+}
+
+.options select{
+  height: 150px;
+}
+
+.options input, .options button{
+  padding: 10px 0 10px 0;
+}
+
+.row {
+    margin: 0 0 0 0;
+}
+
+
+.light_yellow {
+  background-color: #FFFF99 !important;
+}
+
+.light_green {
+  background-color: #7CDA7C !important;
+}
+
+.light_red {
+  background-color: #ff4d4d !important;
+}
+
+.light_blue {
+  background-color: #87CEEB !important;
+}
+
+.table tr:hover td {
+    background: none repeat scroll 0 0 #DCDCDC;
+}
+
+.intro {
+  width: 100%;
+  font-family: monospace;
+}
+
+.intro code *{
+  width: 100%;
+  font-family: monospace;
+}
+
+pre {
+  font-family: monospace !important;
+  white-space: pre;
+}
+
+.card {
+  margin: 0 auto;
+  border: 1px solid #DCDCDC; 
+  max-width: 900px;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  background-color: #e7e7e7;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 10px 10px 10px 10px;
+}
+
+.card-body {
+  padding-left: 20px;
+  padding-right: 20px;
+  flex-direction: column;
+}
+
+.paddingtopandbottom {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% endblock %}

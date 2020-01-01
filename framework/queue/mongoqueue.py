@@ -3,6 +3,13 @@ from pymongo import MongoClient
 from uuid import uuid4
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
 
+@verbose(True,verbose_flag,verbose_timeout,"Terminating worker")
+def set_dumm_off(db,col):
+    conn = MongoClient('mongodb://localhost:27017/')
+    item = conn[db][col].find_one({'status': 'ON__'},{'_id': False})
+    if item:
+        ret = conn[db][col].update_one(item, {"$set":{'status':'OFF_'}})
+
 class qbjobqueue:
     @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")
     def __init__(self, name, init=True):
@@ -25,7 +32,7 @@ class qbjobqueue:
             else:
                 return False
         self.col.insert_one({ 'jobID': str(uuid4()),
-                              'status': 'dumy',
+                              'status': 'ON__',
                               'created': datetime.now(),
                               'started': datetime.now(),
                               'finished': datetime.now(),'data': ''})
@@ -39,11 +46,10 @@ class qbjobqueue:
         except ConnectionFailure:
             return False
 
-    def insert(self, data):
+    def insert(self, uuid, data):
         if len(data) > 0 and self.col != None:
-            jobID = str(uuid4())
-            data.update({"uuid":jobID})
-            setadd = { 'jobID': jobID,
+            data.update({"uuid":uuid})
+            setadd = { 'jobID': uuid,
                        'status': 'wait',
                        'created': datetime.now(),
                        'started': datetime.now(),

@@ -59,7 +59,7 @@ def verbose(OnOff=False,Verb=False,timeout=10,str=None):
                 alarm(0)
                 return None
             except Exception as e:
-                print(e)
+                #print(e)
                 log_string("{}.{} Failed".format(func.__module__, func.__name__), "Red")
                 logfile.info("{}.{} Failed -> {}".format(func.__module__, func.__name__,e))
                 alarm(0)

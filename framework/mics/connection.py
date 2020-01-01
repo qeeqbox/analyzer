@@ -1,6 +1,6 @@
-#from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from pymongo import MongoClient
 from gridfs import GridFS
+from bson.objectid import ObjectId
 
 client = None
 if client == None:client = MongoClient('mongodb://localhost:27017/')
@@ -40,10 +40,19 @@ def find_items(db,_set):
     else:
         return ""
 
-def add_item_fs(db,filebuffer,name,_set,uuid,_type):
-    item = GridFS(client[db]).put(filebuffer,filename=name,metadata=_set,uuid=uuid,type=_type,encoding='utf-8')
+#def add_item_fs(db,filebuffer,name,_set,uuid,_type):
+#    item = GridFS(client[db]).put(filebuffer,filename=name,metadata=_set,uuid=uuid,type=_type,encoding='utf-8')
+#    if item != None:
+#        return item
+#    else:
+#        return False
+
+def add_item_fs(db, col,filebuffer,name,_set,uuid,_type,time):
+    item = GridFS(client[db]).put(filebuffer,filename=name,uuid=uuid,content_type=_type,encoding='utf-8')
     if item != None:
-        return item
+        item = client[db][col].insert_one({"uuid":uuid,"type":_type,"file":ObjectId(item),"time":time})
+        if item != None:
+            return item
     else:
         return False
 
