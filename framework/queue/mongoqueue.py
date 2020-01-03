@@ -5,7 +5,7 @@ from ..logger.logger import verbose, verbose_flag, verbose_timeout
 
 @verbose(True,verbose_flag,verbose_timeout,"Terminating worker")
 def set_dumm_off(db,col):
-    conn = MongoClient('mongodb://localhost:27017/')
+    conn = MongoClient('mongodb://mongodb:27017/')
     item = conn[db][col].find_one({'status': 'ON__'},{'_id': False})
     if item:
         ret = conn[db][col].update_one(item, {"$set":{'status':'OFF_'}})
@@ -13,7 +13,7 @@ def set_dumm_off(db,col):
 class qbjobqueue:
     @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")
     def __init__(self, name, init=True):
-        self.conn = MongoClient('mongodb://localhost:27017/')
+        self.conn = MongoClient('mongodb://mongodb:27017/')
         self.db = None
         self.col = None
         self.cur = None

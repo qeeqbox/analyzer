@@ -16,7 +16,7 @@ from werkzeug.exceptions import HTTPException
 from datetime import datetime
 from mics.certmaker import create_dummy_certificate
 from os import mkdir, path
-from flask_wtf.csrf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 from requests import get
 from flaskext.markdown import Markdown
 from pymongo import MongoClient
@@ -24,33 +24,39 @@ from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
 
-filename = "README.md"
+filename = "README.md @ https://github.com/qeeqbox/analyzer"
 intromarkdown = ""
 
 try:
     r = get('https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md')
-    if r.text != "" and response.ok:
+    if r.text != "" and r.ok:
         intromarkdown = r.text
 except:
-    readmefolder = path.abspath(path.join(path.dirname( __file__ ),"..",filename))
-    with open(readmefolder) as f:
-        intromarkdown = f.read()
+    pass
+
+if intromarkdown == "":
+    try:
+        readmefolder = path.abspath(path.join(path.dirname( __file__ ),"..",filename))
+        with open(readmefolder) as f:
+            intromarkdown = f.read()
+    except:
+        intromarkdown = ""
 
 switches = [(False, 'full'), (False, 'behavior'), (False, 'xref'), (False, 'yara'), (False, 'language'), (False, 'mitre'), (False, 'topurl'), (False, 'ocr'), (False, 'enc'), (False, 'cards'), (False, 'creds'), (False, 'patterns'), (False, 'suspicious'), (False, 'dga'), (False, 'plugins'), (False, 'visualize'), (False, 'flags'), (False, 'icons'), (False, 'worldmap'), (False, 'spelling'), (False, 'image'), (False, 'phishing'), (False, 'unicode'), (False, 'bigfile'), (False, 'w_internal'), (False, 'w_original'), (False, 'w_hash'), (False, 'w_words'), (False, 'w_all'), (False, 'disk_dump_html'), (False, 'disk_dump_json'), (False, 'open'), (False, 'print_json'), (False, 'db_result'), (False, 'db_dump_html'), (False, 'db_dump_json')]
 
 app = Flask(__name__)
-app.secret_key = "1"#uuid4().hex
+app.secret_key = uuid4().hex
 app.config['MONGODB_SETTINGS'] = [
         {
          "ALIAS": "default",
          "DB":    'webinterface',
-         "HOST": 'localhost',
+         "HOST": 'mongodb',
          "PORT": 27017
         },
         {
          "ALIAS": "jobsqueue",
          "DB": 'jobsqueue',
-         "HOST": 'localhost',
+         "HOST": 'mongodb',
          "PORT": 27017
         }]
 
@@ -59,7 +65,7 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.setup_app(app)
-csrf = CsrfProtect()
+csrf = CSRFProtect()
 csrf.init_app(app)
 Markdown(app)
 
@@ -307,7 +313,7 @@ class CustomViewBufferForm(BaseView):
 
 def getstats():
     #lazy check stats
-    conn = MongoClient('mongodb://localhost:27017/')
+    conn = MongoClient('mongodb://mongodb:27017/')
     stats = {}
     try:
         coll = "jobs"
@@ -393,30 +399,28 @@ class CustomMenuLink(MenuLink):
 class StarProject(MenuLink):
     def is_accessible(self):
         return current_user.is_authenticated
-
+ 
 def error_handler(error):
-    return render_template("error.html",uuid=str(uuid4()))
+    return render_template("error.html",error=url_for('admin.index'),uuid=str(uuid4()))
 
 for cls in HTTPException.__subclasses__():
     app.register_error_handler(cls, error_handler)
  
-if __name__ == '__main__':
-    certsdir = path.abspath(path.join(path.dirname( __file__ ),'certs'))
-    if not certsdir.endswith(path.sep): certsdir = certsdir+path.sep
-    if not path.isdir(certsdir): mkdir(certsdir)
-    if create_dummy_certificate('cert.pem', 'key.pem',certsdir,False):
-        admin = Admin(app, "@" , index_view=CustomAdminIndexView(),base_template='base.html' , template_mode='bootstrap3')
-        admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
-        admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
-        admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
-        admin.add_link(CustomMenuLink(name='Logout', category='', url="/admin/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
-        admin.add_view(CustomStatsView(name="Stats",endpoint='stats'))
-        admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer'))
-        admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload'))
-        admin.add_view(UserView(User))
-        admin.add_view(FilesView(Files))
-        admin.add_view(QueueView(Jobs))
-        admin.add_view(ReportsView(Reports))
-        app.run(host = "127.0.0.1", port= "8001", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
-        #app.run(host = "127.0.0.1", port= "8001", debug=True)
+#change admin wiht / -> CustomAdminIndexView url='/'
+
+admin = Admin(app, "@" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3', endpoint="/test")
+admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
+admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
+admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
+admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
+admin.add_view(CustomStatsView(name="Stats",endpoint='stats'))
+admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer'))
+admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload'))
+admin.add_view(UserView(User))
+admin.add_view(FilesView(Files))
+admin.add_view(QueueView(Jobs))
+admin.add_view(ReportsView(Reports))
+
+#app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
+#app.run(host = "127.0.0.1", port= "8001", debug=True)
 

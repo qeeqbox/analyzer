@@ -3,7 +3,7 @@ from gridfs import GridFS
 from bson.objectid import ObjectId
 
 client = None
-if client == None:client = MongoClient('mongodb://localhost:27017/')
+if client == None:client = MongoClient('mongodb://mongodb:27017/')
 
 def update_item(db,col,_id,_set):
     item = client[db][col].find_one_and_update({'_id': _id},{'$set': _set})

@@ -1,0 +1,46 @@
+version: '2.0'
+services:
+  service:
+    build:
+      context: .
+      dockerfile: ./framework-Dockerfile
+    command: bash -c "python3 -m framework.cli --silent"
+    ports:
+      - "5001:80"
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+    volumes:
+      - malwarefolder:/tmp
+
+  website:
+    build:
+      context: .
+      dockerfile: ./webinterface-Dockerfile
+    command: bash -c "python3 start.py && /usr/local/bin/gunicorn -w 1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 app:app"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - malwarefolder:/tmp
+
+  mongodb:
+    image: mongo:3.4
+    ports:
+      - '27017:27017'
+    networks:
+      - backend
+
+volumes:
+  malwarefolder:
+
+networks:
+  frontend:
+    internal: false
+  backend:
+    internal: true

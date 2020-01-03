@@ -9,7 +9,7 @@ class qbworker():
     def __init__(self, name, func, wait):
         self.conn = None
         self.cur = None
-        self.conn = MongoClient('mongodb://localhost:27017/')
+        self.conn = MongoClient('mongodb://mongodb:27017/')
         if bool(name in self.conn.list_database_names()):
             self.cur = self.conn[name]['jobs']
             self.func = func

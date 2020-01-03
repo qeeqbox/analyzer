@@ -14,7 +14,7 @@ from pymongo import MongoClient
 
 def set_dumm_off(db,col):
     try:
-        conn = MongoClient('mongodb://localhost:27017/')
+        conn = MongoClient('mongodb://mongodb:27017/')
         item = conn[db][col].find_one({'status': 'ON__'},{'_id': False})
         if item:
             ret = conn[db][col].update_one(item, {"$set":{'status':'OFF_'}})

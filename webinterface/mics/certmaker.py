@@ -14,7 +14,7 @@ def create_dummy_certificate(certname,keyname,_dir, force=False) -> bool:
                 remove(_dir+keyname)
 
         key = PKey()
-        key.generate_key(TYPE_RSA, 1024)
+        key.generate_key(TYPE_RSA, 4096)
         cert = X509()
         cert.set_serial_number(uuid4().int)
         cert.set_version(2)
