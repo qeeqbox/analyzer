@@ -14,8 +14,7 @@ from tempfile import gettempdir
 from os import path, getpid
 from werkzeug.exceptions import HTTPException
 from datetime import datetime
-from mics.certmaker import create_dummy_certificate
-from os import mkdir, path
+from os import path
 from flask_wtf.csrf import CSRFProtect
 from requests import get
 from flaskext.markdown import Markdown

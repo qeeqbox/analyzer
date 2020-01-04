@@ -10,14 +10,13 @@ from tld import get_fld,get_tld
 from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
-from pymongo import MongoClient
+from .connection import client
 
 def set_dumm_off(db,col):
     try:
-        conn = MongoClient('mongodb://mongodb:27017/')
-        item = conn[db][col].find_one({'status': 'ON__'},{'_id': False})
+        item = client[db][col].find_one({'status': 'ON__'},{'_id': False})
         if item:
-            ret = conn[db][col].update_one(item, {"$set":{'status':'OFF_'}})
+            ret = client[db][col].update_one(item, {"$set":{'status':'OFF_'}})
             log_string("Worker terminated","Red")
     except:
         pass

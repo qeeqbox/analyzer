@@ -1,4 +1,4 @@
-version: '2.0'
+version: '2.1'
 services:
   service:
     build:
@@ -28,9 +28,13 @@ services:
       - backend
     volumes:
       - malwarefolder:/tmp
+    healthcheck:
+      disable: true 
 
   mongodb:
-    image: mongo:3.4
+    build:
+      context: .
+      dockerfile: ./mongodb-Dockerfile
     ports:
       - '27017:27017'
     networks:

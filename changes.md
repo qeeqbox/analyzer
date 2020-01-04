@@ -1,3 +1,11 @@
+#### 2020.V.02.07
+- Fixed bugs
+
+#### 2020.V.02.06
+- Fixed bugs
+- Added webinterface
+- Added docker-compose settings
+
 #### 2020.V.02.05
 - Fixed bugs
 - Fixed emailparser

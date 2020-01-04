@@ -1,19 +1,12 @@
 from datetime import datetime
-from pymongo import MongoClient
 from uuid import uuid4
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
-
-@verbose(True,verbose_flag,verbose_timeout,"Terminating worker")
-def set_dumm_off(db,col):
-    conn = MongoClient('mongodb://mongodb:27017/')
-    item = conn[db][col].find_one({'status': 'ON__'},{'_id': False})
-    if item:
-        ret = conn[db][col].update_one(item, {"$set":{'status':'OFF_'}})
+from ..mics.connection import client
 
 class qbjobqueue:
     @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")
     def __init__(self, name, init=True):
-        self.conn = MongoClient('mongodb://mongodb:27017/')
+        self.client = client
         self.db = None
         self.col = None
         self.cur = None
@@ -22,7 +15,7 @@ class qbjobqueue:
 
     @verbose(True,verbose_flag,verbose_timeout,"Initializing database")
     def init_database(self,name, init=True):
-        self.db = self.conn[name]
+        self.db = self.client[name]
         if init:
             self.db.drop_collection('jobs')
             self.col = self.db.create_collection('jobs', capped=True,size=100000)
@@ -41,7 +34,7 @@ class qbjobqueue:
 
     def check_connection(self):
         try:
-            self.conn.admin.command('ismaster')
+            self.client.admin.command('ismaster')
             return True
         except ConnectionFailure:
             return False

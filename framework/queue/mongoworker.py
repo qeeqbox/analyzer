@@ -1,17 +1,18 @@
 from datetime import datetime
-from pymongo import CursorType, MongoClient
+from pymongo import CursorType
 from pymongo.errors import ConnectionFailure
 from time import sleep
 from threading import Event
 from ..logger.logger import log_string
+from ..mics.connection import client
 
 class qbworker():
     def __init__(self, name, func, wait):
-        self.conn = None
+        self.client = None
         self.cur = None
-        self.conn = MongoClient('mongodb://mongodb:27017/')
-        if bool(name in self.conn.list_database_names()):
-            self.cur = self.conn[name]['jobs']
+        self.client = client
+        if bool(name in self.client.list_database_names()):
+            self.cur = self.client[name]['jobs']
             self.func = func
             self.daemon = True
             self.cancel = Event()
@@ -22,7 +23,7 @@ class qbworker():
 
     def check_connection(self):
         try:
-            self.conn.admin.command('ismaster')
+            self.client.admin.command('ismaster')
             return True
         except ConnectionFailure:
             return False
