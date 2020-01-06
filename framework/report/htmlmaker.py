@@ -484,7 +484,10 @@ class HtmlMaker:
         for x in data:
             for key in data[x]:
                 try:
-                    if key.startswith("____"):
+                    if key.startswith("_____"):
+                        if len(data[x][key[5:]]) > 0:
+                            table += self.make_list_set_table_new3(data[x][key[5:]],key[5:],None,False,None)
+                    elif key.startswith("____"):
                         if len(data[x][key[4:]]) > 0:
                             table += self.make_list_set_table_new4(data[x][key[4:]],["key","value"],None,False,None)
                     elif key.startswith("___"):

@@ -1,3 +1,7 @@
+#### 2020.V.02.08
+- Fixed bugs
+- Added online multiscanners 
+
 #### 2020.V.02.07
 - Fixed bugs
 

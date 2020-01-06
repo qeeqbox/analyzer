@@ -206,6 +206,7 @@ class CustomAdminIndexView(AdminIndexView):
             return redirect(url_for('.index'))
 
         self._template_args['form'] = form
+        self._template_args['active'] = "Login"
         self._template_args['link'] = '<p>Register? <a href="{}">Click here</a></p>'.format(url_for('.register_view'))
         return super(CustomAdminIndexView, self).index()
 
@@ -221,7 +222,8 @@ class CustomAdminIndexView(AdminIndexView):
             return redirect(url_for('.index'))
 
         self._template_args['form'] = form
-        self._template_args['link'] = '<p>Login? <a href="{}">Click here</a></p>'.format(url_for('.login_view'))
+        self._template_args['active'] = "Register"
+        self._template_args['link'] = '*Please do not enter a used username or password<p>Login? <a href="{}">Click here</a></p>'.format(url_for('.login_view'))
         return super(CustomAdminIndexView, self).index()
 
     @expose('/logout/')

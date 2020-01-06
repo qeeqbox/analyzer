@@ -33,9 +33,10 @@ from .intell.qbphishing import QBPhishing
 from .qbdetect.loaddetections import LoadDetections
 from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
+from .services.online.onlinemultiscanners import OnlineMultiScanners
 
-class StaticAnalyzer:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting StaticAnalyzer")
+class Analyzer:
+    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
     def __init__(self):
         '''
         initialize class, and all modules 
@@ -70,6 +71,7 @@ class StaticAnalyzer:
         self.qbwhitelist = QBWhitelist()
         self.htmlparser = HTMLParser()
         self.qbphising = QBPhishing()
+        self.onlinemultiscanners = OnlineMultiScanners()
 
     def analyze(self,parsed) -> dict:
         '''
@@ -155,6 +157,8 @@ class StaticAnalyzer:
             self.qbmitresearch.analyze(data)
         if parsed.yara or parsed.full:
             self.yaraparser.checkwithyara(data,None)
+        if parsed.ms_all or parsed.full:
+            self.onlinemultiscanners.analyze(data,parsed)
         if parsed.visualize or parsed.full:
             self.qbd3generator.create_d3_artifacts(data)
         if parsed.flags or parsed.full:

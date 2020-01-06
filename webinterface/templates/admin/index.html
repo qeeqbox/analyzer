@@ -20,7 +20,7 @@
             {{ f }}
             {% endfor %}
             </div>
-            <button class="btn" type="submit">Login</button>
+            <button class="btn" type="submit">{{ active }}</button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
         <br>

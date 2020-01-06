@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 __V__ = "2020.V.02.07"
 
-from .staticanalyzer import StaticAnalyzer
+from .analyzer import Analyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
 from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
@@ -88,6 +88,8 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupded.add_argument('--db_result',action='store_true',help='save results to db (<16mg)', required=False)
     _analyze_parsergroupded.add_argument('--db_dump_html',action='store_true', help="save html dump tp db", required=False)
     _analyze_parsergroupded.add_argument('--db_dump_json',action='store_true', help="save json dump tp db", required=False)
+    _analyze_parsergroupded = _analyze_parser.add_argument_group('Online multiscanner options')
+    _analyze_parsergroupded.add_argument('--ms_all',action='store_true', help="check hash in different multiscanner platforms(require API keys)", required=False)
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
@@ -99,7 +101,7 @@ class QBAnalyzer(Cmd):
         except:
             log_string("Update failed","Red")
 
-        self.san = StaticAnalyzer()
+        self.san = Analyzer()
         self.rep = ReportHandler()
 
         if mode == "--silent":
@@ -109,11 +111,13 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
+        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/BrRAT.apk --full --db_dump_json --print_json")
+
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
     analyze --folder /home/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
-    analyze --file /malware/BrRAT.apk --full --db_dump_json --print_json
+    analyze --file /malware/2019-12-20-Word-doc-with-macro-for-Emotet.doc --full --db_dump_json --print_json
     analyze --folder /malware --full --db_dump_json --open
     analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
     analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open

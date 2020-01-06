@@ -11,6 +11,7 @@ services:
       - mongodb
     networks:
       - backend
+      - frontend
     volumes:
       - malwarefolder:/tmp
 

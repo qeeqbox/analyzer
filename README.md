@@ -176,8 +176,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ~~Phishing module~~
 - ~~Web service and API~~
 - ~~Web interface (Requested by users)~~
+- ~~Curling some TIPs (Requested by users)~~
 - Web detection
-- Curling some TIPs (Requested by users)
 - MS office module
 - Machine learning modules (maybe commercial)
 
@@ -190,153 +190,19 @@ apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libja
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL
 </pre>
 
-## Running as application
+## Running
 
-#### Run it in Ubuntu 
+#### Run it as CLI
 <pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
-chmod +x install.sh
-./install.sh ubuntu
-./install.sh initdb
-python3 -m framework.cli --interactive
 </pre>
 
-#### Run it in Fedora 
+#### Run it as Web interface 
 <pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
-chmod +x install.sh
-./install.sh fedora
-./install.sh initdb
-python3 -m framework.cli --interactive
-</pre>
-
-#### Run it in Kali
-<pre style="font-family:Consolas,Monaco">
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-chmod +x install.sh
-./install.sh kali
-./install.sh initdb
-python3 -m framework.cli --interactive
-</pre>
-
-
-#### Run it in Docker
-<pre style="font-family:Consolas,Monaco">
-git clone https://github.com/qeeqbox/analyzer.git
-sudo docker build . -t analyzer && sudo docker run -it -v /home/localfolder:/localfolder analyzer
-</pre>
-
-## Intro options
-
-<pre style="font-family:Consolas,Monaco">
- _____  __   _  _____        \   / ______  ______  _____   
-|_____| | \  | |_____| |      \_/   ____/ |______ |_____/
-|     | |  \_| |     | |_____  |   /_____ |______ |    \ 2020.V.02.04
-                               |  https://github.com/QeeqBox/Analyzer
-
-Please choose a mode:
---interactive         Run this framework as an application
---silent              Run this framework as service (Required an interface for interaction)
-
-Examples:
-python3 -m framework.cli --interactive
-python3 -m framework.cli --silent
-</pre>
-
-
-## Interactive mode
-
-<pre style="font-family:Consolas,Monaco">
-(interactive) help analyze
-usage: analyze [-h] [--file FILE] [--folder FOLDER] [--buffer BUFFER]
-               [--type TYPE] [--behavior] [--xref] [--yara] [--language]
-               [--mitre] [--topurl] [--ocr] [--enc] [--cards] [--creds]
-               [--patterns] [--suspicious] [--dga] [--plugins] [--visualize]
-               [--flags] [--icons] [--worldmap] [--spelling] [--image]
-               [--full] [--phishing] [--uuid UUID] [--unicode] [--bigfile]
-               [--w_internal] [--w_original] [--w_hash] [--w_words] [--w_all]
-               [--output OUTPUT] [--disk_dump_html] [--disk_dump_json]
-               [--open] [--print_json] [--db_result] [--db_dump_html]
-               [--db_dump_json]
-
-Input arguments:
-  --file FILE       path to file or dump
-  --folder FOLDER   path to folder
-  --buffer BUFFER   input buffer
-  --type TYPE       force input type
-
-Analysis switches:
-  --behavior        check with generic detections
-  --xref            get cross references
-  --yara            analyze with yara module (Disable this for big files)
-  --language        analyze words against english language
-  --mitre           map strings to mitre
-  --topurl          get urls and check them against top 10000
-  --ocr             get all ocr text
-  --enc             find encryptions
-  --cards           find credit cards
-  --creds           find credit cards
-  --patterns        find common patterns
-  --suspicious      find suspicious strings
-  --dga             find Domain generation algorithms
-  --plugins         scan with external plugins
-  --visualize       visualize some artifacts
-  --flags           add countries flags to html
-  --icons           add executable icons to html
-  --worldmap        add world map to html
-  --spelling        force spelling check
-  --image           add similarity image to html
-  --full            analyze using all modules
-  --phishing        analyze phishing content
-  --uuid UUID       task id
-  --print_json      print output to terminal
-
-Force analysis switches:
-  --unicode         force extracting ascii
-  --bigfile         force analyze big files
-
-Whitelist switches:
-  --w_internal      find it in white list by internal name
-  --w_original      find it in white list by original name
-  --w_hash          find it in white list by hash
-  --w_words         check extracted words against whitelist
-  --w_all           find it in white list
-
-Output arguments and switches:
-  --output OUTPUT   path of output folder
-  --disk_dump_html  save html record to disk
-  --disk_dump_json  save json record to disk
-  --open            open the report in webbroswer
-
-Database options:
-  --db_result       save results to db (<16mg)
-  --db_dump_html    save html dump tp db
-  --db_dump_json    save json dump tp db
-
-Examples:
-    analyze --folder /home/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
-    analyze --file /malware/BrRAT.apk --full --db_dump_json --print_json
-    analyze --folder /malware --full --db_dump_json --open
-    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
-    analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
-    analyze --buffer "google.com bit.ly" --full --print_json
-</pre>
-
-## Silent mode
-Create task
-<pre style="font-family:Consolas,Monaco">
-curl https://localhost:8001/qeeqbox/analyzer/tasks/create -d '{"buffer": "goo9le.com","full":"True","print":"True","json":"True", "open":"True"}' -H 'Content-Type: application/json' --insecure
-</pre>
-The response will be
-<pre style="font-family:Consolas,Monaco">
-{"task":"809cad06-917f-43e1-b02c-8aab68e17110"}
-</pre>
-Get the task output
-<pre style="font-family:Consolas,Monaco">
-curl https://localserver:8001/qeeqbox/analyzer/tasks/get/json/809cad06-917f-43e1-b02c-8aab68e17110 --insecure
+docker-compose --build up
 </pre>
 
 ## Other use
