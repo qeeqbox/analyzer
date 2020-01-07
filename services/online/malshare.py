@@ -23,6 +23,7 @@ class MalShare:
     def get_hash_details(self,hash) -> str:
         return dumps(get("{}&action=details&hash={}".format(self.link,hash),verify=False).json(),indent=4)
 
+    @verbose(True,verbose_flag,5,"Getting hash details from MalShare")
     def get_file(self,hash) -> bool:
         return self.download_file("{}&action=getfile&hash={}".format(self.link,hash),hash)
 

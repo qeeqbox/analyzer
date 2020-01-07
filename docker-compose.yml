@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: ./webinterface-Dockerfile
-    command: bash -c "python3 start.py && /usr/local/bin/gunicorn -w 1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 app:app"
+    command: bash -c "python3 start.py && /usr/local/bin/gunicorn --log-level=critical -w 1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 web:app"
     ports:
       - "8000:8000"
     depends_on:
