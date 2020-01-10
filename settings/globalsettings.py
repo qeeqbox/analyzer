@@ -1,1 +1,0 @@
-mongo_settings_local = 'mongodb://mongodb:27017/' 

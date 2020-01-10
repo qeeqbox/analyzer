@@ -1,9 +1,22 @@
 from pymongo import MongoClient
 from gridfs import GridFS
 from bson.objectid import ObjectId
+from os import environ, path
+from json import load
 
 client = None
-if client == None:client = MongoClient('mongodb://mongodb:27017/')
+
+try:
+    if client == None:
+        settings = path.abspath(path.join(path.dirname( __file__ ),'..','settings.json'))
+        with open(settings) as f:
+            json_settings = load(f)
+            if environ["analyzer_env"] == "local":
+                client = MongoClient(json_settings["mongo_settings_local"])
+            elif environ["analyzer_env"] == "docker":
+                client = MongoClient(json_settings["mongo_settings_docker"])
+except:
+    client = None
 
 def update_item(db,col,_id,_set):
     item = client[db][col].find_one_and_update({'_id': _id},{'$set': _set})

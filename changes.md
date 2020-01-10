@@ -1,3 +1,7 @@
+#### 2020.V.02.09
+- Fixed CLI 
+- Added settings
+
 #### 2020.V.02.08
 - Fixed bugs
 - Added online multiscanners 

@@ -195,23 +195,23 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 #### Run it as CLI
 <pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
+python3 -m analyzer.cli --interactive --local
 </pre>
 
 #### Run it as Web interface 
 <pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
-docker-compose --build up
+docker-compose up --build
 </pre>
 
 ## Other use
-It took very long time making many features of this project adoptable to other project, if you are interested in adopting some features in your project, please mention this source somewhere in your project.
+If you are interested in adopting some features in your project, please mention this source somewhere in your project.
 
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
 
 ## Disclaimer
-This project is NOT an anti malware project and does not quarantine or delete malicious files
+- This project is NOT an anti malware project and does not quarantine or delete malicious files
 
 <p align="center"> <img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png"></p>

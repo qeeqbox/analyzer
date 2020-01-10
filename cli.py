@@ -1,5 +1,34 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.07"
+__V__ = "2020.V.02.09"
+
+
+print("                                                            ")
+print(" _____  __   _  _____        \\   / ______  ______  _____   ")
+print("|_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
+print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V__))
+print("                               |  https://github.com/QeeqBox/Analyzer")
+print("                                                            ")
+
+from sys import stdout,argv
+from os import path,listdir,environ
+
+if __name__ == '__main__':
+    if len(argv) == 3:
+        if argv[2] == "--local" or argv[2] == "--docker":
+            environ["analyzer_env"] = argv[2][2:]
+        if argv[1] == "--interactive" or argv[1] == "--silent":
+            pass
+    else:
+        print("Please choose a mode:")
+        print("--interactive         Run this framework as an application")
+        print("--silent              Run this framework as service (Required an interface for interaction)")
+        print()
+        print("Examples:")
+        print("python3 -m app.cli --interactive")
+        print("python3 -m app.cli --silent\n")
+        exit()
+else:
+    exit()
 
 from .analyzer import Analyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
@@ -8,7 +37,7 @@ from .queue.mongoworker import qbworker
 from .logger.logger import log_string, setup_logger
 from .report.reporthandler import ReportHandler
 from cmd import Cmd
-from os import path,listdir
+from os import path,listdir,environ
 from argparse import ArgumentParser
 from shlex import split as ssplit
 from requests import get
@@ -25,13 +54,6 @@ def ctrlhandler(signum, frame):
 class Namespace:
     def __init__(self, kwargs):
         self.__dict__.update(kwargs)
-
-print("                                                            ")
-print(" _____  __   _  _____        \\   / ______  ______  _____   ")
-print("|_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
-print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V__))
-print("                               |  https://github.com/QeeqBox/Analyzer")
-print("                                                            ")
 
 class QBAnalyzer(Cmd):
     kill_python_cli()
@@ -111,7 +133,6 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
-        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/BrRAT.apk --full --db_dump_json --print_json")
 
     def help_analyze(self):
         self._analyze_parser.print_help()
@@ -196,15 +217,4 @@ class QBAnalyzer(Cmd):
     def do_exit(self, line):
         exit()
 
-if __name__ == '__main__':
-    if len(argv) == 2:
-        if argv[1] == "--interactive" or argv[1] == "--silent": 
-            QBAnalyzer(argv[1]).cmdloop()
-
-    print("Please choose a mode:")
-    print("--interactive         Run this framework as an application")
-    print("--silent              Run this framework as service (Required an interface for interaction)")
-    print()
-    print("Examples:")
-    print("python3 -m app.cli --interactive")
-    print("python3 -m app.cli --silent\n")
+QBAnalyzer(argv[1]).cmdloop()
