@@ -195,6 +195,10 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 #### Run it as CLI
 <pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
+cd analyzer
+chmod +x initdb.sh
+./initdb.sh
+cd ..
 python3 -m analyzer.cli --interactive --local
 </pre>
 
