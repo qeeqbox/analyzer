@@ -1,4 +1,4 @@
-FROM mongo
-COPY ./databases /databases
+FROM mongo:3.4.8
+COPY ./databases databases
 COPY ./initdb.sh /docker-entrypoint-initdb.d/initdb.sh
 RUN chmod 777 /docker-entrypoint-initdb.d/initdb.sh
