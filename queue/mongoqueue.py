@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import uuid4
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.connection import client
+from ..connections.mongodbconn import client
 
 class qbjobqueue:
     @verbose(True,verbose_flag,verbose_timeout,"Starting qbjobqueue")

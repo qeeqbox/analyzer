@@ -10,7 +10,7 @@ from tld import get_fld,get_tld
 from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
-from .connection import client
+from ..connections.mongodbconn import client
 
 def set_dumm_off(db,col):
     try:

@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import get_words,get_words_multi_files,get_entropy
-from ..general.archive import unpack_file
+from ..modules.archive import unpack_file
 from shutil import copyfile,rmtree
 from os import mkdir, path
 from hashlib import md5, sha1, sha256

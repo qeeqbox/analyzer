@@ -19,7 +19,7 @@ class QBURLSimilarity:
         self.datastruct = {"URLs":[],
                            "_URLs":["Distance","URL","Similar"]}
 
-        self.refs = path.abspath(path.join(path.dirname( __file__ ),"..", 'refs'))
+        self.refs = path.abspath(path.join(path.dirname( __file__ ), 'refs'))
         if not self.refs.endswith(path.sep): self.refs = self.refs+path.sep
         self.links = compile(r"((?:(http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
         self.top = "http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip"

@@ -4,7 +4,7 @@ from pymongo.errors import ConnectionFailure
 from time import sleep
 from threading import Event
 from ..logger.logger import log_string
-from ..mics.connection import client
+from ..connections.mongodbconn import client
 
 class qbworker():
     def __init__(self, name, func, wait):

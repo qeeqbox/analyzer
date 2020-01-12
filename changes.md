@@ -1,3 +1,8 @@
+#### 2020.V.02.10
+- Fixed bugs
+- Fixed logger outer and inner timeout
+- Added missing libs
+
 #### 2020.V.02.09
 - Fixed CLI 
 - Added settings

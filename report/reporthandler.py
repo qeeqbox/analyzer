@@ -2,7 +2,7 @@ from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from ..mics.funcs import open_in_browser, serialize_obj
 from ..report.htmlmaker import HtmlMaker
 from ..report.jsonmaker import JSONMaker
-from ..mics.connection import add_item_fs
+from ..connections.mongodbconn import add_item_fs
 from ..intell.qbimage import QBImage
 from ..intell.qbicons import QBIcons
 from datetime import datetime

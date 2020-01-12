@@ -1,7 +1,7 @@
 from threading import Thread
 from flask import Flask, jsonify, make_response, request
 from werkzeug.exceptions import HTTPException
-from ..mics.connection import get_it_fs
+from ..connections.mongodbconn import get_it_fs
 from ..mics.certmaker import create_dummy_certificate
 from ..queue.mongoqueue import qbjobqueue
 from os import mkdir, path

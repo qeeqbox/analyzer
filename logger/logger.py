@@ -3,13 +3,21 @@ __G__ = "(G)bd249ce4"
 from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
 from sys import stdout
 from os import path,mkdir
-from signal import signal,alarm,SIGALRM
+from _thread import interrupt_main
+from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
+from sys import stdout,stderr
+from os import path,mkdir
+from threading import Timer
+
 
 logterminal,logfile,verbose_flag,verbose_timeout = None,None, None, None
 if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
 if logfile == None:logfile = getLogger("qbanalyzerlogfile")
 if verbose_flag == None:verbose_flag = False
-if verbose_timeout == None: verbose_timeout = 10
+if verbose_timeout == None: verbose_timeout = 30
+
+lock = False
+chain = []
 
 class colors:
     Restore = '\033[0m'
@@ -32,38 +40,53 @@ def log_string(_str,color):
     elif color == "Red": logterminal.info('{}{}{} {}'.format(colors.Red,"!",colors.Restore,_str))
     elif color == "Yellow_#": logterminal.info('{}{}{} {}'.format(colors.Yellow,"#",colors.Restore,_str))
 
-class TimeoutException(Exception):   # Custom exception class
-    pass
-
-def verbose(OnOff=False,Verb=False,timeout=10,str=None):
+def verbose(OnOff=False,Verb=False,timeout=30,str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
     '''    
-    def timeout_handler(signum, frame):   # Custom signal handler
-        raise TimeoutException
+    def quite(fn,timeout):
+        global lock
+        stderr.flush()
+        interrupt_main()
+        lock = fn
+        log_string("{} > {}s.. Timeout".format(fn,timeout), "Red")
+        #print(">>>>>>>>>>>>>>>>>>" + lock)
 
     def decorator(func):
         def wrapper(*args, **kwargs):
+            global lock
+            global chain
+            function_name = func.__module__+"."+func.__name__
+            if lock:
+                return None
+            timer = None
+            ret = None
+            chain.append(function_name)
+            #print(chain)
+            #print(tenumerate())
             try:
-                signal(SIGALRM, timeout_handler)
-                alarm(timeout)
                 if Verb:
                     log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
                 if str:
                     log_string(str, "Green")
-                ret =  func(*args, **kwargs)
-                alarm(0)
-                return ret
-            except TimeoutException:
-                log_string("{}.{} > {}s.. Timeout".format(func.__module__, func.__name__,timeout), "Red")
-                alarm(0)
-                return None
+                timer = Timer(timeout, quite, args=[function_name,timeout])
+                timer._name = func.__module__+"."+func.__name__
+                timer.start()
+                ret = func(*args, **kwargs)
+            except KeyboardInterrupt:
+                pass
             except Exception as e:
                 #print(e)
                 log_string("{}.{} Failed".format(func.__module__, func.__name__), "Red")
                 logfile.info("{}.{} Failed -> {}".format(func.__module__, func.__name__,e))
-                alarm(0)
-                return None
+            finally:
+                if timer != None:
+                    timer.cancel()
+            if function_name == chain[-1]:
+                if function_name == lock:
+                    lock = False
+                chain.remove(function_name)
+            return ret
         return wrapper
     return decorator
 

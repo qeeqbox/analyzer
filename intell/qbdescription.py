@@ -2,7 +2,7 @@ __G__ = "(G)bd249ce4"
 
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
 from ..mics.funcs import ip_to_long
-from ..mics.connection import find_item
+from ..connections.mongodbconn import find_item
 
 @verbose(True,verbose_flag,verbose_timeout,"Adding descriptions to strings")
 def add_description(_type,data,keyword):

@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.09"
+__V__ = "2020.V.02.10"
 
 
 print("                                                            ")
@@ -43,7 +43,7 @@ from shlex import split as ssplit
 from requests import get
 from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
-from signal import signal,SIGTSTP,SIGINT
+from signal import SIGTSTP, signal
 from uuid import uuid4
 
 def ctrlhandler(signum, frame):
@@ -59,7 +59,7 @@ class QBAnalyzer(Cmd):
     kill_python_cli()
     setup_logger()
     signal(SIGTSTP, ctrlhandler)
-    signal(SIGINT, ctrlhandler)
+    #signal(SIGINT, ctrlhandler)
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
     _analyze_parsergroupreq = _analyze_parser.add_argument_group('Input arguments')
@@ -132,7 +132,6 @@ class QBAnalyzer(Cmd):
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
-
 
     def help_analyze(self):
         self._analyze_parser.print_help()

@@ -21,7 +21,8 @@ class LoadDetections:
             try:
                 mod = import_module(".qbdetect.detections.{}".format(path.basename(x)[:-3]),package="analyzer")
                 self.imported.append(getattr(mod,"startanalyzing"))
-            except Exception:
+            except Exception as e:
+                print(e)
                 log_string("Loading plugins failed","Red")
 
     @verbose(True,verbose_flag,verbose_timeout,"Loading extra plugins")

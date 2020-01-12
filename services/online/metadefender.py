@@ -11,7 +11,7 @@ class MetaDefender:
             self.link = "https://api.metadefender.com/v2"
             self.headers = {"User-Agent":"Falcon Sandbox","apikey":self.api}
 
-    @verbose(True,verbose_flag,5,"Getting hash details from MetaDefender")
+    @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from MetaDefender")
     def get_hash_details(self,hash) -> dict:
         return dumps(get("{}/hash/{}".format(self.link,hash),headers=self.headers).json(),indent=4)
 

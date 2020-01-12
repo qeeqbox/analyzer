@@ -14,7 +14,7 @@ class HybridAnalysis:
             self.link = "https://www.hybrid-analysis.com/api"
             self.headers = {"User-Agent":"Falcon Sandbox",}
 
-    @verbose(True,verbose_flag,5,"Getting hash details from HybridAnalysis")
+    @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from HybridAnalysis")
     def get_hash_details(self,hash) -> dict:
         return dumps(get("{}/scan/{}".format(self.link,hash),headers=self.headers, auth=self.auth).json(),indent=4)
 

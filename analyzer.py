@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
 from .logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from .general.qbfile import QBFile
-from .general.qbencoding import QBEncdoing
+from .modules.qbfile import QBFile
+from .modules.qbencoding import QBEncdoing
 from .modules.linuxelf import LinuxELF
 from .modules.macho import Macho
 from .modules.windowspe import WindowsPe
@@ -72,7 +72,8 @@ class Analyzer:
         self.htmlparser = HTMLParser()
         self.qbphising = QBPhishing()
         self.onlinemultiscanners = OnlineMultiScanners()
-
+    
+    @verbose(True,verbose_flag,60,"Starting Analyzer")
     def analyze(self,parsed) -> dict:
         '''
         main analyze logic!

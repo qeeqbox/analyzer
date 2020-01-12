@@ -10,7 +10,7 @@ class VirusTotal:
             self.api = tokens["virustotal_key"]
             self.link = "https://www.virustotal.com/vtapi/v2"
 
-    @verbose(True,verbose_flag,5,"Getting hash details from VirusTotal")
+    @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from VirusTotal")
     def get_hash_details(self,hash) -> dict:
         parameters = {'resource': hash, 'apikey': self.api}
         return dumps(get("{}/file/report".format(self.link),params=parameters).json(),indent=4)

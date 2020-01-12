@@ -77,7 +77,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Top phishing words included
 
 ## Other Features
-- Linux
+- Linux (wrapper)
     - ELF information
     - API functions descriptions
     - System commands descriptions
@@ -88,13 +88,13 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - MITRE artifacts mapped to detection
     - Cross references detection
     - Behavior detection
-- macOS
+- macOS (wrapper)
     - DMG extraction
     - Shell code detection
     - PLIST information
     - MITRE artifacts mapped to detection
     - macOS information
-- Windows
+- Windows (wrapper)
     - PE information
     - Encrypted section detection
     - Sections descriptions
@@ -108,7 +108,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Cross references detection
     - Icon extraction
     - Extract String file info (FileDescription, FileDescription etc..)
-- Android
+- Android (wrapper)
     - APK information
     - DEX information
     - Manifest descriptions
@@ -119,40 +119,40 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Big functions identification 
     - Cross references detection
     - API Behavior detection
-- IPhone
+- IPhone (built-in)
     - IPA information
-- BlackBerry (COD)
+- BlackBerry (COD) (built-in)
     - COD information
     - Functions extraction
     - Strings extraction
-- PCAP
+- PCAP (wrapper)
     - Frame filter
     - HTTP filter
     - DNS filter
     - ARP filter
     - WAF detection
     - DGA detection
-- PDF
+- PDF (built-in)
     - Objects enumeration
     - Keys (javascript, js, OpenAction) extraction
     - Streams parsing
     - String analysis
-- Office[x]
+- Office (built-in)
     - Meta info extraction
     - Hyper and target links extraction
     - Bin printable parser
-- RTF
+- RTF (built-in)
     - Number of objects
     - Object extraction
-- EMAIL
+- EMAIL (built-in)
     - Header information
     - Attachment extraction and parsing 
     - Phishing patterns check
-- Archives
+- Archives (wrapper)
     - Extract mimes and guess by extensions
     - Finding patterns in all unpacked files
     - Encrypted archives detection
-- HTML
+- HTML (wrapper)
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
     - Script entropy
@@ -197,7 +197,9 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 chmod +x initdb.sh
+chmod +x install.sh
 ./initdb.sh
+./install.sh ubuntu
 cd ..
 python3 -m analyzer.cli --interactive --local
 </pre>
@@ -207,6 +209,7 @@ python3 -m analyzer.cli --interactive --local
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 docker-compose up --build
+https://127.0.0.1:8000/login/
 </pre>
 
 ## Other use
@@ -217,5 +220,6 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 
 ## Disclaimer
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
+- Prerequisites packages are required for some modules, if you are interested in using those open source packages, or looking to re-write your own packages (Please let me know, I can help with that)
 
 <p align="center"> <img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png"></p>
