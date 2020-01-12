@@ -198,8 +198,9 @@ git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 chmod +x initdb.sh
 chmod +x install.sh
-./initdb.sh
 ./install.sh ubuntu
+service mongodb start
+./initdb.sh
 cd ..
 python3 -m analyzer.cli --interactive --local
 </pre>
