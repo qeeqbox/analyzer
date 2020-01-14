@@ -137,7 +137,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Keys (javascript, js, OpenAction) extraction
     - Streams parsing
     - String analysis
-- Office (built-in)
+- Office (built-in and wrapper)
     - Meta info extraction
     - Hyper and target links extraction
     - Bin printable parser
