@@ -4,12 +4,11 @@
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ## CLI Interface
-
-<img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/introv01.10.gif" style="width:100%;"/>
+<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/blob/master/readme/intro.gif" style="width:100%;"/>
 
 ## Web Interface
 
-<img src="https://github.com/qeeqbox/analyzer/blob/master/readme/webinterface.gif" style="width:100%;"/>
+<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/blob/master/readme/webinterface.gif" style="width:100%;"/>
 
 ## Output
 #### HTML Outputs
