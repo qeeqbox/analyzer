@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.10"
+__V__ = "2020.V.02.11"
 
 
 print("                                                            ")
@@ -45,6 +45,7 @@ from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
 from signal import SIGTSTP, signal
 from uuid import uuid4
+
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -132,6 +133,8 @@ class QBAnalyzer(Cmd):
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
+
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/f9boo3.doc --full --disk_dump_html --open")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

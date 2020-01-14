@@ -1,3 +1,6 @@
+#### 2020.V.02.11
+- Added macro extraction wrapper
+
 #### 2020.V.02.10
 - Fixed bugs
 - Fixed logger outer and inner timeout

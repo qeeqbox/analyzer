@@ -141,9 +141,11 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Meta info extraction
     - Hyper and target links extraction
     - Bin printable parser
-- RTF (built-in)
+    - Extract Text
+- MS (built-in and wrapper)
     - Number of objects
     - Object extraction
+    - Macros extraction
 - EMAIL (built-in)
     - Header information
     - Attachment extraction and parsing 
@@ -187,7 +189,7 @@ apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libja
 </pre>
 
 <pre style="font-family:Consolas,Monaco">
-pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL
+pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools
 </pre>
 
 ## Running

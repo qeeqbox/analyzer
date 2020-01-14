@@ -1,17 +1,20 @@
 __G__ = "(G)bd249ce4"
 
 from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_words_multi_filesarray
+from ..mics.funcs import get_words_multi_filesarray,get_words
 from re import DOTALL, MULTILINE, compile, finditer, sub
 from binascii import unhexlify
+from oletools.olevba3 import VBA_Parser
 
-class RTFParser:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting RTFParser")
+class MSParser:
+    @verbose(True,verbose_flag,verbose_timeout,"Starting MSParser")
     def __init__(self):
         self.datastruct ={   "General":{},
                              "Objects":[],
+                             "Macro":[],
                              "_General":{},
-                             "_Objects":["Len","Parsed"]}
+                             "_Objects":["Len","Parsed"],
+                             "_Macro":["Name","VBA"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def get_objects(self,data,buffer) -> (list,list):
@@ -41,21 +44,39 @@ class RTFParser:
                     break
         return _List,_Listobjects
 
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def extract_macros(self,path) -> list:
+        '''
+        Extract macros
+        '''
+        List = []
+        try:
+            for (f, s, vbaname, vbacode) in VBA_Parser(path).extract_macros():
+                List.append({"Name":vbaname,"VBA":vbacode})
+        except:
+            pass
+        return List
+
     @verbose(True,verbose_flag,verbose_timeout,None)
     def check_sig(self,data) -> bool:
         '''
         check if mime is rtf
         '''
-        if "text/rtf" == data["Details"]["Properties"]["mime"]:
+        if "text/rtf" == data["Details"]["Properties"]["mime"] or data["Details"]["Properties"]["mime"].startswith("application/vnd.ms"):
             return True
 
-    @verbose(True,verbose_flag,verbose_timeout,"Analyze RTF file")
+    @verbose(True,verbose_flag,verbose_timeout,"Analyze MS file")
     def analyze(self,data):
         '''
         start analyzing exe logic, add descriptions and get words and wordsstripped from buffers 
         '''
-        data["RTF"]=self.datastruct
+        data["MS"]=self.datastruct
         f = data["FilesDumps"][data["Location"]["File"]]
-        data["RTF"]["Objects"],objects = self.get_objects(data,f)
-        data["RTF"]["General"] = {"Objects":len(objects)}
-        get_words_multi_filesarray(data,objects)
+        data["MS"]["Objects"],objects = self.get_objects(data,f)
+        data["MS"]["Macro"] = self.extract_macros(data["Location"]["File"])
+        data["MS"]["General"] = {"Objects":len(objects)}
+        if len(objects) > 0:
+            get_words_multi_filesarray(data,objects)
+        else:
+            get_words(data,data["Location"]["File"])

@@ -12,7 +12,7 @@ from .modules.readpackets import ReadPackets
 from .modules.emailparser import EmailParser
 from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
-from .modules.rtfparser import RTFParser
+from .modules.msparser import MSParser
 from .modules.htmlparser import HTMLParser
 from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
@@ -57,7 +57,7 @@ class Analyzer:
         self.qburlsimilarity = QBURLSimilarity()
         self.pdfparser = PDFParser()
         self.officex = Officex()
-        self.rtfparser = RTFParser()
+        self.msparser = MSParser()
         self.qbencryption = QBEncryption()
         self.qbcreditcards = QBCreditcards()
         self.qbpatterns = QBPatterns()
@@ -122,8 +122,8 @@ class Analyzer:
                 self.qbdga.analyze(data)
         elif self.officex.check_sig(data):
             self.officex.analyze(data)
-        elif self.rtfparser.check_sig(data):
-            self.rtfparser.analyze(data)
+        elif self.msparser.check_sig(data):
+            self.msparser.analyze(data)
         elif self.htmlparser.check_sig(data):
             self.htmlparser.analyze(data)
         else:

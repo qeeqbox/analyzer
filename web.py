@@ -1,14 +1,13 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from flask_mongoengine import MongoEngine
 from wtforms import form, fields, validators
 from flask_admin import AdminIndexView, Admin, expose, BaseView
 from flask_admin.menu import MenuLink
 from flask_admin.babel import gettext
-from flask_login import LoginManager,current_user,login_user,logout_user
 from flask_admin.contrib.mongoengine import ModelView
+from flask_login import LoginManager,current_user,login_user,logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug import secure_filename
-from flask import flash
 from uuid import uuid4
 from tempfile import gettempdir
 from os import path, getpid
@@ -23,7 +22,7 @@ from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
 
-filename = "README.md @ https://github.com/qeeqbox/analyzer"
+filename = "README.md"
 intromarkdown = ""
 
 try:
@@ -35,7 +34,7 @@ except:
 
 if intromarkdown == "":
     try:
-        readmefolder = path.abspath(path.join(path.dirname( __file__ ),"..",filename))
+        readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
         with open(readmefolder) as f:
             intromarkdown = f.read()
     except:
@@ -115,6 +114,10 @@ class UserView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class Jobs(db.Document):
     jobID = db.StringField()
     status = db.StringField()
@@ -134,6 +137,10 @@ class QueueView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class Files(db.Document):
     uuid = db.StringField()
     line = db.DictField()
@@ -149,6 +156,10 @@ class FilesView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class Reports(db.Document):
     uuid = db.StringField()
     type = db.StringField()
@@ -161,8 +172,13 @@ class ReportsView(ModelView):
     can_delete = True
     can_edit = False
     column_searchable_list = ['uuid']
+
     def is_accessible(self):
         return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
 
 class LoginForm(form.Form):
     login = fields.StringField(validators=[validators.required()])
@@ -189,7 +205,7 @@ class CustomAdminIndexView(AdminIndexView):
     def index(self):
         if not current_user.is_authenticated:
             return redirect(url_for('.login_view'))
-        self._template_args['filename'] = filename
+        self._template_args['filename'] = filename + " @ https://github.com/qeeqbox/analyzer"
         self._template_args['intro'] = intromarkdown
         return super(CustomAdminIndexView, self).index()
 
@@ -203,7 +219,7 @@ class CustomAdminIndexView(AdminIndexView):
                 login_user(user)
 
         if current_user.is_authenticated:
-            return redirect(url_for('.index'))
+            return redirect(request.args.get('next') or url_for('.index'))
 
         self._template_args['form'] = form
         self._template_args['active'] = "Login"
@@ -280,6 +296,10 @@ class CustomViewUploadForm(BaseView):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class BufferForm(form.Form):
     choices = fields.SelectMultipleField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
@@ -312,7 +332,11 @@ class CustomViewBufferForm(BaseView):
     def is_accessible(self):
         return current_user.is_authenticated
 
-def getstats():
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
+def get_stats():
     #lazy check stats
     conn = MongoClient('mongodb://mongodb:27017/')
     stats = {}
@@ -388,18 +412,30 @@ def getstats():
 class CustomStatsView(BaseView):
     @expose('/', methods=['POST','GET'])
     def index(self):
-        return self.render("stats.html", stats = getstats())
+        return self.render("stats.html", stats = get_stats())
 
     def is_accessible(self):
         return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
 
 class CustomMenuLink(MenuLink):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class StarProject(MenuLink):
     def is_accessible(self):
         return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
  
 def error_handler(error):
     return render_template("error.html",error=url_for('admin.index'),uuid=str(uuid4()))
@@ -409,7 +445,7 @@ for cls in HTTPException.__subclasses__():
  
 #change admin wiht / -> CustomAdminIndexView url='/'
 
-admin = Admin(app, "@" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3', endpoint="/test")
+admin = Admin(app, "@" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
