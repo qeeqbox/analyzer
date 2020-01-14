@@ -17,15 +17,18 @@ class Officex:
                              "Hyper":[],
                              "Other":[],
                              "Macro":[],
+                             "DDE":[],
                              "_General":{},
                              "_Text":"",
                              "_Hyper":["Count","Link"],
                              "_Other":["Count","Link"],
-                             "_Macro":["Name","VBA"]}
+                             "_Macro":["Name","VBA"],
+                             "_DDE":""}
 
         self.word_namespace = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
         self.para = self.word_namespace + 'p'
         self.text = self.word_namespace + 't'
+        self.instrText = self.word_namespace + 'instrText'
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def office_analysis(self,data) -> dict:
@@ -92,6 +95,18 @@ class Officex:
         return '\n'.join(text)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
+    def extract_dde(self,data) -> str:
+        text = []
+        for i, v in enumerate(data["Packed"]["Files"]):
+            if v["Name"].lower() == "document.xml":
+                tree = cetXML(open(v["Path"],"rb").read())
+                for par in tree.iter(self.para):
+                    string = ''.join(node.text for node in par.iter(self.instrText))
+                    if len(string):
+                        text.append(string)
+        return '\n'.join(text)
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
     def extract_macros(self,path) -> list:
         '''
         Extract macros
@@ -124,6 +139,7 @@ class Officex:
         data["Office"] = deepcopy(self.datastruct)
         data["Office"]["General"] = self.office_meta_info(data)
         data["Office"]["Text"] = self.extract_text(data)
+        data["Office"]["DDE"] = self.extract_dde(data)
         data["Office"]["Macro"] = self.extract_macros(data["Location"]["File"])
         data["Office"].update(self.office_analysis(data))
         self.office_read_bin(data)

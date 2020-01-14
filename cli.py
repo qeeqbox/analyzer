@@ -23,9 +23,12 @@ if __name__ == '__main__':
         print("--interactive         Run this framework as an application")
         print("--silent              Run this framework as service (Required an interface for interaction)")
         print()
+        print("--local               Use local mongodb")
+        print("--docker              Use remote mongodb)")
+        print()
         print("Examples:")
-        print("python3 -m app.cli --interactive")
-        print("python3 -m app.cli --silent\n")
+        print("python3 -m app.cli --interactive --local")
+        print("python3 -m app.cli --silent --docker\n")
         exit()
 else:
     exit()
@@ -133,8 +136,6 @@ class QBAnalyzer(Cmd):
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
-
-        self.do_analyze("--file /home/a8b2bd81cf1e/malware/f9boo3.doc --full --disk_dump_html --open")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

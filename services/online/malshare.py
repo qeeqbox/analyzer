@@ -27,4 +27,4 @@ class MalShare:
     def get_file(self,hash) -> bool:
         return self.download_file("{}&action=getfile&hash={}".format(self.link,hash),hash)
 
-#print(malshare().get_hash_details("63c29e8b364b208c806e8687c57c82f4ca10c359"))
+#print(MalShare().get_file(" 78f07a1860ae99c093cc80d31b8bef14 "))
