@@ -223,6 +223,6 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 
 ## Disclaimer
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
-- Prerequisites packages are required for some modules, if you are not interested in using those packages, or looking to re-write your own packages (Please let me know, I can help with that)
+- Prerequisites packages are required for some modules (If you are having issues using those packages, please let me know.. I might be able to share with you my own alternatives that I developed in the past)
 
 <p align="center"> <img src="https://raw.githubusercontent.com/bd249ce4/QBAnalyzer/master/readme/madewithlove.png"></p>
