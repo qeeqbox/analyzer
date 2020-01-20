@@ -21,6 +21,7 @@ from pymongo import MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
+from settings import json_settings
 
 filename = "README.md"
 intromarkdown = ""
@@ -172,6 +173,28 @@ class ReportsView(ModelView):
     can_delete = True
     can_edit = False
     column_searchable_list = ['uuid']
+    column_default_sort = ('time', True)
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
+class Logs(db.Document):
+    uuid = db.StringField()
+    type = db.StringField()
+    file = db.FileField()
+    time = db.DateTimeField()
+    meta = {'db_alias':'default','collection': 'logs','strict': False}
+
+class LogsView(ModelView):
+    can_create = False
+    can_delete = True
+    can_edit = False
+    column_searchable_list = ['uuid']
+    column_default_sort = ('time', True)
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -250,6 +273,8 @@ class CustomAdminIndexView(AdminIndexView):
 class UploadForm(form.Form):
     choices = fields.SelectMultipleField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
+    analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
+    functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
 
 class CustomViewUploadForm(BaseView):
     @expose('/', methods=['POST','GET'])
@@ -269,6 +294,8 @@ class CustomViewUploadForm(BaseView):
                         result.update({x:True})
                     result["file"] = savetotemp
                     result["uuid"] = uuid
+                    result["analyzer_timeout"]= form.analyzertimeout.data
+                    result["function_timeout"]= form.functiontimeout.data
                     files = Files()
                     files.uuid = uuid
                     files.line = result
@@ -303,6 +330,8 @@ class CustomViewUploadForm(BaseView):
 class BufferForm(form.Form):
     choices = fields.SelectMultipleField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
+    analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
+    functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
 
 class CustomViewBufferForm(BaseView):
     @expose('/', methods=['POST','GET'])
@@ -316,6 +345,8 @@ class CustomViewBufferForm(BaseView):
                     result.update({x:True})
                 result["uuid"] = uuid
                 result["buffer"] = form.buffer.data
+                result["analyzer_timeout"]= form.analyzertimeout.data
+                result["function_timeout"]= form.functiontimeout.data
                 jobs = Jobs()
                 jobs.jobID = uuid
                 jobs.status = 'wait'
@@ -457,6 +488,7 @@ admin.add_view(UserView(User))
 admin.add_view(FilesView(Files))
 admin.add_view(QueueView(Jobs))
 admin.add_view(ReportsView(Reports))
+admin.add_view(LogsView(Logs))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)

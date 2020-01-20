@@ -14,7 +14,21 @@
             </div>
             <div class="form-group">
             {% for f in form if f.type != 'CSRFTokenField' %}
-            {% if f.label.text != "File" %}
+            {% if f.label.text != "File" and f.label.text != "Analyzertimeout" and f.label.text != "Functiontimeout" %}
+            {{ f }}
+            {% endif %}
+            {% endfor %}
+            </div>
+            <div class="form-group">
+            {% for f in form if f.type != 'CSRFTokenField' %}
+            {% if f.label.text == "Analyzertimeout" %}
+            {{ f }}
+            {% endif %}
+            {% endfor %}
+            </div>
+            <div class="form-group">
+            {% for f in form if f.type != 'CSRFTokenField' %}
+            {% if f.label.text == "Functiontimeout" %}
             {{ f }}
             {% endif %}
             {% endfor %}
@@ -25,6 +39,6 @@
 			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
-    
 </div>
 {% endblock body %}
+

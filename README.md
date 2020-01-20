@@ -180,8 +180,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ~~Web service and API~~
 - ~~Web interface (Requested by users)~~
 - ~~Curling some TIPs (Requested by users)~~
+- ~~MS office module~~
 - Web detection
-- MS office module
 - Machine learning modules (maybe commercial)
 
 ## Prerequisites
@@ -224,4 +224,4 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 
 ## Disclaimer
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
-- Prerequisites packages are required for some modules (If you are having issues using those packages, please let me know.. I might be able to share with you my own alternatives that I developed in the past in C#\C)
+- Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)

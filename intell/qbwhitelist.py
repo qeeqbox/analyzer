@@ -85,10 +85,12 @@ class QBWhitelist:
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         if parsed.w_internal or parsed.w_all or parsed.full:
-            self.find_it_by_internal_name(data["Details"]["Properties"]["Name"],data["WhiteList"]["ByInternalName"])
+            if len(data["Details"]["Properties"]["Name"]) > 3:
+                self.find_it_by_internal_name(data["Details"]["Properties"]["Name"],data["WhiteList"]["ByInternalName"])
         if parsed.w_original or parsed.w_all or parsed.full:
-            self.find_it_by_original_filename(data["Details"]["Properties"]["Name"],data["WhiteList"]["ByInternalName"])
+            if len(data["Details"]["Properties"]["Name"]) > 3:
+                self.find_it_by_original_filename(data["Details"]["Properties"]["Name"],data["WhiteList"]["ByInternalName"])
         if parsed.w_hash or parsed.w_all or parsed.full:
             self.find_it_by_hash(data["Details"]["Properties"]["md5"],data["WhiteList"]["Bymd5"])
-        if (parsed.w_words or parsed.w_all or parsed.full) and parsed.buffer != None:
+        if parsed.w_all or ((parsed.w_words or parsed.full) and parsed.buffer != None):
             self.find_it_from_words(data["WhiteList"]["Fromwords"])

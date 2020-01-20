@@ -44,7 +44,7 @@ class qbworker():
     def execute_task(self, record):
         if self.cur != None:
             self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'work', 'started': datetime.now()}})
-            if record['data'] is not '':
+            if record['data'] != '':
                 self.func(record['data'],True)
                 self.cur.find_one_and_update({'_id': record['_id']},{'$set': {'status': 'done','finished': datetime.now()}})
                 return True

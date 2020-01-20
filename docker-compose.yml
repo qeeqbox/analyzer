@@ -13,7 +13,7 @@ services:
       - backend
       - frontend
     volumes:
-      - malwarefolder:/tmp
+      - sharedfolder:/tmp
 
   website:
     build:
@@ -28,7 +28,7 @@ services:
       - frontend
       - backend
     volumes:
-      - malwarefolder:/tmp
+      - sharedfolder:/tmp
     healthcheck:
       disable: true 
 
@@ -42,7 +42,7 @@ services:
       - backend
 
 volumes:
-  malwarefolder:
+  sharedfolder:
 
 networks:
   frontend:

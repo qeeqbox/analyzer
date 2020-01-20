@@ -1,3 +1,8 @@
+#### 2020.V.02.12
+- Added custom timeout for analyzer and logics
+- Added custom settings
+- Fixed web interface
+
 #### 2020.V.02.11
 - Added macro extraction wrapper
 

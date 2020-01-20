@@ -1,6 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.11"
-
+__V__ = "2020.V.02.12"
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -37,7 +36,7 @@ from .analyzer import Analyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
 from .queue.mongoqueue import qbjobqueue
 from .queue.mongoworker import qbworker
-from .logger.logger import log_string, setup_logger
+from .logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger
 from .report.reporthandler import ReportHandler
 from cmd import Cmd
 from os import path,listdir,environ
@@ -48,7 +47,7 @@ from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
 from signal import SIGTSTP, signal
 from uuid import uuid4
-
+from .settings import json_settings
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -116,6 +115,9 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupded.add_argument('--db_dump_json',action='store_true', help="save json dump tp db", required=False)
     _analyze_parsergroupded = _analyze_parser.add_argument_group('Online multiscanner options')
     _analyze_parsergroupded.add_argument('--ms_all',action='store_true', help="check hash in different multiscanner platforms(require API keys)", required=False)
+    _analyze_parsergroupdea = _analyze_parser.add_argument_group('Analyzer settings')
+    _analyze_parsergroupdea.add_argument('--function_timeout', type=int, help="function logic timeout")
+    _analyze_parsergroupdea.add_argument('--analyzer_timeout', type=int, help="analyzer logic timeout")
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
@@ -137,6 +139,8 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
+        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/cmd.exe --full --disk_dump_html --open")
+
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
@@ -152,7 +156,6 @@ class QBAnalyzer(Cmd):
     def do_analyze(self,line,silent=False):
         try:
             if silent:
-                #little workaround for now, and hardcoded options..
                 parsed_args = vars(self._analyze_parser.parse_args(""))
                 parsed = Namespace({**parsed_args,**line})
                 if parsed.uuid:
@@ -168,7 +171,21 @@ class QBAnalyzer(Cmd):
             else:
                 parsed = self._analyze_parser.parse_args(ssplit(line))
                 parsed.uuid = str(uuid4())
+
+            try:
+                if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
+                    json_settings["analyzer_timeout"] = int(parsed.analyzer_timeout)
+            except:
+                pass
+            try:
+                if int(parsed.function_timeout) > 0 and int(parsed.function_timeout) < 240:
+                    json_settings["function_timeout"] = int(parsed.function_timeout)
+            except:
+                pass
+
+            log_string("Default timeout {}s for the task, and {}s for each logic".format(json_settings["analyzer_timeout"], json_settings["function_timeout"]),"Yellow")
         except:
+            log_string("Parsing failed, something went wrong..","Red")
             return
 
         log_string("Task {} (Started)".format(parsed.uuid),"Yellow")
@@ -176,12 +193,16 @@ class QBAnalyzer(Cmd):
         if not parsed.output:
             parsed.output = gettempdir()
         if parsed.file or parsed.folder or parsed.buffer:
-            if parsed.file:
-                self.analyzefile(parsed)
-            elif parsed.folder:
-                self.analyzefolder(parsed)
-            elif parsed.buffer:
-                self.analyzebuffer(parsed)
+            try:
+                setup_task_logger(parsed.uuid)
+                if parsed.file:
+                    self.analyzefile(parsed)
+                elif parsed.folder:
+                    self.analyzefolder(parsed)
+                elif parsed.buffer:
+                    self.analyzebuffer(parsed)
+            finally:
+                cancel_task_logger(parsed.uuid)
         else:
             log_string("File, Folder or Buffer is missing","Red")
 

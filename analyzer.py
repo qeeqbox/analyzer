@@ -73,7 +73,7 @@ class Analyzer:
         self.qbphising = QBPhishing()
         self.onlinemultiscanners = OnlineMultiScanners()
     
-    @verbose(True,verbose_flag,60,"Starting Analyzer")
+    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer",extra="analyzer")
     def analyze(self,parsed) -> dict:
         '''
         main analyze logic!
