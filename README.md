@@ -74,6 +74,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Free/Fake email extraction
 - Spelling and punctuation check
 - Top phishing words included
+- Web interface
+- Supports threat intelligence platform feeds
 
 ## Other Features
 - Linux (wrapper)
@@ -159,6 +161,11 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
     - Script entropy
+- Online TIPs (Required tokens)
+    - HybridAnalysis
+    - MalShare
+    - MetaDefender
+    - VirusTotal
 
 ## Web api and interface
 - Testing or researching only
@@ -181,6 +188,8 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - ~~Web interface (Requested by users)~~
 - ~~Curling some TIPs (Requested by users)~~
 - ~~MS office module~~
+- java analysis (Requested by users)
+- offline multiscanner (Requested by users)
 - Web detection
 - Machine learning modules (maybe commercial)
 
@@ -194,6 +203,13 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 </pre>
 
 ## Running
+#### Run it as Web interface 
+<pre style="font-family:Consolas,Monaco">
+git clone https://github.com/qeeqbox/analyzer.git
+cd analyzer
+docker-compose up --build
+https://127.0.0.1:8000/login/
+</pre>
 
 #### Run it as CLI
 <pre style="font-family:Consolas,Monaco">
@@ -206,14 +222,6 @@ service mongodb start
 ./initdb.sh
 cd ..
 python3 -m analyzer.cli --interactive --local
-</pre>
-
-#### Run it as Web interface 
-<pre style="font-family:Consolas,Monaco">
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-docker-compose up --build
-https://127.0.0.1:8000/login/
 </pre>
 
 ## Other use

@@ -1,150 +1,230 @@
+<!-- flat flask-admin template with sidebar by https://github.com/qeeqbox/analyzer -->
+
 {% extends 'admin/base.html' %}
 {% block head_css %}
 {{ super() }}
 
 <style>
 
-html, body {
-    height: 100%;
-    width: 100%
-    margin: 0;
-    font-family: monospace;
-    padding: 0px 0px 0px 0px !important;
-}
+body,
+    html {
+      height: 100%;
+      padding: 0 0 0 0;
+      font-family:Consolas,Monaco !important;
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0;
+    }
 
-.center-block {
-    float: none !important
-}
+    .container{
+      width: 100%;
+      padding: 0 0 0 0;
+      margin: 0 0 0 0;
+    }
 
-a, .btn {
-   outline: none !important;
-}
+    .container .navbar, #admin-navbar-collapse *, .navbar-brand{
+    color: #fff !important;
+    background-color: #313a46 !important;
+    z-index: 9999;
+    }
 
-.container {
-    padding: 0px 0px 0px 0px !important;
-	width:auto;
-	font-size: 12px;
-}
+    .icon-bar{
+    background-color: #fff !important;
+    }
 
-td:last-child {
-  word-break:break-word;
-}
+    .wrapper-col-sidebar {
+      max-width: 150px;
+      width: 150px;
+    }
 
-table {
-	width: 100%;
-}
+    .wrapper-col-sidebar nav {
+      width: 100%;
+    }
 
-.login * {
-    width: 100%
-}
+    .wrapper-row-cus {
+      height: 100%;
+      display: flex;
+    }
 
-.upload, .buffer {
-  text-align: center;
-}
+    .siderbar-nav-custom {
+      height: 100%;
+      width: 100%;
+      background-color: #c0c0c0;
+    }
 
-.upload select, .upload #analyzertimeout, .upload #functiontimeout, .upload button{
-  width: 100%;
-}
+    .siderbar-nav-custom span,
+    .navbar-heading-custom span {
+      padding-left: 8px;
+    }
 
-.buffer textarea, .buffer select, .buffer #analyzertimeout, .buffer #functiontimeout, .buffer button {
-  width: 100%;
-}
+    .navbar{
+      padding: 0 0 0 0;
+      margin: 0 0 0 0;
+      border-radius: 0px;
+    }
 
-.buffer textarea{
-  text-align: left;
-}
+    .wrapper-col-content-cus .container-fluid{
+      padding: 20px 20px 20px 20px;
+    }
 
-.options *{
-  width: 100%;
-}
+    @media (max-width: 768px) {
 
-.options select{
-  height: 150px;
-}
+      .siderbar-nav-custom li a{
+        font-size: 0 !important;    
+      }
 
-.options input, .options button{
-  padding: 10px 0 10px 0;
-}
+      .siderbar-nav-custom li a i{
+        font-size: 16px !important;    
+      }
 
-.row {
-    margin: 0 0 0 0;
-}
+      .wrapper-col-sidebar {
+        max-width: 48px;
+      }
 
+      .wrapper-col-sidebar .nav-link span {
+        position: absolute;
+        opacity: 0;
+      }
+    }
 
-.light_yellow {
-  background-color: #FFFF99 !important;
-}
+    @media (max-width: 576px) {
+      .wrapper-col-sidebar {
+        max-width: 0;
+        overflow-x: hidden;
+      }
+    }
 
-.light_green {
-  background-color: #7CDA7C !important;
-}
+    .wrapper {
+      height: calc(100vh - 60px);
+    }
 
-.light_red {
-  background-color: #ff4d4d !important;
-}
+    .navbar-cus {
+      padding: 0;
+      height: 60px;
+    }
 
-.light_blue {
-  background-color: #87CEEB !important;
-}
+    /*color of nabnar items*/
+    .default-navbar a {
+      color: #fff !important;
+    }
 
-.table tr:hover td {
-    background: none repeat scroll 0 0 #DCDCDC;
-}
+    /*color of navbar background*/
+    .navbar-cus {
+      background-color: #313a46 !important;
+    }
 
-.intro {
-  width: 100%;
-  font-family: monospace;
-}
+    .navbar-heading-custom {
+      background-color: #313a46 !important;
+      height: 100%;
 
-.intro code *{
-  width: 100%;
-  font-family: monospace;
-}
+    }
+    .navbar-heading-custom .nav{
+      color: black;
+      position: relative;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
 
-pre {
-  font-family: monospace !important;
-  white-space: pre;
-}
+    .navbar-heading-custom .navbar-cus a{
+      color: black !important
+    }
+
+    .wrapper-col-content-cus {
+      height: 100%;
+      overflow: auto;
+      width: 100%;
+    }
+
+    .siderbar-nav-custom a{
+      color: #000;
+      outline: 0 !important;
+    }
+
+    .active {
+      color: #206BA4 !important;
+      box-shadow: inset 5px 0 0 0 #d40000;
+      background-color: #fff !important; 
+    }
+
+    .navbar-heading-custom {
+      width: 150px;
+    }
+
+    .left-padding {
+      padding-left: 10px;
+    }
 
 .card {
   margin: 0 auto;
-  border: 1px solid #DCDCDC; 
-  max-width: 900px;
-  border-radius: 5px;
+  border: 1px solid #c0c0c0; 
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  margin: 5px 5px 5px 5px;
 }
 
 .card-header {
-  background-color: #e7e7e7;
+  background-color: #c0c0c0;
   font-size: 12px;
   font-weight: bold;
   padding: 10px 10px 10px 10px;
 }
 
 .card-body {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 20px 20px 20px 20px;
   flex-direction: column;
 }
 
-.paddingtopandbottom {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.center-text{
+  text-align: center;
 }
 
-.navbar * {
-  background-color: #313a46 !important;
-  color: #ffffff !important;
+.width100 .form-group {
+  margin: 0 0 0 0;
 }
 
-.navbar-nav > .active a{
-    color: #313a46 !important;
+.width100 .form-group *{
+  width: 100%
 }
 
-.navbar-toggle .icon-bar {
-    background-color: #ffffff !important;
+.width100 .form-group > *{
+  margin-bottom: 20px !important;
+}
+
+.width100 .form-group > :last-child{
+  margin-bottom: 0px !important;
+}
+
+.vertical-center {
+  min-height: calc(100% - 60px);
+  min-height: calc(100vh - 60px);
+  align-items: center;
+  display: flex;
+}
+
+.col-center{
+    margin: 0 auto;
+    float: none;
+}
+
+ul.nav a:hover { 
+  background-color: transparent; !important; 
+}
+
+.pre-class{
+  padding: 0 0 0 0;
+  background-color: transparent;
+  border: none;
+}
+
+.alert {
+    left: 50%;
+    bottom: 0;
+    position: fixed;
+    transform: translateX(-50%);
+    z-index: 99999;
 }
 
 </style>
@@ -152,3 +232,59 @@ pre {
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 {% endblock %}
+    {% block page_body %}
+    <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">
+      <nav class="navbar navbar-expand bg-primary navbar-cus" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          {% if current_user.is_authenticated %}
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% endif %}
+          {% block brand %}
+          <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
+          {% endblock %}
+        </div>
+        <!-- navbar content -->
+        <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+          {% block menu_links %}
+          <ul class="nav navbar-nav navbar-right">
+            {{ layout.menu_links() }}
+          </ul>
+        </div>
+      </nav>
+
+      {# store the jinja2 context for form_rules rendering logic #}
+      {% set render_ctx = h.resolve_ctx() %}
+
+    <div class="container-fluid wrapper">
+      <div class="row wrapper-row-cus">
+        {% if current_user.is_authenticated %}
+        <div class="col d-md-flex p-0 wrapper-col-sidebar">
+          {% block main_menu %}
+          <ul class="nav flex-column flex-nowrap siderbar-nav-custom">
+            {{ layout.menu() }}
+          </ul>
+          {% endblock %}
+        </div>
+        {% endif %}
+        <div class="col pt-2 wrapper-col-content-cus">
+                {% block messages %}
+                {{ layout.messages() }}
+                {% endblock %}
+          <div class="container-fluid">
+                      {% block body %}
+                      {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+          {% endblock %}
+          {% block access_control %}
+          {% endblock %}
+    </div>
+    {% endblock %}

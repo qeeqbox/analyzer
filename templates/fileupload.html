@@ -1,44 +1,110 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="row fluid">
-    <div class="col-md-6 center-block upload">
+<div class="col-lg-4">
+<div class="card">
+  <div class="card-header">
+    Upload file/files
+  </div>
+  <div class="card-body width100">
         <img style="max-width: 100%; height: auto;" src="/static/filefind.png">
         <form method="POST" action="" enctype="multipart/form-data">
-            <div class="form-group">
+            <div class="form-group center-text">
             {% for f in form if f.type != 'CSRFTokenField' %}
             {% if f.label.text == "File" %}
             {{ f }}
             {% endif %}
             {% endfor %}
-            </div>
-            <div class="form-group">
             {% for f in form if f.type != 'CSRFTokenField' %}
             {% if f.label.text != "File" and f.label.text != "Analyzertimeout" and f.label.text != "Functiontimeout" %}
             {{ f }}
             {% endif %}
             {% endfor %}
-            </div>
-            <div class="form-group">
             {% for f in form if f.type != 'CSRFTokenField' %}
             {% if f.label.text == "Analyzertimeout" %}
             {{ f }}
             {% endif %}
             {% endfor %}
-            </div>
-            <div class="form-group">
             {% for f in form if f.type != 'CSRFTokenField' %}
             {% if f.label.text == "Functiontimeout" %}
             {{ f }}
             {% endif %}
             {% endfor %}
-            </div>
-            <div class="form-group">
-            <button class="btn" type="submit">Upload</button>
+            <button class="btn" type="submit">Analyze</button>
             </div>
 			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
 </div>
+</div>
+<div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        Switches
+      </div>
+      <div class="card-body width100">
+        <pre class="pre-class">
+Analysis switches:
+  --behavior            check with generic detections
+  --xref                get cross references
+  --yara                analyze with yara module (Disable this for big files)
+  --language            analyze words against english language
+  --mitre               map strings to mitre
+  --topurl              get urls and check them against top 10000
+  --ocr                 get all ocr text
+  --enc                 find encryptions
+  --cards               find credit cards
+  --creds               find credit cards
+  --patterns            find common patterns
+  --suspicious          find suspicious strings
+  --dga                 find Domain generation algorithms
+  --plugins             scan with external plugins
+  --visualize           visualize some artifacts
+  --flags               add countries flags to html
+  --icons               add executable icons to html
+  --worldmap            add world map to html
+  --spelling            force spelling check
+  --image               add similarity image to html
+  --full                analyze using all modules
+  --phishing            analyze phishing content
+  --uuid UUID           task id
+  --print_json          print output to terminal
+
+Force analysis switches:
+  --unicode             force extracting ascii
+  --bigfile             force analyze big files
+
+Whitelist switches:
+  --w_internal          find it in white list by internal name
+  --w_original          find it in white list by original name
+  --w_hash              find it in white list by hash
+  --w_words             check extracted words against whitelist
+  --w_all               find it in white list
+
+Output arguments and switches:
+  --output OUTPUT       path of output folder
+  --disk_dump_html      save html record to disk
+  --disk_dump_json      save json record to disk
+  --open                open the report in webbroswer
+
+Database options:
+  --db_result           save results to db (<16mg)
+  --db_dump_html        save html dump tp db
+  --db_dump_json        save json dump tp db
+
+Online multiscanner options:
+  --ms_all              check hash in different multiscanner platforms(require
+                        API keys)
+
+Analyzer settings:
+  --function_timeout FUNCTION_TIMEOUT
+                        function logic timeout
+  --analyzer_timeout ANALYZER_TIMEOUT
+                        analyzer logic timeout
+        </pre>
+      </div>
+    </div>
+</div>
+
 {% endblock body %}
 

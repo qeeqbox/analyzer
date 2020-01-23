@@ -1,10 +1,9 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="row">
     <div class="row">
       {% for key,value in stats.items() %}
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 paddingtopandbottom">
+        <div class="col-lg-4">
           <div class="card">
             <div class="card-header">
               {{ key }}
@@ -16,7 +15,6 @@
         </div>
       {% endfor %}
     </div>
-</div>
 {% endblock body %}
 
 

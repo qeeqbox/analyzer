@@ -204,8 +204,8 @@ class LogsView(ModelView):
             return redirect(url_for('admin.login_view', next=request.url))
 
 class LoginForm(form.Form):
-    login = fields.StringField(validators=[validators.required()])
-    password = fields.PasswordField(validators=[validators.required()])
+    login = fields.StringField(render_kw={"placeholder": "Username"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password"})
     def validate_login(self, field):
         user = self.get_user()  #fix AttributeError: 'NoneType' object has no attribute 'password'
         if user != None:
@@ -216,8 +216,8 @@ class LoginForm(form.Form):
         return User.objects(login=self.login.data).first()
 
 class RegistrationForm(form.Form):
-    login = fields.StringField()
-    password = fields.PasswordField()
+    login = fields.StringField(render_kw={"placeholder": "Username"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password"})
 
     def validate_login(self, field):
         if User.objects(login=self.login.data):
@@ -246,6 +246,7 @@ class CustomAdminIndexView(AdminIndexView):
 
         self._template_args['form'] = form
         self._template_args['active'] = "Login"
+        self._template_args['intro'] = ""
         self._template_args['link'] = '<p>Register? <a href="{}">Click here</a></p>'.format(url_for('.register_view'))
         return super(CustomAdminIndexView, self).index()
 
@@ -262,13 +263,17 @@ class CustomAdminIndexView(AdminIndexView):
 
         self._template_args['form'] = form
         self._template_args['active'] = "Register"
-        self._template_args['link'] = '*Please do not enter a used username or password<p>Login? <a href="{}">Click here</a></p>'.format(url_for('.login_view'))
+        self._template_args['intro'] = ""
+        self._template_args['link'] = '*Please do not enter a used username or password<p><p>Login? <a href="{}">Click here</a></p>'.format(url_for('.login_view'))
         return super(CustomAdminIndexView, self).index()
 
     @expose('/logout/')
     def logout_view(self):
         logout_user()
         return redirect(url_for('.index'))
+
+    def is_visible(self):
+        return False
 
 class UploadForm(form.Form):
     choices = fields.SelectMultipleField('Assigned', choices=switches)
@@ -476,19 +481,19 @@ for cls in HTTPException.__subclasses__():
  
 #change admin wiht / -> CustomAdminIndexView url='/'
 
-admin = Admin(app, "@" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
+admin = Admin(app, "QB" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
 admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
-admin.add_view(CustomStatsView(name="Stats",endpoint='stats'))
-admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer'))
-admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload'))
-admin.add_view(UserView(User))
-admin.add_view(FilesView(Files))
-admin.add_view(QueueView(Jobs))
-admin.add_view(ReportsView(Reports))
-admin.add_view(LogsView(Logs))
+admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
+admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit'))
+admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload'))
+admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
+admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
+admin.add_view(QueueView(Jobs, menu_icon_type='glyph', menu_icon_value='glyphicon-tasks'))
+admin.add_view(ReportsView(Reports, menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt'))
+admin.add_view(LogsView(Logs, menu_icon_type='glyph', menu_icon_value='glyphicon-alert'))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)

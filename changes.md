@@ -1,3 +1,6 @@
+#### 2020.V.02.13
+- Added custom template
+
 #### 2020.V.02.12
 - Added custom timeout for analyzer and logics
 - Added custom settings
