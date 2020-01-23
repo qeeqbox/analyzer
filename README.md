@@ -3,7 +3,7 @@
 
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
-## Falt Web Interface
+## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/webinterfacenew.gif" style="width:100%;"/>
 
 ## CLI Interface
