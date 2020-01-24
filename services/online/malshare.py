@@ -25,7 +25,7 @@ class MalShare:
         if self.api != "":
             return dumps(get("{}&action=details&hash={}".format(self.link,hash),verify=False).json(),indent=4)
         else:
-            return "#Please add your MalShare api key in {} #To get an api key and secret visit {}".format(self.file,"https://malshare.com/doc.php")
+            return "#Please add your MalShare api key in {} #To get an api key visit {}".format(self.file,"https://malshare.com/doc.php")
 
     @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from MalShare")
     def get_file(self,hash) -> bool:
