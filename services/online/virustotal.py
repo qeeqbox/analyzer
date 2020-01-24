@@ -17,6 +17,6 @@ class VirusTotal:
         if self.api != "":
             return dumps(get("{}/file/report".format(self.link),params=parameters).json(),indent=4)
         else:
-            return "#Please add your VirusTotal api key in {} #To get an api key and secret visit {}".format(self.file,"https://developers.virustotal.com/reference#getting-started")
+            return "#Please add your VirusTotal api key in {} #To get an api key visit {}".format(self.file,"https://developers.virustotal.com/reference#getting-started")
 
 #print(virustotal().get_hash_details("63c29e8b364b208c806e8687c57c82f4ca10c359"))
