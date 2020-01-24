@@ -1404,6 +1404,7 @@ condition:
     $1 at pe.entry_point
 }
 
+/*
 rule Armadillo_v1_71_Detecton_1
 {
 meta:
@@ -1413,6 +1414,7 @@ strings:
 condition:
     $1
 }
+*/
 
 rule Armadillo_v1_72_v1_73_Detecton_1
 {
@@ -1554,6 +1556,7 @@ condition:
     $1 at pe.entry_point
 }
 
+/*
 rule Armadillo_v1_xx_v2_xx_Detecton_1
 {
 meta:
@@ -1563,6 +1566,7 @@ strings:
 condition:
     $1 at pe.entry_point
 }
+*/
 
 rule Armadillo_v2_00_Detecton_1
 {
