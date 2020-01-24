@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.13"
+__V__ = "2020.V.02.14"
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -139,7 +139,7 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
-        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/cmd.exe --full --disk_dump_html --open")
+        self.do_analyze("--file /home/a8b2bd81cf1e/malware/unicode.msg --full --disk_dump_html --open")
 
     def help_analyze(self):
         self._analyze_parser.print_help()

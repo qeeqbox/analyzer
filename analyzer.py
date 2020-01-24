@@ -10,6 +10,7 @@ from .modules.apkparser import ApkParser
 from .modules.blackberry import BBParser
 from .modules.readpackets import ReadPackets
 from .modules.emailparser import EmailParser
+from .modules.msgparser import MSGParser
 from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
 from .modules.msparser import MSParser
@@ -51,6 +52,7 @@ class Analyzer:
         self.yaraparser = YaraParser()
         self.readpackets = ReadPackets(QBWafDetect)
         self.emailparser = EmailParser()
+        self.msgparser = MSGParser()
         self.qbbehavior = QBBehavior()
         self.qbd3generator = QBD3generator()
         self.qbocrdetect = QBOCRDetect()
@@ -116,6 +118,8 @@ class Analyzer:
             self.blackberry.analyze(data)
         elif self.emailparser.check_sig(data):
             self.emailparser.analyze(data,parsed)
+        elif self.msgparser.check_sig(data):
+            self.msgparser.analyze(data,parsed)
         elif self.readpackets.check_sig(data):
             self.readpackets.analyze(data)
             if parsed.dga or parsed.full:
