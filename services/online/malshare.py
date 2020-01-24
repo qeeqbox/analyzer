@@ -6,7 +6,8 @@ from json import load,dumps
 
 class MalShare:
     @verbose(True,verbose_flag,verbose_timeout,"Starting MalShare module")
-    def __init__(self,tokens_path):
+    def __init__(self,tokens_path,file):
+        self.file = file
         with open(tokens_path,"r") as f:
             tokens = load(f)
             self.api = tokens["malshare_key"]
@@ -21,7 +22,10 @@ class MalShare:
 
     @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from MalShare")
     def get_hash_details(self,hash) -> str:
-        return dumps(get("{}&action=details&hash={}".format(self.link,hash),verify=False).json(),indent=4)
+        if self.api != "":
+            return dumps(get("{}&action=details&hash={}".format(self.link,hash),verify=False).json(),indent=4)
+        else:
+            return "#Please add your MalShare api key in {} #To get an api key and secret visit {}".format(self.file,"https://malshare.com/doc.php")
 
     @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from MalShare")
     def get_file(self,hash) -> bool:

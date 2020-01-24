@@ -9,11 +9,12 @@ from copy import deepcopy
 class OnlineMultiScanners:
     @verbose(True,verbose_flag,verbose_timeout,"Starting OnlineMultiScanners")
     def __init__(self):
-        tokens_path = path.abspath(path.join(path.dirname( __file__ ),'tokens.json'))
-        self.ha = HybridAnalysis(tokens_path)
-        self.ms = MalShare(tokens_path)
-        self.md = MetaDefender(tokens_path)
-        self.vt = VirusTotal(tokens_path)
+        tokens_full_path = path.abspath(path.join(path.dirname( __file__ ),'tokens.json'))
+        file = "analyzer" + tokens_full_path.split("analyzer")[1]
+        self.ha = HybridAnalysis(tokens_full_path,file)
+        self.ms = MalShare(tokens_full_path,file)
+        self.md = MetaDefender(tokens_full_path,file)
+        self.vt = VirusTotal(tokens_full_path,file)
         self.datastruct = {  "HybridAnalysis":"",
                              "MalShare":"",
                              "MetaDefender":"",
