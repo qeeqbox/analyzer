@@ -17,6 +17,6 @@ class MetaDefender:
         if self.api != "":
             return dumps(get("{}/hash/{}".format(self.link,hash),headers=self.headers).json(),indent=4)
         else:
-            return "#Please add your MetaDefender api key in {} #To get an api key and secret visit {}".format(self.file,"https://onlinehelp.opswat.com/vault/Generate_an_API_key_from_Metadefender_Core.html")
+            return "#Please add your MetaDefender api key in {} #To get an api key visit {}".format(self.file,"https://onlinehelp.opswat.com/vault/Generate_an_API_key_from_Metadefender_Core.html")
 
 #print(metadefender().get_hash_details("b300a83ad84f844f68d6ca4ca4c4f3823ac0239ea227e33147737db5e4cab782"))
