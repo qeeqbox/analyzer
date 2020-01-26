@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.14"
+__V__ = "2020.V.02.15"
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -139,8 +139,6 @@ class QBAnalyzer(Cmd):
         else:
             self.prompt = "(interactive) "
 
-        #self.do_analyze("--file /home/a8b2bd81cf1e/malware/unicode.msg --full --disk_dump_html --open")
-
     def help_analyze(self):
         self._analyze_parser.print_help()
         example = '''\nExamples:
@@ -196,11 +194,11 @@ class QBAnalyzer(Cmd):
             try:
                 setup_task_logger(parsed.uuid)
                 if parsed.file:
-                    self.analyzefile(parsed)
+                    self.analyze_file(parsed)
                 elif parsed.folder:
-                    self.analyzefolder(parsed)
+                    self.analyze_folder(parsed)
                 elif parsed.buffer:
-                    self.analyzebuffer(parsed)
+                    self.analyze_buffer(parsed)
             finally:
                 cancel_task_logger(parsed.uuid)
         else:
@@ -208,14 +206,14 @@ class QBAnalyzer(Cmd):
 
         log_string("Task {} (Finished)".format(parsed.uuid),"Green")
 
-    def analyzefile(self,parsed):
+    def analyze_file(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
             data = self.san.analyze(parsed)
             self.rep.check_output(data,parsed)
         else:
             log_string("Target File/dump is wrong..","Red")
 
-    def analyzefolder(self,parsed):
+    def analyze_folder(self,parsed):
         if path.exists(parsed.folder) and path.isdir(parsed.folder):
             for f in listdir(parsed.folder):
                 fullpath = path.join(parsed.folder, f)
@@ -227,7 +225,7 @@ class QBAnalyzer(Cmd):
         else:
             log_string("Target folder is wrong..","Red")
 
-    def analyzebuffer(self,parsed):
+    def analyze_buffer(self,parsed):
         if parsed.buffer != None:
             tempname = NamedTemporaryFile().name
             with open(tempname,"w") as tempfile:
@@ -237,6 +235,10 @@ class QBAnalyzer(Cmd):
             self.rep.check_output(data,parsed)
         else:
             log_string("Target buffer is empty..","Red")
+
+    def list_switches(self):
+        for x in vars(self._analyze_parser.parse_args("")):
+            print("(\'{}\',\'{}\'')".format(x,x))
 
     def do_exit(self, line):
         exit()

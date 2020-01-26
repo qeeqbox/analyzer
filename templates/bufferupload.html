@@ -11,24 +11,7 @@
             <form method="POST" action="" enctype="multipart/form-data">
                 <div class="form-group center-text">
                 {% for f in form if f.type != 'CSRFTokenField' %}
-                {% if f.label.text == "Buffer" %}
                 {{ f }}
-                {% endif %}
-                {% endfor %}
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                {% if f.label.text != "Buffer" and f.label.text != "Analyzertimeout" and f.label.text != "Functiontimeout" %}
-                {{ f }}
-                {% endif %}
-                {% endfor %}
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                {% if f.label.text == "Analyzertimeout" %}
-                {{ f }}
-                {% endif %}
-                {% endfor %}
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                {% if f.label.text == "Functiontimeout" %}
-                {{ f }}
-                {% endif %}
                 {% endfor %}
                 <button class="btn" type="submit">Analyze</button>
                 </div>
@@ -80,8 +63,7 @@ Whitelist switches:
   --w_all               find it in white list
 
 Online multiscanner options:
-  --ms_all              check hash in different multiscanner platforms(require
-                        API keys)
+  --ms_all              check hash in different multiscanner platforms(requires API keys)
 
         </pre>
       </div>

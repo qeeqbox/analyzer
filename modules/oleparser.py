@@ -5,15 +5,16 @@ from ..mics.funcs import get_words_multi_filesarray,get_words
 from re import DOTALL, MULTILINE, compile, finditer, sub
 from binascii import unhexlify
 from oletools.olevba3 import VBA_Parser
+from olefile import OleFileIO, isOleFile
 
-class MSParser:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting MSParser")
+class OLEParser:
+    @verbose(True,verbose_flag,verbose_timeout,"Starting OLEParser")
     def __init__(self):
         self.datastruct ={   "General":{},
                              "Objects":[],
                              "Macro":[],
                              "_General":{},
-                             "_Objects":["Len","Parsed"],
+                             "_Objects":["Name","Parsed"],
                              "_Macro":["Name","VBA"]}
 
     @verbose(True,verbose_flag,verbose_timeout,None)
@@ -44,6 +45,35 @@ class MSParser:
                     break
         return _List,_Listobjects
 
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def get_streams(self,dump) -> (list,list):
+        '''
+        get streams
+        '''
+        _Listobjects = []
+        _List = []
+        ole = OleFileIO(dump)
+        listdir = ole.listdir()
+        for direntry in listdir:
+            dirs = re.sub(r'[^\x20-\x7f]',r'', " : ".join(direntry))
+            tempdecoded = sub(br'[^\x20-\x7F]+',b'', ole.openstream(direntry).getvalue())
+            _Listobjects.append(tempdecoded)
+            _List.append({"Name":dirs,"Parsed":tempdecoded.decode("utf-8",errors="ignore")})
+        return _List,_Listobjects
+
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def get_general(self,data,f):
+        '''
+        Extract general info
+        '''
+        for k,v in OleFileIO(f).get_metadata().__dict__.items():
+            if v != None:
+                if type(v) == bytes:
+                    if len(v) > 0:
+                        data.update({k:v.decode("utf-8",errors="ignore")})
+                else:
+                    data.update({k:v})
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def extract_macros(self,path) -> list:
@@ -57,25 +87,29 @@ class MSParser:
         except:
             pass
         return List
-
+     
     @verbose(True,verbose_flag,verbose_timeout,None)
     def check_sig(self,data) -> bool:
         '''
-        check if mime is rtf
+        check if mime is ole
         '''
-        if "text/rtf" == data["Details"]["Properties"]["mime"] or data["Details"]["Properties"]["mime"].startswith("application/vnd.ms"):
-            return True
 
-    @verbose(True,verbose_flag,verbose_timeout,"Analyze MS file")
+        if isOleFile(data["Location"]["File"]):
+            return True
+        else:
+            return False
+
+    @verbose(True,verbose_flag,verbose_timeout,"Analyze OLE file")
     def analyze(self,data):
         '''
-        start analyzing exe logic, add descriptions and get words and wordsstripped from buffers 
+        start analyzing ole logic 
         '''
-        data["MS"]=self.datastruct
+        data["OLE"]=self.datastruct
         f = data["FilesDumps"][data["Location"]["File"]]
-        data["MS"]["Objects"],objects = self.get_objects(data,f)
-        data["MS"]["Macro"] = self.extract_macros(data["Location"]["File"])
-        data["MS"]["General"] = {"Objects":len(objects)}
+        self.get_general(data["OLE"]["General"],f)
+        data["OLE"]["Objects"],objects = self.get_streams(f)
+        data["OLE"]["Macro"] = self.extract_macros(data["Location"]["File"])
+        #data["OLE"]["Objects"],objects = self.get_objects(data,f)
         if len(objects) > 0:
             get_words_multi_filesarray(data,objects)
         else:

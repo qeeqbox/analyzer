@@ -22,6 +22,8 @@ from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
 from settings import json_settings
+from wtforms import SelectMultipleField
+from wtforms.widgets import ListWidget, CheckboxInput
 
 filename = "README.md"
 intromarkdown = ""
@@ -41,7 +43,7 @@ if intromarkdown == "":
     except:
         intromarkdown = ""
 
-switches = [(False, 'full'), (False, 'behavior'), (False, 'xref'), (False, 'yara'), (False, 'language'), (False, 'mitre'), (False, 'topurl'), (False, 'ocr'), (False, 'enc'), (False, 'cards'), (False, 'creds'), (False, 'patterns'), (False, 'suspicious'), (False, 'dga'), (False, 'plugins'), (False, 'visualize'), (False, 'flags'), (False, 'icons'), (False, 'worldmap'), (False, 'spelling'), (False, 'image'), (False, 'phishing'), (False, 'unicode'), (False, 'bigfile'), (False, 'w_internal'), (False, 'w_original'), (False, 'w_hash'), (False, 'w_words'), (False, 'w_all'), (False, 'disk_dump_html'), (False, 'disk_dump_json'), (False, 'open'), (False, 'print_json'), (False, 'db_result'), (False, 'db_dump_html'), (False, 'db_dump_json')]
+switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
 app = Flask(__name__)
 app.secret_key = uuid4().hex
@@ -275,14 +277,24 @@ class CustomAdminIndexView(AdminIndexView):
     def is_visible(self):
         return False
 
+class MultiCheckboxField(SelectMultipleField):
+    widget          = ListWidget(prefix_label=False)
+    option_widget   = CheckboxInput()
+
 class UploadForm(form.Form):
-    choices = fields.SelectMultipleField('Assigned', choices=switches)
+    choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
     analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
     functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
+    __order = ('file', 'choices', 'analyzertimeout','functiontimeout')
+    def __iter__(self):
+        fields = list(super(UploadForm, self).__iter__())
+        get_field = lambda fid: next((f for f in fields if f.id == fid))
+        return (get_field(fid) for fid in self.__order)
 
 class CustomViewUploadForm(BaseView):
     @expose('/', methods=['POST','GET'])
+
     def index(self):
         # handle user login
         form = UploadForm(request.form)
@@ -333,10 +345,15 @@ class CustomViewUploadForm(BaseView):
             return redirect(url_for('admin.login_view', next=request.url))
 
 class BufferForm(form.Form):
-    choices = fields.SelectMultipleField('Assigned', choices=switches)
+    choices = MultiCheckboxField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
     analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
     functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
+    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout')
+    def __iter__(self):
+        fields = list(super(BufferForm, self).__iter__())
+        get_field = lambda fid: next((f for f in fields if f.id == fid))
+        return (get_field(fid) for fid in self.__order)
 
 class CustomViewBufferForm(BaseView):
     @expose('/', methods=['POST','GET'])

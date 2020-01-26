@@ -4,6 +4,7 @@ from .hybridanalysis import HybridAnalysis
 from .malshare import MalShare
 from .metadefender import MetaDefender
 from .virustotal import VirusTotal
+from .alienvault import AlienVault
 from copy import deepcopy
 
 class OnlineMultiScanners:
@@ -15,14 +16,17 @@ class OnlineMultiScanners:
         self.ms = MalShare(tokens_full_path,file)
         self.md = MetaDefender(tokens_full_path,file)
         self.vt = VirusTotal(tokens_full_path,file)
+        self.av = AlienVault(tokens_full_path,file)
         self.datastruct = {  "HybridAnalysis":"",
                              "MalShare":"",
                              "MetaDefender":"",
                              "VirusTotal":"",
+                             "AlienVault":"",
                              "_____HybridAnalysis":{},
                              "_____MalShare":{},
                              "_____MetaDefender":{},
-                             "_____VirusTotal":{}}
+                             "_____VirusTotal":{},
+                             "_____AlienVault":{}}
 
     @verbose(True,verbose_flag,verbose_timeout,"Checking hash in online multiscanners services")
     def analyze(self,data,parsed):
@@ -31,3 +35,4 @@ class OnlineMultiScanners:
         data["ONLINEMULTISCANNERS"]["MalShare"] = self.ms.get_hash_details(data["Details"]["Properties"]["md5"])
         data["ONLINEMULTISCANNERS"]["MetaDefender"] = self.md.get_hash_details(data["Details"]["Properties"]["md5"])
         data["ONLINEMULTISCANNERS"]["VirusTotal"] = self.vt.get_hash_details(data["Details"]["Properties"]["md5"])
+        data["ONLINEMULTISCANNERS"]["AlienVault"] = self.av.get_hash_details(data["Details"]["Properties"]["md5"])

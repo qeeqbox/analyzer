@@ -146,7 +146,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Extract Text
     - Extract DDE
     - Macros extraction
-- MS (built-in and wrapper)
+- OLE (wrapper)
     - Number of objects
     - Object extraction
     - Macros extraction
@@ -168,6 +168,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - MalShare
     - MetaDefender
     - VirusTotal
+    - AlienVault
 
 ## Web api and interface
 - Testing or researching only

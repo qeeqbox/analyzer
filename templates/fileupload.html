@@ -10,26 +10,9 @@
         <img style="max-width: 100%; height: auto;" src="/static/filefind.png">
         <form method="POST" action="" enctype="multipart/form-data">
             <div class="form-group center-text">
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            {% if f.label.text == "File" %}
-            {{ f }}
-            {% endif %}
-            {% endfor %}
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            {% if f.label.text != "File" and f.label.text != "Analyzertimeout" and f.label.text != "Functiontimeout" %}
-            {{ f }}
-            {% endif %}
-            {% endfor %}
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            {% if f.label.text == "Analyzertimeout" %}
-            {{ f }}
-            {% endif %}
-            {% endfor %}
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            {% if f.label.text == "Functiontimeout" %}
-            {{ f }}
-            {% endif %}
-            {% endfor %}
+                {% for f in form if f.type != 'CSRFTokenField' %}
+                {{ f }}
+                {% endfor %}
             <button class="btn" type="submit">Analyze</button>
             </div>
 			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -80,8 +63,7 @@ Whitelist switches:
   --w_all               find it in white list
 
 Online multiscanner options:
-  --ms_all              check hash in different multiscanner platforms(require
-                        API keys)
+  --ms_all              check hash in different multiscanner platforms(requires API keys)
 
         </pre>
       </div>

@@ -13,8 +13,8 @@ from .modules.emailparser import EmailParser
 from .modules.msgparser import MSGParser
 from .modules.pdfparser import PDFParser
 from .modules.officex import Officex
-from .modules.msparser import MSParser
 from .modules.htmlparser import HTMLParser
+from .modules.oleparser import OLEParser
 from .yara.yaraparser import YaraParser
 from .intell.qblanguage import QBLanguage
 from .intell.qbsuspicious import QBSuspicious
@@ -59,7 +59,6 @@ class Analyzer:
         self.qburlsimilarity = QBURLSimilarity()
         self.pdfparser = PDFParser()
         self.officex = Officex()
-        self.msparser = MSParser()
         self.qbencryption = QBEncryption()
         self.qbcreditcards = QBCreditcards()
         self.qbpatterns = QBPatterns()
@@ -73,6 +72,7 @@ class Analyzer:
         self.qbwhitelist = QBWhitelist()
         self.htmlparser = HTMLParser()
         self.qbphising = QBPhishing()
+        self.oleparser = OLEParser()
         self.onlinemultiscanners = OnlineMultiScanners()
     
     @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer",extra="analyzer")
@@ -126,10 +126,10 @@ class Analyzer:
                 self.qbdga.analyze(data)
         elif self.officex.check_sig(data):
             self.officex.analyze(data)
-        elif self.msparser.check_sig(data):
-            self.msparser.analyze(data)
         elif self.htmlparser.check_sig(data):
             self.htmlparser.analyze(data)
+        elif self.oleparser.check_sig(data):
+            self.oleparser.analyze(data)
         else:
             self.qbfile.check_sig(data)
             if parsed.behavior or parsed.full:
