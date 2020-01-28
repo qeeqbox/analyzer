@@ -177,7 +177,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - &#9745; ~~Reduce file I/O~~
 - &#9745; ~~PDF module~~
 - &#9745; ~~RTF module~~
-- ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
+- &#9745; ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
 - &#9745; ~~HTML module~~
 - &#9745; ~~Refactoring modules v2~~
 - &#9745; ~~Converting some yara rules into individual modules (Requested by users)~~
