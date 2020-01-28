@@ -174,20 +174,20 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Dump json or html from mongodb database
 
 ## Roadmap
-- ~~Reduce file I/O~~
-- ~~PDF module~~
-- ~~RTF module~~
+- &#9745; ~~Reduce file I/O~~
+- &#9745; ~~PDF module~~
+- &#9745; ~~RTF module~~
 - ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
-- ~~HTML module~~
-- ~~Refactoring modules v2~~
-- ~~Converting some yara rules into individual modules (Requested by users)~~
-- ~~Whitelist (Requested by users)~~
-- ~~Switching to mongodb (Requested by users)~~
-- ~~Phishing module~~
-- ~~Web service and API~~
-- ~~Web interface (Requested by users)~~
-- ~~Curling some TIPs (Requested by users)~~
-- ~~MS office module~~
+- &#9745; ~~HTML module~~
+- &#9745; ~~Refactoring modules v2~~
+- &#9745; ~~Converting some yara rules into individual modules (Requested by users)~~
+- &#9745; ~~Whitelist (Requested by users)~~
+- &#9745; ~~Switching to mongodb (Requested by users)~~
+- &#9745; ~~Phishing module~~
+- &#9745; ~~Web service and API~~
+- &#9745; ~~Web interface (Requested by users)~~
+- &#9745; ~~Curling some TIPs (Requested by users)~~
+- &#9745; ~~MS office module~~
 - java analysis (Requested by users)
 - offline multiscanner (Requested by users)
 - Web detection
