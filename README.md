@@ -8,9 +8,6 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/webinterfacenew.gif" style="max-width:768px"/>
 
-## CLI Interface
-<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
-
 ## Output
 #### HTML Outputs
 - [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
@@ -236,3 +233,9 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 ## Disclaimer
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
 - Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
+
+## Other Licenses
+#### By using this framework, you are accepting the license terms of each package listed below:
+<pre style="font-family:Consolas,Monaco">
+python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
+</pre>
