@@ -1,15 +1,12 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/analyzerlogo.png"></p>
 
 #
-[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/ubuntu19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/Fedora31-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/docker19-passed-success.svg)](https://github.com/qeeqbox/analyzer/) [![Generic badge](https://img.shields.io/badge/kali-passed-success.svg)](https://github.com/qeeqbox/analyzer/)
+[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=ubuntu&query=$.ubuntu&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=kali&query=$.kali&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker&query=$.docker&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
 
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/webinterfacenew.gif" style="max-width:768px"/>
-
-## CLI Interface
-<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
 
 ## Output
 #### HTML Outputs
@@ -177,20 +174,20 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Dump json or html from mongodb database
 
 ## Roadmap
-- ~~Reduce file I/O~~
-- ~~PDF module~~
-- ~~RTF module~~
-- ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
-- ~~HTML module~~
-- ~~Refactoring modules v2~~
-- ~~Converting some yara rules into individual modules (Requested by users)~~
-- ~~Whitelist (Requested by users)~~
-- ~~Switching to mongodb (Requested by users)~~
-- ~~Phishing module~~
-- ~~Web service and API~~
-- ~~Web interface (Requested by users)~~
-- ~~Curling some TIPs (Requested by users)~~
-- ~~MS office module~~
+- &#9745; ~~Reduce file I/O~~
+- &#9745; ~~PDF module~~
+- &#9745; ~~RTF module~~
+- &#9745; ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
+- &#9745; ~~HTML module~~
+- &#9745; ~~Refactoring modules v2~~
+- &#9745; ~~Converting some yara rules into individual modules (Requested by users)~~
+- &#9745; ~~Whitelist (Requested by users)~~
+- &#9745; ~~Switching to mongodb (Requested by users)~~
+- &#9745; ~~Phishing module~~
+- &#9745; ~~Web service and API~~
+- &#9745; ~~Web interface (Requested by users)~~
+- &#9745; ~~Curling some TIPs (Requested by users)~~
+- &#9745; ~~MS office module~~
 - java analysis (Requested by users)
 - offline multiscanner (Requested by users)
 - Web detection
@@ -205,6 +202,8 @@ apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libja
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
 </pre>
 
+Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
+
 ## Running
 #### Run it as Web interface 
 <pre style="font-family:Consolas,Monaco">
@@ -214,25 +213,15 @@ docker-compose up --build
 https://127.0.0.1:8000/login/
 </pre>
 
-#### Run it as CLI
-<pre style="font-family:Consolas,Monaco">
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-chmod +x initdb.sh
-chmod +x install.sh
-./install.sh ubuntu
-service mongodb start
-./initdb.sh
-cd ..
-python3 -m analyzer.cli --interactive --local
-</pre>
-
-## Other use
-If you are interested in adopting some features in your project, please mention this source somewhere in your project.
-
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
 
-## Disclaimer
+## Other Licenses
+#### By using this framework, you are accepting the license terms of each package listed below:
+<pre style="font-family:Consolas,Monaco">
+python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
+</pre>
+
+## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
-- Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
+- If you are interested in adopting some features in your project, please mention this source somewhere in your project
