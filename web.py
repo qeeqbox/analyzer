@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, flash, jsonify, redirect, request, url_for, render_template
 from flask_mongoengine import MongoEngine
 from wtforms import form, fields, validators
 from flask_admin import AdminIndexView, Admin, expose, BaseView
@@ -7,11 +7,11 @@ from flask_admin.babel import gettext
 from flask_admin.contrib.mongoengine import ModelView
 from flask_login import LoginManager,current_user,login_user,logout_user
 from flask_bcrypt import Bcrypt
+from werkzeug.exceptions import HTTPException
 from werkzeug import secure_filename
 from uuid import uuid4
 from tempfile import gettempdir
 from os import path, getpid
-from werkzeug.exceptions import HTTPException
 from datetime import datetime
 from os import path
 from flask_wtf.csrf import CSRFProtect
@@ -24,6 +24,8 @@ from shutil import disk_usage
 from settings import json_settings
 from wtforms import SelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
+from bson.objectid import ObjectId
+from flask_socketio import SocketIO
 
 filename = "README.md"
 intromarkdown = ""
@@ -47,17 +49,21 @@ switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yar
 
 app = Flask(__name__)
 app.secret_key = uuid4().hex
+socket_io = SocketIO(app)
+
+conn = MongoClient('mongodb://mongodb:27017/')
+
 app.config['MONGODB_SETTINGS'] = [
         {
          "ALIAS": "default",
          "DB":    'webinterface',
-         "HOST": 'mongodb',
+         "HOST": json_settings["mongo_settings_host_docker"],
          "PORT": 27017
         },
         {
          "ALIAS": "jobsqueue",
          "DB": 'jobsqueue',
-         "HOST": 'mongodb',
+         "HOST": json_settings["mongo_settings_host_docker"],
          "PORT": 27017
         }]
 
@@ -69,6 +75,15 @@ login_manager.setup_app(app)
 csrf = CSRFProtect()
 csrf.init_app(app)
 Markdown(app)
+
+def find_items(db,col,items):
+    _dict = {}
+    for item in items:
+        if item != '':
+            ret = conn[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
+            if ret != None:
+                _dict.update({item:ret})
+    return _dict
 
 def convert_size(s):
     for u in ['B','KB','MB','GB']:
@@ -131,6 +146,7 @@ class Jobs(db.Document):
     meta = {"db_alias": "jobsqueue",'strict': False}
 
 class QueueView(ModelView):
+    list_template = 'list.html'
     can_create = False
     can_delete = False
     can_edit = True
@@ -391,7 +407,6 @@ class CustomViewBufferForm(BaseView):
 
 def get_stats():
     #lazy check stats
-    conn = MongoClient('mongodb://mongodb:27017/')
     stats = {}
     try:
         coll = "jobs"
@@ -474,6 +489,27 @@ class CustomStatsView(BaseView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+class CustomDBupdate(BaseView):
+    @expose('/', methods=['POST','GET'])
+    def index(self):
+        if request.json:
+            json_content = request.get_json(silent=True)
+            items = find_items("jobsqueue","jobs",json_content)
+            if items != None:
+                return jsonify(items)
+        else:
+            return jsonify({"Error":"Something wrong"})
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+    
+    def is_visible(self):
+        return False
+
 class CustomMenuLink(MenuLink):
     def is_accessible(self):
         return current_user.is_authenticated
@@ -495,8 +531,6 @@ def error_handler(error):
 
 for cls in HTTPException.__subclasses__():
     app.register_error_handler(cls, error_handler)
- 
-#change admin wiht / -> CustomAdminIndexView url='/'
 
 admin = Admin(app, "QB" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
@@ -504,6 +538,7 @@ admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeq
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
 admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
 admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
+admin.add_view(CustomDBupdate(name="DBinfo",endpoint='dbinfo',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit'))
 admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload'))
 admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))

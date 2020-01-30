@@ -202,6 +202,8 @@ apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libja
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
 </pre>
 
+Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
+
 ## Running
 #### Run it as Web interface 
 <pre style="font-family:Consolas,Monaco">
@@ -211,31 +213,15 @@ docker-compose up --build
 https://127.0.0.1:8000/login/
 </pre>
 
-#### Run it as CLI
-<pre style="font-family:Consolas,Monaco">
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-chmod +x initdb.sh
-chmod +x install.sh
-./install.sh ubuntu
-service mongodb start
-./initdb.sh
-cd ..
-python3 -m analyzer.cli --interactive --local
-</pre>
-
-## Other use
-If you are interested in adopting some features in your project, please mention this source somewhere in your project.
-
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
-
-## Disclaimer
-- This project is NOT an anti malware project and does not quarantine or delete malicious files
-- Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
 
 ## Other Licenses
 #### By using this framework, you are accepting the license terms of each package listed below:
 <pre style="font-family:Consolas,Monaco">
 python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
 </pre>
+
+## Disclaimer\Notes
+- This project is NOT an anti malware project and does not quarantine or delete malicious files
+- If you are interested in adopting some features in your project, please mention this source somewhere in your project
