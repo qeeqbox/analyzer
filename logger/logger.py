@@ -1,12 +1,9 @@
 __G__ = "(G)bd249ce4"
 
 from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
-from sys import stdout
 from os import path
 from _thread import interrupt_main
-from logging import DEBUG, ERROR, Formatter, StreamHandler, WARNING, getLogger, handlers
 from sys import stdout,stderr
-from os import path
 from threading import Timer
 from datetime import datetime
 from ..settings import json_settings

@@ -263,9 +263,10 @@ ul.nav a:hover {
 
 
 </style>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<script>
+  var csrf_token = '{{ csrf_token() }}'
+</script>
 {% endblock %}
     {% block page_body %}
     <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">

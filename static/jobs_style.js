@@ -1,9 +1,41 @@
-$(".col-status").each(function() {
-	if ($(this).text().indexOf('wait') >= 0){$(this).closest("tr").attr("class","light_yellow");}
-	else if ($(this).text().indexOf('done') >= 0){$(this).closest("tr").attr("class","light_green");}
-	else if ($(this).text().indexOf('work') >= 0){$(this).closest("tr").attr("class","light_blue");}
-	else if ($(this).text().indexOf('dumy') >= 0){$(this).closest("tr").attr("class","light_red");}
-})
+(function auto_update(){
+    var arr = [];
+    $(".table tr").each(function() {
+        arr.push(this.id);
+    });
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": csrf_token }
+    });
+    $.ajax({
+        type: "POST",
+        url: "/dbinfo",
+        data: JSON.stringify(arr),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+          items = JSON.parse(JSON.stringify(data));
+          for (var i in items) {
+           for (var ii in items[i]) {
+            if (typeof items[i][ii]==='object'){$("#"+i+ii).text(JSON.stringify(items[i][ii]).split(",").join(", "));}
+            else{$("#"+i+ii).text(items[i][ii]);}
+            }
+          }
+            Success = true;
+        },
+        error: function (data) {
+            Success = false;
+        }
+    });
+
+    $(".col-status").each(function() {
+      if ($(this).text().indexOf('wait') >= 0){$(this).closest("tr").attr("class","light_yellow");}
+      else if ($(this).text().indexOf('done') >= 0){$(this).closest("tr").attr("class","light_green");}
+      else if ($(this).text().indexOf('work') >= 0){$(this).closest("tr").attr("class","light_blue");}
+      else if ($(this).text().indexOf('dumy') >= 0){$(this).closest("tr").attr("class","light_red");}
+    })
+
+    setTimeout(auto_update, 3000)
+})();
 
 $('#settings').click(function() {
   maxw = $(".wrapper-col-sidebar").css("max-width");
