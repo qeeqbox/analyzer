@@ -12,8 +12,7 @@
         data: JSON.stringify(arr),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (data) {
-          items = JSON.parse(JSON.stringify(data));
+        success: function (items) {
           for (var i in items) {
            for (var ii in items[i]) {
             if (typeof items[i][ii]==='object'){$("#"+i+ii).text(JSON.stringify(items[i][ii]).split(",").join(", "));}

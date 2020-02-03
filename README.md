@@ -167,11 +167,10 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - VirusTotal
     - AlienVault
 
-## Web api and interface
-- Testing or researching only
-- Track tasks by uuid
-- https (auto generate self signed certificate)
-- Dump json or html from mongodb database
+## Flat web interface features
+- custom login-logout
+- custom task queue (mongodb)
+- dynamic web updates with ajax
 
 ## Roadmap
 - &#9745; ~~Reduce file I/O~~

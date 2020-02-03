@@ -1,3 +1,7 @@
+#### 2020.V.02.16
+- Fixed few bugs in flat template
+- Improved web backend settings
+
 #### 2020.V.02.15
 - Fixed flat template
 - Added ole wrapper

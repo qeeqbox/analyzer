@@ -21,11 +21,11 @@ from pymongo import MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings
+from settings import json_settings, mongodb_settings
 from wtforms import SelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
-from flask_socketio import SocketIO
+from json import JSONEncoder, dumps
 
 filename = "README.md"
 intromarkdown = ""
@@ -48,25 +48,11 @@ if intromarkdown == "":
 switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
 app = Flask(__name__)
-app.secret_key = uuid4().hex
-socket_io = SocketIO(app)
+app.secret_key = "63c98a9cd54036c4a1505357ba1b5d4af5bbdfa26c477a43bc23ee9ed88fb874673b1fde50026533b6f9a41cfa0cd98c1132a0c8961a8432de708b193aaf979c"
+#app.secret_key = uuid4().hex fix workers
 
-conn = MongoClient('mongodb://mongodb:27017/')
-
-app.config['MONGODB_SETTINGS'] = [
-        {
-         "ALIAS": "default",
-         "DB":    'webinterface',
-         "HOST": json_settings["mongo_settings_host_docker"],
-         "PORT": 27017
-        },
-        {
-         "ALIAS": "jobsqueue",
-         "DB": 'jobsqueue',
-         "HOST": json_settings["mongo_settings_host_docker"],
-         "PORT": 27017
-        }]
-
+conn = MongoClient(json_settings["mongo_settings_docker"])
+app.config['MONGODB_SETTINGS'] = mongodb_settings
 db = MongoEngine()
 db.init_app(app)
 bcrypt = Bcrypt(app)
@@ -224,6 +210,7 @@ class LogsView(ModelView):
 class LoginForm(form.Form):
     login = fields.StringField(render_kw={"placeholder": "Username"})
     password = fields.PasswordField(render_kw={"placeholder": "Password"})
+
     def validate_login(self, field):
         user = self.get_user()  #fix AttributeError: 'NoneType' object has no attribute 'password'
         if user != None:
@@ -300,9 +287,10 @@ class MultiCheckboxField(SelectMultipleField):
 class UploadForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
-    analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
-    functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
-    __order = ('file', 'choices', 'analyzertimeout','functiontimeout')
+    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=(json_settings["analyzer_timeout"]),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=(json_settings["function_timeout"]),coerce=int)
+    submit = fields.SubmitField(render_kw={"class":"btn"}) 
+    __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
         fields = list(super(UploadForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
@@ -363,9 +351,10 @@ class CustomViewUploadForm(BaseView):
 class BufferForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
-    analyzertimeout = fields.TextField(render_kw={"placeholder": "Individual task timeout Sec e.g. 60, default {}".format(json_settings["analyzer_timeout"])})
-    functiontimeout = fields.TextField(render_kw={"placeholder": "Individual logic timeout Sec e.g 30, default {}".format(json_settings["function_timeout"])})
-    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout')
+    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=int(json_settings["analyzer_timeout"]),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=int(json_settings["function_timeout"]),coerce=int)
+    submit = fields.SubmitField(render_kw={"class":"btn"})
+    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
         fields = list(super(BufferForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
@@ -478,7 +467,7 @@ def get_stats():
     return stats
 
 class CustomStatsView(BaseView):
-    @expose('/', methods=['POST','GET'])
+    @expose('/', methods=['GET'])
     def index(self):
         return self.render("stats.html", stats = get_stats())
 
@@ -489,14 +478,20 @@ class CustomStatsView(BaseView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+class TimeEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.astimezone().strftime("%Y-%m-%d %H:%M:%S.%f")
+        return JSONEncoder.default(self, obj)
+
 class CustomDBupdate(BaseView):
-    @expose('/', methods=['POST','GET'])
+    @expose('/', methods=['POST'])
     def index(self):
         if request.json:
             json_content = request.get_json(silent=True)
             items = find_items("jobsqueue","jobs",json_content)
             if items != None:
-                return jsonify(items)
+                return dumps(items, cls=TimeEncoder)
         else:
             return jsonify({"Error":"Something wrong"})
 

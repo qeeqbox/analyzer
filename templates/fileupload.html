@@ -13,9 +13,8 @@
                 {% for f in form if f.type != 'CSRFTokenField' %}
                 {{ f }}
                 {% endfor %}
-            <button class="btn" type="submit">Analyze</button>
             </div>
-			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+			  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         </form>
     </div>
 </div>
