@@ -9,21 +9,25 @@ services:
       - "5001:80"
     depends_on:
       - mongodb
+    environment:
+      - analyzer_env=docker
     networks:
       - backend
       - frontend
     volumes:
-      - sharedfolder:/tmp
+      - sharedfolder:/tmp/
 
   website:
     build:
       context: .
       dockerfile: ./webinterface-Dockerfile
-    command: bash -c "python3 start.py && /usr/local/bin/gunicorn --log-level=critical --worker-class=gevent --worker-connections=1000 --workers=1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 web:app"
+    command: bash -c "python3 start.py --docker && /usr/local/bin/gunicorn --log-level=critical --worker-class=gevent --worker-connections=1000 --workers=1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 web:app"
     ports:
       - "8000:8000"
     depends_on:
       - mongodb
+    environment:
+      - analyzer_env=docker
     networks:
       - frontend
       - backend

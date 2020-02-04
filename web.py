@@ -21,11 +21,12 @@ from pymongo import MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings, mongodb_settings
+from settings import json_settings, mongodb_settings_docker, mongodb_settings_local
 from wtforms import SelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
+from os import path,listdir,environ
 
 filename = "README.md"
 intromarkdown = ""
@@ -49,10 +50,17 @@ switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yar
 
 app = Flask(__name__)
 app.secret_key = "63c98a9cd54036c4a1505357ba1b5d4af5bbdfa26c477a43bc23ee9ed88fb874673b1fde50026533b6f9a41cfa0cd98c1132a0c8961a8432de708b193aaf979c"
-#app.secret_key = uuid4().hex fix workers
+conn = None
 
-conn = MongoClient(json_settings["mongo_settings_docker"])
-app.config['MONGODB_SETTINGS'] = mongodb_settings
+if environ["analyzer_env"] == "docker":
+    conn = MongoClient(json_settings["mongo_settings_docker"])
+    app.config['MONGODB_SETTINGS'] = mongodb_settings_docker
+elif environ["analyzer_env"] == "local":
+    conn = MongoClient(json_settings["mongo_settings_local"])
+    app.config['MONGODB_SETTINGS'] = mongodb_settings_local
+else:
+    exit()
+
 db = MongoEngine()
 db.init_app(app)
 bcrypt = Bcrypt(app)
@@ -287,8 +295,8 @@ class MultiCheckboxField(SelectMultipleField):
 class UploadForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
-    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=(json_settings["analyzer_timeout"]),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=(json_settings["function_timeout"]),coerce=int)
+    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(json_settings["analyzer_timeout"]),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '60sec logic timeout'),(100,'1:40min logic timeout')],default=(json_settings["function_timeout"]),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"}) 
     __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
@@ -298,7 +306,6 @@ class UploadForm(form.Form):
 
 class CustomViewUploadForm(BaseView):
     @expose('/', methods=['POST','GET'])
-
     def index(self):
         # handle user login
         form = UploadForm(request.form)

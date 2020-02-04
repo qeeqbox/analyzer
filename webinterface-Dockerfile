@@ -1,5 +1,5 @@
 FROM python:3
-RUN apt-get update && apt-get install -y supervisor curl
-RUN pip install requests flask supervisor-stdout werkzeug gunicorn flask_mongoengine flask_admin flask_login flask_bcrypt pyOpenSSL Flask-Markdown psutil gevent
+RUN apt-get update && apt-get install -y curl
+RUN pip install requests flask werkzeug gunicorn flask_mongoengine flask_admin flask_login flask_bcrypt pyOpenSSL Flask-Markdown psutil gevent
 WORKDIR /analyzer
 ADD ./ .
