@@ -22,7 +22,7 @@ from pymongo import ASCENDING, MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings, mongodb_settings_docker, mongodb_settings_local
+from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,jobsqueuedb,meta_users_settings,meta_jobs_settings,meta_files_settings, meta_reports_settings, meta_logs_settings
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
@@ -75,15 +75,6 @@ class Namespace:
     def __init__(self, kwargs):
         self.__dict__.update(kwargs)
 
-def find_items_without_coll(db,col,items):
-    _dict = {}
-    for item in items:
-        if item != '':
-            ret = conn[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
-            if ret != None:
-                _dict.update({item:ret})
-    return _dict
-
 def convert_size(s):
     for u in ['B','KB','MB','GB']:
         if s < 1024.0:
@@ -99,7 +90,7 @@ def load_user(user_id):
 class User(db.Document):
     login = db.StringField(max_length=80, unique=True)
     password = db.StringField(max_length=64)
-    meta = {'db_alias':'default','collection': 'users','strict': False}
+    meta = meta_users_settings
 
     @property
     def is_authenticated(self):
@@ -138,7 +129,7 @@ class Jobs(db.Document):
     started = db.DateTimeField()
     finished = db.DateTimeField()
     data = db.DictField()
-    meta = {"db_alias": "jobsqueue",'strict': False}
+    meta = meta_jobs_settings
 
 class QueueView(ModelView):
     list_template = 'list.html'
@@ -159,7 +150,7 @@ class Files(db.Document):
     uuid = db.StringField()
     line = db.DictField()
     file = db.FileField()
-    meta = {'db_alias':'default','collection': 'files','strict': False}
+    meta = meta_files_settings
 
 class FilesView(ModelView):
     can_create = False
@@ -179,7 +170,7 @@ class Reports(db.Document):
     type = db.StringField()
     file = db.FileField()
     time = db.DateTimeField()
-    meta = {'db_alias':'default','collection': 'reports','strict': False}
+    meta = meta_reports_settings
 
 class ReportsView(ModelView):
     can_create = False
@@ -200,7 +191,7 @@ class Logs(db.Document):
     type = db.StringField()
     file = db.FileField()
     time = db.DateTimeField()
-    meta = {'db_alias':'default','collection': 'logs','strict': False}
+    meta = meta_logs_settings
 
 class LogsView(ModelView):
     can_create = False
@@ -408,28 +399,25 @@ def get_stats():
     #lazy check stats
     stats = {}
     try:
-        coll = "jobs"
-        if coll in conn["jobsqueue"].list_collection_names():
-            stats.update({"[{}] Collection".format(coll):"Exists"})
+        if jobsqueuedb["jobscoll"] in conn[jobsqueuedb["dbname"]].list_collection_names():
+            stats.update({"[{}] Collection".format(jobsqueuedb["jobscoll"]):"Exists"})
         else:
-            stats.update({"[{}] Collection".format(coll):"Does not exists"})
+            stats.update({"[{}] Collection".format(jobsqueuedb["jobscoll"]):"Does not exists"})
     except:
         pass
     try:
-        for coll in ("reports","files","fs.chunks","fs.files"):
-            if coll in conn["webinterface"].list_collection_names():
+        for coll in (defaultdb["reportscoll"],defaultdb["filescoll"],"fs.chunks","fs.files"):
+            if coll in conn[defaultdb["dbname"]].list_collection_names():
                 stats.update({"[{}] Collection".format(coll):"Exists"})
             else:
                 stats.update({"[{}] Collection".format(coll):"Does not exists"})
     except:
         pass
     try:
-        db = "jobsqueue" 
-        col = "jobs"
-        stats.update({  "[Queue] status":True if conn[db][col].find_one({'status': 'ON__'},{'_id': False}) else False,
-                        "[Queue] Total jobs ": conn[db][col].find({"status" : {"$nin" : ["ON__","OFF_"]}}).count(),
-                        "[Queue] Total finished jobs":conn[db][col].find({'status': 'done'}).count(),
-                        "[Queue] Total waiting jobs":conn[db][col].find({'status': 'wait'}).count()})
+        stats.update({  "[Queue] status":True if conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find_one({'status': 'ON__'},{'_id': False}) else False,
+                        "[Queue] Total jobs ": conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({"status" : {"$nin" : ["ON__","OFF_"]}}).count(),
+                        "[Queue] Total finished jobs":conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({'status': 'done'}).count(),
+                        "[Queue] Total waiting jobs":conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({'status': 'wait'}).count()})
                         
     #get total disk usage
     #"[Queue] Used space":"{} of {}".format(convert_size(conn[db].command("dbstats")["fsUsedSize"]),convert_size(conn[db].command("dbstats")["fsTotalSize"]))
@@ -437,28 +425,20 @@ def get_stats():
     except:
         pass
     try:
-        db = "webinterface" 
-        col = "reports"
-        stats.update({"[Reports] Total reports":conn[db][col].find({}).count(),
-                      "[Reports] Total used space":"{}".format(convert_size(conn[db].command("collstats",col)["storageSize"] + conn[db].command("collstats",col)["totalIndexSize"]))})
+        stats.update({"[Reports] Total reports":conn[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
+                      "[Reports] Total used space":"{}".format(convert_size(conn[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["storageSize"] + conn[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["totalIndexSize"]))})
     except:
         pass
     try:
-        db = "webinterface" 
-        col = "files"
-        stats.update({"[Files] Total files uploaded":conn[db][col].find({}).count()})
+        stats.update({"[Files] Total files uploaded":conn[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
     except:
         pass
     try:
-        db = "webinterface" 
-        col = "fs.chunks"
-        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(conn[db][col].find().count() * 255 * 1000))})
+        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(conn[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
     except:
         pass
     try:
-        db = "webinterface" 
-        col = "users"
-        stats.update({"[Users] Total users":conn[db][col].find({}).count()})
+        stats.update({"[Users] Total users":conn[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
     except:
         pass
     try:
@@ -507,9 +487,9 @@ def find_and_srot(db,col,key,var):
 def get_last_logs(json):
     items = []
     if json['id'] == 0:
-        items,startid = find_and_srot("analyzer","alllogs","time",datetime.now())
+        items,startid = find_and_srot(defaultdb["dbname"],defaultdb["alllogscoll"],"time",datetime.now())
     else:
-        items,startid = find_and_srot("analyzer","alllogs","_id",ObjectId(json['id']))
+        items,startid = find_and_srot(defaultdb["dbname"],defaultdb["alllogscoll"],"_id",ObjectId(json['id']))
     return {"id":startid,"logs":items}
 
 class CustomLogsView(BaseView):
@@ -540,12 +520,21 @@ class TimeEncoder(JSONEncoder):
             return obj.astimezone().strftime("%Y-%m-%d %H:%M:%S.%f")
         return JSONEncoder.default(self, obj)
 
+def find_items_without_coll(db,col,items):
+    _dict = {}
+    for item in items:
+        if item != '':
+            ret = conn[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
+            if ret != None:
+                _dict.update({item:ret})
+    return _dict
+
 class CustomDBupdate(BaseView):
     @expose('/', methods=['POST'])
     def index(self):
         if request.json:
             json_content = request.get_json(silent=True)
-            items = find_items_without_coll("jobsqueue","jobs",json_content)
+            items = find_items_without_coll(jobsqueuedb["dbname"],jobsqueuedb["jobscoll"],json_content)
             if items != None:
                 return dumps(items, cls=TimeEncoder)
         else:

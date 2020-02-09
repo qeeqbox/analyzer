@@ -7,14 +7,17 @@ from time import sleep
 from threading import Event
 from ..logger.logger import log_string
 from ..connections.mongodbconn import client
+from ..settings import jobsqueuedb
 
 class qbworker():
-    def __init__(self, name, func, wait):
+    def __init__(self, func, wait):
         self.client = None
         self.cur = None
         self.client = client
-        if bool(name in self.client.list_database_names()):
-            self.cur = self.client[name]['jobs']
+        self.dbname = jobsqueuedb["dbname"]
+        self.collname = jobsqueuedb["jobscoll"]
+        if bool(self.dbname in self.client.list_database_names()):
+            self.cur = self.client[self.dbname][self.collname]
             self.func = func
             self.daemon = True
             self.cancel = Event()

@@ -32,6 +32,9 @@ if __name__ == '__main__':
 else:
     exit()
 
+from .connections.mongodbconn import startinit
+startinit("databases")
+
 from .analyzer import Analyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
 from .queue.mongoqueue import qbjobqueue
@@ -133,8 +136,8 @@ class QBAnalyzer(Cmd):
         self.rep = ReportHandler()
 
         if mode == "--silent":
-            qbjobqueue("jobsqueue",True)
-            qbworker("jobsqueue",self.do_analyze,3)
+            qbjobqueue(True)
+            qbworker(self.do_analyze,3)
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "

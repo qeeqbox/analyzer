@@ -6,7 +6,7 @@ from _thread import interrupt_main
 from sys import stdout,stderr
 from threading import Timer
 from datetime import datetime
-from ..settings import json_settings
+from ..settings import json_settings, defaultdb
 from ..connections.mongodbconn import add_item_fs,add_item
 from tempfile import gettempdir
 
@@ -55,7 +55,7 @@ class CustomHandler(Handler):
         stdout.flush()
         self.logsfile.write("{} {} {}\n".format(record.msg[0],record.msg[2],record.msg[1]))
         self.logsfile.flush()
-        add_item("analyzer","alllogs",{'time':record.msg[0],'message': record.msg[1]})
+        add_item(defaultdb["dbname"],defaultdb["alllogscoll"],{'time':record.msg[0],'message': record.msg[1]})
 
 class TaskHandler(Handler):
     def __init__(self,task):
@@ -66,7 +66,7 @@ class TaskHandler(Handler):
     def emit(self, record):
         self.logsfile.write("{} {}\n".format(record.msg[0],record.msg[1]))
         self.logsfile.flush()
-        add_item("analyzer","tasklogs",{'time':record.msg[0],"task":self.task,'message': record.msg[1]})
+        add_item(defaultdb["dbname"],defaultdb["tasklogscoll"],{'time':record.msg[0],"task":self.task,'message': record.msg[1]})
 
 def setup_task_logger(task):
     log_string("Setting up task {} logger".format(task),"Yellow")
@@ -82,7 +82,7 @@ def cancel_task_logger(task):
     with open(path.join(gettempdir(),task),"rb") as f:
         logs = f.read()
     if len(logs) > 0:
-        _id = add_item_fs("webinterface","logs",logs,"log",None,task,"text/plain",datetime.now())
+        _id = add_item_fs(defaultdb["dbname"],defaultdb["tasklogscoll"],logs,"log",None,task,"text/plain",datetime.now())
         if _id:
             log_string("Logs result dumped into db","Yellow")
         else:
@@ -94,7 +94,7 @@ def log_string(_str,color):
     '''
     output str with color and symbol (they are all as info)
     '''
-    ctime = datetime.now()
+    ctime = datetime.utcnow()
     if color == "Green":
         logterminal.info([ctime,_str,green_x])
         dynamic.info([ctime,_str,"X"])

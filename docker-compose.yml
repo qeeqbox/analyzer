@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./webinterface-Dockerfile
-    command: bash -c "/usr/local/bin/gunicorn --log-level=critical --worker-class=gevent --worker-connections=1000 --workers=1 -b :8000 web:app"
+    command: bash -c "/usr/local/bin/gunicorn --worker-class=gevent --worker-connections=1000 --workers=1 -b :8000 web:app"
     ports:
       - "8000:8000"
     depends_on:
@@ -48,6 +48,7 @@ services:
       - '27017:27017'
     networks:
       - backend
+      - frontend
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

@@ -5,6 +5,7 @@ from ..report.jsonmaker import JSONMaker
 from ..connections.mongodbconn import add_item_fs
 from ..intell.qbimage import QBImage
 from ..intell.qbicons import QBIcons
+from ..settings import defaultdb
 from datetime import datetime
 
 class ReportHandler:
@@ -48,14 +49,14 @@ class ReportHandler:
                 #    log_string("Unable to add JSON result to db","Red")
             if parsed.db_dump_json:
                 datajson = self.jsonmaker.dump_json_and_return(data)
-                _id = add_item_fs("webinterface","reports",datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"application/json",datetime.now())
+                _id = add_item_fs(defaultdb["dbname"],defaultdb["reportscoll"],datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"application/json",datetime.now())
                 if _id:
                     log_string("JSON result dumped into db","Yellow")
                 else:
                     log_string("Unable to dump JSON result to db","Red")
             if parsed.db_dump_html:
                 datajson = self.jsonmaker.dump_json_and_return(data)
-                _id = add_item_fs("webinterface","reports",renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"text/html",datetime.now())
+                _id = add_item_fs(defaultdb["dbname"],defaultdb["reportscoll"],renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"text/html",datetime.now())
                 if _id:
                     log_string("HTML result dumped into db","Yellow")
                 else:

@@ -1,7 +1,6 @@
 from mics.certmaker import create_dummy_certificate
-from os import path, mkdir
+from os import path, mkdir, environ
 from sys import argv
-from os import environ, path
 
 if __name__ == '__main__':
     if len(argv) == 2:
