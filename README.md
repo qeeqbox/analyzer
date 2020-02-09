@@ -201,25 +201,23 @@ Prerequisites packages are required for some modules (If you are having issues u
 
 ## Running
 #### Run it as Web interface with Dockerfile 
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-sudo docker build -t analyzer . && sudo docker run -d -p 8000:8000 analyzer
-https://127.0.0.1:8000/login/
+git clone https://github.com/qeeqbox/analyzer.git <br>
+cd analyzer <br>
+sudo docker build -t analyzer . && sudo docker run -d -p 8000:8000 analyzer <br>
+https://127.0.0.1:8000/login/ <br>
 
 #### Run it as Web interface with docker-compose
-git clone https://github.com/qeeqbox/analyzer.git
-cd analyzer
-docker-compose up --build
-https://127.0.0.1:8000/login/
+git clone https://github.com/qeeqbox/analyzer.git <br>
+cd analyzer <br>
+docker-compose up --build <br>
+https://127.0.0.1:8000/login/ <br>
 
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
 
 ## Other Licenses
 #### By using this framework, you are accepting the license terms of each package listed below:
-<pre style="font-family:Consolas,Monaco">
 python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
-</pre>
 
 ## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
