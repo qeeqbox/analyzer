@@ -1,6 +1,8 @@
+__G__ = "(G)bd249ce4"
+
 from flask import Flask, flash, jsonify, redirect, request, url_for, render_template
 from flask_mongoengine import MongoEngine
-from wtforms import form, fields, validators
+from wtforms import form, fields, validators, SelectMultipleField
 from flask_admin import AdminIndexView, Admin, expose, BaseView
 from flask_admin.menu import MenuLink
 from flask_admin.babel import gettext
@@ -8,25 +10,24 @@ from flask_admin.contrib.mongoengine import ModelView
 from flask_login import LoginManager,current_user,login_user,logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import HTTPException
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from uuid import uuid4
 from tempfile import gettempdir
-from os import path, getpid
+from os import environ, getpid, path, path
 from datetime import datetime
-from os import path
 from flask_wtf.csrf import CSRFProtect
 from requests import get
 from flaskext.markdown import Markdown
-from pymongo import MongoClient
+from pymongo import ASCENDING, MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
 from settings import json_settings, mongodb_settings_docker, mongodb_settings_local
-from wtforms import SelectMultipleField
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
-from os import path,listdir,environ
+#import logging
+#logging.basicConfig(level=logging.DEBUG)
 
 filename = "README.md"
 intromarkdown = ""
@@ -70,7 +71,11 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 Markdown(app)
 
-def find_items(db,col,items):
+class Namespace:
+    def __init__(self, kwargs):
+        self.__dict__.update(kwargs)
+
+def find_items_without_coll(db,col,items):
     _dict = {}
     for item in items:
         if item != '':
@@ -86,10 +91,6 @@ def convert_size(s):
         else:
             s /= 1024.0
     return "File is too big"
-
-class Namespace:
-    def __init__(self, kwargs):
-        self.__dict__.update(kwargs)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -241,6 +242,8 @@ class CustomAdminIndexView(AdminIndexView):
     def index(self):
         if not current_user.is_authenticated:
             return redirect(url_for('.login_view'))
+        #return redirect("/stats")
+
         self._template_args['filename'] = filename + " @ https://github.com/qeeqbox/analyzer"
         self._template_args['intro'] = intromarkdown
         return super(CustomAdminIndexView, self).index()
@@ -483,6 +486,52 @@ class CustomStatsView(BaseView):
 
     def inaccessible_callback(self, name, **kwargs):
         if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))    
+
+#hmm finding by time is weird?
+def find_and_srot(db,col,key,var):
+    _list = []
+    
+    if key == "time":
+        items = list(conn[db][col].find().sort([('_id', -1)]).limit(1))
+    else:
+        items = list(conn[db][col].find({key: {"$gt": var}}).sort([(key,ASCENDING)]))
+    
+    for item in items:
+        _list.append("{} {}".format(item["time"].isoformat(),item["message"]))
+    if len(_list) > 0:
+        return "\n".join(_list),str(items[-1]["_id"])
+    else:
+        return "",0
+
+def get_last_logs(json):
+    items = []
+    if json['id'] == 0:
+        items,startid = find_and_srot("analyzer","alllogs","time",datetime.now())
+    else:
+        items,startid = find_and_srot("analyzer","alllogs","_id",ObjectId(json['id']))
+    return {"id":startid,"logs":items}
+
+class CustomLogsView(BaseView):
+    extra_js = ['/static/activelogs.js']
+
+    @expose('/', methods=['GET','POST'])
+    def index(self):
+        if request.method == 'GET':
+            return self.render("activelogs.html")
+        elif request.method == 'POST':
+            if request.json:
+                json_content = request.get_json(silent=True)
+                return dumps(get_last_logs(json_content))
+        else:
+            return jsonify({"Error":"Something wrong"})
+
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
 class TimeEncoder(JSONEncoder):
@@ -496,7 +545,7 @@ class CustomDBupdate(BaseView):
     def index(self):
         if request.json:
             json_content = request.get_json(silent=True)
-            items = find_items("jobsqueue","jobs",json_content)
+            items = find_items_without_coll("jobsqueue","jobs",json_content)
             if items != None:
                 return dumps(items, cls=TimeEncoder)
         else:
@@ -548,6 +597,7 @@ admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphico
 admin.add_view(QueueView(Jobs, menu_icon_type='glyph', menu_icon_value='glyphicon-tasks'))
 admin.add_view(ReportsView(Reports, menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt'))
 admin.add_view(LogsView(Logs, menu_icon_type='glyph', menu_icon_value='glyphicon-alert'))
+admin.add_view(CustomLogsView(name="Active Logs",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)

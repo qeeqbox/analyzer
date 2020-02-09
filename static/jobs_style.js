@@ -33,7 +33,7 @@
       else if ($(this).text().indexOf('dumy') >= 0){$(this).closest("tr").attr("class","light_red");}
     })
 
-    setTimeout(auto_update, 3000)
+    setTimeout(auto_update, 1500)
 })();
 
 $('#settings').click(function() {

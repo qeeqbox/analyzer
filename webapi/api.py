@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from threading import Thread
 from flask import Flask, jsonify, make_response, request
 from werkzeug.exceptions import HTTPException

@@ -1,4 +1,3 @@
-{"version":"2020.V.02.17",
- "ubuntu":"passed",
- "kali":"passed",
- "docker":"passed"}
+{"version":"2020.V.02.18",
+ "docker":"passed",
+ "docker-compose":"passed}

@@ -2,12 +2,14 @@
 {% block body %}
 {{ super() }}
 {% if current_user.is_authenticated %}
-<div class="card">
-  <div class="card-header">
-    {{ filename }}
-  </div>
-  <div class="card-body">
-    {{ intro|markdown }}
+<div class="col">
+  <div class="card">
+    <div class="card-header">
+      {{ filename }}
+    </div>
+    <div class="card-body width100">
+      {{ intro|markdown }}
+    </div>
   </div>
 </div>
 {% else %}

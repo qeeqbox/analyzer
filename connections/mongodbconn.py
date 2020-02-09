@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from pymongo import MongoClient
 from gridfs import GridFS
 from bson.objectid import ObjectId

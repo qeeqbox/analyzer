@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from datetime import datetime
 from pymongo import CursorType
 from pymongo.errors import ConnectionFailure

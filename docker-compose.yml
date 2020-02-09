@@ -16,12 +16,14 @@ services:
       - frontend
     volumes:
       - sharedfolder:/tmp/
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
   website:
     build:
       context: .
       dockerfile: ./webinterface-Dockerfile
-    command: bash -c "python3 start.py --docker && /usr/local/bin/gunicorn --log-level=critical --worker-class=gevent --worker-connections=1000 --workers=1 --certfile=certs/cert.pem --keyfile=certs/key.pem -b :8000 web:app"
+    command: bash -c "/usr/local/bin/gunicorn --log-level=critical --worker-class=gevent --worker-connections=1000 --workers=1 -b :8000 web:app"
     ports:
       - "8000:8000"
     depends_on:
@@ -33,6 +35,8 @@ services:
       - backend
     volumes:
       - sharedfolder:/tmp
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     healthcheck:
       disable: true 
 
@@ -44,6 +48,9 @@ services:
       - '27017:27017'
     networks:
       - backend
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
 volumes:
   sharedfolder:

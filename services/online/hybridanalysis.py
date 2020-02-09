@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from requests import get
 from requests.auth import HTTPBasicAuth
 from ...logger.logger import verbose, verbose_flag, verbose_timeout

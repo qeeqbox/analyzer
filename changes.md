@@ -1,3 +1,8 @@
+#### 2020.V.02.18
+- Fixed bugs
+- Custom logging handlers
+- Added active logs to web interface
+
 #### 2020.V.02.17
 - Fixed bugs
 - Fixed Dockerfile

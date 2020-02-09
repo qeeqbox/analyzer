@@ -5,12 +5,6 @@ from r2pipe import open as r2open
 from re import search
 from ast import literal_eval
 
-#this module needs some optimization
-#only apis for now, will change this in future
-#added a little hack for handling errors 
-#(check returns 0 because of error and flags=['-2'])
-#Similar to objdump, still needs to optimize
-  
 class QBD3generator:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBD3generator")
     def __init__(self):

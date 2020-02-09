@@ -138,9 +138,23 @@ body,
 
     .wrapper-col-content-cus {
       height: 100%;
-      overflow: auto;
       width: 100%;
+      display: flex;
+      flex-direction: column;
     }
+
+    .wrapper-col-content-cus .content{
+      margin: 20px 20px 20px 20px;
+      height: calc(100% - 100px);
+      overflow-y: scroll;
+      overflow-x: hidden;     
+    }
+
+    .wrapper-col-content-cus .bottom{
+      height: 60px;
+      flex: 1;
+      background-color: #313a46 !important;
+    } 
 
     .siderbar-nav-custom a{
       color: #000;
@@ -274,6 +288,15 @@ ul.nav a:hover {
   border:none;
 }
 
+.activelogs{
+  width: 100%;
+  border: none;
+}
+
+a {
+  outline:none !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script>
@@ -321,13 +344,16 @@ ul.nav a:hover {
         </div>
         {% endif %}
         <div class="col pt-2 wrapper-col-content-cus">
+            <div class="content">
                 {% block messages %}
                 {{ layout.messages() }}
                 {% endblock %}
-          <div class="container-fluid">
-                      {% block body %}
-                      {% endblock %}
-          </div>
+                {% block body %}
+                {% endblock %}
+            </div>
+            <div class="bottom">
+              This is the bottom.
+            </div>
         </div>
       </div>
     </div>

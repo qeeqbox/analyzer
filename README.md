@@ -6,7 +6,7 @@
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
-<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/webinterfacenew.gif" style="max-width:768px"/>
+<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/webintro18.gif" style="max-width:768px"/>
 
 ## Output
 #### HTML Outputs
@@ -204,13 +204,13 @@ Prerequisites packages are required for some modules (If you are having issues u
 git clone https://github.com/qeeqbox/analyzer.git <br>
 cd analyzer <br>
 sudo docker build -t analyzer . && sudo docker run -d -p 8000:8000 analyzer <br>
-https://127.0.0.1:8000/login/ <br>
+http://127.0.0.1:8000/login/ <br>
 
 #### Run it as Web interface with docker-compose
 git clone https://github.com/qeeqbox/analyzer.git <br>
 cd analyzer <br>
 docker-compose up --build <br>
-https://127.0.0.1:8000/login/ <br>
+http://127.0.0.1:8000/login/ <br>
 
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
