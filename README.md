@@ -193,32 +193,24 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Machine learning modules (maybe commercial)
 
 ## Prerequisites
-<pre style="font-family:Consolas,Monaco">
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb
-</pre>
 
-<pre style="font-family:Consolas,Monaco">
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
-</pre>
 
 Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
 
 ## Running
 #### Run it as Web interface with Dockerfile 
-<pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 sudo docker build -t analyzer . && sudo docker run -d -p 8000:8000 analyzer
 https://127.0.0.1:8000/login/
-</pre>
 
 #### Run it as Web interface with docker-compose
-<pre style="font-family:Consolas,Monaco">
 git clone https://github.com/qeeqbox/analyzer.git
 cd analyzer
 docker-compose up --build
 https://127.0.0.1:8000/login/
-</pre>
 
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
