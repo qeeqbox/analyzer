@@ -31,6 +31,7 @@ from .intell.qbcountriesviz import QBCountriesviz
 from .intell.qburlsimilarity import QBURLSimilarity
 from .intell.qbwhitelist import QBWhitelist
 from .intell.qbphishing import QBPhishing
+from .snort.qbsnort import QBSnort
 from .qbdetect.loaddetections import LoadDetections
 from .mitre.mitreparser import MitreParser
 from .mitre.qbmitresearch import QBMitresearch
@@ -74,6 +75,7 @@ class Analyzer:
         self.qbphising = QBPhishing()
         self.oleparser = OLEParser()
         self.onlinemultiscanners = OnlineMultiScanners()
+        self.qbsnort = QBSnort()
     
     @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer",extra="analyzer")
     def analyze(self,parsed) -> dict:
@@ -122,6 +124,7 @@ class Analyzer:
             self.msgparser.analyze(data,parsed)
         elif self.readpackets.check_sig(data):
             self.readpackets.analyze(data)
+            self.qbsnort.analyze(data)
             if parsed.dga or parsed.full:
                 self.qbdga.analyze(data)
         elif self.officex.check_sig(data):

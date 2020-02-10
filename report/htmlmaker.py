@@ -27,7 +27,7 @@ class HtmlMaker:
         get all imported modules 
         '''
         x = [x.split(".")[0] for x in modules.keys() if not x.startswith("_")]
-        self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux\\MacOS\\Windows\\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, font-awesome, flag-icon-css, {} and tons of researches ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
+        self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux\\MacOS\\Windows\\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, snort, font-awesome, flag-icon-css, {} and tons of researches ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def add_text_area(self) -> str:

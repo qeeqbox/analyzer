@@ -585,8 +585,8 @@ admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon
 admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
 admin.add_view(QueueView(Jobs, menu_icon_type='glyph', menu_icon_value='glyphicon-tasks'))
 admin.add_view(ReportsView(Reports, menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt'))
-admin.add_view(LogsView(Logs, menu_icon_type='glyph', menu_icon_value='glyphicon-alert'))
-admin.add_view(CustomLogsView(name="Active Logs",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
+admin.add_view(LogsView(Logs, menu_icon_type='glyph', menu_icon_value='glyphicon-info-sign'))
+admin.add_view(CustomLogsView(name="Active Logs",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-flash'))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)

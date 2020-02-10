@@ -72,6 +72,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Free/Fake email extraction
 - Spelling and punctuation check
 - Top phishing words included
+- Snort support
 - Web interface
 - Supports threat intelligence platform feeds
 
@@ -131,6 +132,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - ARP filter
     - WAF detection
     - DGA detection
+    - Snort parsing
 - PDF (built-in)
     - Objects enumeration
     - Keys (javascript, js, OpenAction) extraction
@@ -167,11 +169,6 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - VirusTotal
     - AlienVault
 
-## Flat web interface features
-- custom login-logout
-- custom task queue (mongodb)
-- dynamic web updates with ajax
-
 ## Roadmap
 - &#9745; ~~Reduce file I/O~~
 - &#9745; ~~PDF module~~
@@ -187,8 +184,9 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - &#9745; ~~Web interface (Requested by users)~~
 - &#9745; ~~Curling some TIPs (Requested by users)~~
 - &#9745; ~~MS office module~~
-- java analysis (Requested by users)
-- offline multiscanner (Requested by users)
+- &#9745; ~~Snort wrapper (Requested by users)~~
+- Offline multiscanner (Requested by users)
+- Java analysis (Requested by users)
 - Web detection
 - Machine learning modules (maybe commercial)
 
