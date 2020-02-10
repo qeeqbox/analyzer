@@ -211,9 +211,9 @@ docker-compose up --build <br>
 http://127.0.0.1:8000/login/ <br>
 
 ## Media
-[inquest](https://inquest.net/newsletter/issue015)
-[ncybersec](https://zh-cn.facebook.com/ncybersec/posts/1391635004340553)
-[secwiki](https://wiki.ourren.com/news?tag=tools)
+- [inquest](https://inquest.net/newsletter/issue015)
+- [ncybersec](https://zh-cn.facebook.com/ncybersec/posts/1391635004340553)
+- [secwiki](https://wiki.ourren.com/news?tag=tools)
 
 ## Resources
 Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
