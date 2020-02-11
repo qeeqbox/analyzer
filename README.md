@@ -168,6 +168,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - MetaDefender
     - VirusTotal
     - AlienVault
+    - PulseDive
 
 ## Roadmap
 - &#9745; ~~Reduce file I/O~~

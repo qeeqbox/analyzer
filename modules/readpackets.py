@@ -7,7 +7,7 @@ from scapy import all as scapy
 from scapy.layers import http
 from datetime import datetime
 from re import compile,I,search
-from tldextract import extract
+from tldextract import TLDExtract
 from copy import deepcopy
 
 class ReadPackets:
@@ -35,6 +35,7 @@ class ReadPackets:
 
         self.ip = compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])',I)
         self.waf = waf()
+        self.extract = TLDExtract(suffix_list_urls=None)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def get_layers(self,packet) -> str:
@@ -46,9 +47,11 @@ class ReadPackets:
         while True:
             layer = packet.getlayer(c)
             c += 1
-            if layer is None:break
-            _temp.append(layer.name)
-        return ":".join(_temp)
+            if layer is None:
+                break
+            if layer.name not in _temp:
+                _temp.append(layer.name)
+        return "->".join(_temp)
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def read_all_packets(self,packets):
@@ -100,7 +103,7 @@ class ReadPackets:
                     if packet.an.rrname.decode("utf-8",errors="ignore")[:-1] not in _tempdomains:
                         try:
                             parsedhost = packet.an.rrname.decode("utf-8",errors="ignore")[:-1]
-                            s,d,t = extract(parsedhost)
+                            s,d,t = self.extract(parsedhost)
                             _tempdomains.append(parsedhost)
                             _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
                                              "subdomain":s,
@@ -137,7 +140,7 @@ class ReadPackets:
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8",errors="ignore")
                     if not search(self.ip, parsedhost) and parsedhost not in _tempdomains:
-                        s,d,t = extract(parsedhost)
+                        s,d,t = self.extract(parsedhost)
                         _tempdomains.append(parsedhost)
                         _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
                                          "subdomain":s,
@@ -176,7 +179,7 @@ class ReadPackets:
                                          "Path":fields["Path"].decode("utf-8",errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8",errors="ignore")
                     if not search(self.ip, parsedhost) and parsedhost not in _tempdomains:
-                        s,d,t = extract(parsedhost)
+                        s,d,t = self.extract(parsedhost)
                         _tempdomains.append(parsedhost)
                         _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
                                          "subdomain":s,

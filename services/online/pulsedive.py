@@ -5,7 +5,7 @@ from ...logger.logger import verbose, verbose_flag, verbose_timeout
 from json import load,dumps
 
 class PulseDive:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting AlienVault module")
+    @verbose(True,verbose_flag,verbose_timeout,"Starting PulseDive module")
     def __init__(self,tokens_path,file):
         self.file = file
         with open(tokens_path,"r") as f:
@@ -13,7 +13,7 @@ class PulseDive:
             self.api = tokens["pulsedive_key"]
             self.link = "https://pulsedive.com/api"
 
-    @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from AlienVault")
+    @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from PulseDive")
     def get_hash_details(self,hash) -> dict:
         if self.api != "":
             return dumps(get("{}/info.php".format(self.link,hash),{'indicator':hash,"key":self.api}).json(),indent=4)

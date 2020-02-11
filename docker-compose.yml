@@ -5,15 +5,12 @@ services:
       context: .
       dockerfile: ./framework-Dockerfile
     command: bash -c "python3 -m analyzer.cli --silent --docker"
-    ports:
-      - "5001:80"
     depends_on:
       - mongodb
     environment:
       - analyzer_env=docker
     networks:
       - backend
-      - frontend
     volumes:
       - sharedfolder:/tmp/
       - /etc/timezone:/etc/timezone:ro
@@ -48,7 +45,6 @@ services:
       - '27017:27017'
     networks:
       - backend
-      - frontend
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

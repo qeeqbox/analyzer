@@ -23,7 +23,7 @@ class qbjobqueue:
         self.db = self.client[name]
         if init:
             self.db.drop_collection(self.collname)
-            self.col = self.db.create_collection(self.collname, capped=True,size=100000)
+            self.col = self.db.create_collection(self.collname, capped=True, max=100000, size=100000, autoIndexId=True)
         else:
             if bool(self.collname in self.db.list_collection_names()):
                 self.col = self.db[self.collname]

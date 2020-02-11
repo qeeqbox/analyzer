@@ -1,5 +1,5 @@
 __G__ = "(G)bd249ce4"
-__V__ = "2020.V.02.18"
+__V__ = "2020.V.02.20"
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -126,7 +126,7 @@ class QBAnalyzer(Cmd):
         super(QBAnalyzer, self).__init__()
         try:
             log_string("Checking updates","Green")
-            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/info")
+            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/info", verify=False, timeout=2)
             if ver.ok and ver.json()["version"] != __V__:
                 log_string("New version {} available, please update.. ".format(ver.json()["version"]),"Red")
         except:
@@ -137,7 +137,7 @@ class QBAnalyzer(Cmd):
 
         if mode == "--silent":
             qbjobqueue(True)
-            qbworker(self.do_analyze,3)
+            qbworker(self.do_analyze,2)
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "

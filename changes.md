@@ -1,3 +1,6 @@
+#### 2020.V.02.20
+- Fixed bugs
+
 #### 2020.V.02.19
 - Added snort wrapper
 - Added pulsedive
