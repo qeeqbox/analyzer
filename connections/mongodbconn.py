@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from gridfs import GridFS
 from bson.objectid import ObjectId
 from os import environ
-from ..settings import json_settings
+from ..settings import json_settings, defaultdb
 
 if environ["analyzer_env"] == "local":
     client = MongoClient(json_settings["mongo_settings_local"])
@@ -14,8 +14,8 @@ elif environ["analyzer_env"] == "docker":
 def startinit(init):
     if init == "databases":
         #client.drop_database("analyzer")
-        client["analyzer"].drop_collection('alllogs')
-        client["analyzer"]["alllogs"].create_index("time", expireAfterSeconds=(3*60))    
+        client[defaultdb["dbname"]].drop_collection(defaultdb["alllogscoll"])
+        client[defaultdb["dbname"]][defaultdb["alllogscoll"]].create_index("time", expireAfterSeconds=(3*60))    
 
 def update_item(db,col,_id,_set):
     item = client[db][col].find_one_and_update({'_id': _id},{'$set': _set})

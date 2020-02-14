@@ -2,71 +2,66 @@
 {% block body %}
 {{ super() }}
 <div class="col-lg-4">
-<div class="card">
-  <div class="card-header">
-    Upload file/files
-  </div>
-  <div class="card-body width100">
-        <img style="max-width: 100%; height: auto;" src="/static/filefind.png">
-        <form method="POST" action="" enctype="multipart/form-data">
-            <div class="form-group center-text">
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                {{ f }}
-                {% endfor %}
-            </div>
-			  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        </form>
-    </div>
-</div>
-</div>
-<div class="col-lg-8">
-    <div class="card">
+   <div class="card">
       <div class="card-header">
-        Switches
+         Upload file/files
       </div>
       <div class="card-body width100">
-        <pre class="pre-class">
-Analysis switches:
-  --behavior            check with generic detections
-  --xref                get cross references
-  --yara                analyze with yara module (Disable this for big files)
-  --language            analyze words against english language
-  --mitre               map strings to mitre
-  --topurl              get urls and check them against top 10000
-  --ocr                 get all ocr text
-  --enc                 find encryptions
-  --cards               find credit cards
-  --creds               find credit cards
-  --patterns            find common patterns
-  --suspicious          find suspicious strings
-  --dga                 find Domain generation algorithms
-  --plugins             scan with external plugins
-  --visualize           visualize some artifacts
-  --flags               add countries flags to html
-  --icons               add executable icons to html
-  --worldmap            add world map to html
-  --spelling            force spelling check
-  --image               add similarity image to html
-  --full                analyze using all modules
-  --phishing            analyze phishing content
-
-Force analysis switches:
-  --unicode             force extracting ascii
-  --bigfile             force analyze big files
-
-Whitelist switches:
-  --w_internal          find it in white list by internal name
-  --w_original          find it in white list by original name
-  --w_hash              find it in white list by hash
-  --w_words             check extracted words against whitelist
-  --w_all               find it in white list
-
-Online multiscanner options:
-  --ms_all              check hash in different multiscanner platforms(requires API keys)
-        </pre>
+         <img style="max-width: 100%; height: auto;" src="/static/filefind.png">
+         <form method="POST" action="" enctype="multipart/form-data">
+            <div class="form-group center-text">
+               {% for f in form if f.type != 'CSRFTokenField' %}
+               {{ f }}
+               {% endfor %}
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+         </form>
       </div>
-    </div>
+   </div>
 </div>
-
+<div class="col-lg-8">
+   <div class="card">
+      <div class="card-header">
+         Switches
+      </div>
+      <div class="card-body width100">
+         <div class="pre-class">
+            Analysis switches:
+            --behavior            check with generic detections
+            --xref                get cross references
+            --yara                analyze with yara module (Disable this for big files)
+            --language            analyze words against english language
+            --mitre               map strings to mitre
+            --topurl              get urls and check them against top 10000
+            --ocr                 get all ocr text
+            --enc                 find encryptions
+            --cards               find credit cards
+            --creds               find credit cards
+            --patterns            find common patterns
+            --suspicious          find suspicious strings
+            --dga                 find Domain generation algorithms
+            --plugins             scan with external plugins
+            --visualize           visualize some artifacts
+            --flags               add countries flags to html
+            --icons               add executable icons to html
+            --worldmap            add world map to html
+            --spelling            force spelling check
+            --image               add similarity image to html
+            --full                analyze using all modules
+            --phishing            analyze phishing content
+            Force analysis switches:
+            --unicode             force extracting ascii
+            --bigfile             force analyze big files
+            Whitelist switches:
+            --w_internal          find it in white list by internal name
+            --w_original          find it in white list by original name
+            --w_hash              find it in white list by hash
+            --w_words             check extracted words against whitelist
+            --w_all               find it in white list
+            Online multiscanner options:
+            --ms_all              check hash in different multiscanner platforms(requires API keys)
+         </div>
+      </div>
+   </div>
+</div>
 {% endblock body %}
-

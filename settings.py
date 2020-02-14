@@ -49,3 +49,5 @@ meta_jobs_settings = {"db_alias": "jobsqueue",'collection':jobsqueuedb["jobscoll
 meta_files_settings = {'db_alias':'default','collection': defaultdb["filescoll"],'strict': False}
 meta_reports_settings = {'db_alias':'default','collection': defaultdb["reportscoll"],'strict': False}
 meta_logs_settings = {'db_alias':'default','collection': defaultdb["logscoll"],'strict': False}
+
+elastic_db = {u'host': u'elasticsearch', u'port': 9200}

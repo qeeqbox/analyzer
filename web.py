@@ -111,6 +111,7 @@ class User(db.Document):
         return self.login
 
 class UserView(ModelView):
+    list_template = 'list.html'
     can_create = False
     can_delete = True
     can_edit = False
@@ -132,7 +133,7 @@ class Jobs(db.Document):
     meta = meta_jobs_settings
 
 class QueueView(ModelView):
-    list_template = 'list.html'
+    list_template = 'listactivelogs.html'
     can_create = False
     can_delete = False
     can_edit = True
@@ -153,6 +154,7 @@ class Files(db.Document):
     meta = meta_files_settings
 
 class FilesView(ModelView):
+    list_template = 'list.html'
     can_create = False
     can_delete = True
     can_edit = False
@@ -173,6 +175,7 @@ class Reports(db.Document):
     meta = meta_reports_settings
 
 class ReportsView(ModelView):
+    list_template = 'list.html'
     can_create = False
     can_delete = True
     can_edit = False
@@ -194,6 +197,7 @@ class Logs(db.Document):
     meta = meta_logs_settings
 
 class LogsView(ModelView):
+    list_template = 'list.html'
     can_create = False
     can_delete = True
     can_edit = False

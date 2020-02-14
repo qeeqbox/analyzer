@@ -3,34 +3,34 @@
 {{ super() }}
 {% if current_user.is_authenticated %}
 <div class="col">
-  <div class="card">
-    <div class="card-header">
-      {{ filename }}
-    </div>
-    <div class="card-body width100">
-      {{ intro|markdown }}
-    </div>
-  </div>
+   <div class="card">
+      <div class="card-header">
+         {{ filename }}
+      </div>
+      <div class="card-body width100">
+         {{ intro|markdown }}
+      </div>
+   </div>
 </div>
 {% else %}
 <div class="col-lg-4 col-center">
-    <div class="card">
+   <div class="card">
       <div class="card-header">
-        {{ active }} form
+         {{ active }} form
       </div>
       <div class="card-body width100">
-        <form method="POST">
+         <form method="POST">
             <div class="form-group">
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            {{ f }}
-            {% endfor %}
-            <button class="btn" type="submit">{{ active }}</button>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            {{ link | safe }}
+               {% for f in form if f.type != 'CSRFTokenField' %}
+               {{ f }}
+               {% endfor %}
+               <button class="btn" type="submit">{{ active }}</button>
+               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+               {{ link | safe }}
             </div>
-        </form>
+         </form>
       </div>
-    </div>
+   </div>
 </div>
 {% endif %}
 <script async defer src="https://buttons.github.io/buttons.js"></script>

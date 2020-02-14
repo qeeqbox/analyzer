@@ -1,21 +1,18 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-    <div class="row">
-      {% for key,value in stats.items() %}
-        <div class="col-lg-4">
-          <div class="card">
-            <div class="card-header">
-              {{ key }}
-            </div>
-            <div class="card-body">
-              {{ value }}
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
+<div class="row">
+   {% for key,value in stats.items() %}
+   <div class="col-lg-4">
+      <div class="card">
+         <div class="card-header">
+            {{ key }}
+         </div>
+         <div class="card-body">
+            {{ value }}
+         </div>
+      </div>
+   </div>
+   {% endfor %}
+</div>
 {% endblock body %}
-
-
-glyphicon glyphicon-star

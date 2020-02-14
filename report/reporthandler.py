@@ -39,6 +39,8 @@ class ReportHandler:
 
     @verbose(True,verbose_flag,verbose_timeout,None)
     def save_output(self,data,renderedhtml,parsed):
+        _id = None
+        _es = None
         if len(data)>0:
             if parsed.db_result:
                 serialize_obj(data)
@@ -50,10 +52,15 @@ class ReportHandler:
             if parsed.db_dump_json:
                 datajson = self.jsonmaker.dump_json_and_return(data)
                 _id = add_item_fs(defaultdb["dbname"],defaultdb["reportscoll"],datajson,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"application/json",datetime.now())
+                #_es = push_to_elastic(parsed.uuid,datajson["Details"])
                 if _id:
                     log_string("JSON result dumped into db","Yellow")
                 else:
                     log_string("Unable to dump JSON result to db","Red")
+                if _es:
+                    log_string("JSON result dumped into elastic","Yellow")
+                else:
+                    log_string("Unable to dump JSON result to elastic","Red")
             if parsed.db_dump_html:
                 datajson = self.jsonmaker.dump_json_and_return(data)
                 _id = add_item_fs(defaultdb["dbname"],defaultdb["reportscoll"],renderedhtml,data["Details"]["Properties"]["md5"],data["Details"]["Properties"],parsed.uuid,"text/html",datetime.now())

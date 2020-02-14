@@ -97,7 +97,7 @@
                   </tr>
                </thead>
                {% for row in data %}
-               <tr>
+               <tr id="{{ get_pk_value(row) }}">
                   {% block list_row scoped %}
                   {% if actions %}
                   <td>
@@ -116,7 +116,7 @@
                   {%- endif -%}
                   {% endblock %}
                   {% for c, name in list_columns %}
-                  <td class="col-{{c}}">
+                  <td class="col-{{c}}" id="{{get_pk_value(row)}}{{c}}">
                      {% if admin_view.is_editable(c) %}
                      {% set form = list_forms[get_pk_value(row)] %}
                      {% if form.csrf_token %}
