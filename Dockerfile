@@ -11,6 +11,7 @@ RUN wget -O /tmp/community-rules.tar.gz https://www.snort.org/downloads/communit
     mkdir -p /etc/snort/rules && \
     tar zxvf /tmp/community-rules.tar.gz -C /etc/snort/rules --strip-components=1
 ADD ./ /analyzer
+RUN cd analyzer && python3 initializer.py --key && cd ..
 COPY ./databases databases
 COPY ./initdb.sh initdb.sh
 RUN chmod 777 initdb.sh

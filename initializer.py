@@ -1,6 +1,7 @@
 from mics.certmaker import create_dummy_certificate
-from os import path, mkdir, environ
+from os import path, mkdir, environ, urandom
 from sys import argv
+from base64 import b64encode
 
 if __name__ == '__main__':
     if len(argv) == 2:
@@ -10,7 +11,11 @@ if __name__ == '__main__':
             if not certsdir.endswith(path.sep): certsdir = certsdir+path.sep
             if not path.isdir(certsdir): mkdir(certsdir)
             create_dummy_certificate('cert.pem', 'key.pem',certsdir,False)
+        elif argv[1] == "--key":
+            with open("key.hex","w") as f:
+                f.write(b64encode(urandom(128)).decode('utf-8'))
     else:
         exit()
 else:
     exit()
+

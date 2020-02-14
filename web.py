@@ -29,11 +29,13 @@ from json import JSONEncoder, dumps
 #import logging
 #logging.basicConfig(level=logging.DEBUG)
 
-filename = "README.md"
+key = ""
+keyname = "key.hex"
 intromarkdown = ""
+filename = "README.md"
 
 try:
-    r = get('https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md')
+    r = get('https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md',verify=False, timeout=2)
     if r.text != "" and r.ok:
         intromarkdown = r.text
 except:
@@ -42,15 +44,23 @@ except:
 if intromarkdown == "":
     try:
         readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
-        with open(readmefolder) as f:
+        with open(readmefolder,"rU", encoding="utf-8") as f:
             intromarkdown = f.read()
     except:
-        intromarkdown = ""
+        pass
+
+if key == "":
+    try:
+        readmefolder = path.abspath(path.join(path.dirname( __file__ ),keyname))
+        with open(readmefolder,"rU", encoding="utf-8") as f:
+            key = f.read()
+    except:
+        pass
 
 switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
 app = Flask(__name__)
-app.secret_key = "63c98a9cd54036c4a1505357ba1b5d4af5bbdfa26c477a43bc23ee9ed88fb874673b1fde50026533b6f9a41cfa0cd98c1132a0c8961a8432de708b193aaf979c"
+app.secret_key = key
 conn = None
 
 if environ["analyzer_env"] == "docker":
@@ -123,6 +133,11 @@ class UserView(ModelView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'Current users'
+         return super(UserView, self).index_view()
+
 class Jobs(db.Document):
     jobID = db.StringField()
     status = db.StringField()
@@ -143,9 +158,11 @@ class QueueView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated
 
-    def inaccessible_callback(self, name, **kwargs):
-        if not self.is_accessible():
-            return redirect(url_for('admin.login_view', next=request.url))
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'All jobs in queue'
+         return super(QueueView, self).index_view()
+
 
 class Files(db.Document):
     uuid = db.StringField()
@@ -166,6 +183,11 @@ class FilesView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
+
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'Uploaded files'
+         return super(FilesView, self).index_view()
 
 class Reports(db.Document):
     uuid = db.StringField()
@@ -189,6 +211,11 @@ class ReportsView(ModelView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'Generated HTML/JSON reports'
+         return super(ReportsView, self).index_view()
+
 class Logs(db.Document):
     uuid = db.StringField()
     type = db.StringField()
@@ -210,6 +237,11 @@ class LogsView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
+
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'Generated logs'
+         return super(LogsView, self).index_view()
 
 class LoginForm(form.Form):
     login = fields.StringField(render_kw={"placeholder": "Username"})
