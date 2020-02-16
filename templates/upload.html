@@ -1,0 +1,33 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+<div class="col-lg-4">
+   <div class="card">
+      <div class="card-header">
+         In-line buffer
+      </div>
+      <div class="card-body width100">
+         <form method="POST" action="" enctype="multipart/form-data">
+            <div class="form-group center-text">
+               {% for f in form if f.type != 'CSRFTokenField' %}
+               {{ f }}
+               {% endfor %}
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+         </form>
+      </div>
+   </div>
+</div>
+<div class="col-lg-8">
+   <div class="card">
+      <div class="card-header">
+         Switches
+      </div>
+      <div class="card-body width100">
+         <div class="pre-class">
+            {{ switches_details }}
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock body %}

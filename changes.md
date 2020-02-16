@@ -1,3 +1,10 @@
+#### 2020.V.02.24
+- Fixed bugs
+- Fixed webinterface
+
+#### 2020.V.02.23
+- Fixed webinterface
+
 #### 2020.V.02.22
 - Fixed bugs
 - Fixed webinterface

@@ -25,6 +25,7 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
+      - service
     environment:
       - analyzer_env=docker
     networks:

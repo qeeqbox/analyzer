@@ -17,6 +17,9 @@ def startinit(init):
         client[defaultdb["dbname"]].drop_collection(defaultdb["alllogscoll"])
         client[defaultdb["dbname"]][defaultdb["alllogscoll"]].create_index("time", expireAfterSeconds=(3*60))    
 
+def update_task(db,col,task,log):
+    client[db][col].update({'task': task}, {'$push': {'logs': log}}, upsert = True)
+
 def update_item(db,col,_id,_set):
     item = client[db][col].find_one_and_update({'_id': _id},{'$set': _set})
     if item != None:

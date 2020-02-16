@@ -6,7 +6,7 @@
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
-<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/v2.21.gif" style="max-width:768px"/>
+<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/introv2.24.gif" style="max-width:768px"/>
 
 ## Output
 #### HTML Outputs

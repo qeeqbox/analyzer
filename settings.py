@@ -1,3 +1,5 @@
+__V__ = "2020.V.02.24"
+
 json_settings = {
 	"mongo_settings_host_docker":"mongodb",
 	"mongo_settings_host_local":"localhost",
@@ -9,11 +11,11 @@ json_settings = {
 
 defaultdb = {"dbname":"analyzer",
 			 "reportscoll":"reports",
-			 "logscoll":"logs",
 			 "filescoll":"files",
 			 "userscoll":"users",
 			 "alllogscoll":"alllogs",
-			 "tasklogscoll":"tasklogs"}
+			 "taskfileslogscoll":"taskfileslogs",
+			 "taskdblogscoll":"taskdblogs"}
 
 jobsqueuedb = {"dbname":"analyzer",
 			   "jobscoll":"jobs"}
@@ -48,6 +50,6 @@ meta_users_settings = {'db_alias':'default','collection': defaultdb["userscoll"]
 meta_jobs_settings = {"db_alias": "jobsqueue",'collection':jobsqueuedb["jobscoll"],'strict': False}
 meta_files_settings = {'db_alias':'default','collection': defaultdb["filescoll"],'strict': False}
 meta_reports_settings = {'db_alias':'default','collection': defaultdb["reportscoll"],'strict': False}
-meta_logs_settings = {'db_alias':'default','collection': defaultdb["logscoll"],'strict': False}
-
+meta_task_files_logs_settings = {'db_alias':'default','collection': defaultdb["taskfileslogscoll"],'strict': False}
+meta_task_logs_settings = {'db_alias':'default','collection': defaultdb["taskdblogscoll"],'strict': False}
 elastic_db = {u'host': u'elasticsearch', u'port': 9200}

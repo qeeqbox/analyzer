@@ -7,7 +7,8 @@
    html {
    height: 100%;
    padding: 0 0 0 0;
-   font-family: Consolas, Monaco !important;
+   font-family: monospace !important;
+   font-size: 12px;
    }
    * {
    -webkit-border-radius: 0 !important;
@@ -153,10 +154,22 @@
    color: #000;
    outline: 0 !important;
    }
-   .active {
+   .wrapper-col-sidebar .active {
    color: #206BA4 !important;
    box-shadow: inset 5px 0 0 0 #d40000;
    background-color: #fff !important;
+   }
+   .wrapper-col-sidebar .noredbox{
+   box-shadow: none !important;
+   background-color: #c0c0c0 !important;
+   color: #000 !important;
+   }
+   .custom-dropdown-toggle{
+   box-shadow: none !important;
+   background-color: #c0c0c0 !important;
+   }
+   .fix-margin-icon{
+   margin: 0 0 0 0 !important;
    }
    .left-padding {
    padding-left: 10px;
@@ -196,10 +209,11 @@
    margin-bottom: 0px !important;
    }
    .vertical-center {
-   min-height: calc(100% - 40px);
-   min-height: calc(100vh - 40px);
-   align-items: center;
    display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   height: calc(100vh - 140px);
    }
    .col-center {
    margin: 0 auto;
@@ -241,7 +255,6 @@
    }
    #choices li * {
    font-weight: normal !important;
-   font-family: Consolas, Monaco !important;
    width: auto !important;
    }
    .navbar-nav li a {
@@ -276,6 +289,11 @@
    }
    .toggle-items{
    margin: 0 0 0 0 !important;
+   }
+   input[type='file']{
+   -webkit-border-radius: 0 !important;
+   -moz-border-radius: 0 !important;
+   border-radius: 0 !important;
    }
 
 </style>
@@ -342,4 +360,9 @@
    {% endblock %}
 </div>
 {% endblock %}
+{% block tail_js %}
+{{ super() }}
+<script type="text/javascript">$('.custom-dropdown-toggle').click(function() {$(this).next().collapse('toggle');});</script>
+{% endblock %}
+
 

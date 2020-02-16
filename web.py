@@ -22,46 +22,83 @@ from pymongo import ASCENDING, MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,jobsqueuedb,meta_users_settings,meta_jobs_settings,meta_files_settings, meta_reports_settings, meta_logs_settings
+from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,jobsqueuedb,meta_users_settings,meta_jobs_settings,meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, __V__
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
+from re import compile, search, DOTALL
 #import logging
 #logging.basicConfig(level=logging.DEBUG)
 
-key = ""
-keyname = "key.hex"
-intromarkdown = ""
-filename = "README.md"
+switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
+switches_details = '''
+Analysis switches:
+--behavior            check with generic detections
+--xref                get cross references
+--yara                analyze with yara module (Disable this for big files)
+--language            analyze words against english language
+--mitre               map strings to mitre
+--topurl              get urls and check them against top 10000
+--ocr                 get all ocr text
+--enc                 find encryptions
+--cards               find credit cards
+--creds               find credit cards
+--patterns            find common patterns
+--suspicious          find suspicious strings
+--dga                 find Domain generation algorithms
+--plugins             scan with external plugins
+--visualize           visualize some artifacts
+--flags               add countries flags to html
+--icons               add executable icons to html
+--worldmap            add world map to html
+--spelling            force spelling check
+--image               add similarity image to html
+--full                analyze using all modules
+--phishing            analyze phishing content
+Force analysis switches:
+--unicode             force extracting ascii
+--bigfile             force analyze big files
+Whitelist switches:
+--w_internal          find it in white list by internal name
+--w_original          find it in white list by original name
+--w_hash              find it in white list by hash
+--w_words             check extracted words against whitelist
+--w_all               find it in white list
+Online multiscanner options:
+--ms_all              check hash in different multiscanner platforms(requires API keys)'''
 
-try:
-    r = get('https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md',verify=False, timeout=2)
-    if r.text != "" and r.ok:
-        intromarkdown = r.text
-except:
-    pass
+def intro(filename, link):
+    intromarkdown = ""
+    try:
+        r = get(link,verify=False, timeout=2)
+        if r.text!= "" and r.ok:
+            intromarkdown = search(compile(r"\#\# General Features.*",DOTALL),r.text).group(0)
+    except:
+        pass
 
-if intromarkdown == "":
+    if intromarkdown == "":
+        try:
+            readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
+            with open(readmefolder,"rU", encoding="utf-8") as f:
+                intromarkdown = search(compile(r"\#\# General Features.*",DOTALL),f.read()).group(0)
+        except:
+            pass
+    return intromarkdown
+
+def session_key(filename):
+    key = ""
     try:
         readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
         with open(readmefolder,"rU", encoding="utf-8") as f:
-            intromarkdown = f.read()
-    except:
-        pass
-
-if key == "":
-    try:
-        readmefolder = path.abspath(path.join(path.dirname( __file__ ),keyname))
-        with open(readmefolder,"rU", encoding="utf-8") as f:
             key = f.read()
-    except:
-        pass
-
-switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
+    finally:
+        return key
 
 app = Flask(__name__)
-app.secret_key = key
+app.secret_key = session_key("key.hex")
+intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 conn = None
+
 
 if environ["analyzer_env"] == "docker":
     conn = MongoClient(json_settings["mongo_settings_docker"])
@@ -196,7 +233,7 @@ class Reports(db.Document):
     time = db.DateTimeField()
     meta = meta_reports_settings
 
-class ReportsView(ModelView):
+class ReportsViewJSON(ModelView):
     list_template = 'list.html'
     can_create = False
     can_delete = True
@@ -211,17 +248,43 @@ class ReportsView(ModelView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+    def get_query(self):            
+        return Reports.objects(type="application/json")
+
     @expose('/')
     def index_view(self):
-         self._template_args['card_title'] = 'Generated HTML/JSON reports'
-         return super(ReportsView, self).index_view()
+         self._template_args['card_title'] = 'Generated JSON reports'
+         return super(ReportsViewJSON, self).index_view()
+
+class ReportsViewHTML(ModelView):
+    list_template = 'list.html'
+    can_create = False
+    can_delete = True
+    can_edit = False
+    column_searchable_list = ['uuid']
+    column_default_sort = ('time', True)
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
+    def get_query(self):            
+        return Reports.objects(type="text/html")
+
+    @expose('/')
+    def index_view(self):
+         self._template_args['card_title'] = 'Generated HTML reports'
+         return super(ReportsViewHTML, self).index_view()
 
 class Logs(db.Document):
     uuid = db.StringField()
     type = db.StringField()
     file = db.FileField()
     time = db.DateTimeField()
-    meta = meta_logs_settings
+    meta = meta_task_files_logs_settings
 
 class LogsView(ModelView):
     list_template = 'list.html'
@@ -271,7 +334,7 @@ class CustomAdminIndexView(AdminIndexView):
             return redirect(url_for('.login_view'))
         #return redirect("/stats")
 
-        self._template_args['filename'] = filename + " @ https://github.com/qeeqbox/analyzer"
+        self._template_args['filename'] = "README.md @ https://github.com/qeeqbox/analyzer"
         self._template_args['intro'] = intromarkdown
         return super(CustomAdminIndexView, self).index()
 
@@ -376,7 +439,7 @@ class CustomViewUploadForm(BaseView):
                     flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
-        return self.render("fileupload.html",form=form)
+        return self.render("upload.html",form=form, switches_details=switches_details)
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -422,7 +485,7 @@ class CustomViewBufferForm(BaseView):
                 flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
-        return self.render("bufferupload.html",form=form)
+        return self.render("upload.html",form=form, switches_details=switches_details)
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -608,21 +671,22 @@ def error_handler(error):
 for cls in HTTPException.__subclasses__():
     app.register_error_handler(cls, error_handler)
 
-admin = Admin(app, "QB" , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
+admin = Admin(app, "QeeqBox Analyzer {}".format(__V__[7:]) , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
 admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
-admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(CustomDBupdate(name="DBinfo",endpoint='dbinfo',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
-admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit'))
-admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload'))
-admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
+admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit',category='Analyze'))
+admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload',category='Analyze'))
+admin.add_view(ReportsViewHTML(Reports,name="HTML",endpoint='reportshtml', menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt',category='Reports'))
+admin.add_view(ReportsViewJSON(Reports,name="JSON",endpoint='reportsjson',menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt',category='Reports'))
+admin.add_view(LogsView(Logs,name='Tasks',menu_icon_type='glyph', menu_icon_value='glyphicon-info-sign',category='Logs'))
+admin.add_view(CustomLogsView(name="Active",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-flash',category='Logs'))
+admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
 admin.add_view(QueueView(Jobs, menu_icon_type='glyph', menu_icon_value='glyphicon-tasks'))
-admin.add_view(ReportsView(Reports, menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt'))
-admin.add_view(LogsView(Logs, menu_icon_type='glyph', menu_icon_value='glyphicon-info-sign'))
-admin.add_view(CustomLogsView(name="Active Logs",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-flash'))
+admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)

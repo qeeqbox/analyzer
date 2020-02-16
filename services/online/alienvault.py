@@ -16,8 +16,7 @@ class AlienVault:
 
     @verbose(True,verbose_flag,verbose_timeout,"Getting hash details from AlienVault")
     def get_hash_details(self,hash) -> dict:
-        return dumps(get("{}/indicators/file/{}/analysis".format(self.link,hash)).json(),indent=4)
-        #if self.api != "":
-        #    return dumps(get("{}/indicators/file/{}/analysis".format(self.link,hash)).json(),indent=4)
-        #else:
-        #    return "#Please add your AlienVault api key in {} #To get an api key visit {}".format(self.file,"https://otx.alienvault.com/assets/static/external_api.html#api_v1_indicators")
+        if self.api != "":
+            return dumps(get("{}/indicators/file/{}/analysis".format(self.link,hash)).json(),indent=4)
+        else:
+            return "#Please add your AlienVault api key in {} #To get an api key visit {}".format(self.file,"https://otx.alienvault.com/assets/static/external_api.html#api_v1_indicators")

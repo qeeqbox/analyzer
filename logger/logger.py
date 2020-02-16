@@ -7,7 +7,7 @@ from sys import stdout,stderr
 from threading import Timer
 from datetime import datetime
 from ..settings import json_settings, defaultdb
-from ..connections.mongodbconn import add_item_fs,add_item
+from ..connections.mongodbconn import add_item_fs,add_item, update_task
 from tempfile import gettempdir
 
 logterminal,dynamic,verbose_flag,verbose_timeout = None,None, None, None
@@ -66,10 +66,11 @@ class TaskHandler(Handler):
     def emit(self, record):
         self.logsfile.write("{} {}\n".format(record.msg[0],record.msg[1]))
         self.logsfile.flush()
-        add_item(defaultdb["dbname"],defaultdb["tasklogscoll"],{'time':record.msg[0],"task":self.task,'message': record.msg[1]})
+        update_task(defaultdb["dbname"],defaultdb["taskdblogscoll"],self.task,"{} {}".format(record.msg[0],record.msg[1]))
 
 def setup_task_logger(task):
     log_string("Setting up task {} logger".format(task),"Yellow")
+    add_item(defaultdb["dbname"],defaultdb["taskdblogscoll"],{"task":task,"logs":[]})
     dynamic.handlers.clear()
     dynamic.setLevel(DEBUG)
     dynamic.addHandler(TaskHandler(task))
@@ -82,7 +83,7 @@ def cancel_task_logger(task):
     with open(path.join(gettempdir(),task),"rb") as f:
         logs = f.read()
     if len(logs) > 0:
-        _id = add_item_fs(defaultdb["dbname"],defaultdb["tasklogscoll"],logs,"log",None,task,"text/plain",datetime.now())
+        _id = add_item_fs(defaultdb["dbname"],defaultdb["taskfileslogscoll"],logs,"log",None,task,"text/plain",datetime.now())
         if _id:
             log_string("Logs result dumped into db","Yellow")
         else:
