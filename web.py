@@ -22,11 +22,13 @@ from pymongo import ASCENDING, MongoClient
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,jobsqueuedb,meta_users_settings,meta_jobs_settings,meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, __V__
+from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,meta_users_settings,meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, __V__
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
 from re import compile, search, DOTALL
+from redisqueue.qbqueue import QBQueue
+
 #import logging
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -96,6 +98,7 @@ def session_key(filename):
 
 app = Flask(__name__)
 app.secret_key = session_key("key.hex")
+queue = QBQueue("analyzerqueue", host="redis", port=6379, db=0)
 intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 conn = None
 
@@ -174,32 +177,6 @@ class UserView(ModelView):
     def index_view(self):
          self._template_args['card_title'] = 'Current users'
          return super(UserView, self).index_view()
-
-class Jobs(db.Document):
-    jobID = db.StringField()
-    status = db.StringField()
-    created = db.DateTimeField()
-    started = db.DateTimeField()
-    finished = db.DateTimeField()
-    data = db.DictField()
-    meta = meta_jobs_settings
-
-class QueueView(ModelView):
-    list_template = 'listactivelogs.html'
-    can_create = False
-    can_delete = False
-    can_edit = True
-    column_searchable_list = ['jobID']
-    extra_js = ['/static/jobs_style.js ']
-
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-    @expose('/')
-    def index_view(self):
-         self._template_args['card_title'] = 'All jobs in queue'
-         return super(QueueView, self).index_view()
-
 
 class Files(db.Document):
     uuid = db.StringField()
@@ -420,22 +397,11 @@ class CustomViewUploadForm(BaseView):
                     files = Files()
                     files.uuid = uuid
                     files.line = result
-                    #form.populate_obj(files)
-                    #save to db
                     files.file.put(file, content_type=file.content_type, filename=filename)
                     files.save()
-                    #save to hdd
                     file.seek(0)
                     file.save(savetotemp)
-                    #q_return = queue.insert(uuid,result)
-                    jobs = Jobs()
-                    jobs.jobID = uuid
-                    jobs.status = 'wait'
-                    jobs.created = datetime.now()
-                    jobs.started = datetime.now()
-                    jobs.finished = datetime.now()
-                    jobs.data = result
-                    jobs.save()
+                    queue.put(uuid,result)
                     flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
@@ -474,14 +440,7 @@ class CustomViewBufferForm(BaseView):
                 result["buffer"] = form.buffer.data
                 result["analyzer_timeout"]= form.analyzertimeout.data
                 result["function_timeout"]= form.functiontimeout.data
-                jobs = Jobs()
-                jobs.jobID = uuid
-                jobs.status = 'wait'
-                jobs.created = datetime.now()
-                jobs.started = datetime.now()
-                jobs.finished = datetime.now()
-                jobs.data = result
-                jobs.save()
+                queue.put(uuid,result)
                 flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
@@ -498,29 +457,11 @@ def get_stats():
     #lazy check stats
     stats = {}
     try:
-        if jobsqueuedb["jobscoll"] in conn[jobsqueuedb["dbname"]].list_collection_names():
-            stats.update({"[{}] Collection".format(jobsqueuedb["jobscoll"]):"Exists"})
-        else:
-            stats.update({"[{}] Collection".format(jobsqueuedb["jobscoll"]):"Does not exists"})
-    except:
-        pass
-    try:
         for coll in (defaultdb["reportscoll"],defaultdb["filescoll"],"fs.chunks","fs.files"):
             if coll in conn[defaultdb["dbname"]].list_collection_names():
                 stats.update({"[{}] Collection".format(coll):"Exists"})
             else:
                 stats.update({"[{}] Collection".format(coll):"Does not exists"})
-    except:
-        pass
-    try:
-        stats.update({  "[Queue] status":True if conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find_one({'status': 'ON__'},{'_id': False}) else False,
-                        "[Queue] Total jobs ": conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({"status" : {"$nin" : ["ON__","OFF_"]}}).count(),
-                        "[Queue] Total finished jobs":conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({'status': 'done'}).count(),
-                        "[Queue] Total waiting jobs":conn[jobsqueuedb["dbname"]][jobsqueuedb["jobscoll"]].find({'status': 'wait'}).count()})
-                        
-    #get total disk usage
-    #"[Queue] Used space":"{} of {}".format(convert_size(conn[db].command("dbstats")["fsUsedSize"]),convert_size(conn[db].command("dbstats")["fsTotalSize"]))
-
     except:
         pass
     try:
@@ -628,27 +569,6 @@ def find_items_without_coll(db,col,items):
                 _dict.update({item:ret})
     return _dict
 
-class CustomDBupdate(BaseView):
-    @expose('/', methods=['POST'])
-    def index(self):
-        if request.json:
-            json_content = request.get_json(silent=True)
-            items = find_items_without_coll(jobsqueuedb["dbname"],jobsqueuedb["jobscoll"],json_content)
-            if items != None:
-                return dumps(items, cls=TimeEncoder)
-        else:
-            return jsonify({"Error":"Something wrong"})
-
-    def is_accessible(self):
-        return current_user.is_authenticated
-
-    def inaccessible_callback(self, name, **kwargs):
-        if not self.is_accessible():
-            return redirect(url_for('admin.login_view', next=request.url))
-    
-    def is_visible(self):
-        return False
-
 class CustomMenuLink(MenuLink):
     def is_accessible(self):
         return current_user.is_authenticated
@@ -676,7 +596,6 @@ admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeq
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
 admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
-admin.add_view(CustomDBupdate(name="DBinfo",endpoint='dbinfo',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit',category='Analyze'))
 admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload',category='Analyze'))
 admin.add_view(ReportsViewHTML(Reports,name="HTML",endpoint='reportshtml', menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt',category='Reports'))
@@ -685,7 +604,6 @@ admin.add_view(LogsView(Logs,name='Tasks',menu_icon_type='glyph', menu_icon_valu
 admin.add_view(CustomLogsView(name="Active",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-flash',category='Logs'))
 admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
-admin.add_view(QueueView(Jobs, menu_icon_type='glyph', menu_icon_value='glyphicon-tasks'))
 admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))

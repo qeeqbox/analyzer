@@ -192,7 +192,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Machine learning modules (maybe commercial)
 
 ## Prerequisites
-apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb
+apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
 
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
 
@@ -261,6 +261,7 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 - https://github.com/python-pillow/Pillow/blob/master/LICENSE
 - https://github.com/nltk/nltk/blob/develop/LICENSE.txt
 - http://p7zip.sourceforge.net/
+- https://github.com/andymccurdy/redis-py/blob/master/LICENSE
 
 ## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files

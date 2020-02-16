@@ -7,6 +7,7 @@ services:
     command: bash -c "python3 -m analyzer.cli --silent --docker"
     depends_on:
       - mongodb
+      - redis
     environment:
       - analyzer_env=docker
     networks:
@@ -26,6 +27,7 @@ services:
     depends_on:
       - mongodb
       - service
+      - redis
     environment:
       - analyzer_env=docker
     networks:
@@ -49,6 +51,13 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    networks:
+      - backend
 
 volumes:
   sharedfolder:

@@ -17,18 +17,9 @@ defaultdb = {"dbname":"analyzer",
 			 "taskfileslogscoll":"taskfileslogs",
 			 "taskdblogscoll":"taskdblogs"}
 
-jobsqueuedb = {"dbname":"analyzer",
-			   "jobscoll":"jobs"}
-
 mongodb_settings_docker = [{
 				     "ALIAS": "default",
 				     "DB":    defaultdb["dbname"],
-				     "HOST": json_settings["mongo_settings_host_docker"],
-				     "PORT": 27017
-				    },
-				    {
-				     "ALIAS": "jobsqueue",
-				     "DB": jobsqueuedb["dbname"],
 				     "HOST": json_settings["mongo_settings_host_docker"],
 				     "PORT": 27017
 				    }]
@@ -38,16 +29,9 @@ mongodb_settings_local = [{
 				     "DB":    defaultdb["dbname"],
 				     "HOST": json_settings["mongo_settings_host_local"],
 				     "PORT": 27017
-				    },
-				    {
-				     "ALIAS": "jobsqueue",
-				     "DB": jobsqueuedb["dbname"],
-				     "HOST": json_settings["mongo_settings_host_local"],
-				     "PORT": 27017
 				    }]
 
 meta_users_settings = {'db_alias':'default','collection': defaultdb["userscoll"],'strict': False}
-meta_jobs_settings = {"db_alias": "jobsqueue",'collection':jobsqueuedb["jobscoll"],'strict': False}
 meta_files_settings = {'db_alias':'default','collection': defaultdb["filescoll"],'strict': False}
 meta_reports_settings = {'db_alias':'default','collection': defaultdb["reportscoll"],'strict': False}
 meta_task_files_logs_settings = {'db_alias':'default','collection': defaultdb["taskfileslogscoll"],'strict': False}

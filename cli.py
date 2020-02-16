@@ -38,20 +38,19 @@ startinit("databases")
 
 from .analyzer import Analyzer
 from .mics.funcs import kill_python_cli,kill_process_and_subs
-from .queue.mongoqueue import qbjobqueue
-from .queue.mongoworker import qbworker
+from .redisqueue.qbqueue import QBQueue
 from .logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger
 from .report.reporthandler import ReportHandler
+from .settings import json_settings
 from cmd import Cmd
 from os import path,listdir,environ
 from argparse import ArgumentParser
 from shlex import split as ssplit
-from requests import get
 from tempfile import NamedTemporaryFile,gettempdir
 from sys import stdout,argv
 from signal import SIGTSTP, signal
 from uuid import uuid4
-from .settings import json_settings
+from time import sleep
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -125,20 +124,18 @@ class QBAnalyzer(Cmd):
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
-        try:
-            log_string("Checking updates","Green")
-            ver = get("https://raw.githubusercontent.com/qeeqbox/analyzer/master/info", verify=False, timeout=2)
-            if ver.ok and ver.json()["version"] != __V__:
-                log_string("New version {} available, please update.. ".format(ver.json()["version"]),"Red")
-        except:
-            log_string("Update failed","Red")
-
         self.san = Analyzer()
         self.rep = ReportHandler()
 
         if mode == "--silent":
-            qbjobqueue(True)
-            qbworker(self.do_analyze,2)
+            queue = QBQueue("analyzerqueue", host="redis", port=6379, db=0)
+            log_string("Waiting on tasks..","Green")
+            while True:
+                sleep(2)
+                task = queue.get()
+                if task != None:
+                    self.do_analyze(task['data'],True)
+                    log_string("Waiting on tasks..","Green")
             kill_process_and_subs()
         else:
             self.prompt = "(interactive) "
@@ -165,9 +162,8 @@ class QBAnalyzer(Cmd):
                     parsed.disk_dump_json = False
                     parsed.open = False
                     parsed.print = False
-                    if not parsed.db_dump_json and not parsed.db_dump_html:
-                        parsed.db_dump_json = True
-                        parsed.db_dump_html = True
+                    parsed.db_dump_json = True
+                    parsed.db_dump_html = True
                 else:
                     return
             else:
