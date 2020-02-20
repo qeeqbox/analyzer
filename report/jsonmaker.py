@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from analyzer.logger.logger import log_string,verbose,verbose_flag,verbose_timeout
 from json import JSONEncoder,dump as jdump,dumps as jdumps
 from os import path
 

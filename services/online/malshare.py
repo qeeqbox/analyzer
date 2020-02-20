@@ -3,7 +3,7 @@ __G__ = "(G)bd249ce4"
 from shutil import copyfileobj
 from requests import get
 from requests.packages.urllib3 import disable_warnings
-from ...logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from json import load,dumps
 
 class MalShare:

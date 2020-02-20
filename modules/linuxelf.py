@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_entropy,get_words,get_entropy_float_ret
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_entropy,get_words,get_entropy_float_ret
+from analyzer.intell.qbdescription import add_description
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from elftools.elf.descriptions import describe_symbol_type

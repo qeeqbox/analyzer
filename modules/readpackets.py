@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_words
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_words
+from analyzer.intell.qbdescription import add_description
 from scapy import all as scapy
 from scapy.layers import http
 from datetime import datetime

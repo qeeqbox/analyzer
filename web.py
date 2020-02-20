@@ -18,56 +18,20 @@ from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 from requests import get
 from flaskext.markdown import Markdown
-from pymongo import ASCENDING, MongoClient
+from pymongo import ASCENDING
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import json_settings, mongodb_settings_docker, mongodb_settings_local, defaultdb,meta_users_settings,meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, __V__
+from settings import __V__, defaultdb, json_settings, meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, meta_users_settings
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
 from re import compile, search, DOTALL
 from redisqueue.qbqueue import QBQueue
-
-#import logging
-#logging.basicConfig(level=logging.DEBUG)
+from analyzer.connections.redisconn import get_cache
+from analyzer.connections.mongodbconn import client
 
 switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
-switches_details = '''
-Analysis switches:
---behavior            check with generic detections
---xref                get cross references
---yara                analyze with yara module (Disable this for big files)
---language            analyze words against english language
---mitre               map strings to mitre
---topurl              get urls and check them against top 10000
---ocr                 get all ocr text
---enc                 find encryptions
---cards               find credit cards
---creds               find credit cards
---patterns            find common patterns
---suspicious          find suspicious strings
---dga                 find Domain generation algorithms
---plugins             scan with external plugins
---visualize           visualize some artifacts
---flags               add countries flags to html
---icons               add executable icons to html
---worldmap            add world map to html
---spelling            force spelling check
---image               add similarity image to html
---full                analyze using all modules
---phishing            analyze phishing content
-Force analysis switches:
---unicode             force extracting ascii
---bigfile             force analyze big files
-Whitelist switches:
---w_internal          find it in white list by internal name
---w_original          find it in white list by original name
---w_hash              find it in white list by hash
---w_words             check extracted words against whitelist
---w_all               find it in white list
-Online multiscanner options:
---ms_all              check hash in different multiscanner platforms(requires API keys)'''
 
 def intro(filename, link):
     intromarkdown = ""
@@ -98,19 +62,11 @@ def session_key(filename):
 
 app = Flask(__name__)
 app.secret_key = session_key("key.hex")
-queue = QBQueue("analyzerqueue", host="redis", port=6379, db=0)
 intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
-conn = None
-
-
-if environ["analyzer_env"] == "docker":
-    conn = MongoClient(json_settings["mongo_settings_docker"])
-    app.config['MONGODB_SETTINGS'] = mongodb_settings_docker
-elif environ["analyzer_env"] == "local":
-    conn = MongoClient(json_settings["mongo_settings_local"])
-    app.config['MONGODB_SETTINGS'] = mongodb_settings_local
-else:
-    exit()
+app.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
+queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
+analyzer_timeout = json_settings[environ["analyzer_env"]]["analyzer_timeout"]
+function_timeout = json_settings[environ["analyzer_env"]]["function_timeout"]
 
 db = MongoEngine()
 db.init_app(app)
@@ -365,8 +321,8 @@ class MultiCheckboxField(SelectMultipleField):
 class UploadForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
-    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(json_settings["analyzer_timeout"]),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '60sec logic timeout'),(100,'1:40min logic timeout')],default=(json_settings["function_timeout"]),coerce=int)
+    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(analyzer_timeout),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '60sec logic timeout'),(100,'1:40min logic timeout')],default=(function_timeout),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"}) 
     __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
@@ -405,7 +361,7 @@ class CustomViewUploadForm(BaseView):
                     flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
-        return self.render("upload.html",form=form, switches_details=switches_details)
+        return self.render("upload.html",form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -417,8 +373,8 @@ class CustomViewUploadForm(BaseView):
 class BufferForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
-    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=int(json_settings["analyzer_timeout"]),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=int(json_settings["function_timeout"]),coerce=int)
+    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=int(analyzer_timeout),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=int(function_timeout),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"})
     __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
@@ -444,7 +400,7 @@ class CustomViewBufferForm(BaseView):
                 flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
-        return self.render("upload.html",form=form, switches_details=switches_details)
+        return self.render("upload.html",form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -458,27 +414,27 @@ def get_stats():
     stats = {}
     try:
         for coll in (defaultdb["reportscoll"],defaultdb["filescoll"],"fs.chunks","fs.files"):
-            if coll in conn[defaultdb["dbname"]].list_collection_names():
+            if coll in client[defaultdb["dbname"]].list_collection_names():
                 stats.update({"[{}] Collection".format(coll):"Exists"})
             else:
                 stats.update({"[{}] Collection".format(coll):"Does not exists"})
     except:
         pass
     try:
-        stats.update({"[Reports] Total reports":conn[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
-                      "[Reports] Total used space":"{}".format(convert_size(conn[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["storageSize"] + conn[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["totalIndexSize"]))})
+        stats.update({"[Reports] Total reports":client[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
+                      "[Reports] Total used space":"{}".format(convert_size(client[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["storageSize"] + client[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["totalIndexSize"]))})
     except:
         pass
     try:
-        stats.update({"[Files] Total files uploaded":conn[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
+        stats.update({"[Files] Total files uploaded":client[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
     except:
         pass
     try:
-        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(conn[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
+        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(client[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
     except:
         pass
     try:
-        stats.update({"[Users] Total users":conn[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
+        stats.update({"[Users] Total users":client[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
     except:
         pass
     try:
@@ -493,7 +449,7 @@ def get_stats():
     except:
         pass
 
-    conn.close()
+    client.close()
     return stats
 
 class CustomStatsView(BaseView):
@@ -513,9 +469,9 @@ def find_and_srot(db,col,key,var):
     _list = []
     
     if key == "time":
-        items = list(conn[db][col].find().sort([('_id', -1)]).limit(1))
+        items = list(client[db][col].find().sort([('_id', -1)]).limit(1))
     else:
-        items = list(conn[db][col].find({key: {"$gt": var}}).sort([(key,ASCENDING)]))
+        items = list(client[db][col].find({key: {"$gt": var}}).sort([(key,ASCENDING)]))
     
     for item in items:
         _list.append("{} {}".format(item["time"].isoformat(),item["message"]))
@@ -564,7 +520,7 @@ def find_items_without_coll(db,col,items):
     _dict = {}
     for item in items:
         if item != '':
-            ret = conn[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
+            ret = client[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
             if ret != None:
                 _dict.update({item:ret})
     return _dict

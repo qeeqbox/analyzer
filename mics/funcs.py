@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout, log_string
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout, log_string
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
@@ -10,7 +10,7 @@ from tld import get_fld,get_tld
 from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
-from ..connections.mongodbconn import client
+from analyzer.connections.mongodbconn import client
 
 def set_dumm_off(db,col):
     try:

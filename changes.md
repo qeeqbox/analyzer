@@ -1,3 +1,11 @@
+#### 2020.V.02.26
+- Fixed bugs
+- Fixed logger wrapper
+
+#### 2020.V.02.25
+- Fixed bugs
+- Switched queue to redis
+
 #### 2020.V.02.24
 - Fixed bugs
 - Fixed webinterface

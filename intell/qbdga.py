@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_entropy_float_ret
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_entropy_float_ret
 from itertools import takewhile
 from re import I, compile, findall, search
 from copy import deepcopy

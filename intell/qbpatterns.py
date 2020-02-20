@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import check_url
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import check_url
+from analyzer.intell.qbdescription import add_description
 from re import I, compile, findall
 from binascii import unhexlify
 from ipaddress import ip_address

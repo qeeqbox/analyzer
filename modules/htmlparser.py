@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_words,get_entropy
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_words,get_entropy
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 from copy import deepcopy

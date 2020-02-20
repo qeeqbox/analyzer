@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from re import findall
 from PIL import Image
 from pytesseract import image_to_string

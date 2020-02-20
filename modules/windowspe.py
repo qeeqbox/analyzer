@@ -1,8 +1,8 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_words,get_entropy,get_entropy_float_ret
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_words,get_entropy,get_entropy_float_ret
+from analyzer.intell.qbdescription import add_description
 from pefile import PE,RESOURCE_TYPE,DIRECTORY_ENTRY
 from hashlib import md5
 from datetime import datetime

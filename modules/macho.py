@@ -1,9 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..mics.funcs import get_words,get_words_multi_files,get_entropy,get_entropy_float_ret
-from ..modules.archive import check_packed_files,dmg_unpack,unpack_file
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.mics.funcs import get_words,get_words_multi_files,get_entropy,get_entropy_float_ret
+from analyzer.modules.archive import check_packed_files,dmg_unpack,unpack_file
+from analyzer.intell.qbdescription import add_description
 from macholib.MachO import LC_SEGMENT,LC_SEGMENT_64,LC_LOAD_DYLIB
 from macholib import MachO,SymbolTable
 from plistlib import readPlist

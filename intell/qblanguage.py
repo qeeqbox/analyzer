@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from nltk.corpus import words
 from nltk import word_tokenize
 from nltk.corpus import wordnet

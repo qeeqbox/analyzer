@@ -1,13 +1,4 @@
-__V__ = "2020.V.02.24"
-
-json_settings = {
-	"mongo_settings_host_docker":"mongodb",
-	"mongo_settings_host_local":"localhost",
-	"mongo_settings_local":"mongodb://localhost:27017/",
-	"mongo_settings_docker":"mongodb://mongodb:27017/",
-	"function_timeout":100,
-	"analyzer_timeout":120,
-}
+__V__ = "2020.V.02.26"
 
 defaultdb = {"dbname":"analyzer",
 			 "reportscoll":"reports",
@@ -17,19 +8,30 @@ defaultdb = {"dbname":"analyzer",
 			 "taskfileslogscoll":"taskfileslogs",
 			 "taskdblogscoll":"taskdblogs"}
 
-mongodb_settings_docker = [{
-				     "ALIAS": "default",
-				     "DB":    defaultdb["dbname"],
-				     "HOST": json_settings["mongo_settings_host_docker"],
-				     "PORT": 27017
-				    }]
-
-mongodb_settings_local = [{
-				     "ALIAS": "default",
-				     "DB":    defaultdb["dbname"],
-				     "HOST": json_settings["mongo_settings_host_local"],
-				     "PORT": 27017
-				    }]
+json_settings = {"local":{
+					"mongo_settings_host":"localhost",
+					"mongo_settings":"mongodb://localhost:27017/",
+					"redis_host": "localhost",
+					"redis_port":6379,
+					"function_timeout":100,
+					"analyzer_timeout":120,
+					"web_mongo":[{   "ALIAS": "default",
+								     "DB":    defaultdb["dbname"],
+								     "HOST": "localhost",
+								     "PORT": 27017
+								    }]},
+				"docker":{
+					"mongo_settings_host":"mongodb",
+					"mongo_settings":"mongodb://mongodb:27017/",
+					"redis_host": "redis",
+					"redis_port":6379,
+					"function_timeout":100,
+					"analyzer_timeout":120,
+					"web_mongo":[{   "ALIAS": "default",
+								     "DB":    defaultdb["dbname"],
+								     "HOST": "mongodb",
+								     "PORT": 27017
+								    }]}}
 
 meta_users_settings = {'db_alias':'default','collection': defaultdb["userscoll"],'strict': False}
 meta_files_settings = {'db_alias':'default','collection': defaultdb["filescoll"],'strict': False}

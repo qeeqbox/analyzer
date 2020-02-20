@@ -1,41 +1,41 @@
 __G__ = "(G)bd249ce4"
 
-from .logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from .modules.qbfile import QBFile
-from .modules.qbencoding import QBEncdoing
-from .modules.linuxelf import LinuxELF
-from .modules.macho import Macho
-from .modules.windowspe import WindowsPe
-from .modules.apkparser import ApkParser
-from .modules.blackberry import BBParser
-from .modules.readpackets import ReadPackets
-from .modules.emailparser import EmailParser
-from .modules.msgparser import MSGParser
-from .modules.pdfparser import PDFParser
-from .modules.officex import Officex
-from .modules.htmlparser import HTMLParser
-from .modules.oleparser import OLEParser
-from .yara.yaraparser import YaraParser
-from .intell.qblanguage import QBLanguage
-from .intell.qbsuspicious import QBSuspicious
-from .intell.qbbehavior import QBBehavior
-from .intell.qbd3generator import QBD3generator
-from .intell.qbocrdetect import QBOCRDetect
-from .intell.qbencryption import QBEncryption
-from .intell.qbwafdetect import QBWafDetect
-from .intell.qbcreditcards import QBCreditcards
-from .intell.qbcredentials import QBCredentials
-from .intell.qbpatterns import QBPatterns
-from .intell.qbdga import QBDGA
-from .intell.qbcountriesviz import QBCountriesviz
-from .intell.qburlsimilarity import QBURLSimilarity
-from .intell.qbwhitelist import QBWhitelist
-from .intell.qbphishing import QBPhishing
-from .snort.qbsnort import QBSnort
-from .qbdetect.loaddetections import LoadDetections
-from .mitre.mitreparser import MitreParser
-from .mitre.qbmitresearch import QBMitresearch
-from .services.online.onlinemultiscanners import OnlineMultiScanners
+from analyzer.logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from analyzer.modules.qbfile import QBFile
+from analyzer.modules.qbencoding import QBEncdoing
+from analyzer.modules.linuxelf import LinuxELF
+from analyzer.modules.macho import Macho
+from analyzer.modules.windowspe import WindowsPe
+from analyzer.modules.apkparser import ApkParser
+from analyzer.modules.blackberry import BBParser
+from analyzer.modules.readpackets import ReadPackets
+from analyzer.modules.emailparser import EmailParser
+from analyzer.modules.msgparser import MSGParser
+from analyzer.modules.pdfparser import PDFParser
+from analyzer.modules.officex import Officex
+from analyzer.modules.htmlparser import HTMLParser
+from analyzer.modules.oleparser import OLEParser
+from analyzer.yara.yaraparser import YaraParser
+from analyzer.intell.qblanguage import QBLanguage
+from analyzer.intell.qbsuspicious import QBSuspicious
+from analyzer.intell.qbbehavior import QBBehavior
+from analyzer.intell.qbd3generator import QBD3generator
+from analyzer.intell.qbocrdetect import QBOCRDetect
+from analyzer.intell.qbencryption import QBEncryption
+from analyzer.intell.qbwafdetect import QBWafDetect
+from analyzer.intell.qbcreditcards import QBCreditcards
+from analyzer.intell.qbcredentials import QBCredentials
+from analyzer.intell.qbpatterns import QBPatterns
+from analyzer.intell.qbdga import QBDGA
+from analyzer.intell.qbcountriesviz import QBCountriesviz
+from analyzer.intell.qburlsimilarity import QBURLSimilarity
+from analyzer.intell.qbwhitelist import QBWhitelist
+from analyzer.intell.qbphishing import QBPhishing
+from analyzer.snort.qbsnort import QBSnort
+from analyzer.qbdetect.loaddetections import LoadDetections
+from analyzer.mitre.mitreparser import MitreParser
+from analyzer.mitre.qbmitresearch import QBMitresearch
+from analyzer.services.online.onlinemultiscanners import OnlineMultiScanners
 
 class Analyzer:
     @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
@@ -87,7 +87,7 @@ class Analyzer:
 
         log_string("Start analyzing {}".format(parsed.file),"Yellow")
 
-        self.qbfile.analyze(data,parsed.file,parsed.output)
+        self.qbfile.analyze(data,parsed.uuid,parsed.file,parsed.output)
         self.qbencoding.analyze(data,parsed.file,parsed.unicode)
 
         if self.pdfparser.check_sig(data):

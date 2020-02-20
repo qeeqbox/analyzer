@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..intell.qblanguage import check_spelling
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.intell.qblanguage import check_spelling
 from re import compile, findall
 from copy import deepcopy
 

@@ -1,24 +1,22 @@
 __G__ = "(G)bd249ce4"
 
 from logging import DEBUG, ERROR, Handler, WARNING, getLogger
-from os import path
-from _thread import interrupt_main
-from sys import stdout,stderr
-from threading import Timer
+from os import path,environ
+from sys import stdout
 from datetime import datetime
-from ..settings import json_settings, defaultdb
-from ..connections.mongodbconn import add_item_fs,add_item, update_task
+from analyzer.settings import json_settings, defaultdb
+from analyzer.connections.mongodbconn import add_item_fs,add_item, update_task
 from tempfile import gettempdir
+import concurrent.futures as futures
+from ctypes import py_object, c_long, pythonapi
 
 logterminal,dynamic,verbose_flag,verbose_timeout = None,None, None, None
+env_var = environ["analyzer_env"]
 
 if dynamic == None:dynamic = getLogger("qbanalyzerdynamic")
 if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
 if verbose_flag == None:verbose_flag = False
-if verbose_timeout == None: verbose_timeout = json_settings["function_timeout"]
-
-lock = False
-chain = []
+if verbose_timeout == None: verbose_timeout = json_settings[env_var]["function_timeout"]
 
 class colors:
     Restore = '\033[0m'
@@ -109,52 +107,56 @@ def log_string(_str,color):
         logterminal.info([ctime,_str,yellow_hashtag])
         dynamic.info([ctime,_str,"#"])
 
+def terminate_thread(thread):
+    if not thread.isAlive():
+        return
+    res = pythonapi.PyThreadState_SetAsyncExc(c_long(thread.ident), py_object(SystemExit))
+    if res == 0:
+        raise ValueError("No thread ID")
+    elif res > 1:
+        pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
+        raise SystemError("Failed")
+
 def verbose(OnOff=False,Verb=False,timeout=30,str=None,extra=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
     '''    
-    def quite(fn,timeout):
-        global lock
-        stderr.flush()
-        interrupt_main()
-        lock = fn
-        log_string("{} > {}s.. Timeout".format(fn,timeout), "Red")
-
     def decorator(func):
         def wrapper(*args, **kwargs):
-            global lock
-            global chain
+            result = None
             function_name = func.__module__+"."+func.__name__
-            if lock:
-                return None
-            timer = None
-            ret = None
-            chain.append(function_name)
+            #chain.append(function_name)
             try:
                 if Verb:
                     log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
                 if str:
                     log_string(str, "Green")
-                if extra == "analyzer":
-                    timer = Timer(json_settings["analyzer_timeout"], quite, args=[function_name,json_settings["analyzer_timeout"]])
-                else:
-                    timer = Timer(json_settings["function_timeout"], quite, args=[function_name,json_settings["function_timeout"]])
-                timer._name = func.__module__+"."+func.__name__
-                timer.start()
-                ret = func(*args, **kwargs)
-            except KeyboardInterrupt:
-                pass
+
+                #? -->
+                with futures.ThreadPoolExecutor() as executor:
+                    if extra == "analyzer":
+                        time = json_settings[env_var]["analyzer_timeout"]
+                    else:
+                        time = json_settings[env_var]["function_timeout"]
+                    future = executor.submit(func, *args, **kwargs)
+                    try:
+                        result = future.result(time)
+                    except futures.TimeoutError:
+                        log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
+                        executor.shutdown(wait=False)
+                        for thread in executor._threads:
+                            terminate_thread(thread)
+                        #raise TimeoutError from None
+                    executor._threads.clear()
+                    futures.thread._threads_queues.clear()
+                    return result
+
             except Exception as e:
                 #print(e)
                 log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
-            finally:
-                if timer != None:
-                    timer.cancel()
-            if function_name == chain[-1]:
-                if function_name == lock:
-                    lock = False
-                chain.remove(function_name)
-            return ret
+            #if function_name == chain[-1]:
+            #    chain.remove(function_name)
+            return result
         return wrapper
     return decorator
 

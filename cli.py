@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from .settings import __V__
+from analyzer.settings import __V__
 
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
@@ -16,41 +16,34 @@ if __name__ == '__main__':
     if len(argv) == 3:
         if argv[2] == "--local" or argv[2] == "--docker":
             environ["analyzer_env"] = argv[2][2:]
-        if argv[1] == "--interactive" or argv[1] == "--silent":
-            pass
     else:
         print("Please choose a mode:")
-        print("--interactive         Run this framework as an application")
-        print("--silent              Run this framework as service (Required an interface for interaction)")
-        print()
-        print("--local               Use local mongodb")
-        print("--docker              Use remote mongodb)")
+        print("--local               Use local settings")
+        print("--docker              Use remote settings)")
         print()
         print("Examples:")
-        print("python3 -m app.cli --interactive --local")
         print("python3 -m app.cli --silent --docker\n")
         exit()
 else:
     exit()
 
-from .connections.mongodbconn import startinit
-startinit("databases")
-
-from .analyzer import Analyzer
-from .mics.funcs import kill_python_cli,kill_process_and_subs
-from .redisqueue.qbqueue import QBQueue
-from .logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger
-from .report.reporthandler import ReportHandler
-from .settings import json_settings
+from analyzer.analyzer_ import Analyzer
+from analyzer.mics.funcs import kill_python_cli,kill_process_and_subs
+from analyzer.redisqueue.qbqueue import QBQueue
+from analyzer.logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger
+from analyzer.report.reporthandler import ReportHandler
+from analyzer.settings import json_settings
+from analyzer.connections.redisconn import put_cache
 from cmd import Cmd
-from os import path,listdir,environ
 from argparse import ArgumentParser
 from shlex import split as ssplit
 from tempfile import NamedTemporaryFile,gettempdir
-from sys import stdout,argv
 from signal import SIGTSTP, signal
 from uuid import uuid4
 from time import sleep
+from contextlib import redirect_stdout
+from io import StringIO
+from gc import collect
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -58,7 +51,13 @@ def ctrlhandler(signum, frame):
     kill_process_and_subs()
 
 class Namespace:
-    def __init__(self, kwargs):
+    def __init__(self, kwargs,disable_keys,enable_keys):
+        for key in disable_keys:
+            if key in kwargs:
+                kwargs[key] = False
+        for key in enable_keys:
+            if key in kwargs:
+                kwargs[key] = True
         self.__dict__.update(kwargs)
 
 class QBAnalyzer(Cmd):
@@ -126,9 +125,10 @@ class QBAnalyzer(Cmd):
         super(QBAnalyzer, self).__init__()
         self.san = Analyzer()
         self.rep = ReportHandler()
+        self.do_cache_switches()
 
         if mode == "--silent":
-            queue = QBQueue("analyzerqueue", host="redis", port=6379, db=0)
+            queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
             log_string("Waiting on tasks..","Green")
             while True:
                 sleep(2)
@@ -136,60 +136,50 @@ class QBAnalyzer(Cmd):
                 if task != None:
                     self.do_analyze(task['data'],True)
                     log_string("Waiting on tasks..","Green")
+                    collect()
             kill_process_and_subs()
         else:
-            self.prompt = "(interactive) "
+            self.prompt = "(testing) " #no more interactive
 
     def help_analyze(self):
         self._analyze_parser.print_help()
-        example = '''\nExamples:
-    analyze --folder /home/malware --full --disk_dump_html --disk_dump_json --db_dump_html --db_dump_json --open
-    analyze --file /malware/2019-12-20-Word-doc-with-macro-for-Emotet.doc --full --db_dump_json --print_json
-    analyze --folder /malware --full --db_dump_json --open
-    analyze --folder /malware --output /outputfolder --yara --mitre --ocr --disk_dump_json --open
-    analyze --buffer "google.com bit.ly" --topurl --db_dump_html --open
-    analyze --buffer "google.com bit.ly" --full --print_json
-    '''
-        print(example)
+
+    def do_cache_switches(self):
+        try:
+            with StringIO() as buf, redirect_stdout(buf):
+                self._analyze_parser.print_help()
+                output = buf.getvalue()
+            #subbed = search(compile(r"Analysis switches\:.*",DOTALL),output).group(0)
+            put_cache("switches",output)
+            log_string("Dumped switches","Green")
+        except:
+            log_string("Dumping switches failed","Red")
 
     def do_analyze(self,line,silent=False):
         try:
             if silent:
                 parsed_args = vars(self._analyze_parser.parse_args(""))
-                parsed = Namespace({**parsed_args,**line})
-                if parsed.uuid:
-                    parsed.disk_dump_html = False
-                    parsed.disk_dump_json = False
-                    parsed.open = False
-                    parsed.print = False
-                    parsed.db_dump_json = True
-                    parsed.db_dump_html = True
-                else:
+                parsed = Namespace({**parsed_args,**line},["disk_dump_html","disk_dump_json","open","print"],["db_dump_json","db_dump_html"])
+                if not parsed.uuid:
                     return
             else:
                 parsed = self._analyze_parser.parse_args(ssplit(line))
                 parsed.uuid = str(uuid4())
 
-            try:
-                if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
-                    json_settings["analyzer_timeout"] = int(parsed.analyzer_timeout)
-            except:
-                pass
-            try:
-                if int(parsed.function_timeout) > 0 and int(parsed.function_timeout) < 240:
-                    json_settings["function_timeout"] = int(parsed.function_timeout)
-            except:
-                pass
+            if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
+                json_settings[environ["analyzer_env"]]["analyzer_timeout"] = int(parsed.analyzer_timeout)
+            if int(parsed.function_timeout) > 0 and int(parsed.function_timeout) < 240:
+               json_settings[environ["analyzer_env"]]["function_timeout"] = int(parsed.function_timeout)
+            if not parsed.output:
+                parsed.output = gettempdir()
 
-            log_string("Default timeout {}s for the task, and {}s for each logic".format(json_settings["analyzer_timeout"], json_settings["function_timeout"]),"Yellow")
+            log_string("Default timeout {}s for the task, and {}s for each logic".format(json_settings[environ["analyzer_env"]]["analyzer_timeout"],json_settings[environ["analyzer_env"]]["function_timeout"]),"Yellow")
         except:
             log_string("Parsing failed, something went wrong..","Red")
             return
 
         log_string("Task {} (Started)".format(parsed.uuid),"Yellow")
 
-        if not parsed.output:
-            parsed.output = gettempdir()
         if parsed.file or parsed.folder or parsed.buffer:
             try:
                 setup_task_logger(parsed.uuid)
@@ -210,6 +200,7 @@ class QBAnalyzer(Cmd):
         if path.exists(parsed.file) and path.isfile(parsed.file):
             data = self.san.analyze(parsed)
             self.rep.check_output(data,parsed)
+            del data
         else:
             log_string("Target File/dump is wrong..","Red")
 
@@ -222,6 +213,7 @@ class QBAnalyzer(Cmd):
                     data = self.san.analyze(parsed)
                     self.rep.check_output(data,parsed)
                     parsed.extra = ""
+                    del data
         else:
             log_string("Target folder is wrong..","Red")
 
@@ -233,6 +225,7 @@ class QBAnalyzer(Cmd):
             parsed.file = tempname
             data = self.san.analyze(parsed)
             self.rep.check_output(data,parsed)
+            del data
         else:
             log_string("Target buffer is empty..","Red")
 

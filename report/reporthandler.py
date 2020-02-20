@@ -1,11 +1,11 @@
-from ..logger.logger import log_string,verbose,verbose_flag,verbose_timeout
-from ..mics.funcs import open_in_browser, serialize_obj
-from ..report.htmlmaker import HtmlMaker
-from ..report.jsonmaker import JSONMaker
-from ..connections.mongodbconn import add_item_fs
-from ..intell.qbimage import QBImage
-from ..intell.qbicons import QBIcons
-from ..settings import defaultdb
+from analyzer.logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from analyzer.mics.funcs import open_in_browser, serialize_obj
+from analyzer.report.htmlmaker import HtmlMaker
+from analyzer.report.jsonmaker import JSONMaker
+from analyzer.connections.mongodbconn import add_item_fs
+from analyzer.intell.qbimage import QBImage
+from analyzer.intell.qbicons import QBIcons
+from analyzer.settings import defaultdb
 from datetime import datetime
 
 class ReportHandler:

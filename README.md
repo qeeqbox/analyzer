@@ -1,7 +1,7 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/analyzerlogo.png"></p>
 
 #
-[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker&query=$.docker&colorB=red)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
+<!-- badges -->[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker&query=$.docker&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)<!-- /badges -->
 
 Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
 
@@ -36,7 +36,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
 - [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
-## General Features
+<!-- include -->## General Features
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Intime analysis (Session is saved)
@@ -261,8 +261,9 @@ Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, h
 - https://github.com/python-pillow/Pillow/blob/master/LICENSE
 - https://github.com/nltk/nltk/blob/develop/LICENSE.txt
 - http://p7zip.sourceforge.net/
+- https://redislabs.com/legal/licenses/
 - https://github.com/andymccurdy/redis-py/blob/master/LICENSE
 
 ## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
-- If you are interested in adopting some features in your project, please mention this source somewhere in your project
+- If you are interested in adopting some features in your project, please mention this source somewhere in your project<!-- /include -->

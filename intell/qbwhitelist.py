@@ -1,7 +1,7 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..connections.mongodbconn import find_items
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.connections.mongodbconn import find_items
 from re import I, compile
 from copy import deepcopy
 

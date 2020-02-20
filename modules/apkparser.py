@@ -1,9 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
-from ..modules.archive import check_packed_files, unpack_file
-from ..mics.funcs import get_words_multi_files,get_words
-from ..intell.qbdescription import add_description
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.modules.archive import check_packed_files, unpack_file
+from analyzer.mics.funcs import get_words_multi_files,get_words
+from analyzer.intell.qbdescription import add_description
 from r2pipe import open as r2open
 from xml.dom.minidom import parseString
 from re import sub

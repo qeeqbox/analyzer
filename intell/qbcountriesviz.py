@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from ..logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from copy import deepcopy
 
 class QBCountriesviz:
@@ -40,7 +40,7 @@ class QBCountriesviz:
         data["Flags"] = {"Flags":[]}
         self.find_flags(data["Flags"]["Flags"],data)
 
-    @verbose(True,verbose_flag,verbose_timeout,"Get countries flags")
+    @verbose(True,verbose_flag,verbose_timeout,"Get countries codes")
     def get_all_codes(self,data):
         '''
         start get countries codes logic

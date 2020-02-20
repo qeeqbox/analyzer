@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 from os import environ
-from ..settings import elastic_db
+from analyzer.settings import elastic_db
 
 if environ["analyzer_env"] == "local":
     es = Elasticsearch([elastic_db])

@@ -5,3 +5,4 @@ RUN pip3 install requests flask werkzeug gunicorn flask_mongoengine flask_admin 
 WORKDIR /analyzer
 ADD ./ .
 RUN python3 initializer.py --key
+WORKDIR /

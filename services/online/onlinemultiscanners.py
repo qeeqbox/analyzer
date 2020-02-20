@@ -1,13 +1,13 @@
 __G__ = "(G)bd249ce4"
 
 from os import path
-from ...logger.logger import verbose, verbose_flag, verbose_timeout
-from .hybridanalysis import HybridAnalysis
-from .malshare import MalShare
-from .metadefender import MetaDefender
-from .virustotal import VirusTotal
-from .alienvault import AlienVault
-from .pulsedive import PulseDive
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.services.online.hybridanalysis import HybridAnalysis
+from analyzer.services.online.malshare import MalShare
+from analyzer.services.online.metadefender import MetaDefender
+from analyzer.services.online.virustotal import VirusTotal
+from analyzer.services.online.alienvault import AlienVault
+from analyzer.services.online.pulsedive import PulseDive
 from copy import deepcopy
 
 class OnlineMultiScanners:
