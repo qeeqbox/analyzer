@@ -11,6 +11,9 @@ print("                                                            ")
 
 from sys import stdout,argv
 from os import path,listdir,environ
+from sys import setswitchinterval
+
+setswitchinterval(0.0000001)
 
 if __name__ == '__main__':
     if len(argv) == 3:
@@ -64,6 +67,7 @@ class QBAnalyzer(Cmd):
     kill_python_cli()
     setup_logger()
     signal(SIGTSTP, ctrlhandler)
+    
     #signal(SIGINT, ctrlhandler)
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()

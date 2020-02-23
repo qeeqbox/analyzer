@@ -12,6 +12,7 @@ from ctypes import py_object, c_long, pythonapi
 
 logterminal,dynamic,verbose_flag,verbose_timeout = None,None, None, None
 env_var = environ["analyzer_env"]
+list_executor = []
 
 if dynamic == None:dynamic = getLogger("qbanalyzerdynamic")
 if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
@@ -117,45 +118,51 @@ def terminate_thread(thread):
         pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
         raise SystemError("Failed")
 
-def verbose(OnOff=False,Verb=False,timeout=30,str=None,extra=None):
+def verbose(OnOff=False,Verb=False,timeout=None,str=None,extra=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
     '''    
     def decorator(func):
         def wrapper(*args, **kwargs):
             result = None
+            executor_temp = None 
+            global list_executor
             function_name = func.__module__+"."+func.__name__
-            #chain.append(function_name)
             try:
                 if Verb:
                     log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
                 if str:
                     log_string(str, "Green")
-
-                #? -->
+                if extra == "analyzer":
+                    time = json_settings[env_var]["analyzer_timeout"]
+                else:
+                    time = json_settings[env_var]["function_timeout"]
                 with futures.ThreadPoolExecutor() as executor:
-                    if extra == "analyzer":
-                        time = json_settings[env_var]["analyzer_timeout"]
-                    else:
-                        time = json_settings[env_var]["function_timeout"]
+                    executor_temp = executor
+                    list_executor.append(executor)
                     future = executor.submit(func, *args, **kwargs)
                     try:
                         result = future.result(time)
-                    except futures.TimeoutError:
-                        log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
                         executor.shutdown(wait=False)
-                        for thread in executor._threads:
-                            terminate_thread(thread)
-                        #raise TimeoutError from None
-                    executor._threads.clear()
-                    futures.thread._threads_queues.clear()
-                    return result
-
+                        executor._threads.clear()
+                        futures.thread._threads_queues.clear()
+                    except futures.TimeoutError:
+                        try:
+                            log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
+                            for executor in list_executor:
+                                #if executor_temp != executor:
+                                #    for thread in executor._threads:    
+                                #        terminate_thread(thread)
+                                executor.shutdown(wait=False)
+                                executor._threads.clear()
+                                futures.thread._threads_queues.clear()
+                            list_executor = []
+                        except:
+                            log_string("Wrapper failed..", "Red")
+                if executor_temp in list_executor:
+                    list_executor.remove(executor_temp)
             except Exception as e:
-                #print(e)
                 log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
-            #if function_name == chain[-1]:
-            #    chain.remove(function_name)
             return result
         return wrapper
     return decorator

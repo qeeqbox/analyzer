@@ -173,4 +173,5 @@ class Analyzer:
             self.qbcountriesviz.get_flags_from_codes(data)
         if parsed.worldmap or parsed.full:
             self.qbcountriesviz.get_all_codes(data)
+
         return data

@@ -1,3 +1,6 @@
+#### 2020.V.02.27
+- Fixed some issues with queues
+
 #### 2020.V.02.26
 - Fixed bugs
 - Fixed logger wrapper
