@@ -217,7 +217,17 @@ http://127.0.0.1:8000/login/ <br>
 - [secwiki](https://wiki.ourren.com/news?tag=tools)
 
 ## Resources
-Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
+- Linux documentation
+- MacOS documentation
+- Windows documentation
+- Android documentation
+- software77
+- MITRE ATT&CK™
+- sc0ty
+- hexacorn
+- PEID
+- cisco umbrella 
+- TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
 
 ## Other Licenses
 #### By using this framework, you are accepting the license terms of each package listed below:
