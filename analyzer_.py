@@ -77,7 +77,7 @@ class Analyzer:
         self.onlinemultiscanners = OnlineMultiScanners()
         self.qbsnort = QBSnort()
     
-    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer",extra="analyzer")
+    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
     def analyze(self,parsed) -> dict:
         '''
         main analyze logic!

@@ -1,3 +1,7 @@
+#### 2020.V.02.28
+- Fixed some bugs in loggers
+- Removed logger decoration from recursive functions
+
 #### 2020.V.02.27
 - Fixed some issues with queues
 

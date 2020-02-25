@@ -1,4 +1,4 @@
-__V__ = "2020.V.02.27"
+__V__ = "2020.V.02.28"
 
 defaultdb = {"dbname":"analyzer",
 			 "reportscoll":"reports",

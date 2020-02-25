@@ -49,20 +49,6 @@ def open_in_browser(_path):
     open_new_tab(_path)
 
 @verbose(True,verbose_flag,verbose_timeout,None)
-def check_url(url) -> bool:
-    if not url.startswith(("http://","https://","ftp://")):
-        url = "http://"+url
-    if get_tld(url, fail_silently=True):
-        root = None
-        try:
-            root = get_fld(url,fix_protocol=True)
-        except:
-            pass
-        if root:
-            return True
-    return False
-
-@verbose(True,verbose_flag,verbose_timeout,None)
 def get_entropy(data) -> str:
     '''
     get entropy of buffer
@@ -188,17 +174,35 @@ def get_words_multi_filesarray(data,arr) -> (list,str):
                             "wordsinsensitive": wordsinsensitive,
                             "wordsstripped": wordsstripped }
 
-@verbose(True,verbose_flag,verbose_timeout,None)
 def serialize_obj(obj):
     '''
     recursive str serialization obj
     '''
-    if type(obj) == dict:
-        for key, value in obj.items():
-            obj[key] = serialize_obj(value)
-    elif type(obj) == list:
-        for i, item in enumerate(obj):
-            obj[i] = serialize_obj(item)
-    else:
-        obj = str(obj)
-    return obj
+    try:
+        if type(obj) == dict:
+            for key, value in obj.items():
+                obj[key] = serialize_obj(value)
+        elif type(obj) == list:
+            for i, item in enumerate(obj):
+                obj[i] = serialize_obj(item)
+        else:
+            obj = str(obj)
+        return obj
+    except:
+        pass
+
+def check_url(url) -> bool:
+    try:
+        if not url.startswith(("http://","https://","ftp://")):
+            url = "http://"+url
+        if get_tld(url, fail_silently=True):
+            root = None
+            try:
+                root = get_fld(url,fix_protocol=True)
+            except:
+                pass
+            if root:
+                return True
+        return False
+    except:
+        pass

@@ -19,6 +19,8 @@ class HtmlMaker:
         self.template = self.templates + "template.html"
         self.qbimage = qbimage()
         self.qbicons = qbicons()
+        self.add_text_area = """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
+        self.empty_text_area = """<div class=empty></div>"""
         self.get_moudles()
 
     @verbose(True,verbose_flag,verbose_timeout,None)
@@ -28,20 +30,6 @@ class HtmlMaker:
         '''
         x = [x.split(".")[0] for x in modules.keys() if not x.startswith("_")]
         self.d = '(QBAnalyzer∞ proudly uses/depends on Docker, Python3, Bootstrap, Javascript, jquery, D3.js, JSON, Html, Sqlite3, Wikipedia, Linux\\MacOS\\Windows\\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, radare2, dmg2img, snort, font-awesome, flag-icon-css, {} and tons of researches ..) If i missed a reference/dependency, please let me know!'.format(', '.join(list(set(x))))
-
-    @verbose(True,verbose_flag,verbose_timeout,None)
-    def add_text_area(self) -> str:
-        '''
-        textarea tag
-        '''
-        return """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
-
-    @verbose(True,verbose_flag,verbose_timeout,None)
-    def empty_text_area(self) -> str:
-        '''
-        textarea tag
-        '''
-        return """<div class=empty></div>"""
 
 
     @verbose(True,verbose_flag,verbose_timeout,"Making yara table")
@@ -74,8 +62,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header=header,data=data)
         return result
 
@@ -99,8 +87,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header=header,data=data,size=len(data))
         return result
 
@@ -138,8 +126,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
@@ -176,8 +164,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
@@ -205,8 +193,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header=header,data=data,_safe=_safe)
         return result
 
@@ -244,8 +232,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(headers=headers,data=data,_safe=_safe)
         return result
 
@@ -269,8 +257,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header=header,data=data)
         return result
 
@@ -324,8 +312,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header=header,data=str(data),name=name)
         return result
 
@@ -470,8 +458,8 @@ class HtmlMaker:
             </tbody>
         </table>
         </div>"""
-        if textarea: temp += self.add_text_area()
-        else: temp += self.empty_text_area()
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
         result = Template(temp).render(header="Xrefs",data=str(data),name=name)
         return result
 

@@ -2,22 +2,25 @@ __G__ = "(G)bd249ce4"
 
 from logging import DEBUG, ERROR, Handler, WARNING, getLogger
 from os import path,environ
-from sys import stdout
+from sys import stdout, stderr
 from datetime import datetime
 from analyzer.settings import json_settings, defaultdb
 from analyzer.connections.mongodbconn import add_item_fs,add_item, update_task
 from tempfile import gettempdir
 import concurrent.futures as futures
 from ctypes import py_object, c_long, pythonapi
+from multiprocessing.context import TimeoutError
+from multiprocessing.pool import ThreadPool
+import traceback
 
-logterminal,dynamic,verbose_flag,verbose_timeout = None,None, None, None
+logterminal,dynamic,verbose_flag,verbose_timeout, pool = None,None, None, None, None
 env_var = environ["analyzer_env"]
-list_executor = []
 
 if dynamic == None:dynamic = getLogger("qbanalyzerdynamic")
 if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
 if verbose_flag == None:verbose_flag = False
-if verbose_timeout == None: verbose_timeout = json_settings[env_var]["function_timeout"]
+if verbose_timeout == None:verbose_timeout = json_settings[env_var]["function_timeout"]
+if pool == None:pool = ThreadPool()
 
 class colors:
     Restore = '\033[0m'
@@ -118,50 +121,47 @@ def terminate_thread(thread):
         pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
         raise SystemError("Failed")
 
-def verbose(OnOff=False,Verb=False,timeout=None,str=None,extra=None):
+def clear_pool():
+    try:
+        pool.terminate()
+        pool.join()
+        pool.close()
+        pool = ThreadPool()
+    except:
+        pass
+
+def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
     '''    
     def decorator(func):
         def wrapper(*args, **kwargs):
             result = None
-            executor_temp = None 
-            global list_executor
+            global pool
             function_name = func.__module__+"."+func.__name__
             try:
                 if Verb:
                     log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
-                if str:
-                    log_string(str, "Green")
-                if extra == "analyzer":
+                if _str:
+                    log_string(_str, "Green")
+                if _str == "Starting Analyzer":
                     time = json_settings[env_var]["analyzer_timeout"]
                 else:
                     time = json_settings[env_var]["function_timeout"]
-                with futures.ThreadPoolExecutor() as executor:
-                    executor_temp = executor
-                    list_executor.append(executor)
-                    future = executor.submit(func, *args, **kwargs)
-                    try:
-                        result = future.result(time)
-                        executor.shutdown(wait=False)
-                        executor._threads.clear()
-                        futures.thread._threads_queues.clear()
-                    except futures.TimeoutError:
-                        try:
-                            log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
-                            for executor in list_executor:
-                                #if executor_temp != executor:
-                                #    for thread in executor._threads:    
-                                #        terminate_thread(thread)
-                                executor.shutdown(wait=False)
-                                executor._threads.clear()
-                                futures.thread._threads_queues.clear()
-                            list_executor = []
-                        except:
-                            log_string("Wrapper failed..", "Red")
-                if executor_temp in list_executor:
-                    list_executor.remove(executor_temp)
+                try:
+                    res = pool.apply_async(func, args, kwargs)
+                    result = res.get(timeout=time)
+                except TimeoutError:
+                    log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
+                    pool.terminate()
+                    pool.join()
+                    pool.close()
+                    pool = ThreadPool()
+                except Exception as e:
+                    #print(traceback.format_exc())
+                    log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
             except Exception as e:
+                #print(traceback.format_exc())
                 log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
             return result
         return wrapper

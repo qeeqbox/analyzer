@@ -33,7 +33,7 @@ else:
 from analyzer.analyzer_ import Analyzer
 from analyzer.mics.funcs import kill_python_cli,kill_process_and_subs
 from analyzer.redisqueue.qbqueue import QBQueue
-from analyzer.logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger
+from analyzer.logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger,clear_pool
 from analyzer.report.reporthandler import ReportHandler
 from analyzer.settings import json_settings
 from analyzer.connections.redisconn import put_cache
@@ -135,7 +135,7 @@ class QBAnalyzer(Cmd):
             queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
             log_string("Waiting on tasks..","Green")
             while True:
-                sleep(2)
+                sleep(1)
                 task = queue.get()
                 if task != None:
                     self.do_analyze(task['data'],True)
@@ -202,7 +202,9 @@ class QBAnalyzer(Cmd):
 
     def analyze_file(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
+            clear_pool()
             data = self.san.analyze(parsed)
+            clear_pool()
             self.rep.check_output(data,parsed)
             del data
         else:
@@ -211,10 +213,12 @@ class QBAnalyzer(Cmd):
     def analyze_folder(self,parsed):
         if path.exists(parsed.folder) and path.isdir(parsed.folder):
             for f in listdir(parsed.folder):
+                clear_pool()
                 fullpath = path.join(parsed.folder, f)
                 if path.isfile(fullpath):
                     parsed.file = fullpath
                     data = self.san.analyze(parsed)
+                    clear_pool()
                     self.rep.check_output(data,parsed)
                     parsed.extra = ""
                     del data
@@ -223,11 +227,13 @@ class QBAnalyzer(Cmd):
 
     def analyze_buffer(self,parsed):
         if parsed.buffer != None:
+            clear_pool()
             tempname = NamedTemporaryFile().name
             with open(tempname,"w") as tempfile:
                 tempfile.write(parsed.buffer)
             parsed.file = tempname
             data = self.san.analyze(parsed)
+            clear_pool()
             self.rep.check_output(data,parsed)
             del data
         else:

@@ -2,9 +2,9 @@ from analyzer.logger.logger import log_string,verbose,verbose_flag,verbose_timeo
 from analyzer.mics.funcs import open_in_browser, serialize_obj
 from analyzer.report.htmlmaker import HtmlMaker
 from analyzer.report.jsonmaker import JSONMaker
-from analyzer.connections.mongodbconn import add_item_fs
 from analyzer.intell.qbimage import QBImage
 from analyzer.intell.qbicons import QBIcons
+from analyzer.connections.mongodbconn import add_item_fs
 from analyzer.settings import defaultdb
 from datetime import datetime
 
