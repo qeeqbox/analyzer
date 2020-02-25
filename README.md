@@ -3,7 +3,7 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker&query=$.docker&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
 
-Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
+Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/introv2.24.gif" style="max-width:768px"/>
@@ -186,10 +186,10 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - &#9745; ~~Curling some TIPs (Requested by users)~~
 - &#9745; ~~MS office module~~
 - &#9745; ~~Snort wrapper (Requested by users)~~
+- &#9745; ~~Machine learning modules - Moving to different project~~
 - Offline multiscanner (Requested by users)
 - Java analysis (Requested by users)
 - Web detection
-- Machine learning modules (maybe commercial)
 
 ## Prerequisites
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
