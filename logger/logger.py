@@ -124,7 +124,7 @@ def clear_pool():
         pool.terminate()
         pool.join()
         pool.close()
-        ThreadPool()
+        pool = ThreadPool()
     except:
         pass
 
