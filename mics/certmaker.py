@@ -1,3 +1,5 @@
+__G__ = "(G)bd249ce4"
+
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import PKey, TYPE_RSA, X509, X509Extension, dump_certificate, dump_privatekey
 from uuid import uuid4

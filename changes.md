@@ -1,3 +1,6 @@
+#### 2020.V.02.29
+- Added tagger
+
 #### 2020.V.02.28
 - Fixed some bugs in loggers
 - Removed logger decoration from recursive functions

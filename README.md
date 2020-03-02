@@ -3,7 +3,7 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker&query=$.docker&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
 
-Threat intelligence framework for extracting artifacts and IoCs from file/dump into readable format
+Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/introv2.24.gif" style="max-width:768px"/>
@@ -59,6 +59,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - Similarity image divided to classes
 - YARA module and YARA rules included
 - YARA module includes conditions
+- Yara tags by index
 - URL/EMAIL/TEL/Tags patterns extraction
 - Credit Cards patterns extraction
 - Credential patterns extraction
@@ -162,7 +163,7 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
     - Extract scripts, iframes, links and forms
     - Decode/analyze links
     - Script entropy
-- Online TIPs (Required tokens)
+- Online TIPs (Required tokens, Moving to different project)
     - HybridAnalysis
     - MalShare
     - MetaDefender
@@ -186,10 +187,10 @@ Threat intelligence framework for extracting artifacts and IoCs from file/dump i
 - &#9745; ~~Curling some TIPs (Requested by users)~~
 - &#9745; ~~MS office module~~
 - &#9745; ~~Snort wrapper (Requested by users)~~
+- &#9745; ~~Machine learning modules - Moving to different project~~
 - Offline multiscanner (Requested by users)
 - Java analysis (Requested by users)
 - Web detection
-- Machine learning modules (maybe commercial)
 
 ## Prerequisites
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
@@ -217,11 +218,23 @@ http://127.0.0.1:8000/login/ <br>
 - [secwiki](https://wiki.ourren.com/news?tag=tools)
 
 ## Resources
-Linux\MacOS\Windows\Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, cisco umbrella and tons of researches.. (If i missed a resource/dependency, please let me know!)
+- Linux documentation
+- MacOS documentation
+- Windows documentation
+- Android documentation
+- software77
+- MITRE ATT&CK™
+- sc0ty
+- hexacorn
+- PEID
+- cisco umbrella 
+- yara rules community 
+- TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
 
 ## Other Licenses
 #### By using this framework, you are accepting the license terms of each package listed below:
 - https://github.com/arbor/yara/blob/master/LICENSE
+- https://github.com/Yara-Rules/rules/blob/master/LICENSE
 - https://github.com/tesseract-ocr/tesseract/blob/master/LICENSE
 - http://www.swig.org/Release/LICENSE
 - https://www.radare.org/r/license.html

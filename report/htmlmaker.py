@@ -238,6 +238,71 @@ class HtmlMaker:
         return result
 
     @verbose(True,verbose_flag,verbose_timeout,None)
+    def make_list_set_table_tags_1(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render list into html table
+        '''
+        temp = """
+        <div class="tablewrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                    {% for header in headers %}
+                        {% if header in item %}
+                            {% if header == "namespace" %}
+                                <td class="{{item["color"]|e}}">{{item[header]|e}}</td>
+                            {% else %}
+                                <td>{{item[header]|e}}</td>
+                            {% endif %}
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>"""
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
+        result = Template(temp).render(headers=headers,data=data,_safe=_safe)
+        return result
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
+    def make_list_set_table_tags_2(self,data,headers,exclude=None,textarea=None,_safe=None) -> str:
+        '''
+        render dict into html table
+        '''
+        temp = """
+        <div class="tablewrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ headers }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td class="custom-td">{% for item in data %}<span class="label {{item["color"]|e}}">{{item["rule"]|e}}</span>  {% endfor %}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>"""
+        if textarea: temp += self.add_text_area
+        else: temp += self.empty_text_area
+        result = Template(temp).render(headers=headers,data=data,_safe=_safe)
+        return result
+
+
+    @verbose(True,verbose_flag,verbose_timeout,None)
     def make_flags(self,data,header,exclude=None,textarea=None,_safe=None) -> str:
         '''
         render similarity image inside html table
@@ -483,6 +548,9 @@ class HtmlMaker:
                             for item in data[x][key[3:]]:
                                 table += self.make_list_set_table_new2(item,["key","value"],None,False,None)
                     elif key.startswith("__"):
+                        if x == "Yara" and len(data[x][key[2:]]) > 0:
+                            table += self.make_list_set_table_tags_1(data[x][key[2:]],data[x][key],None,False,None)
+                            table += self.make_list_set_table_tags_2(data[x][key[2:]],"tags",None,False,None)
                         if len(data[x][key[2:]]) > 0:
                             for item in data[x][key[2:]]:
                                 table += self.make_list_set_table_new2(data[x][key[2:]][item],["key","value"],None,False,None)

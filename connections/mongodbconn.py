@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 from os import environ
 from analyzer.settings import json_settings
 
-client = MongoClient(json_settings[environ["analyzer_env"]]["mongo_settings"], serverSelectionTimeoutMS=1000)
+client = MongoClient(json_settings[environ["analyzer_env"]]["mongo_settings"])
 
 def update_task(db,col,task,log):
     client[db][col].update({'task': task}, {'$push': {'logs': log}}, upsert = True)
@@ -26,7 +26,7 @@ def add_item(db,col,_set):
         return False
 
 def find_item(db,col,_set):
-    item = client[db][col].find_one(_set,{'_id': False}).max_time_ms(500)
+    item = client[db][col].find_one(_set,{'_id': False})
     if item != None:
         return item
     else:
@@ -35,7 +35,7 @@ def find_item(db,col,_set):
 def find_items(db,_set):
     _list = []
     for col in client[db].list_collection_names():
-        items = client[db][col].find(_set,{'_id': False}).max_time_ms(500)
+        items = client[db][col].find(_set,{'_id': False})
         if items != None:
             for item in items:
                 item.update({"Collection":col})

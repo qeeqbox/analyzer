@@ -10,4 +10,9 @@ RUN chmod a+r /etc/snort/snort.conf
 RUN wget -O /tmp/community-rules.tar.gz https://www.snort.org/downloads/community/community-rules.tar.gz && \
     mkdir -p /etc/snort/rules && \
     tar zxvf /tmp/community-rules.tar.gz -C /etc/snort/rules --strip-components=1
+RUN wget -O /tmp/yara-rules.zip https://codeload.github.com/Yara-Rules/rules/zip/master && \
+	mkdir -p /analyzer/yara/yara-rules-github && \
+	7z x /tmp/yara-rules.zip -o/analyzer/yara/ && \
+	rm /analyzer/yara/rules-master/index.yar && \
+	rm /analyzer/yara/rules-master/index_w_mobile.yar
 ADD ./ /analyzer

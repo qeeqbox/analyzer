@@ -1,5 +1,8 @@
 __G__ = "(G)bd249ce4"
 
+from os import environ, path
+environ["analyzer_env"] = "docker"
+
 from flask import Flask, flash, jsonify, redirect, request, url_for, render_template
 from flask_mongoengine import MongoEngine
 from wtforms import form, fields, validators, SelectMultipleField
@@ -12,7 +15,6 @@ from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
 from uuid import uuid4
-from tempfile import gettempdir
 from os import environ, getpid, path, path
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
@@ -30,8 +32,10 @@ from re import compile, search, DOTALL
 from redisqueue.qbqueue import QBQueue
 from analyzer.connections.redisconn import get_cache
 from analyzer.connections.mongodbconn import client
+from random import choice
+from string import ascii_uppercase
 
-switches = [('full','full'),('behavior','behavior'),('xref','xref'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
+switches = [('full','full'),('behavior','behavior'),('xref','xref'),('tags','tags'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
 def intro(filename, link):
     intromarkdown = ""
@@ -64,10 +68,10 @@ app = Flask(__name__)
 app.secret_key = session_key("key.hex")
 intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 app.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
-app.config['MONGODB_CONNECT'] = False
 queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
 analyzer_timeout = json_settings[environ["analyzer_env"]]["analyzer_timeout"]
 function_timeout = json_settings[environ["analyzer_env"]]["function_timeout"]
+malware_folder = json_settings[environ["analyzer_env"]]["malware_folder"]
 
 db = MongoEngine()
 db.init_app(app)
@@ -323,7 +327,7 @@ class UploadForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
     analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(analyzer_timeout),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '60sec logic timeout'),(100,'1:40min logic timeout')],default=(function_timeout),coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '1min logic timeout'),(100,'1:40min logic timeout')],default=(function_timeout),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"}) 
     __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit')
     def __iter__(self):
@@ -344,7 +348,7 @@ class CustomViewUploadForm(BaseView):
                 if file:
                     result = {}
                     filename = secure_filename(file.filename)
-                    savetotemp = path.join(gettempdir(),filename)
+                    savetotemp = path.join(malware_folder,filename)
                     for x in request.form.getlist("choices"):
                         result.update({x:True})
                     result["file"] = savetotemp
@@ -362,7 +366,7 @@ class CustomViewUploadForm(BaseView):
                     flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
-        return self.render("upload.html",form=form, switches_details=get_cache("switches"))
+        return self.render("upload.html",header="Scan File\\Files",form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -393,15 +397,25 @@ class CustomViewBufferForm(BaseView):
                 result = {}
                 for x in request.form.getlist("choices"):
                     result.update({x:True})
-                result["uuid"] = uuid
-                result["buffer"] = form.buffer.data
-                result["analyzer_timeout"]= form.analyzertimeout.data
-                result["function_timeout"]= form.functiontimeout.data
-                queue.put(uuid,result)
-                flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
+                filename = ''.join(choice(ascii_uppercase) for _ in range(8))
+                savetotemp = path.join(malware_folder,filename)
+                with open(savetotemp,"w") as tempfile:
+                    tempfile.write(form.buffer.data)
+                with open(savetotemp,"rb") as tempfile:
+                    result["file"] = savetotemp
+                    result["uuid"] = uuid
+                    result["analyzer_timeout"]= form.analyzertimeout.data
+                    result["function_timeout"]= form.functiontimeout.data
+                    files = Files()
+                    files.uuid = uuid
+                    files.line = result
+                    files.file.put(tempfile, content_type="application/octet-stream", filename=filename)
+                    files.save()
+                    queue.put(uuid,result)
+                    flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
-        return self.render("upload.html",form=form, switches_details=get_cache("switches"))
+        return self.render("upload.html",header="Scan Buffer",form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated

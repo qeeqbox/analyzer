@@ -9,9 +9,8 @@ print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V
 print("                               |  https://github.com/QeeqBox/Analyzer")
 print("                                                            ")
 
-from sys import stdout,argv
-from os import path,listdir,environ
-from sys import setswitchinterval
+from sys import stdout,argv,setswitchinterval
+from os import environ, path
 
 setswitchinterval(0.0000001)
 
@@ -33,16 +32,13 @@ else:
 from analyzer.analyzer_ import Analyzer
 from analyzer.mics.funcs import kill_python_cli,kill_process_and_subs
 from analyzer.redisqueue.qbqueue import QBQueue
-from analyzer.logger.logger import log_string, setup_logger,setup_task_logger,cancel_task_logger,clear_pool
+from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger
 from analyzer.report.reporthandler import ReportHandler
 from analyzer.settings import json_settings
 from analyzer.connections.redisconn import put_cache
 from cmd import Cmd
 from argparse import ArgumentParser
-from shlex import split as ssplit
-from tempfile import NamedTemporaryFile,gettempdir
 from signal import SIGTSTP, signal
-from uuid import uuid4
 from time import sleep
 from contextlib import redirect_stdout
 from io import StringIO
@@ -77,6 +73,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupreq.add_argument('--buffer', help="input buffer")
     _analyze_parsergroupreq.add_argument('--type', help="force input type")
     _analyze_parsergroupdef = _analyze_parser.add_argument_group('Analysis switches')
+    _analyze_parsergroupdef.add_argument('--tags',action='store_true', help="Generate yara tags", required=False)
     _analyze_parsergroupdef.add_argument('--behavior',action='store_true', help="check with generic detections", required=False)
     _analyze_parsergroupdef.add_argument('--xref',action='store_true', help="get cross references", required=False)
     _analyze_parsergroupdef.add_argument('--yara',action='store_true', help="analyze with yara module (Disable this for big files)", required=False)
@@ -127,8 +124,8 @@ class QBAnalyzer(Cmd):
 
     def __init__(self,mode):
         super(QBAnalyzer, self).__init__()
-        self.san = Analyzer()
-        self.rep = ReportHandler()
+        self.analyzer = Analyzer()
+        self.reporthandler = ReportHandler()
         self.do_cache_switches()
 
         if mode == "--silent":
@@ -161,38 +158,27 @@ class QBAnalyzer(Cmd):
 
     def do_analyze(self,line,silent=False):
         try:
-            if silent:
-                parsed_args = vars(self._analyze_parser.parse_args(""))
-                parsed = Namespace({**parsed_args,**line},["disk_dump_html","disk_dump_json","open","print"],["db_dump_json","db_dump_html"])
-                if not parsed.uuid:
-                    return
-            else:
-                parsed = self._analyze_parser.parse_args(ssplit(line))
-                parsed.uuid = str(uuid4())
-
+            line["output"] = json_settings[environ["analyzer_env"]]["malware_output_folder"]
+            parsed_args = vars(self._analyze_parser.parse_args(""))
+            parsed = Namespace({**parsed_args,**line},["disk_dump_html","disk_dump_json","open","print"],["db_dump_json","db_dump_html"])
+            if not parsed.uuid:
+                return
             if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
                 json_settings[environ["analyzer_env"]]["analyzer_timeout"] = int(parsed.analyzer_timeout)
             if int(parsed.function_timeout) > 0 and int(parsed.function_timeout) < 240:
                json_settings[environ["analyzer_env"]]["function_timeout"] = int(parsed.function_timeout)
-            if not parsed.output:
-                parsed.output = gettempdir()
-
             log_string("Default timeout {}s for the task, and {}s for each logic".format(json_settings[environ["analyzer_env"]]["analyzer_timeout"],json_settings[environ["analyzer_env"]]["function_timeout"]),"Yellow")
-        except:
+        except Exception as e:
+            print(e)
             log_string("Parsing failed, something went wrong..","Red")
             return
 
         log_string("Task {} (Started)".format(parsed.uuid),"Yellow")
 
-        if parsed.file or parsed.folder or parsed.buffer:
+        if parsed.file:
             try:
                 setup_task_logger(parsed.uuid)
-                if parsed.file:
-                    self.analyze_file(parsed)
-                elif parsed.folder:
-                    self.analyze_folder(parsed)
-                elif parsed.buffer:
-                    self.analyze_buffer(parsed)
+                self.analyze_file(parsed)
             finally:
                 cancel_task_logger(parsed.uuid)
         else:
@@ -202,47 +188,15 @@ class QBAnalyzer(Cmd):
 
     def analyze_file(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
-            clear_pool()
-            data = self.san.analyze(parsed)
-            clear_pool()
-            self.rep.check_output(data,parsed)
+            data = self.analyzer.analyze(parsed)
+            self.reporthandler.check_output(data,parsed)
             del data
         else:
             log_string("Target File/dump is wrong..","Red")
 
-    def analyze_folder(self,parsed):
-        if path.exists(parsed.folder) and path.isdir(parsed.folder):
-            for f in listdir(parsed.folder):
-                clear_pool()
-                fullpath = path.join(parsed.folder, f)
-                if path.isfile(fullpath):
-                    parsed.file = fullpath
-                    data = self.san.analyze(parsed)
-                    clear_pool()
-                    self.rep.check_output(data,parsed)
-                    parsed.extra = ""
-                    del data
-        else:
-            log_string("Target folder is wrong..","Red")
-
-    def analyze_buffer(self,parsed):
-        if parsed.buffer != None:
-            clear_pool()
-            tempname = NamedTemporaryFile().name
-            with open(tempname,"w") as tempfile:
-                tempfile.write(parsed.buffer)
-            parsed.file = tempname
-            data = self.san.analyze(parsed)
-            clear_pool()
-            self.rep.check_output(data,parsed)
-            del data
-        else:
-            log_string("Target buffer is empty..","Red")
-
     def list_switches(self):
         for x in vars(self._analyze_parser.parse_args("")):
             print("(\'{}\',\'{}\'')".format(x,x))
-
     def do_exit(self, line):
         exit()
 

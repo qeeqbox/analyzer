@@ -14,8 +14,5 @@ if __name__ == '__main__':
         elif argv[1] == "--key":
             with open("key.hex","w") as f:
                 f.write(b64encode(urandom(128)).decode('utf-8'))
-    else:
-        exit()
-else:
-    exit()
+exit()
 

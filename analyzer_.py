@@ -35,7 +35,6 @@ from analyzer.snort.qbsnort import QBSnort
 from analyzer.qbdetect.loaddetections import LoadDetections
 from analyzer.mitre.mitreparser import MitreParser
 from analyzer.mitre.qbmitresearch import QBMitresearch
-from analyzer.services.online.onlinemultiscanners import OnlineMultiScanners
 
 class Analyzer:
     @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
@@ -74,7 +73,6 @@ class Analyzer:
         self.htmlparser = HTMLParser()
         self.qbphising = QBPhishing()
         self.oleparser = OLEParser()
-        self.onlinemultiscanners = OnlineMultiScanners()
         self.qbsnort = QBSnort()
     
     @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
@@ -164,9 +162,9 @@ class Analyzer:
         if parsed.mitre or parsed.full:
             self.qbmitresearch.analyze(data)
         if parsed.yara or parsed.full:
-            self.yaraparser.checkwithyara(data,None)
-        if parsed.ms_all or parsed.full:
-            self.onlinemultiscanners.analyze(data,parsed)
+            self.yaraparser.checkwithyara(data,False,None)
+        if parsed.tags or parsed.full:
+            self.yaraparser.checkwithyara(data,True,None)
         if parsed.visualize or parsed.full:
             self.qbd3generator.create_d3_artifacts(data)
         if parsed.flags or parsed.full:

@@ -3,7 +3,7 @@ services:
   service:
     build:
       context: .
-      dockerfile: ./framework-Dockerfile
+      dockerfile: ./analyzer-Dockerfile
     command: bash -c "python3 -m analyzer.cli --silent --docker"
     depends_on:
       - mongodb
@@ -13,7 +13,9 @@ services:
     networks:
       - backend
     volumes:
-      - sharedfolder:/tmp/
+      - ./folders/malware:/analyzer/folders/malware
+      - ./folders/logs:/analyzer/folders/logs
+      - ./folders/output:/analyzer/folders/output
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
 
@@ -34,7 +36,9 @@ services:
       - frontend
       - backend
     volumes:
-      - sharedfolder:/tmp
+      - ./folders/malware:/analyzer/folders/malware
+      - ./folders/logs:/analyzer/folders/logs
+      - ./folders/output:/analyzer/folders/output
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     healthcheck:
@@ -60,7 +64,7 @@ services:
       - backend
 
 volumes:
-  sharedfolder:
+  malware:
 
 networks:
   frontend:

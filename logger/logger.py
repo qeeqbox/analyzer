@@ -1,23 +1,21 @@
 __G__ = "(G)bd249ce4"
 
-from logging import DEBUG, ERROR, Handler, WARNING, getLogger
+from logging import DEBUG, Handler, WARNING, getLogger
 from os import path,environ
-from sys import stdout, stderr
+from sys import stdout
 from datetime import datetime
 from analyzer.settings import json_settings, defaultdb
 from analyzer.connections.mongodbconn import add_item_fs,add_item, update_task
 from tempfile import gettempdir
-import concurrent.futures as futures
 from ctypes import py_object, c_long, pythonapi
 from multiprocessing.context import TimeoutError
 from multiprocessing.pool import ThreadPool
-import traceback
 
 logterminal,dynamic,verbose_flag,verbose_timeout, pool = None,None, None, None, None
 env_var = environ["analyzer_env"]
 
-if dynamic == None:dynamic = getLogger("qbanalyzerdynamic")
-if logterminal == None:logterminal = getLogger("qbanalyzerlogterminal")
+if dynamic == None:dynamic = getLogger("analyzerdynamic")
+if logterminal == None:logterminal = getLogger("analyzerlogterminal")
 if verbose_flag == None:verbose_flag = False
 if verbose_timeout == None:verbose_timeout = json_settings[env_var]["function_timeout"]
 if pool == None:pool = ThreadPool()
@@ -62,7 +60,7 @@ class CustomHandler(Handler):
 class TaskHandler(Handler):
     def __init__(self,task):
         Handler.__init__(self)
-        self.logsfile = open(path.join(gettempdir(),task),'w')
+        self.logsfile = open(path.join(json_settings[env_var]["logs_folder"],task),'w')
         self.task = task
 
     def emit(self, record):
@@ -82,7 +80,7 @@ def cancel_task_logger(task):
     log_string("Closing up task {} logger".format(task),"Yellow")
     dynamic.disabled = True
     logs = ""
-    with open(path.join(gettempdir(),task),"rb") as f:
+    with open(path.join(json_settings[env_var]["logs_folder"],task),"rb") as f:
         logs = f.read()
     if len(logs) > 0:
         _id = add_item_fs(defaultdb["dbname"],defaultdb["taskfileslogscoll"],logs,"log",None,task,"text/plain",datetime.now())
@@ -126,7 +124,7 @@ def clear_pool():
         pool.terminate()
         pool.join()
         pool.close()
-        pool = ThreadPool()
+        ThreadPool()
     except:
         pass
 
@@ -149,6 +147,7 @@ def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
                 else:
                     time = json_settings[env_var]["function_timeout"]
                 try:
+                    #result = func(*args, **kwargs)
                     res = pool.apply_async(func, args, kwargs)
                     result = res.get(timeout=time)
                 except TimeoutError:
@@ -168,10 +167,8 @@ def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
     return decorator
 
 def setup_logger():
-    getLogger("scapy.runtime").setLevel(ERROR)
     getLogger("requests").setLevel(WARNING)
     getLogger("urllib3").setLevel(WARNING)
-    getLogger("pytesseract").setLevel(WARNING)
     getLogger("PIL").setLevel(WARNING)
     getLogger("chardet").setLevel(WARNING)
     logterminal.setLevel(DEBUG)
