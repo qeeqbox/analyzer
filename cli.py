@@ -32,7 +32,7 @@ else:
 from analyzer.analyzer_ import Analyzer
 from analyzer.mics.funcs import kill_python_cli,kill_process_and_subs
 from analyzer.redisqueue.qbqueue import QBQueue
-from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger
+from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger,clear_pool
 from analyzer.report.reporthandler import ReportHandler
 from analyzer.settings import json_settings
 from analyzer.connections.redisconn import put_cache
@@ -160,7 +160,7 @@ class QBAnalyzer(Cmd):
         try:
             line["output"] = json_settings[environ["analyzer_env"]]["malware_output_folder"]
             parsed_args = vars(self._analyze_parser.parse_args(""))
-            parsed = Namespace({**parsed_args,**line},["disk_dump_html","disk_dump_json","open","print"],["db_dump_json","db_dump_html"])
+            parsed = Namespace({**parsed_args,**line},["open","print"],["db_dump_json","db_dump_html","disk_dump_html","disk_dump_json"])
             if not parsed.uuid:
                 return
             if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
@@ -188,9 +188,11 @@ class QBAnalyzer(Cmd):
 
     def analyze_file(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
+            clear_pool()
             data = self.analyzer.analyze(parsed)
             self.reporthandler.check_output(data,parsed)
             del data
+            clear_pool()
         else:
             log_string("Target File/dump is wrong..","Red")
 

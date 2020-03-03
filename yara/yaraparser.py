@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout,log_string
 from analyzer.settings import default_colors
 from yara import compile
 from glob import glob
@@ -43,12 +43,13 @@ class YaraParser:
         self.rules_tags = compile(filepaths=self._set_tags)
 
     @verbose(True,verbose_flag,verbose_timeout,"Checking with yara rules")
-    def checkwithyara(self,data,tags,check=""):
+    def checkwithyara(self,data,parsed,check=""):
         '''
         check file with compiled yara detection and append results into list
         '''
         data["Yara"] = deepcopy(self.datastruct)
-        if tags:
+        if parsed.full or parsed.tags:
+            log_string("Finding yara tags", "Green")
             matches = self.rules_tags.match(data["Location"]["File"])
             list_of_matches = []
             if len(matches) > 0:
@@ -65,8 +66,10 @@ class YaraParser:
                                                               "color":color,
                                                               "rule":match.rule,
                                                               "meta":'\n'.join("{}: {}".format(key, match.meta[key]) for key in match.meta)})
-        else:
+
+        if parsed.full or parsed.yara:
             matches = self.rules.match(data["Location"]["File"])
+            log_string("Finding yara matches", "Green")
             if len(matches) > 0:
                 for match in matches:
                     temp = {}

@@ -161,10 +161,8 @@ class Analyzer:
             self.loaddetections.checkwithdetections(data)
         if parsed.mitre or parsed.full:
             self.qbmitresearch.analyze(data)
-        if parsed.yara or parsed.full:
-            self.yaraparser.checkwithyara(data,False,None)
-        if parsed.tags or parsed.full:
-            self.yaraparser.checkwithyara(data,True,None)
+        if parsed.yara or parsed.tags or parsed.full:
+            self.yaraparser.checkwithyara(data,parsed,None)
         if parsed.visualize or parsed.full:
             self.qbd3generator.create_d3_artifacts(data)
         if parsed.flags or parsed.full:

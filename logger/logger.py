@@ -120,13 +120,17 @@ def terminate_thread(thread):
         raise SystemError("Failed")
 
 def clear_pool():
+    global pool
     try:
-        pool.terminate()
-        pool.join()
-        pool.close()
-        pool = ThreadPool()
-    except:
-        pass
+        if pool:
+            pool.terminate()
+            pool.join()
+            pool.close()
+            pool = ThreadPool()
+            log_string("Clearing pool success", "Green")
+    except Exception as e:
+        print(e)
+        log_string("Clearing pool issue", "Red")
 
 def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
     '''

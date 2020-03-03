@@ -7,8 +7,8 @@ from copy import deepcopy
 class QBSuspicious:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBSuspicious")
     def __init__(self):
-        self.datastruct = { "Suspicious":[],
-                            "_Suspicious":["Count","Detected"]}
+        self.datastruct = { "Strings":[],
+                            "_Strings":["Count","Detected"]}
 
         self.suspicious = ["crypt","==","ransom","+tcp","pool.","bitcoin","encrypt","decrypt","mail","ftp","http","https","btc","address","sudo","password","pass","admin","payment"]
 
@@ -38,4 +38,4 @@ class QBSuspicious:
         data["Suspicious"] = deepcopy(self.datastruct)
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.find_suspicious(data["Suspicious"]["Suspicious"])
+        self.find_suspicious(data["Suspicious"]["Strings"])

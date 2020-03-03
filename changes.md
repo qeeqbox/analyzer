@@ -1,3 +1,6 @@
+#### 2020.V.02.30
+- Fixed bugs
+
 #### 2020.V.02.29
 - Added tagger
 

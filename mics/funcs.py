@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout, log_string
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
@@ -10,19 +10,8 @@ from tld import get_fld,get_tld
 from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
-from analyzer.connections.mongodbconn import client
-
-def set_dumm_off(db,col):
-    try:
-        item = client[db][col].find_one({'status': 'ON__'},{'_id': False})
-        if item:
-            ret = client[db][col].update_one(item, {"$set":{'status':'OFF_'}})
-            log_string("Worker terminated","Red")
-    except:
-        pass
 
 def kill_process_and_subs():
-    set_dumm_off("jobsqueue","jobs")
     proc = Process(getpid())
     subprocs = proc.children()
     for subproc in subprocs:
@@ -34,7 +23,6 @@ def kill_process_and_subs():
 
 @verbose(True,verbose_flag,verbose_timeout,None)
 def kill_python_cli():
-    set_dumm_off("jobsqueue","jobs")
     current = getpid()
     for p in process_iter():
         cmdline = p.cmdline()
@@ -113,7 +101,7 @@ def get_words(data,_path) -> (list,str):
     wordsinsensitive = []
     wordssensitive = []
     wordsstripped = ""
-    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
+    encoding = data["Encoding"]["Details"]["ForceEncoding"]
     if encoding == "utf-16":
         words = findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][_path])
     else:
@@ -136,7 +124,7 @@ def get_words_multi_files(data,arr) -> (list,str):
     wordsstripped = ""
     wordsinsensitive = []
     wordssensitive = []
-    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
+    encoding = data["Encoding"]["Details"]["ForceEncoding"]
     for x in arr:
         if encoding == "utf-16":
             words.extend(findall(b"[\x20-\x7e\x00]{4,}",data["FilesDumps"][x["Path"]]))
@@ -159,7 +147,7 @@ def get_words_multi_filesarray(data,arr) -> (list,str):
     wordsstripped = ""
     wordsinsensitive = []
     wordssensitive = []
-    encoding = data["Encoding"]["Encoding"]["ForceEncoding"]
+    encoding = data["Encoding"]["Details"]["ForceEncoding"]
     for x in arr:
         #if x["Path"].endswith(".xml"):
         if encoding == "utf-16":

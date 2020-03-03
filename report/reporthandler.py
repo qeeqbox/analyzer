@@ -49,14 +49,9 @@ class ReportHandler:
     @verbose(True,verbose_flag,verbose_timeout,"Parsing and cleaning output")
     def check_output(self,data,parsed):
         renderedhtml = "Error"
-        if parsed.db_dump_html:
-            renderedhtml = self.htmlmaker.render_template(data,None,None,parsed,False)
-        if parsed.disk_dump_html:
-            if self.htmlmaker.render_template(data,None,None,parsed,True):
-                log_string("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
-                if parsed.open:
-                    open_in_browser(data["Location"]["html"])
-
+        if parsed.db_dump_html or parsed.disk_dump_html:
+            renderedhtml = self.htmlmaker.render_template(data,None,None,parsed,True)
+            log_string("Generated Html file {}".format(data["Location"]["html"]),"Yellow")
         if parsed.db_dump_json or parsed.disk_dump_json or parsed.print_json:
             data = serialize_obj(data) # force this <--- incase some value returned with object of type 'NoneType' has no len
             self.jsonmaker.clean_data(data)

@@ -25,8 +25,8 @@ class QBEncdoing:
     @verbose(True,verbose_flag,verbose_timeout,"Checking file encoding")
     def analyze(self,data,_path,_unicode) -> bool:
 
-        data["Encoding"] = {"Encoding":{},
-                           "_Encoding":{}}
+        data["Encoding"] = {"Details":{},
+                           "_Details":{}}
 
         open(_path,"rb").read()
         fbom = open(_path,"rb").read(4)
@@ -36,6 +36,6 @@ class QBEncdoing:
         else:
             encoding = "utf-8"
 
-        data["Encoding"]["Encoding"]={ "charset":Magic(mime_encoding=True).from_file(_path),
+        data["Encoding"]["Details"]={  "charset":Magic(mime_encoding=True).from_file(_path),
                                        "ForceEncoding":encoding,
                                        "ByteOrderMark":self.check_bom(fbom)}
