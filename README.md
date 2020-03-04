@@ -280,3 +280,4 @@ http://127.0.0.1:8000/login/ <br>
 ## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
 - If you are interested in adopting some features in your project, please mention this source somewhere in your project
+- If you are having issues with some open source packages, I may be able to share with you my own packages that I built in c\c++ (But I no longer updating them)
