@@ -232,7 +232,7 @@ http://127.0.0.1:8000/login/ <br>
 - TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
 
 ## Other Licenses
-#### By using this framework, you are accepting the license terms of each package listed below:
+By using this framework, you are accepting the license terms of each package listed below:
 - https://github.com/arbor/yara/blob/master/LICENSE
 - https://github.com/Yara-Rules/rules/blob/master/LICENSE
 - https://github.com/tesseract-ocr/tesseract/blob/master/LICENSE
