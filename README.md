@@ -8,33 +8,9 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/introv2.24.gif" style="max-width:768px"/>
 
-## Output
-#### HTML Outputs
-- [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
-- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.html)
-- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.html)
-- [Android-Ransom](https://bd249ce4.github.io/pages/2019/sexSimulator.apk.html)
-- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/2019/BundloreAdware.dmg.html)
-- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.html)
-- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.html)
-- [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.html)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.html)
-- [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.html)
-- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.html)
-- [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.html)
+## Output 
+- [APT-Malware JSON\HTML reports (+190 sample)](https://github.com/qeeqbox/APT-Malware-Reports-Set-1)
 
-#### Output json
-- [putty-clean](https://bd249ce4.github.io/pages/2019/putty.exe.json)
-- [Linux-Xorddos](https://bd249ce4.github.io/pages/2019/Xorddos.json)
-- [Android-BrazilianRAT](https://bd249ce4.github.io/pages/2019/BrRAT.apk.json)
-- [Android-Ransom](https://bd249ce4.github.io/pages/2019/sexSimulator.apk.json)
-- [macOS-DMG-BundloreAdware](https://bd249ce4.github.io/pages/2019/BundloreAdware.dmg.json)
-- [Windows-GoziBankerISFB](https://bd249ce4.github.io/pages/2019/GoziBankerISFB.exe.json)
-- [PDF-TrojanDownloader](https://bd249ce4.github.io/pages/2019/Downloader.pdf.json)
-- [PCAP-dump](https://bd249ce4.github.io/pages/2019/PCAPdump.json)
-- [Office-JSDropper](https://bd249ce4.github.io/pages/2019/OfficeJSDropper.json)
-- [RTF-Downloader](https://bd249ce4.github.io/pages/2019/f9boo3.doc.json)
-- [EMAIL-Shademalspam](https://bd249ce4.github.io/pages/2019/Shaderansomwaremalspam.eml.json)
 
 ## General Features
 - Runs locally (Offline)
