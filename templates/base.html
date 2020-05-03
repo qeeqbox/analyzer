@@ -29,6 +29,7 @@
    }
    .navbar-brand{
       height: 30px;
+      font-size: 12px;
    }
    .icon-bar {
    background-color: #fff !important;
@@ -142,9 +143,9 @@
    overflow-x: hidden;
    }
    .wrapper-col-content-cus .content-wrapper {
-   height: calc(100% - 30px);
-   min-height: calc(100% - 30px);
-   max-height: calc(100% - 30px);
+   height: 100%;
+   min-height: 100%;
+   max-height: 100%;
    }
    .wrapper-col-content-cus .content {
    margin: 10px 20px 10px 20px;
@@ -357,8 +358,6 @@
                   {% endblock %}
                </div>
             </div>
-            <div class="bottom">
-            </div>
          </div>
       </div>
    </div>
@@ -370,6 +369,30 @@
 {% block tail_js %}
 {{ super() }}
 <script type="text/javascript">$('.custom-dropdown-toggle').click(function() {$(this).next().collapse('toggle');});</script>
+<script type="text/javascript">
+ $(document).ready(function() 
+ {
+    $('li ul').each(function(index, obj) { 
+        item = localStorage.getItem("obj"+index)
+        if (item !== "" && item)
+        {
+         this.className=item
+      }
+    });
+ });
+</script>
+<script type="text/javascript">
+ $(document).ready(function() 
+ {
+    $('ul .dropdown').click(function(e) 
+    { setTimeout(function () {
+     $('.dropdown .nav').each(function(index, obj) {
+      localStorage.setItem("obj"+index,this.className)
+      });
+    }, 1500);
+    });
+ });
+</script>
 {% endblock %}
 
 

@@ -1,4 +1,4 @@
-__V__ = "2020.V.02.30"
+__V__ = "2020.V.02.31"
 
 defaultdb = {
   "dbname": "analyzer",

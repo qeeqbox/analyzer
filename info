@@ -1,4 +1,3 @@
-{"version":"2020.V.02.30",
- "docker":"failed",
+{"version":"2020.V.02.31",
  "dockercompose":"passed",
- "auto_testing":"851b072ad4785494543cbc11"}
+ "auto_testing":"970813d0ab8951ddabe5280af7d8879c"}

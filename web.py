@@ -579,4 +579,3 @@ admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)
-

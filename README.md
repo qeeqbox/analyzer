@@ -6,7 +6,7 @@
 Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
-<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/introv2.24.gif" style="max-width:768px"/>
+<img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
 
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://github.com/qeeqbox/APT-Malware-Reports-Set-1)
