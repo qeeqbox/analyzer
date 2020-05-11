@@ -52,6 +52,7 @@ services:
       - '27017:27017'
     networks:
       - backend
+      - frontend
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

@@ -1,3 +1,10 @@
+#### 2020.V.02.32
+- Switched to gevent timeout
+- Fixed yara-rules issues 
+
+#### 2020.V.02.31
+- Fixed bugs
+
 #### 2020.V.02.30
 - Fixed bugs
 

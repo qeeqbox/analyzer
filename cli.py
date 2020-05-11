@@ -1,7 +1,12 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.settings import __V__
+from gevent.monkey import patch_all
+patch_all()
 
+from gevent import setswitchinterval
+setswitchinterval(1)
+
+from analyzer.settings import __V__
 print("                                                            ")
 print(" _____  __   _  _____        \\   / ______  ______  _____   ")
 print("|_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
@@ -9,10 +14,8 @@ print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V
 print("                               |  https://github.com/QeeqBox/Analyzer")
 print("                                                            ")
 
-from sys import stdout,argv,setswitchinterval
+from sys import stdout,argv
 from os import environ, path
-
-setswitchinterval(0.0000001)
 
 if __name__ == '__main__':
     if len(argv) == 3:
@@ -32,7 +35,7 @@ else:
 from analyzer.analyzer_ import Analyzer
 from analyzer.mics.funcs import kill_python_cli,kill_process_and_subs
 from analyzer.redisqueue.qbqueue import QBQueue
-from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger,clear_pool
+from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger
 from analyzer.report.reporthandler import ReportHandler
 from analyzer.settings import json_settings
 from analyzer.connections.redisconn import put_cache
@@ -188,11 +191,9 @@ class QBAnalyzer(Cmd):
 
     def analyze_file(self,parsed):
         if path.exists(parsed.file) and path.isfile(parsed.file):
-            clear_pool()
             data = self.analyzer.analyze(parsed)
             self.reporthandler.check_output(data,parsed)
             del data
-            clear_pool()
         else:
             log_string("Target File/dump is wrong..","Red")
 

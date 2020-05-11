@@ -8,17 +8,15 @@ from analyzer.settings import json_settings, defaultdb
 from analyzer.connections.mongodbconn import add_item_fs,add_item, update_task
 from tempfile import gettempdir
 from ctypes import py_object, c_long, pythonapi
-from multiprocessing.context import TimeoutError
-from multiprocessing.pool import ThreadPool
+from gevent import Timeout
 
-logterminal,dynamic,verbose_flag,verbose_timeout, pool = None,None, None, None, None
+logterminal,dynamic,verbose_flag,verbose_timeout = None,None, None, None
 env_var = environ["analyzer_env"]
 
 if dynamic == None:dynamic = getLogger("analyzerdynamic")
 if logterminal == None:logterminal = getLogger("analyzerlogterminal")
 if verbose_flag == None:verbose_flag = False
 if verbose_timeout == None:verbose_timeout = json_settings[env_var]["function_timeout"]
-if pool == None:pool = ThreadPool()
 
 class colors:
     Restore = '\033[0m'
@@ -109,29 +107,6 @@ def log_string(_str,color):
         logterminal.info([ctime,_str,yellow_hashtag])
         dynamic.info([ctime,_str,"#"])
 
-def terminate_thread(thread):
-    if not thread.isAlive():
-        return
-    res = pythonapi.PyThreadState_SetAsyncExc(c_long(thread.ident), py_object(SystemExit))
-    if res == 0:
-        raise ValueError("No thread ID")
-    elif res > 1:
-        pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
-        raise SystemError("Failed")
-
-def clear_pool():
-    global pool
-    try:
-        if pool:
-            pool.terminate()
-            pool.join()
-            pool.close()
-            pool = ThreadPool()
-            log_string("Clearing pool success", "Green")
-    except Exception as e:
-        print(e)
-        log_string("Clearing pool issue", "Red")
-
 def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
@@ -139,7 +114,7 @@ def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
     def decorator(func):
         def wrapper(*args, **kwargs):
             result = None
-            global pool
+            #global pool
             function_name = func.__module__+"."+func.__name__
             try:
                 if Verb:
@@ -151,20 +126,13 @@ def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
                 else:
                     time = json_settings[env_var]["function_timeout"]
                 try:
-                    #result = func(*args, **kwargs)
-                    res = pool.apply_async(func, args, kwargs)
-                    result = res.get(timeout=time)
-                except TimeoutError:
+                    with Timeout(time):
+                        result = func(*args, **kwargs)
+                except Timeout:
                     log_string("{} > {}s.. Timeout".format(function_name,time), "Red")
-                    pool.terminate()
-                    pool.join()
-                    pool.close()
-                    pool = ThreadPool()
                 except Exception as e:
-                    #print(traceback.format_exc())
                     log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
             except Exception as e:
-                #print(traceback.format_exc())
                 log_string("{}.{} Failed -> {}".format(func.__module__, func.__name__,e),"Red")
             return result
         return wrapper
