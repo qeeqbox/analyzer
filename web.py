@@ -3,7 +3,7 @@ __G__ = "(G)bd249ce4"
 from os import environ, path
 environ["analyzer_env"] = "docker"
 
-from flask import Flask, flash, jsonify, redirect, request, url_for, render_template
+from flask import Flask, flash, jsonify, redirect, request, url_for, render_template, session
 from flask_mongoengine import MongoEngine
 from wtforms import form, fields, validators, SelectMultipleField
 from flask_admin import AdminIndexView, Admin, expose, BaseView
@@ -34,6 +34,7 @@ from analyzer.connections.redisconn import get_cache
 from analyzer.connections.mongodbconn import client
 from random import choice
 from string import ascii_uppercase
+from datetime import timedelta
 
 switches = [('full','full'),('behavior','behavior'),('xref','xref'),('tags','tags'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
@@ -245,8 +246,8 @@ class LogsView(ModelView):
          return super(LogsView, self).index_view()
 
 class LoginForm(form.Form):
-    login = fields.StringField(render_kw={"placeholder": "Username"})
-    password = fields.PasswordField(render_kw={"placeholder": "Password"})
+    login = fields.StringField(render_kw={"placeholder": "Username","autocomplete":"off"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password","autocomplete":"off"})
 
     def validate_login(self, field):
         user = self.get_user()  #fix AttributeError: 'NoneType' object has no attribute 'password'
@@ -286,6 +287,7 @@ class CustomAdminIndexView(AdminIndexView):
                 login_user(user)
 
         if current_user.is_authenticated:
+            session["navs"] = []
             return redirect(request.args.get('next') or url_for('.index'))
 
         self._template_args['form'] = form
@@ -314,7 +316,21 @@ class CustomAdminIndexView(AdminIndexView):
     @expose('/logout/')
     def logout_view(self):
         logout_user()
+        session["navs"] = []
         return redirect(url_for('.index'))
+
+    @expose('/toggled', methods=('GET', 'POST'))
+    def is_toggled(self):
+        try:
+            if current_user.is_authenticated:
+                json_content = request.get_json(silent=True)
+                for key, value in json_content.items():
+                    if value == "false":
+                        session["navs"].remove(key)
+                    else:
+                        session["navs"].append(key)
+        finally:
+            return jsonify("Done")
 
     def is_visible(self):
         return False
@@ -579,3 +595,9 @@ admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon
 
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)
+
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=60)
+    session.modified = True

@@ -167,6 +167,7 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 - Offline multiscanner (Requested by users)
 - Java analysis (Requested by users)
 - Web detection
+- Adding username and password wrappers to databases
 
 ## Prerequisites
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis

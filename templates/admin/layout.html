@@ -28,14 +28,18 @@
         {%- endif %}
           <a class="dropdown-toggle custom-dropdown-toggle" data-toggle="collapse" href="">
             {% if item.class_name %}<span class="{{ item.class_name }}"></span> {% endif %}
-            {%- if 'dropdown-submenu' in class_name -%}
-            <i class="glyphicon glyphicon-chevron-right fix-margin-icon"></i>
-            {%- else -%}
+            {%- if item.is_active(admin_view) or item.name in session["navs"] -%}
             <i class="glyphicon glyphicon-chevron-down fix-margin-icon"></i>
+            {%- else -%}
+            <i class="glyphicon glyphicon-chevron-right fix-margin-icon"></i>
             {%- endif -%}
             {{ menu_icon(item) }} {{ item.name }}
           </a>
-          <ul class="nav collapse {% if item.is_active(admin_view) %}in{% endif %}">
+          {% if item.is_active(admin_view) or item.name in session["navs"] %}
+          <ul class="nav collapse in">
+          {% else %}
+          <ul class="nav collapse">
+          {% endif %}
           {%- for child in children -%}
             {%- if child.is_category() -%}
               {{ menu(menu_root=[child]) }}

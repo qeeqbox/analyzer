@@ -1,3 +1,6 @@
+#### 2020.V.02.33
+- Fixed some bugs (Flickering web-interface)
+
 #### 2020.V.02.32
 - Switched to gevent timeout
 - Fixed yara-rules issues 
