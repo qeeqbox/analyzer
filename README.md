@@ -33,7 +33,7 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 - Cross references force directed image and table
 - MITRE att&ck tools and patterns detection (could be FP)
 - Similarity image divided to classes
-- YARA module and YARA rules included
+- YARA module and YARA rules included (Downloaded a copy from yara-rules-github)
 - YARA module includes conditions
 - Yara tags by index
 - URL/EMAIL/TEL/Tags patterns extraction
