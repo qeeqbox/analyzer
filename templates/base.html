@@ -260,6 +260,7 @@ a:hover {
      position: fixed;
      transform: translateX(-50%);
      z-index: 99999;
+     display: inline-flex;
 }
  .light_yellow {
      background-color: #FFFF99 !important;
@@ -380,6 +381,20 @@ input[type='file'] {
   height: 35px;
   background: url('/static/upload.png') center center no-repeat #e4e4e4;
   background-size: 25px 25px;
+}
+
+.taskspinner {
+  border: 2px solid #ccc !important;
+  border-top-color: #000 !important;
+  border-radius: 50% !important;
+  animation: spinner .9s linear infinite;
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
 }
 
 </style>

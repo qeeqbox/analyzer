@@ -12,6 +12,7 @@ class QBPatterns:
     @verbose(True,verbose_flag,verbose_timeout,"Starting QBPatterns")
     def __init__(self):
         self.datastruct = {  "IP4S":[],
+                             "IP4SANDPORT":[],
                              "IP6S":[],
                              "LINKS":[],
                              "EMAILS":[],
@@ -19,6 +20,7 @@ class QBPatterns:
                              "TAGS":[],
                              "HEX":[],
                              "_IP4S":["Count","IP","Code","Alpha2","Description"],
+                             "_IP4SANDPORT":["Count","IP","Port","Description"],
                              "_IP6S":["Count","IP","Code","Alpha2","Description"],
                              "_LINKS":["Count","Link","Description"],
                              "_EMAILS":["Count","EMAIL","Description"],
@@ -28,6 +30,7 @@ class QBPatterns:
 
         self.links = compile(r"((?:(smb|srm|ssh|ftps|file|http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)",I)
         self.ip4 = compile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b',I)
+        self.ip4andports = compile(r'\b((?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]):[0-9]{1,5})\b',I)
         self.ip6 = compile(r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',I)
         self.email = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
         self.tel = compile(r'(\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)',I)
@@ -64,6 +67,25 @@ class QBPatterns:
                     pass
         for x in set(_List):
             _data.append({"Count":_List.count(x),"IP":x,"Code":"","Alpha2":"","Description":""})
+
+    @verbose(True,verbose_flag,verbose_timeout,"Finding IP4 ports patterns")
+    def check_ip4_ports(self,_data):
+        '''
+        check if buffer contains ips x.x.x.x:xxxxx
+        '''
+        _List = []
+        x = findall(self.ip4andports,self.wordsstripped)
+        if len(x) > 0:
+            for _ in x:
+                try:
+                    ip,port = _.split(":")
+                    ip_address(ip)
+                    _List.append(_)
+                except:
+                    pass
+        for x in set(_List):
+            ip,port = x.split(":")
+            _data.append({"Count":_List.count(x),"IP":ip,"Port":port,"Description":""})
 
     @verbose(True,verbose_flag,verbose_timeout,"Finding IP6s patterns")
     def check_ip6(self,_data):
@@ -144,6 +166,7 @@ class QBPatterns:
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
         self.check_link(data["Patterns"]["LINKS"])
         self.check_ip4(data["Patterns"]["IP4S"])
+        self.check_ip4_ports(data["Patterns"]["IP4SANDPORT"])
         self.check_ip6(data["Patterns"]["IP6S"])
         self.check_email(data["Patterns"]["EMAILS"])
         self.check_tags(data["Patterns"]["TAGS"])
@@ -152,4 +175,5 @@ class QBPatterns:
         add_description("DNSServers",data["Patterns"]["IP4S"],"IP")
         add_description("ReservedIP",data["Patterns"]["IP4S"],"IP")
         add_description("CountriesIPs",data["Patterns"]["IP4S"],"IP")
+        add_description("Ports",data["Patterns"]["IP4SANDPORT"],"Port")
         add_description("Emails",data["Patterns"]["EMAILS"],"EMAIL")

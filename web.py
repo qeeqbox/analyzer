@@ -345,13 +345,17 @@ class UploadForm(form.Form):
     analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(analyzer_timeout),coerce=int)
     functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '1min logic timeout'),(100,'1:40min logic timeout')],default=(function_timeout),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"}) 
-    __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit')
+    submitandwait = fields.SubmitField('Submit And Wait',render_kw={"class":"btn"})
+    __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit','submitandwait')
     def __iter__(self):
         fields = list(super(UploadForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
         return (get_field(fid) for fid in self.__order)
 
 class CustomViewUploadForm(BaseView):
+
+    extra_js = ['/static/checktask.js']
+
     @expose('/', methods=['POST','GET'])
     def index(self):
         # handle user login
@@ -379,7 +383,10 @@ class CustomViewUploadForm(BaseView):
                     file.seek(0)
                     file.save(savetotemp)
                     queue.put(uuid,result)
-                    flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
+                    if len(uploaded_files) == 1 and request.form.get('submitandwait') == 'Submit And Wait':
+                        flash(gettext(uuid), 'successandwaituuid')
+                    else:
+                        flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
         return self.render("upload.html",header="Scan File\\Files",form=form, switches_details=get_cache("switches"))
@@ -397,13 +404,17 @@ class BufferForm(form.Form):
     analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=int(analyzer_timeout),coerce=int)
     functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=int(function_timeout),coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"})
-    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout','submit')
+    submitandwait = fields.SubmitField('Submit And Wait',render_kw={"class":"btn"})
+    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout','submit','submitandwait')
     def __iter__(self):
         fields = list(super(BufferForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
         return (get_field(fid) for fid in self.__order)
 
 class CustomViewBufferForm(BaseView):
+
+    extra_js = ['/static/checktask.js']
+
     @expose('/', methods=['POST','GET'])
     def index(self):
         form = BufferForm(request.form)
@@ -428,7 +439,10 @@ class CustomViewBufferForm(BaseView):
                     files.file.put(tempfile, content_type="application/octet-stream", filename=filename)
                     files.save()
                     queue.put(uuid,result)
-                    flash(gettext("Done submitting buffer Task ({})".format(uuid)), 'success')
+                    if request.form.get('submitandwait') == 'Submit And Wait':
+                        flash(gettext(uuid), 'successandwaituuid')
+                    else:
+                        flash(gettext('Done submitting buffer Task {}'.format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
         return self.render("upload.html",header="Scan Buffer",form=form, switches_details=get_cache("switches"))
@@ -541,6 +555,28 @@ class CustomLogsView(BaseView):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
 
+class CheckTask(BaseView):
+    @expose('/', methods=['POST','GET'])
+    def index(self):
+        if request.method == 'POST':
+            if request.json:
+                json_content = request.get_json(silent=True)
+                item = client[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"],"type":"text/html"})
+                if item:
+                    return jsonify({"Task":str(item["file"])})
+            return jsonify({"Task":""})
+        return self.render("activelogs.html")
+
+    def is_visible(self):
+        return False
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not self.is_accessible():
+            return redirect(url_for('admin.login_view', next=request.url))
+
 class TimeEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -572,11 +608,6 @@ class StarProject(MenuLink):
         if not self.is_accessible():
             return redirect(url_for('admin.login_view', next=request.url))
  
-def error_handler(error):
-    return render_template("error.html",error=url_for('admin.index'),uuid=str(uuid4()))
-
-for cls in HTTPException.__subclasses__():
-    app.register_error_handler(cls, error_handler)
 
 admin = Admin(app, "QeeqBox Analyzer {}".format(__V__[7:]) , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
@@ -592,7 +623,7 @@ admin.add_view(CustomLogsView(name="Active",endpoint='activelogs',menu_icon_type
 admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
 admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
 admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
-
+admin.add_view(CheckTask('Task',endpoint='task', menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)
 

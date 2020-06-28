@@ -1,3 +1,12 @@
+#### 2020.V.02.35
+- Added IP:Port pattern
+- Added auto-open report for individual task
+- Fixed some bugs
+
+#### 2020.V.02.34
+- Added permanent fix to yara-rule
+- Fixed some bugs
+
 #### 2020.V.02.33
 - Fixed some bugs (Flickering web-interface)
 

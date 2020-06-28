@@ -91,14 +91,19 @@
     {% if messages %}
       {% for category, m in messages %}
         {% if category %}
-        {# alert-error changed to alert-danger in bootstrap 3, mapping is for backwards compatibility #}
-        {% set mapping = {'message': 'info', 'error': 'danger'} %}
+        {% set mapping = {'message': 'info', 'error': 'danger', 'successandwaituuid':'warning'} %}
         <div class="alert alert-{{ mapping.get(category, category) }} alert-dismissable">
         {% else %}
         <div class="alert alert-dismissable">
         {% endif %}
+        {% if category == "successandwaituuid" %}
+          Done submitting Task {{ m }}
+          <div class="taskspinner"></div>
+          <script type="text/javascript">window.onload = function(){check_task("{{ m }}");}</script>
+        {% else %}
+        {{ m }}
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          {{ m }}
+        {% endif %}
         </div>
       {% endfor %}
     {% endif %}

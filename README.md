@@ -164,7 +164,7 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 - &#9745; ~~MS office module~~
 - &#9745; ~~Snort wrapper (Requested by users)~~
 - &#9745; ~~Machine learning modules - Moving to different project~~
-- Offline multiscanner (Requested by users)
+- &#9745; ~~Offline multiscanner - Moving to different project~~
 - Java analysis (Requested by users)
 - Web detection
 - Adding username and password wrappers to databases
