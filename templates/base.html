@@ -329,6 +329,7 @@ a:hover {
      border: 1px solid #ccc;
      background-color: #ffffff;
      resize: none;
+     padding: 2px 5px 2px 5px;
 }
  select {
      border: 1px solid #c0c0c0 !important;
@@ -346,6 +347,7 @@ a:hover {
  input {
      border: 1px solid #c0c0c0 !important;
      outline: none;
+     padding: 2px 5px 2px 5px;
 }
  input[type='checkbox'] {
      -webkit-appearance: none;
@@ -488,6 +490,36 @@ $('.custom-dropdown-toggle').click(function() {
         dataType: "json",
     });
 });
+
+$(document).ready(function(){
+    $("#file").on('change',function(){
+        if ($("#file")[0].files.length > 0) {
+            $("#submit").attr("disabled",false);
+            if ($("#file")[0].files.length > 1) {
+                $("#submitandwait").attr("disabled",true);
+            }
+            else{
+                $("#submitandwait").attr("disabled",false);
+            }
+        }
+        else{
+            $("#submit").attr("disabled",true);
+            $("#submitandwait").attr("disabled",true);
+        }
+    });
+    $("#buffer").on('change keyup',function(){
+        if ($("#buffer").val().length > 0)
+        {
+            $("#submit").attr("disabled",false);
+            $("#submitandwait").attr("disabled",false);
+        }
+        else{
+            $("#submit").attr("disabled",true);
+            $("#submitandwait").attr("disabled",true);
+        }
+    });
+});
+
 </script>
 {% endblock %}
 
