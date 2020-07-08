@@ -169,13 +169,6 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 - Web detection
 - Adding username and password wrappers to databases
 
-## Prerequisites
-apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
-
-pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
-
-Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
-
 ## Running
 #### One click auto-configure
 git clone https://github.com/qeeqbox/analyzer.git <br>
@@ -184,6 +177,13 @@ chmod +x run.sh <br>
 ./run.sh auto_dev <br>
 
 The project interface http://127.0.0.1:8000/login/ will open automatically after finishing the initialization process
+
+## Prerequisites
+apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
+
+pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
+
+Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
 
 ## Media
 - [inquest](https://inquest.net/newsletter/issue015)
