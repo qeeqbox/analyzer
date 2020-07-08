@@ -17,7 +17,7 @@ function check_task(task) {
             if (_task["Task"] === "") {
                 setTimeout(function() {
                     check_task(task);
-                }, 3000)
+                }, 1000)
             } else {
                 window.location.replace("/reportshtml/api/file/?id=" + _task["Task"] + "&coll=fs");
             }

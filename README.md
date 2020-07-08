@@ -177,11 +177,13 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
 
 ## Running
-#### Run it as Web interface with docker-compose
+#### One click auto-configure
 git clone https://github.com/qeeqbox/analyzer.git <br>
 cd analyzer <br>
-docker-compose up --build <br>
-http://127.0.0.1:8000/login/ <br>
+chmod +x run.sh <br>
+./run.sh auto_dev <br>
+
+The project interface http://127.0.0.1:8000/login/ will open automatically after finishing the initialization process
 
 ## Media
 - [inquest](https://inquest.net/newsletter/issue015)

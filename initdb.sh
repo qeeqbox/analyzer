@@ -3,10 +3,8 @@ if which mongo ; then
   		service mongodb start    
 	fi
 	sleep 5
-	mongo QBWindows --eval "db.dropDatabase()"
-	mongo QBResearches --eval "db.dropDatabase()"
-	mongorestore -d QBWindows databases/Windows/
-	mongorestore -d QBResearches databases/Researches/
+	mongorestore --username changeme_9620eh26sfvka017fx --password changeme_0cx821ncf7qg17ahx3 -d QBWindows databases/Windows/ --authenticationDatabase admin
+	mongorestore --username changeme_9620eh26sfvka017fx --password changeme_0cx821ncf7qg17ahx3 -d QBResearches databases/Researches/ --authenticationDatabase admin
 else
 	echo "Please install mongodb"
 fi

@@ -69,6 +69,7 @@ app = Flask(__name__)
 app.secret_key = session_key("key.hex")
 intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 app.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
 analyzer_timeout = json_settings[environ["analyzer_env"]]["analyzer_timeout"]
 function_timeout = json_settings[environ["analyzer_env"]]["function_timeout"]
@@ -305,6 +306,7 @@ class CustomAdminIndexView(AdminIndexView):
             user["password"] = bcrypt.generate_password_hash(user["password"]).decode('utf-8')
             user.save()
             login_user(user)
+            session["navs"] = []
             return redirect(url_for('.index'))
 
         self._template_args['form'] = form

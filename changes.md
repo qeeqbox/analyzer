@@ -1,4 +1,10 @@
 #### 2020.V.02.35
+- Added starter script
+- Added One click auto-configure
+- Fixed web interface
+- Fixed some bugs
+
+#### 2020.V.02.35
 - Added IP:Port pattern
 - Added auto-open report for individual task
 - Fixed some bugs

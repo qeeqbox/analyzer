@@ -13,7 +13,7 @@ defaultdb = {
 json_settings = {
   "docker": {
     "mongo_settings_host": "mongodb",
-    "mongo_settings": "mongodb://mongodb:27017/",
+    "mongo_settings": "mongodb://changeme_9620eh26sfvka017fx:changeme_0cx821ncf7qg17ahx3@mongodb:27017/?authSource=admin",
     "redis_host": "redis",
     "redis_port": 6379,
     "function_timeout": 100,
@@ -21,8 +21,7 @@ json_settings = {
     "web_mongo": [{
       "ALIAS": "default",
       "DB": defaultdb["dbname"],
-      "HOST": "mongodb",
-      "PORT": 27017
+      "HOST": "mongodb://changeme_9620eh26sfvka017fx:changeme_0cx821ncf7qg17ahx3@mongodb:27017/analyzer?authSource=admin"
     }],
     "malware_folder":"/analyzer/folders/malware",
     "malware_output_folder":"/analyzer/folders/output",
