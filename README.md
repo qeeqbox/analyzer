@@ -178,6 +178,10 @@ chmod +x run.sh <br>
 
 The project interface http://127.0.0.1:8000/login/ will open automatically after finishing the initialization process
 
+#### Or, if you already have the prerequisites
+docker-compose -f docker-compose-dev.yml up --build
+Then open http://127.0.0.1:8000/login/
+
 ## Prerequisites
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
 

@@ -31,7 +31,7 @@ deploy_aws_project () {
 	echo "Will be added later on"
 }
 
-auto_configure_dev () {
+auto_configure () {
 	stop_containers
 	wait_on_web_interface & 
 	setup_requirements 
@@ -39,7 +39,7 @@ auto_configure_dev () {
 	stop_containers
 }
 
-if [[ "$1" == "auto_dev" ]]; then
+if [[ "$1" == "auto_configure" ]]; then
 	stop_containers
 	wait_on_web_interface & 
 	setup_requirements 
@@ -47,10 +47,10 @@ if [[ "$1" == "auto_dev" ]]; then
 	stop_containers
 fi
 
-while read -p "`echo -e '\nChoose an option:\n1) Setup requirements (docker, docker-compose)\n9) Run auto dev\n>> '`"; do
+while read -p "`echo -e '\nChoose an option:\n1) Setup requirements (docker, docker-compose)\n9) Run auto configuration\n>> '`"; do
   case $REPLY in
     "1") setup_requirements;;
-    "9") auto_configure_dev;;
+    "9") auto_configure;;
     *) echo "Invalid option";;
   esac
 done
