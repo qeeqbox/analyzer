@@ -178,9 +178,9 @@ chmod +x run.sh <br>
 
 The project interface http://127.0.0.1:8000/login/ will open automatically after finishing the initialization process
 
-
 #### Or, if you already have the prerequisites
 docker-compose -f docker-compose-dev.yml up --build
+
 Then open http://127.0.0.1:8000/login/
 
 ## Prerequisites
