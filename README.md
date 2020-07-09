@@ -174,7 +174,7 @@ Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file
 git clone https://github.com/qeeqbox/analyzer.git <br>
 cd analyzer <br>
 chmod +x run.sh <br>
-./run.sh auto_dev <br>
+./run.sh auto_configure <br>
 
 The project interface http://127.0.0.1:8000/login/ will open automatically after finishing the initialization process
 
