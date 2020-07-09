@@ -257,4 +257,3 @@ By using this framework, you are accepting the license terms of each package lis
 
 ## Disclaimer\Notes
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
-- If you are having issues with some open source packages, I may be able to share with you my own packages that I built in c\c++ (But I no longer updating them)
