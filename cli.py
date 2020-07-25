@@ -132,7 +132,7 @@ class QBAnalyzer(Cmd):
         self.do_cache_switches()
 
         if mode == "--silent":
-            queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
+            queue = QBQueue("analyzer", json_settings[environ["analyzer_env"]]["redis_settings"])
             log_string("Waiting on tasks..","Green")
             while True:
                 sleep(1)

@@ -3,7 +3,7 @@ from pickle import dumps, loads
 from os import environ
 from analyzer.settings import json_settings
 
-_redis = Redis(host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
+_redis = Redis.from_url(json_settings[environ["analyzer_env"]]["redis_settings"])
 
 def get_cache(val):
     data = None

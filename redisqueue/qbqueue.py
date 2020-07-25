@@ -5,9 +5,9 @@ from redis import Redis
 from pickle import dumps, loads
 
 class QBQueue(object):
-    def __init__(self, name, namespace='queue', **kwargs):
+    def __init__(self, name, url,namespace='queue'):
         self.key = '%s:%s' %(namespace, name)
-        self._redis = Redis(**kwargs)
+        self._redis = Redis.from_url(url)
         self.enable_get()
         self.enable_put()
 

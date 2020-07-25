@@ -14,8 +14,7 @@ json_settings = {
   "docker": {
     "mongo_settings_host": "mongodb",
     "mongo_settings": "mongodb://changeme_9620eh26sfvka017fx:changeme_0cx821ncf7qg17ahx3@mongodb:27017/?authSource=admin",
-    "redis_host": "redis",
-    "redis_port": 6379,
+    "redis_settings": "redis://:changeme_26c845sfwbfi927234@redis:6379/0",
     "function_timeout": 100,
     "analyzer_timeout": 120,
     "web_mongo": [{

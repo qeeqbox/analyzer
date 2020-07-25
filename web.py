@@ -70,7 +70,7 @@ app.secret_key = session_key("key.hex")
 intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 app.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
-queue = QBQueue("analyzer", host=json_settings[environ["analyzer_env"]]["redis_host"], port=json_settings[environ["analyzer_env"]]["redis_port"], db=0)
+queue = QBQueue("analyzer", json_settings[environ["analyzer_env"]]["redis_settings"])
 analyzer_timeout = json_settings[environ["analyzer_env"]]["analyzer_timeout"]
 function_timeout = json_settings[environ["analyzer_env"]]["function_timeout"]
 malware_folder = json_settings[environ["analyzer_env"]]["malware_folder"]
