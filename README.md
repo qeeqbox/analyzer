@@ -190,11 +190,6 @@ pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile s
 
 Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
 
-## Media
-- [inquest](https://inquest.net/newsletter/issue015)
-- [ncybersec](https://zh-cn.facebook.com/ncybersec/posts/1391635004340553)
-- [secwiki](https://wiki.ourren.com/news?tag=tools)
-
 ## Resources
 - Linux documentation
 - MacOS documentation
