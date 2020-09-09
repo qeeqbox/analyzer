@@ -251,4 +251,6 @@ By using this framework, you are accepting the license terms of each package lis
 - https://github.com/andymccurdy/redis-py/blob/master/LICENSE
 
 ## Disclaimer\Notes
+- Do not deploy without proper configuration
+- Setup some security group rules and remove default credentials
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
