@@ -3,7 +3,7 @@
 {{ super() }}
 {% if current_user.is_authenticated %}
 <div class="col">
-   <div class="card">
+   <div class="card new_card">
       <div class="card-header">
          {{ filename }}
       </div>
@@ -14,7 +14,7 @@
 </div>
 {% else %}
 <div class="col-lg-4 col-center vertical-center">
-   <div class="card">
+   <div class="card new_card">
       <div class="card-header">
          {{ active }} form
       </div>
