@@ -1,3 +1,6 @@
+#### 2020.V.02.37
+- change some css settings
+
 #### 2020.V.02.35
 - Added starter script
 - Added One click auto-configure
