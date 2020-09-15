@@ -443,6 +443,7 @@ input[type='file'] {
          <ul class="nav navbar-nav navbar-right toggle-items">
             {{ layout.menu_links() }}
          </ul>
+         {% endblock %}
       </div>
    </nav>
    {# store the jinja2 context for form_rules rendering logic #}
@@ -471,9 +472,8 @@ input[type='file'] {
          </div>
       </div>
    </div>
-   {% endblock %}
-   {% block access_control %}
-   {% endblock %}
+{% block access_control %}
+{% endblock %}
 </div>
 {% endblock %}
 {% block tail_js %}
@@ -537,5 +537,3 @@ $(document).ready(function(){
 
 </script>
 {% endblock %}
-
-
