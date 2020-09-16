@@ -3,13 +3,13 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green)](https://github.com/qeeqbox/analyzer/blob/master/changes.md)
 
-Offline Threat Intelligence Analyzer for extracting artifacts and IoCs from file/dump into readable format
+Offline Threat Intelligence Analyzer for extracting **features**, artifacts and IoCs from file/dump into readable format
 
 ## Flat Web Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
 
 ## Output 
-- [APT-Malware JSON\HTML reports (+190 sample)](https://github.com/qeeqbox/APT-Malware-Reports-Set-1)
+- [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
 
 
 ## General Features
