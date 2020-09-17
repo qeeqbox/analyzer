@@ -87,6 +87,7 @@ class QBAnalyzer(Cmd):
     _analyze_parsergroupdef.add_argument('--enc',action='store_true', help="find encryptions", required=False)
     _analyze_parsergroupdef.add_argument('--cards',action='store_true', help="find credit cards", required=False)
     _analyze_parsergroupdef.add_argument('--creds',action='store_true', help="find credit cards", required=False)
+    _analyze_parsergroupdef.add_argument('--secrets',action='store_true', help="find secrets", required=False)
     _analyze_parsergroupdef.add_argument('--patterns',action='store_true', help="find common patterns", required=False)
     _analyze_parsergroupdef.add_argument('--suspicious',action='store_true', help="find suspicious strings", required=False)
     _analyze_parsergroupdef.add_argument('--dga',action='store_true', help="find Domain generation algorithms", required=False)

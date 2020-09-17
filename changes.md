@@ -1,3 +1,6 @@
+#### 2020.V.02.39
+- Added qbsecrets
+
 #### 2020.V.02.38
 - Fixed some bugs
 - Changed to Dark Qbox Theme

@@ -25,6 +25,7 @@ from analyzer.intell.qbencryption import QBEncryption
 from analyzer.intell.qbwafdetect import QBWafDetect
 from analyzer.intell.qbcreditcards import QBCreditcards
 from analyzer.intell.qbcredentials import QBCredentials
+from analyzer.intell.qbsecrets import QBSecrets
 from analyzer.intell.qbpatterns import QBPatterns
 from analyzer.intell.qbdga import QBDGA
 from analyzer.intell.qbcountriesviz import QBCountriesviz
@@ -61,6 +62,7 @@ class Analyzer:
         self.officex = Officex()
         self.qbencryption = QBEncryption()
         self.qbcreditcards = QBCreditcards()
+        self.qbsecrets = QBSecrets()
         self.qbpatterns = QBPatterns()
         self.loaddetections = LoadDetections()
         self.qblanguage = QBLanguage()
@@ -157,6 +159,8 @@ class Analyzer:
             self.qbcreditcards.analyze(data)
         if parsed.creds or parsed.full:
             self.qbcreditcardsedentials.analyze(data)
+        if parsed.secrets or parsed.full:
+            self.qbsecrets.analyze(data)
         if parsed.plugins or parsed.full:
             self.loaddetections.checkwithdetections(data)
         if parsed.mitre or parsed.full:

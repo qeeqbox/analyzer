@@ -36,14 +36,14 @@ from random import choice
 from string import ascii_uppercase
 from datetime import timedelta
 
-switches = [('full','full'),('behavior','behavior'),('xref','xref'),('tags','tags'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
+switches = [('full','full'),('behavior','behavior'),('xref','xref'),('tags','tags'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('secrets','secrets'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
 
 def intro(filename, link):
     intromarkdown = ""
     try:
         r = get(link,verify=False, timeout=2)
         if r.text!= "" and r.ok:
-            intromarkdown = search(compile(r"\#\# General Features.*",DOTALL),r.text).group(0)
+            intromarkdown = search(compile(r"\#\# Features.*",DOTALL),r.text).group(0)
     except:
         pass
 
@@ -51,7 +51,7 @@ def intro(filename, link):
         try:
             readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
             with open(readmefolder,"rU", encoding="utf-8") as f:
-                intromarkdown = search(compile(r"\#\# General Features.*",DOTALL),f.read()).group(0)
+                intromarkdown = search(compile(r"\#\# Features.*",DOTALL),f.read()).group(0)
         except:
             pass
     return intromarkdown
