@@ -1,16 +1,15 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/analyzerlogo.png"></p>
 
 #
-[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You%20For%20The%20Support!!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
+[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-Offline Threat Intelligence Analyzer for extracting **features**, artifacts and IoCs from file/dump into readable format
+Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs from data into readable and visualized format. This project was developed for `analyzing classified data and training some AI locally without interaction with internet or external resources`
 
-## Flat Web Interface
+## New Dark Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
 
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
-
 
 ## General Features
 - Runs locally (Offline)
@@ -254,3 +253,4 @@ By using this framework, you are accepting the license terms of each package lis
 - Do not deploy without proper configuration
 - Setup some security group rules and remove default credentials
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
+
