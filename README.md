@@ -167,6 +167,8 @@ Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs
 - Java analysis (Requested by users)
 - Web detection
 - Adding username and password wrappers to databases
+- Adding more creds pattern (Requested by users)
+- CSS clean up
 
 ## Running
 #### One click auto-configure
