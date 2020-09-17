@@ -11,7 +11,7 @@ Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
 
-## Features
+## General Features
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Intime analysis (Session is saved)
