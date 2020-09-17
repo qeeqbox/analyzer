@@ -1,3 +1,7 @@
+#### 2020.V.02.38
+- Fixed some bugs
+- Changed to Dark Qbox Theme
+
 #### 2020.V.02.37
 - change some css settings
 

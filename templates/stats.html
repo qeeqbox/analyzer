@@ -1,7 +1,7 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="row">
+<div class="stats-row no-padding">
    {% for key,value in stats.items() %}
    <div class="col-lg-4">
       <div class="card new_card">

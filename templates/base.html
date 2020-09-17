@@ -8,7 +8,7 @@
      padding: 0 0 0 0;
      font-family: monospace !important;
      font-size: 12px;
-     color: #121212 !important;
+     color: #b4b4b4 !important;
      cursor: default !important;
 }
  
@@ -18,18 +18,21 @@
      border-radius: 0 !important;
 }
 
-a:link {
-    color: #a2a2a2;
-    cursor: default !important;
-}
-
-a:visited {
-    color: #646464;
+a {
+    color: #fff;
+    background-color: transparent !important;
     cursor: default !important;
 }
 
 a:hover {
-    color: #121212;
+    color: #0d67ca;
+    background-color: transparent !important;
+    cursor: default !important;
+}
+
+a:focus {
+    color: #0d67ca;
+    background-color: transparent !important;
     cursor: default !important;
 }
 
@@ -38,14 +41,25 @@ a:hover {
      padding: 0 0 0 0;
      margin: 0 0 0 0;
 }
- .container .navbar, #admin-navbar-collapse *, .navbar-brand {
+ .container .navbar, #admin-navbar-collapse * {
      color: #fff !important;
-     background-color: #313a46 !important;
+     background-color: #2b2c2c !important;
      z-index: 9999;
 }
+
+.sidebar-nav-custom-brand{
+    background-color: #ffbb47 !important;
+}
+
  .navbar-brand{
-     height: 30px;
-     font-size: 12px;
+     color: #2b2c2c !important;
+     z-index: 9999;
+     height: 50px;
+     font-size: 16px;
+     line-height: 30px;
+     background-color: #ffbb47 !important;
+     box-shadow: 0 8px 5px rgba(0,0,0,.08);
+     width: 100%;
 }
  .icon-bar {
      background-color: #fff !important;
@@ -58,9 +72,6 @@ a:hover {
  .wrapper-col-sidebar nav {
      width: 100%;
 }
- .wrapper-col-sidebar a:link, .wrapper-col-sidebar a:visited{
-     color: #121212 !important;
-}
 
  .wrapper-row-cus {
      height: 100%;
@@ -69,45 +80,59 @@ a:hover {
      margin: 0 0 0 0 !important;
      padding: 0 0 0 0 !important;
 }
- .siderbar-nav-custom {
-     height: 100%;
+ .sidebar-nav-custom {
+     padding-top: 10px;
+    height: calc(100vh - 50px);
      width: 100%;
-     background-color: #c0c0c0;
+     background-color: #2b2c2c;
+     -ms-overflow-style: none;  /* IE and Edge */
+     scrollbar-width: none;  /* Firefox */
+     overflow-y: scroll;
 }
- .siderbar-nav-custom span, .navbar-heading-custom span {
+
+.sidebar-nav-custom::-webkit-scrollbar {
+    display: none;
+}
+
+ .sidebar-nav-custom span, .navbar-heading-custom span {
      padding-left: 8px;
 }
  .navbar {
      padding: 0 0 0 0;
      margin: 0 0 0 0;
      border-radius: 0px;
-     min-height: 30px;
+     min-height: 50px;
 }
  .navbar-header{
-     height: 30px !important;
+     height: 50px !important;
 }
  .navbar-toggle {
      position: relative;
      float: right;
      padding: 0 0 0 0 !important;
-     margin: 6px 6px 0 0 !important;
+     margin: 16px 6px 0 0 !important;
 }
  .wrapper-col-content-cus .container-fluid {
      padding: 20px 20px 20px 20px;
 }
  @media (max-width: 768px) {
-     .siderbar-nav-custom li a {
+    .sidebar-nav-custom-brand > li > a{
+     line-height: 40px;
+     font-size: 16px;
+    }
+
+     .sidebar-nav-custom li a, .sidebar-nav-custom-brand li a{
          font-size: 0 !important;
     }
-     .siderbar-nav-custom li a i {
+     .sidebar-nav-custom li a i, .sidebar-nav-custom-brand li a i {
          font-size: 16px !important;
     }
-     .wrapper-col-sidebar {
+     .wrapper-col-sidebar, .sidebar-nav-custom-brand{
          max-width: 48px;
          min-width: 48px;
          width: 48px;
     }
-     .wrapper-col-sidebar .nav-link span {
+     .wrapper-col-sidebar .nav-link span, .sidebar-nav-custom-brand .nav-link span {
          position: absolute;
          opacity: 0;
     }
@@ -124,22 +149,20 @@ a:hover {
     }
 }
  .wrapper {
-     height: calc(100vh - 30px);
+     height: calc(100vh);
      padding: 0 0 0 0 !important;
      margin: 0 0 0 0 !important;
 }
  .navbar-cus {
      padding: 0;
-     height: 30px;
+     height: 50px;
 }
- .default-navbar a {
-     color: #fff !important;
-}
+
  .navbar-cus {
-     background-color: #313a46 !important;
+     background-color: #ffbb47 !important;
 }
  .navbar-heading-custom {
-     background-color: #313a46 !important;
+     background-color: #ffbb47 !important;
      height: 100%;
 }
  .navbar-heading-custom .nav {
@@ -161,39 +184,59 @@ a:hover {
      overflow-x: hidden;
 }
  .content-wrapper{
-     overflow-y: scroll !important;
-     overflow-x: hidden;
+     background-color: #212222 !important;
 }
+
+.custom-scrollbar{
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #0d67ca #212222;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track-piece  {
+    background-color: #212222;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background-color: #0d67ca;
+}
+
  .wrapper-col-content-cus .content-wrapper {
      height: 100%;
-     min-height: 100%;
      max-height: 100%;
 }
  .wrapper-col-content-cus .content {
-     margin: 10px 20px 10px 20px;
+    padding: 5px 15px 5px;
+     height: 30px;
+     font-weight: bold;
+     font-size: 14px;
 }
  .wrapper-col-content-cus .bottom {
      height: 30px;
      flex: 1;
      background-color: #313a46 !important;
 }
- .siderbar-nav-custom a {
-     color: #000;
+ .sidebar-nav-custom a {
      outline: 0 !important;
 }
- .wrapper-col-sidebar .active {
-     color: #206BA4 !important;
-     box-shadow: inset 5px 0 0 0 #313a46;
-     background-color: #fff !important;
+
+.active a {
+     color: #ffbb47 !important;
 }
  .wrapper-col-sidebar .noredbox{
      box-shadow: none !important;
-     background-color: #c0c0c0 !important;
-     color: #000 !important;
 }
+
  .custom-dropdown-toggle{
      box-shadow: none !important;
-     background-color: #c0c0c0 !important;
+     background-color: #2b2c2c !important;
 }
  .fix-margin-icon{
      margin: 0 0 0 0 !important;
@@ -203,18 +246,18 @@ a:hover {
 }
  .card {
      margin: 0 auto;
-     border: 1px solid #c0c0c0;
      overflow: hidden;
+     background-color: #2b2c2c;
      display: flex;
      flex-direction: column;
-     margin: 5px 5px 5px 5px;
+     margin: 10px 10px 10px 10px;
 }
  .card-header {
      height: 30px;
-     background-color: #c0c0c0;
+     background-color: #2b2c2c;
      font-size: 12px;
      font-weight: bold;
-     padding: 5px 10px 5px 10px;
+     padding: 10px 20px 5px 20px;
 }
  .card-body {
      padding: 20px 20px 20px 20px;
@@ -262,6 +305,9 @@ a:hover {
      transform: translateX(-50%);
      z-index: 99999;
      display: inline-flex;
+     -webkit-border-radius: 4px !important;
+     border-radius: 4px !important;
+     border: none
 }
  .light_yellow {
      background-color: #FFFF99 !important;
@@ -278,20 +324,39 @@ a:hover {
  #choices {
      padding: 0 0 0 0;
      max-height: 170px;
-     overflow-y: auto;
+     overflow-y: scroll !important;
+     overflow-x: hidden;
+     scrollbar-width: thin;
+    scrollbar-color: #0d67ca #2b2c2c;
      text-align: left;
 }
- #choices li * {
+
+#choices::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+
+#choices::-webkit-scrollbar-track-piece  {
+    background-color: #2b2c2c;
+}
+
+#choices::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background-color: #0d67ca;
+}
+
+#choices li * {
      font-weight: normal !important;
      width: auto !important;
 }
+
  .navbar-nav li a {
      padding: 0 15px;
-     line-height: 30px;
+     line-height: 50px;
 }
  .navbar-header a {
      padding: 0 15px;
-     line-height: 30px;
+     line-height: 50px;
 }
  .navbar {
      border: none;
@@ -299,54 +364,97 @@ a:hover {
  .activelogs {
      width: 100%;
      border: none;
+     background-color: inherit !important;
+     scrollbar-color: #0d67ca #2b2c2c !important;
+     height: 100%;
 }
  a {
      outline: none !important;
 }
- .siderbar-nav-custom > li > a {
+ .sidebar-nav-custom > li > a {
      line-height: 20px;
      padding: 5px 15px 5px;
+     font-size: 14px;
 }
+
  .navbar-header a {
      padding: 0 15px;
-     line-height: 30px;
+     line-height: 50px;
 }
  #admin-navbar-collapse{
      padding: 0 0 0 0;
+     box-shadow: 0 8px 5px rgba(0,0,0,.08);
 }
  .toggle-items{
      margin: 0 0 0 0 !important;
 }
  input[type='file']{
-     -webkit-border-radius: 0 !important;
-     -moz-border-radius: 0 !important;
-     border-radius: 0 !important;
+     -webkit-border-radius: 2px !important;
+     -moz-border-radius: 2px !important;
+     border-radius: 2px !important;
 }
  .wrapper-col-sidebar .dropdown li a{
      line-height: 20px !important;
      padding: 5px 15px 5px;
 }
  textarea {
-     border: 1px solid #ccc;
-     background-color: #ffffff;
+    background-color: #383939 !important;
+     -webkit-border-radius: 2px !important;
+     border-radius: 2px !important;
+     border: none;
      resize: none;
      padding: 2px 5px 2px 5px;
+     overflow-y: scroll !important;
+     overflow-x: hidden;
+     scrollbar-width: thin;
+    scrollbar-color: #0d67ca #383939;
+    height: 100px;
 }
+
+textarea::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+
+textarea::-webkit-scrollbar-track-piece  {
+    background-color: #383939;
+}
+
+textarea::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background-color: #0d67ca;
+}
+
  select {
-     border: 1px solid #c0c0c0 !important;
      outline:0px;
      -moz-appearance: none;
      -webkit-appearance: none;
+     background-color: #383939 !important;
+     -webkit-border-radius: 2px !important;
+     border-radius: 2px !important;
+     border: none
 }
  select::-ms-expand {
      display: none;
 }
+
  textarea:hover, input:hover,button:hover, textarea:active, input:active, button:active,.btn:active,.btn.active, textarea:focus, input:focus,button:focus,label:focus {
      outline:0px !important;
      box-shadow: none !important;
 }
+
+.btn{
+    background-color: #383939 !important;
+     -webkit-border-radius: 2px !important;
+     border-radius: 2px !important;
+     border: none
+}
+
  input {
-     border: 1px solid #c0c0c0 !important;
+     background-color: #383939 !important;
+     -webkit-border-radius: 2px !important;
+     border-radius: 2px !important;
+     border: none;
      outline: none;
      padding: 2px 5px 2px 5px;
 }
@@ -358,7 +466,8 @@ a:hover {
      padding: 5px;
      height: 5px;
      color: #c0c0c0;
-     border: 1px solid #c0c0c0;
+     border: 1px solid #b4b4b4;
+     border-radius: 2px !important;
      outline: none;
 }
  input[type='checkbox']:checked {
@@ -367,7 +476,7 @@ a:hover {
  input[type='checkbox']:checked:before {
      position: absolute;
      display: block;
-     background: none #c0c0c0;
+     background: none #b4b4b4;
      content:'';
      height: 8px;
      width: 8px;
@@ -380,11 +489,11 @@ ul .nav li {
 }
 
 input[type='file'] {
-  background-color: #e4e4e4;
-  /*padding-top: 35px;
-  height: 35px;
-  background: url('/static/upload.png') center center no-repeat #e4e4e4;
-  background-size: 25px 25px;*/
+  background-color: #863535;
+  height: 30px;
+  background: url('/static/upload.svg') center center no-repeat #b4b4b4;
+  background-size: 25px 25px;
+  padding: 35px 0 0 0 !important;
 }
 
 .taskspinner {
@@ -399,11 +508,10 @@ input[type='file'] {
 
 .new_card {
     margin: 0 auto;
-    border: 1px solid #c0c0c0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    margin: 5px 5px 5px 5px;
+    margin: 10px 10px 10px 10px;
     box-shadow: 0 1px 1px rgba(0,0,0,.1);
      -webkit-border-radius: 4px !important;
      -moz-border-radius: 4px !important;
@@ -414,6 +522,105 @@ input[type='file'] {
   to {transform: rotate(360deg);}
 }
 
+.no-padding>[class^="col-"]{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+table, tr, td {
+    border: 1px solid #b4b4b4 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+}
+
+thead > tr > th {
+    border: 1px solid #b4b4b4 !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+}
+
+.table-responsive a:link {
+    color: #b4b4b4;
+    cursor: default !important;
+}
+
+.table-responsive a:visited {
+    color: #b4b4b4;
+    cursor: default !important;
+}
+
+.table-responsive a:hover {
+    color: #0d67ca;
+    cursor: default !important;
+}
+
+table tr:hover{ 
+   background-color: inherit !important;     
+   opacity: 1.0 !important; 
+}
+
+.btn:hover {
+    color: #0d67ca !important;
+}
+
+.btn:active {
+    color: #ffbb47 !important;
+}
+
+.btn:focus {
+    color: #0d67ca !important;
+}
+
+.nav-tabs-custom {
+    border-bottom: 1px solid #b4b4b4 !important;
+    background-color: #2b2c2c !important;
+}
+
+.nav-tabs-custom li a:hover{
+    background-color: #383939 !important;
+    border: none !important;
+}
+
+.nav-tabs-custom li a:active{
+    background-color: #383939 !important;
+    border: none !important;
+}
+
+.nav-tabs-custom li a{
+    background-color: #383939 !important;
+    border: none !important;
+}
+
+
+.nav-tabs-custom > li {
+    margin-bottom: 0px !important;
+}
+
+.dropdown-menu{
+    background-color: #383939 !important;
+}
+
+.dropdown-menu > li > a {
+    color: #b4b4b4 !important;
+}
+
+.dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+    background-color: #383939 !important;
+    background-image: none !important;
+}
+
+.dropdown-menu > li > a:hover {
+    color: #0d67ca !important;
+}
+
+.nav-tabs .dropdown-menu{
+    margin-left: -2px !important;
+}
+
+input[type="search"]{
+    border: none !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script>
@@ -422,52 +629,63 @@ input[type='file'] {
 {% endblock %}
 {% block page_body %}
 <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">
-   <nav class="navbar navbar-expand bg-primary navbar-cus" role="navigation">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-         {% if current_user.is_authenticated %}
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
-         <span class="sr-only">Toggle navigation</span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         </button>
-         {% endif %}
-         {% block brand %}
-         <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
-         {% endblock %}
-      </div>
-      <!-- navbar content -->
-      <div class="collapse navbar-collapse" id="admin-navbar-collapse">
-         {% block menu_links %}
-         <ul class="nav navbar-nav navbar-right toggle-items">
-            {{ layout.menu_links() }}
-         </ul>
-         {% endblock %}
-      </div>
-   </nav>
+    {% if current_user.is_authenticated %}
+   {% endif %}
    {# store the jinja2 context for form_rules rendering logic #}
    {% set render_ctx = h.resolve_ctx() %}
    <div class="container-fluid wrapper">
       <div class="row wrapper-row-cus">
          {% if current_user.is_authenticated %}
          <div class="wrapper-col-sidebar">
+            <ul class="nav flex-column flex-nowrap sidebar-nav-custom-brand">
+            <li>
+                {% block brand %}
+                <a class="navbar-brand" href="{{ admin_view.admin.url }}"><i class="glyphicon glyphicon-home"></i> {{ admin_view.admin.name }}</a>
+                {% endblock %}
+             </li>
+            </ul>
             {% block main_menu %}
-            <ul class="nav flex-column flex-nowrap siderbar-nav-custom">
+            <ul class="nav flex-column flex-nowrap sidebar-nav-custom">
                {{ layout.menu() }}
             </ul>
             {% endblock %}
          </div>
          {% endif %}
          <div class="wrapper-col-content-cus">
-            <div class="content-wrapper">
-               <div class="content">
-                  {% block messages %}
-                  {{ layout.messages() }}
-                  {% endblock %}
-                  {% block body %}
-                  {% endblock %}
-               </div>
+            {% if current_user.is_authenticated %}
+            <nav class="navbar navbar-expand bg-primary navbar-cus" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                   
+                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   </button>
+                   
+                </div>
+                <!-- navbar content -->
+                <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+                   {% block menu_links %}
+                   <ul class="nav navbar-nav navbar-right toggle-items">
+                      {{ layout.menu_links() }}
+                   </ul>
+                   {% endblock %}
+                </div>
+             </nav>
+             {% endif %}
+            <div class="content-wrapper no-padding custom-scrollbar">
+                {% if location_tree is defined %}
+                <div class="content">
+                {{ location_tree }}
+                </div>
+                {% endif %}
+               {% block messages %}
+               {{ layout.messages() }}
+               {% endblock %}
+               {% block body %}
+               {% endblock %}
             </div>
          </div>
       </div>
@@ -537,3 +755,5 @@ $(document).ready(function(){
 
 </script>
 {% endblock %}
+
+

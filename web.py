@@ -276,6 +276,7 @@ class CustomAdminIndexView(AdminIndexView):
 
         self._template_args['filename'] = "README.md @ https://github.com/qeeqbox/analyzer"
         self._template_args['intro'] = intromarkdown
+        #self._template_args['location_tree'] = "Home"
         return super(CustomAdminIndexView, self).index()
 
     @expose('/login/', methods=['POST','GET'])
@@ -611,7 +612,7 @@ class StarProject(MenuLink):
             return redirect(url_for('admin.login_view', next=request.url))
  
 
-admin = Admin(app, "QeeqBox Analyzer {}".format(__V__[7:]) , index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
+admin = Admin(app, "QeeqBox", index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))

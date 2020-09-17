@@ -118,7 +118,7 @@ def verbose(OnOff=False,Verb=False,timeout=None,_str=None):
             function_name = func.__module__+"."+func.__name__
             try:
                 if Verb:
-                    log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs))
+                    log_string("Function '{0}', parameters : {1} and {2}".format(func.__name__, args, kwargs),"Yellow")
                 if _str:
                     log_string(_str, "Green")
                 if _str == "Starting Analyzer":

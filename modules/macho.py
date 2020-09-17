@@ -163,7 +163,7 @@ class Macho:
             data["Location"]["Original"].endswith(".dmg"):
             x = dmg_unpack(data["Location"]["File"])
             if x: 
-                if check_packed_files(x,["info.plist"]):
+                if check_packed_files(x,["info.plist"]) or check_packed_files(x,["Install"]):
                     unpack_file(data,x)
                     return True
 
