@@ -3,7 +3,7 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs from data into readable and visualized format `This project was developed for analyzing classified data and training some AI locally without internet/external resources interaction`
+Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs from data into readable and visualized format `(This project was developed for analyzing classified data and training some AI locally without internet/external resources interaction)`
 
 ## New Dark Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
