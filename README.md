@@ -3,7 +3,11 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-Offline Threat Intelligence Analyzer for extracting features, artifacts and IoCs from data into readable and visualized format `(This project was developed for analyzing classified data and training some AI locally without internet/external interaction)`
+- Do you want to analyze sensitive files or data with an open-source project?
+- Do you write about malware and need an easy way to generate visualized output?
+- Do you have a **policy** that restrict your data analysis from using external resources?
+
+This is an offline Threat Intelligence Analyzer for producing a readable and visualized format from classified/unclassified data. It contains different modules (extractors and parsers) that run locally. The extractors extract different features, artifacts and IoCs. And, parsers produce readable and visualized output that can be **integrated** into your SOC platforms or programs.
 
 ## New Dark Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
@@ -370,3 +374,4 @@ By using this framework, you are accepting the license terms of each package lis
 - Do not deploy without proper configuration
 - Setup some security group rules and remove default credentials
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
+- This project was developed for analyzing classified data and training some AI locally without internet/external interaction
