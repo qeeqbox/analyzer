@@ -10,7 +10,7 @@ from flask_admin import AdminIndexView, Admin, expose, BaseView
 from flask_admin.menu import MenuLink
 from flask_admin.babel import gettext
 from flask_admin.contrib.mongoengine import ModelView
-from flask_login import LoginManager,current_user,login_user,logout_user
+from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
@@ -36,22 +36,22 @@ from random import choice
 from string import ascii_uppercase
 from datetime import timedelta
 
-switches = [('full','full'),('behavior','behavior'),('xref','xref'),('tags','tags'),('yara','yara'),('language','language'),('mitre','mitre'),('topurl','topurl'),('ocr','ocr'),('enc','enc'),('cards','cards'),('creds','creds'),('secrets','secrets'),('patterns','patterns'),('suspicious','suspicious'),('dga','dga'),('plugins','plugins'),('visualize','visualize'),('flags','flags'),('icons','icons'),('worldmap','worldmap'),('spelling','spelling'),('image','image'),('phishing','phishing'),('unicode','unicode'),('bigfile','bigfile'),('w_internal','w_internal'),('w_original','w_original'),('w_hash','w_hash'),('w_words','w_words'),('w_all','w_all'),('ms_all','ms_all')]
+switches = [('full', 'full'), ('behavior', 'behavior'), ('xref', 'xref'), ('tags', 'tags'), ('yara', 'yara'), ('language', 'language'), ('mitre', 'mitre'), ('topurl', 'topurl'), ('ocr', 'ocr'), ('enc', 'enc'), ('cards', 'cards'), ('creds', 'creds'), ('secrets', 'secrets'), ('patterns', 'patterns'), ('suspicious', 'suspicious'), ('dga', 'dga'), ('plugins', 'plugins'), ('visualize', 'visualize'), ('flags', 'flags'), ('icons', 'icons'), ('worldmap', 'worldmap'), ('spelling', 'spelling'), ('image', 'image'), ('phishing', 'phishing'), ('unicode', 'unicode'), ('bigfile', 'bigfile'), ('w_internal', 'w_internal'), ('w_original', 'w_original'), ('w_hash', 'w_hash'), ('w_words', 'w_words'), ('w_all', 'w_all'), ('ms_all', 'ms_all')]
 
 def intro(filename, link):
     intromarkdown = ""
     try:
-        r = get(link,verify=False, timeout=2)
+        r = get(link, verify=False, timeout=2)
         if r.text!= "" and r.ok:
-            intromarkdown = search(compile(r"\#\# Features.*",DOTALL),r.text).group(0)
+            intromarkdown = search(compile(r"\#\# Features.*", DOTALL), r.text).group(0)
     except:
         pass
 
     if intromarkdown == "":
         try:
-            readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
-            with open(readmefolder,"rU", encoding="utf-8") as f:
-                intromarkdown = search(compile(r"\#\# Features.*",DOTALL),f.read()).group(0)
+            readmefolder = path.abspath(path.join(path.dirname( __file__ ), filename))
+            with open(readmefolder, "rU", encoding="utf-8") as f:
+                intromarkdown = search(compile(r"\#\# Features.*", DOTALL), f.read()).group(0)
         except:
             pass
     return intromarkdown
@@ -59,15 +59,15 @@ def intro(filename, link):
 def session_key(filename):
     key = ""
     try:
-        readmefolder = path.abspath(path.join(path.dirname( __file__ ),filename))
-        with open(readmefolder,"rU", encoding="utf-8") as f:
+        readmefolder = path.abspath(path.join(path.dirname( __file__ ), filename))
+        with open(readmefolder, "rU", encoding="utf-8") as f:
             key = f.read()
     finally:
         return key
 
 app = Flask(__name__)
 app.secret_key = session_key("key.hex")
-intromarkdown = intro("README.md","https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
+intromarkdown = intro("README.md", "https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 app.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
 app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 queue = QBQueue("analyzer", json_settings[environ["analyzer_env"]]["redis_settings"])
@@ -89,9 +89,9 @@ class Namespace:
         self.__dict__.update(kwargs)
 
 def convert_size(s):
-    for u in ['B','KB','MB','GB']:
+    for u in ['B', 'KB', 'MB', 'GB']:
         if s < 1024.0:
-            return "{:.2f}{}".format(s,u)
+            return "{:.2f}{}".format(s, u)
         else:
             s /= 1024.0
     return "File is too big"
@@ -247,13 +247,13 @@ class LogsView(ModelView):
          return super(LogsView, self).index_view()
 
 class LoginForm(form.Form):
-    login = fields.StringField(render_kw={"placeholder": "Username","autocomplete":"off"})
-    password = fields.PasswordField(render_kw={"placeholder": "Password","autocomplete":"off"})
+    login = fields.StringField(render_kw={"placeholder": "Username", "autocomplete":"off"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password", "autocomplete":"off"})
 
     def validate_login(self, field):
         user = self.get_user()  #fix AttributeError: 'NoneType' object has no attribute 'password'
         if user != None:
-            if not bcrypt.check_password_hash(user.password,self.password.data):
+            if not bcrypt.check_password_hash(user.password, self.password.data):
                 raise validators.ValidationError('Invalid password')
 
     def get_user(self):
@@ -279,7 +279,7 @@ class CustomAdminIndexView(AdminIndexView):
         #self._template_args['location_tree'] = "Home"
         return super(CustomAdminIndexView, self).index()
 
-    @expose('/login/', methods=['POST','GET'])
+    @expose('/login/', methods=['POST', 'GET'])
     def login_view(self):
         # handle user login
         form = LoginForm(request.form)
@@ -345,11 +345,11 @@ class MultiCheckboxField(SelectMultipleField):
 class UploadForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     file = fields.FileField(render_kw={"multiple": True})
-    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')],default=(analyzer_timeout),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '1min logic timeout'),(100,'1:40min logic timeout')],default=(function_timeout),coerce=int)
+    analyzertimeout = fields.SelectField('analyzertimeout', choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')], default=(analyzer_timeout), coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout', choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '1min logic timeout'), (100, '1:40min logic timeout')], default=(function_timeout), coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"}) 
-    submitandwait = fields.SubmitField('Submit And Wait',render_kw={"class":"btn"})
-    __order = ('file', 'choices', 'analyzertimeout','functiontimeout','submit','submitandwait')
+    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class":"btn"})
+    __order = ('file', 'choices', 'analyzertimeout', 'functiontimeout', 'submit', 'submitandwait')
     def __iter__(self):
         fields = list(super(UploadForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
@@ -359,7 +359,7 @@ class CustomViewUploadForm(BaseView):
 
     extra_js = ['/static/checktask.js']
 
-    @expose('/', methods=['POST','GET'])
+    @expose('/', methods=['POST', 'GET'])
     def index(self):
         # handle user login
         form = UploadForm(request.form)
@@ -371,7 +371,7 @@ class CustomViewUploadForm(BaseView):
                 if file:
                     result = {}
                     filename = secure_filename(file.filename)
-                    savetotemp = path.join(malware_folder,filename)
+                    savetotemp = path.join(malware_folder, filename)
                     for x in request.form.getlist("choices"):
                         result.update({x:True})
                     result["file"] = savetotemp
@@ -385,14 +385,14 @@ class CustomViewUploadForm(BaseView):
                     files.save()
                     file.seek(0)
                     file.save(savetotemp)
-                    queue.put(uuid,result)
+                    queue.put(uuid, result)
                     if len(uploaded_files) == 1 and request.form.get('submitandwait') == 'Submit And Wait':
                         flash(gettext(uuid), 'successandwaituuid')
                     else:
-                        flash(gettext("Done uploading {} Task ({})".format(filename,uuid)), 'success')
+                        flash(gettext("Done uploading {} Task ({})".format(filename, uuid)), 'success')
                 else:
-                    flash(gettext("Something wrong while uploading {} Task ({})".format(filename,uuid)), 'error')
-        return self.render("upload.html",header="Scan File\\Files",form=form, switches_details=get_cache("switches"))
+                    flash(gettext("Something wrong while uploading {} Task ({})".format(filename, uuid)), 'error')
+        return self.render("upload.html", header="Scan File\\Files", form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -404,11 +404,11 @@ class CustomViewUploadForm(BaseView):
 class BufferForm(form.Form):
     choices = MultiCheckboxField('Assigned', choices=switches)
     buffer = fields.TextAreaField(render_kw={"class": "buffer"})
-    analyzertimeout = fields.SelectField('analyzertimeout',choices=[(30, '30sec'), (60, '1min'), (120, '2min')],default=int(analyzer_timeout),coerce=int)
-    functiontimeout = fields.SelectField('functiontimeout',choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'),(100,'1:40min')],default=int(function_timeout),coerce=int)
+    analyzertimeout = fields.SelectField('analyzertimeout', choices=[(30, '30sec'), (60, '1min'), (120, '2min')], default=int(analyzer_timeout), coerce=int)
+    functiontimeout = fields.SelectField('functiontimeout', choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'), (100, '1:40min')], default=int(function_timeout), coerce=int)
     submit = fields.SubmitField(render_kw={"class":"btn"})
-    submitandwait = fields.SubmitField('Submit And Wait',render_kw={"class":"btn"})
-    __order = ('buffer', 'choices', 'analyzertimeout','functiontimeout','submit','submitandwait')
+    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class":"btn"})
+    __order = ('buffer', 'choices', 'analyzertimeout', 'functiontimeout', 'submit', 'submitandwait')
     def __iter__(self):
         fields = list(super(BufferForm, self).__iter__())
         get_field = lambda fid: next((f for f in fields if f.id == fid))
@@ -418,7 +418,7 @@ class CustomViewBufferForm(BaseView):
 
     extra_js = ['/static/checktask.js']
 
-    @expose('/', methods=['POST','GET'])
+    @expose('/', methods=['POST', 'GET'])
     def index(self):
         form = BufferForm(request.form)
         if request.method == 'POST':
@@ -428,10 +428,10 @@ class CustomViewBufferForm(BaseView):
                 for x in request.form.getlist("choices"):
                     result.update({x:True})
                 filename = ''.join(choice(ascii_uppercase) for _ in range(8))
-                savetotemp = path.join(malware_folder,filename)
-                with open(savetotemp,"w") as tempfile:
+                savetotemp = path.join(malware_folder, filename)
+                with open(savetotemp, "w") as tempfile:
                     tempfile.write(form.buffer.data)
-                with open(savetotemp,"rb") as tempfile:
+                with open(savetotemp, "rb") as tempfile:
                     result["file"] = savetotemp
                     result["uuid"] = uuid
                     result["analyzer_timeout"]= form.analyzertimeout.data
@@ -441,14 +441,14 @@ class CustomViewBufferForm(BaseView):
                     files.line = result
                     files.file.put(tempfile, content_type="application/octet-stream", filename=filename)
                     files.save()
-                    queue.put(uuid,result)
+                    queue.put(uuid, result)
                     if request.form.get('submitandwait') == 'Submit And Wait':
                         flash(gettext(uuid), 'successandwaituuid')
                     else:
                         flash(gettext('Done submitting buffer Task {}'.format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
-        return self.render("upload.html",header="Scan Buffer",form=form, switches_details=get_cache("switches"))
+        return self.render("upload.html", header="Scan Buffer", form=form, switches_details=get_cache("switches"))
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -461,7 +461,7 @@ def get_stats():
     #lazy check stats
     stats = {}
     try:
-        for coll in (defaultdb["reportscoll"],defaultdb["filescoll"],"fs.chunks","fs.files"):
+        for coll in (defaultdb["reportscoll"], defaultdb["filescoll"], "fs.chunks", "fs.files"):
             if coll in client[defaultdb["dbname"]].list_collection_names():
                 stats.update({"[{}] Collection".format(coll):"Exists"})
             else:
@@ -469,8 +469,8 @@ def get_stats():
     except:
         pass
     try:
-        stats.update({"[Reports] Total reports":client[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
-                      "[Reports] Total used space":"{}".format(convert_size(client[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["storageSize"] + client[defaultdb["dbname"]].command("collstats",defaultdb["reportscoll"])["totalIndexSize"]))})
+        stats.update({"[Reports] Total reports":client[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(), 
+                      "[Reports] Total used space":"{}".format(convert_size(client[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + client[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
     except:
         pass
     try:
@@ -487,12 +487,12 @@ def get_stats():
         pass
     try:
         total, used, free = disk_usage("/")
-        stats.update({"CPU memory":cpu_percent(),
-                      "Memory used":virtual_memory()[2],
-                      "Current process used memory": "{}".format(convert_size(Process(getpid()).memory_info().rss)),
-                      "Total disk size": "{}".format(convert_size(total)),
-                      "Used disk size": "{}".format(convert_size(used)),
-                      "Free disk size": "{}".format(convert_size(free)),
+        stats.update({"CPU memory":cpu_percent(), 
+                      "Memory used":virtual_memory()[2], 
+                      "Current process used memory": "{}".format(convert_size(Process(getpid()).memory_info().rss)), 
+                      "Total disk size": "{}".format(convert_size(total)), 
+                      "Used disk size": "{}".format(convert_size(used)), 
+                      "Free disk size": "{}".format(convert_size(free)), 
                       "Host platform":pplatform()})
     except:
         pass
@@ -513,33 +513,33 @@ class CustomStatsView(BaseView):
             return redirect(url_for('admin.login_view', next=request.url))    
 
 #hmm finding by time is weird?
-def find_and_srot(db,col,key,var):
+def find_and_srot(db, col, key, var):
     _list = []
     
     if key == "time":
         items = list(client[db][col].find().sort([('_id', -1)]).limit(1))
     else:
-        items = list(client[db][col].find({key: {"$gt": var}}).sort([(key,ASCENDING)]))
+        items = list(client[db][col].find({key: {"$gt": var}}).sort([(key, ASCENDING)]))
     
     for item in items:
-        _list.append("{} {}".format(item["time"].isoformat(),item["message"]))
+        _list.append("{} {}".format(item["time"].isoformat(), item["message"]))
     if len(_list) > 0:
-        return "\n".join(_list),str(items[-1]["_id"])
+        return "\n".join(_list), str(items[-1]["_id"])
     else:
-        return "",0
+        return "", 0
 
 def get_last_logs(json):
     items = []
     if json['id'] == 0:
-        items,startid = find_and_srot(defaultdb["dbname"],defaultdb["alllogscoll"],"time",datetime.now())
+        items, startid = find_and_srot(defaultdb["dbname"], defaultdb["alllogscoll"], "time", datetime.now())
     else:
-        items,startid = find_and_srot(defaultdb["dbname"],defaultdb["alllogscoll"],"_id",ObjectId(json['id']))
-    return {"id":startid,"logs":items}
+        items, startid = find_and_srot(defaultdb["dbname"], defaultdb["alllogscoll"], "_id", ObjectId(json['id']))
+    return {"id":startid, "logs":items}
 
 class CustomLogsView(BaseView):
     extra_js = ['/static/activelogs.js']
 
-    @expose('/', methods=['GET','POST'])
+    @expose('/', methods=['GET', 'POST'])
     def index(self):
         if request.method == 'GET':
             return self.render("activelogs.html")
@@ -559,12 +559,12 @@ class CustomLogsView(BaseView):
             return redirect(url_for('admin.login_view', next=request.url))
 
 class CheckTask(BaseView):
-    @expose('/', methods=['POST','GET'])
+    @expose('/', methods=['POST', 'GET'])
     def index(self):
         if request.method == 'POST':
             if request.json:
                 json_content = request.get_json(silent=True)
-                item = client[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"],"type":"text/html"})
+                item = client[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"], "type":"text/html"})
                 if item:
                     return jsonify({"Task":str(item["file"])})
             return jsonify({"Task":""})
@@ -586,11 +586,11 @@ class TimeEncoder(JSONEncoder):
             return obj.astimezone().strftime("%Y-%m-%d %H:%M:%S.%f")
         return JSONEncoder.default(self, obj)
 
-def find_items_without_coll(db,col,items):
+def find_items_without_coll(db, col, items):
     _dict = {}
     for item in items:
         if item != '':
-            ret = client[db][col].find_one({"_id":ObjectId(item)},{'_id': False})
+            ret = client[db][col].find_one({"_id":ObjectId(item)}, {'_id': False})
             if ret != None:
                 _dict.update({item:ret})
     return _dict
@@ -612,21 +612,21 @@ class StarProject(MenuLink):
             return redirect(url_for('admin.login_view', next=request.url))
  
 
-admin = Admin(app, "QeeqBox", index_view=CustomAdminIndexView(url='/'),base_template='base.html' , template_mode='bootstrap3')
+admin = Admin(app, "QeeqBox", index_view=CustomAdminIndexView(url='/'), base_template='base.html' , template_mode='bootstrap3')
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/archive/master.zip", icon_type='glyph', icon_value='glyphicon-download-alt'))
 admin.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer/subscription", icon_type='glyph', icon_value='glyphicon glyphicon-eye-open'))
 admin.add_link(CustomMenuLink(name='Logout', category='', url="/logout", icon_type='glyph', icon_value='glyphicon glyphicon-user'))
-admin.add_view(CustomViewBufferForm(name="Buffer",endpoint='buffer',menu_icon_type='glyph', menu_icon_value='glyphicon-edit',category='Analyze'))
-admin.add_view(CustomViewUploadForm(name="Upload",endpoint='upload',menu_icon_type='glyph', menu_icon_value='glyphicon-upload',category='Analyze'))
-admin.add_view(ReportsViewHTML(Reports,name="HTML",endpoint='reportshtml', menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt',category='Reports'))
-admin.add_view(ReportsViewJSON(Reports,name="JSON",endpoint='reportsjson',menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt',category='Reports'))
-admin.add_view(LogsView(Logs,name='Tasks',menu_icon_type='glyph', menu_icon_value='glyphicon-info-sign',category='Logs'))
-admin.add_view(CustomLogsView(name="Active",endpoint='activelogs',menu_icon_type='glyph', menu_icon_value='glyphicon-flash',category='Logs'))
-admin.add_view(CustomStatsView(name="Stats",endpoint='stats',menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
-admin.add_view(FilesView(Files,menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
+admin.add_view(CustomViewBufferForm(name="Buffer", endpoint='buffer', menu_icon_type='glyph', menu_icon_value='glyphicon-edit', category='Analyze'))
+admin.add_view(CustomViewUploadForm(name="Upload", endpoint='upload', menu_icon_type='glyph', menu_icon_value='glyphicon-upload', category='Analyze'))
+admin.add_view(ReportsViewHTML(Reports, name="HTML", endpoint='reportshtml', menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt', category='Reports'))
+admin.add_view(ReportsViewJSON(Reports, name="JSON", endpoint='reportsjson', menu_icon_type='glyph', menu_icon_value='glyphicon-list-alt', category='Reports'))
+admin.add_view(LogsView(Logs, name='Tasks', menu_icon_type='glyph', menu_icon_value='glyphicon-info-sign', category='Logs'))
+admin.add_view(CustomLogsView(name="Active", endpoint='activelogs', menu_icon_type='glyph', menu_icon_value='glyphicon-flash', category='Logs'))
+admin.add_view(CustomStatsView(name="Stats", endpoint='stats', menu_icon_type='glyph', menu_icon_value='glyphicon-stats'))
+admin.add_view(FilesView(Files, menu_icon_type='glyph', menu_icon_value='glyphicon-file'))
 admin.add_view(UserView(User, menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
-admin.add_view(CheckTask('Task',endpoint='task', menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
+admin.add_view(CheckTask('Task', endpoint='task', menu_icon_type='glyph', menu_icon_value='glyphicon-user'))
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)
 

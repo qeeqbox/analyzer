@@ -1,6 +1,5 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from socket import inet_ntoa,inet_aton
 from struct import pack,unpack
 from re import findall
@@ -10,6 +9,7 @@ from tld import get_fld,get_tld
 from webbrowser import open_new_tab
 from psutil import process_iter,Process,wait_procs
 from os import getpid
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 
 def kill_process_and_subs():
     proc = Process(getpid())

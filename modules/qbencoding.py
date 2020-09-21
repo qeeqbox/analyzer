@@ -1,41 +1,41 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 from magic import Magic
+from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
 
 class QBEncdoing:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting QBEncdoing")
-    def __init__(self):
-        pass
+	@verbose(True, verbose_flag, verbose_timeout, "Starting QBEncdoing")
+	def __init__(self):
+		pass
 
-    @verbose(True,verbose_flag,verbose_timeout,None)
-    def check_bom(self,str) -> str:
-        if str[:3] == '\xEF\xBB\xBF':
-            return "UTF-8-SIG"
-        elif str[:4] == '\xFF\xFE\x00\x00':
-            return "UTF-32LE"
-        elif str[:4] == '\x00\x00\xFF\xFE':
-            return "UTF-32BE"
-        elif str[:2] == '\xFF\xFE':
-            return "UTF-16LE"
-        elif str[:2] == '\xFE\xFF':
-            return "UTF-16BE"
-        return "None"
+	@verbose(True, verbose_flag, verbose_timeout, None)
+	def check_bom(self, str) -> str:
+		if str[:3] == '\xEF\xBB\xBF':
+			return "UTF-8-SIG"
+		elif str[:4] == '\xFF\xFE\x00\x00':
+			return "UTF-32LE"
+		elif str[:4] == '\x00\x00\xFF\xFE':
+			return "UTF-32BE"
+		elif str[:2] == '\xFF\xFE':
+			return "UTF-16LE"
+		elif str[:2] == '\xFE\xFF':
+			return "UTF-16BE"
+		return "None"
 
-    @verbose(True,verbose_flag,verbose_timeout,"Checking file encoding")
-    def analyze(self,data,_path,_unicode) -> bool:
+	@verbose(True, verbose_flag, verbose_timeout, "Checking file encoding")
+	def analyze(self, data, _path, _unicode) -> bool:
 
-        data["Encoding"] = {"Details":{},
-                           "_Details":{}}
+		data["Encoding"] = {"Details":{}, 
+						   "_Details":{}}
 
-        open(_path,"rb").read()
-        fbom = open(_path,"rb").read(4)
+		open(_path, "rb").read()
+		fbom = open(_path, "rb").read(4)
 
-        if _unicode:
-            encoding = "utf-16"
-        else:
-            encoding = "utf-8"
+		if _unicode:
+			encoding = "utf-16"
+		else:
+			encoding = "utf-8"
 
-        data["Encoding"]["Details"]={  "charset":Magic(mime_encoding=True).from_file(_path),
-                                       "ForceEncoding":encoding,
-                                       "ByteOrderMark":self.check_bom(fbom)}
+		data["Encoding"]["Details"]={  "charset":Magic(mime_encoding=True).from_file(_path), 
+									   "ForceEncoding":encoding, 
+									   "ByteOrderMark":self.check_bom(fbom)}

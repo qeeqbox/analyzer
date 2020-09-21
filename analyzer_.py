@@ -1,6 +1,6 @@
 __G__ = "(G)bd249ce4"
 
-from analyzer.logger.logger import log_string,verbose,verbose_flag,verbose_timeout
+from analyzer.logger.logger import log_string, verbose, verbose_flag, verbose_timeout
 from analyzer.modules.qbfile import QBFile
 from analyzer.modules.qbencoding import QBEncdoing
 from analyzer.modules.linuxelf import LinuxELF
@@ -38,7 +38,7 @@ from analyzer.mitre.mitreparser import MitreParser
 from analyzer.mitre.qbmitresearch import QBMitresearch
 
 class Analyzer:
-    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
+    @verbose(True, verbose_flag, verbose_timeout, "Starting Analyzer")
     def __init__(self):
         '''
         initialize class, and all modules 
@@ -77,25 +77,25 @@ class Analyzer:
         self.oleparser = OLEParser()
         self.qbsnort = QBSnort()
     
-    @verbose(True,verbose_flag,verbose_timeout,"Starting Analyzer")
-    def analyze(self,parsed) -> dict:
+    @verbose(True, verbose_flag, verbose_timeout, "Starting Analyzer")
+    def analyze(self, parsed) -> dict:
         '''
         main analyze logic!
         '''
 
         data = {}
 
-        log_string("Start analyzing {}".format(parsed.file),"Yellow")
+        log_string("Start analyzing {}".format(parsed.file), "Yellow")
 
-        self.qbfile.analyze(data,parsed.uuid,parsed.file,parsed.output)
-        self.qbencoding.analyze(data,parsed.file,parsed.unicode)
+        self.qbfile.analyze(data, parsed.uuid, parsed.file, parsed.output)
+        self.qbencoding.analyze(data, parsed.file, parsed.unicode)
 
         if self.pdfparser.check_sig(data):
             self.pdfparser.analyze(data)
         elif self.windowspe.check_sig(data):
             self.windowspe.analyze(data)
             if parsed.behavior or parsed.full:
-                self.qbbehavior.analyze(data,"winapi.json")
+                self.qbbehavior.analyze(data, "winapi.json")
             if parsed.xref or parsed.full:
                 self.qbd3generator.create_d3_ref(data)
         elif self.linuxelf.check_sig(data):
@@ -103,7 +103,7 @@ class Analyzer:
             if parsed.xref or parsed.full:
                 self.qbd3generator.create_d3_ref(data)
             if parsed.behavior or parsed.full:
-                self.qbbehavior.analyze(data,"linux.json")
+                self.qbbehavior.analyze(data, "linux.json")
         elif self.macho.check_sig_macho(data):
             self.macho.analyze_macho(data)
         elif self.macho.check_sig_dmg(data):
@@ -111,17 +111,17 @@ class Analyzer:
         elif self.apkparser.check_sig_apk(data):
             self.apkparser.analyze_apk(data)
             if parsed.behavior or parsed.full:
-                self.qbbehavior.analyze(data,"android.json")
+                self.qbbehavior.analyze(data, "android.json")
         elif self.apkparser.check_sig_dex(data):
             self.apkparser.analyze_dex(data)
             if parsed.behavior or parsed.full:
-                self.qbbehavior.analyze(data,"android.json")
+                self.qbbehavior.analyze(data, "android.json")
         elif self.blackberry.check_sig(data):
             self.blackberry.analyze(data)
         elif self.emailparser.check_sig(data):
-            self.emailparser.analyze(data,parsed)
+            self.emailparser.analyze(data, parsed)
         elif self.msgparser.check_sig(data):
-            self.msgparser.analyze(data,parsed)
+            self.msgparser.analyze(data, parsed)
         elif self.readpackets.check_sig(data):
             self.readpackets.analyze(data)
             self.qbsnort.analyze(data)
@@ -136,15 +136,15 @@ class Analyzer:
         else:
             self.qbfile.check_sig(data)
             if parsed.behavior or parsed.full:
-                self.qbbehavior.analyze(data,"winapi.json")
-                self.qbbehavior.analyze(data,"linux.json")
-                self.qbbehavior.analyze(data,"android.json")
+                self.qbbehavior.analyze(data, "winapi.json")
+                self.qbbehavior.analyze(data, "linux.json")
+                self.qbbehavior.analyze(data, "android.json")
         if parsed.w_internal or parsed.w_original or parsed.w_hash or parsed.w_words or parsed.w_all or parsed.full:
-            self.qbwhitelist.analyze(data,parsed)
+            self.qbwhitelist.analyze(data, parsed)
         if parsed.language or parsed.full:
-            self.qblanguage.analyze(data,parsed)
+            self.qblanguage.analyze(data, parsed)
         if parsed.phishing or parsed.full:
-            self.qbphising.analyze(data,parsed)
+            self.qbphising.analyze(data, parsed)
         if parsed.patterns or parsed.full:
             self.qbpatterns.analyze(data)
         if parsed.suspicious or parsed.full:
@@ -166,7 +166,7 @@ class Analyzer:
         if parsed.mitre or parsed.full:
             self.qbmitresearch.analyze(data)
         if parsed.yara or parsed.tags or parsed.full:
-            self.yaraparser.checkwithyara(data,parsed,None)
+            self.yaraparser.checkwithyara(data, parsed, None)
         if parsed.visualize or parsed.full:
             self.qbd3generator.create_d3_artifacts(data)
         if parsed.flags or parsed.full:

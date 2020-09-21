@@ -1,3 +1,6 @@
+#### 2020.V.02.40
+- Code clean up
+
 #### 2020.V.02.39
 - Added qbsecrets
 
