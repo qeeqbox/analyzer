@@ -3,13 +3,9 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-- Do you want to analyze sensitive data with an open-source project?
-- Do you write about malware and need an easy way to generate visualized output?
-- Do you have a **policy** that restricts your data analysis from using external resources?
+- Do you want to analyze/visualize/structure **sensitive** data locally?
 
-Then, try **OTIA**!
-
-**O**ffline **T**hreat **I**ntelligence **A**nalyzer for producing a readable and visualized format from classified/unclassified data. It contains different modules (extractors and parsers) that run locally. The extractors extract different features, artifacts and IoCs. And, parsers produce readable and visualized output that can be **integrated** into your SOC platforms or programs.
+Then, try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer for extracting different features, artifacts and IOCs from classified/unclassified data. It contains different analyzers, extractors and parsers modules that run locally. The generated output can be easily **integrated** in your SOC platforms or programs.
 
 ## New Dark Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
