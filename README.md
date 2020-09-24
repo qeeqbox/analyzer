@@ -73,13 +73,7 @@ Try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer. It extr
 - HTML - wrapper -> ```Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy```
 - Some patterns -> ```AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID```
 
-- ~~Online TIPs (Required tokens, Moving to different project)~~
-    - ~~HybridAnalysis~~
-    - ~~MalShare~~
-    - ~~MetaDefender~~
-    - ~~VirusTotal~~
-    - ~~AlienVault~~
-    - ~~PulseDive~~
+- ~~Online TIPs (Required tokens, Moving to different project) HybridAnalysis MalShare MetaDefender VirusTotal AlienVault PulseDive~~
 
 ## Running
 #### One click auto-configure
