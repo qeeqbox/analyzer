@@ -1,3 +1,4 @@
-{"version":"2020.V.02.40",
+{"version":"2020.V.02.41",
  "dockercompose":"passed",
- "auto_testing":"DCE0D9ED-9E55-430E-97BE-F8188BB3589E"}
+ "implemented":"68%",
+ "auto_testing":"b3103b56-48dc-4ac0-865a-07e77d9c5d60"}

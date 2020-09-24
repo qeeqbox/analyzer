@@ -1,13 +1,16 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/analyzerlogo.png"></p>
 
 #
-[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
+[![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=implemented&query=$.implemented&colorB=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-- Do you want to analyze/visualize/structure **sensitive** data locally?
+Do you want to analyze/visualize/structure **sensitive** locally? 
 
 Then, try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer for extracting different features, artifacts and IOCs from classified/unclassified data. It contains different analyzers, extractors and parsers modules that run locally. The generated output can be easily **integrated** in your SOC platforms or programs.
 
-## New Dark Interface
+## Install
+```git clone https://github.com/qeeqbox/analyzer.git && cd analyzer &&  chmod +x run.sh && ./run.sh auto_configure```
+
+## Interface
 <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/intro.gif" style="max-width:768px"/>
 
 ## Output 
@@ -55,113 +58,20 @@ Then, try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer fo
 - Web interface
 
 ## Other Features
-- Linux (wrapper)
-    - ELF information
-    - API functions descriptions
-    - System commands descriptions
-    - Sections descriptions
-    - Lib descriptions
-    - Encrypted section detection
-    - Symbols extraction
-    - MITRE artifacts mapped to detection
-    - Cross references detection
-    - Behavior detection
-- macOS (wrapper)
-    - DMG extraction
-    - Shell code detection
-    - PLIST information
-    - MITRE artifacts mapped to detection
-    - macOS information
-- Windows (wrapper)
-    - PE information
-    - Encrypted section detection
-    - Sections descriptions
-    - DLL descriptions
-    - Symbols extraction
-    - Signature extraction and validation
-    - API descriptions
-    - PE ASLR, DEP, SEH and CFG detection
-    - MITRE artifacts mapped to detection
-    - API Behavior detection (DLL injection, Process Hollowing, Process Doppelganging etc..)
-    - Cross references detection
-    - Icon extraction
-    - Extract String file info (FileDescription, FileDescription etc..)
-- Android (wrapper)
-    - APK information
-    - DEX information
-    - Manifest descriptions
-    - Intent descriptions
-    - Resources extraction
-    - Symbols extraction
-    - Classes extraction
-    - Big functions identification 
-    - Cross references detection
-    - API Behavior detection
-- IPhone (built-in)
-    - IPA information
-- BlackBerry (COD) (built-in)
-    - COD information
-    - Functions extraction
-    - Strings extraction
-- PCAP (wrapper)
-    - Frame filter
-    - HTTP filter
-    - DNS filter
-    - ARP filter
-    - WAF detection
-    - DGA detection
-    - Snort parsing
-- PDF (built-in)
-    - Objects enumeration
-    - Keys (javascript, js, OpenAction) extraction
-    - Streams parsing
-    - String analysis
-- Office (built-in and wrapper)
-    - Meta info extraction
-    - Hyper and target links extraction
-    - Bin printable parser
-    - Extract Text
-    - Extract DDE
-    - Macros extraction
-- OLE (wrapper)
-    - Number of objects
-    - Object extraction
-    - Macros extraction
-- EMAIL (built-in and wrapper)
-    - Header information
-    - Attachment extraction and parsing 
-    - Extract body
-    - Phishing patterns check
-- Archives (wrapper)
-    - Extract mimes and guess by extensions
-    - Finding patterns in all unpacked files
-    - Encrypted archives detection
-- HTML (wrapper)
-    - Extract scripts, iframes, links and forms
-    - Decode/analyze links
-    - Script entropy
-- Some patterns
-    - AWS Clint ID
-    - Amazon MWS Auth Token
-    - Amazon S3
-    - ALIYUN OSS
-    - AZURE Storage
-    - Facebook Access Token
-    - Github Token
-    - Goole API Key
-    - Google CAPTCHA
-    - Google OAuth
-    - Google Secret
-    - Google OAuth Access Token
-    - Mailgun API Key
-    - MailChimp API
-    - Picatic API
-    - Slack Token
-    - Square Access Token
-    - Square OAuth Secret
-    - Stripe API
-    - Twilio API
-    - Twilio SID
+- Linux - wrapper -> ```ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection```
+- macOS - wrapper -> ```DMG extraction, Shell code detection, PLIST information, MITRE artifacts mapped to detection, macOS information```
+- Windows - wrapper -> ```PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..```
+- Android - wrapper -> ```APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection```
+- IPhone - built-in -> ```IPA information```
+- BlackBerry COD - built-in -> ```COD information, Functions extraction, Strings extraction```
+- PCAP - wrapper - > ```Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing```
+- PDF - built-in -> ```Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis```
+- Office - built-in and wrapper -> ```Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction```
+- OLE - wrapper -> ```Number of objects, Object extraction, Macros extraction```
+- EMAIL - built-in and wrapper -> ```Header information, Attachment extraction and parsing, Extract body, Phishing patterns check```
+- Archives - wrapper -> ```Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection```
+- HTML - wrapper -> ```Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy```
+- Some patterns -> ```AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID```
 
 - ~~Online TIPs (Required tokens, Moving to different project)~~
     - ~~HybridAnalysis~~
@@ -170,30 +80,6 @@ Then, try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer fo
     - ~~VirusTotal~~
     - ~~AlienVault~~
     - ~~PulseDive~~
-
-## Roadmap
-- &#9745; ~~Reduce file I/O~~
-- &#9745; ~~PDF module~~
-- &#9745; ~~RTF module~~
-- &#9745; ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
-- &#9745; ~~HTML module~~
-- &#9745; ~~Refactoring modules v2~~
-- &#9745; ~~Converting some yara rules into individual modules (Requested by users)~~
-- &#9745; ~~Whitelist (Requested by users)~~
-- &#9745; ~~Switching to mongodb (Requested by users)~~
-- &#9745; ~~Phishing module~~
-- &#9745; ~~Web service and API~~
-- &#9745; ~~Web interface (Requested by users)~~
-- &#9745; ~~Curling some TIPs (Requested by users)~~
-- &#9745; ~~MS office module~~
-- &#9745; ~~Snort wrapper (Requested by users)~~
-- &#9745; ~~Machine learning modules - Moving to different project~~
-- &#9745; ~~Offline multiscanner - Moving to different project~~
-- &#9745; ~~Adding more creds pattern (Requested by users)~~
-- Java analysis (Requested by users)
-- Web detection
-- Adding username and password wrappers to databases
-- CSS clean up
 
 ## Running
 #### One click auto-configure
@@ -305,6 +191,30 @@ apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libja
 pip3 install pyelftools macholib python-magic nltk Pillow jinja2 ssdeep pefile scapy r2pipe pytesseract M2Crypto requests tld tldextract bs4 psutil pymongo flask pyOpenSSL oletools extract_msg
 
 Prerequisites packages are required for some modules (If you are having issues using those packages, I might be able to share with you my own alternatives that I developed in the past in C#\C)
+
+## Roadmap
+- &#9745; ~~Reduce file I/O~~
+- &#9745; ~~PDF module~~
+- &#9745; ~~RTF module~~
+- &#9745; ~~Fix htmlmaker (return concat(self.root_render_func(self.new_context(vars))) MemoryError) due to rendering large objects.. this happened due to yara module appending too many results that caused htmlmaker to hang . Solved by grouping yara results into one~~
+- &#9745; ~~HTML module~~
+- &#9745; ~~Refactoring modules v2~~
+- &#9745; ~~Converting some yara rules into individual modules (Requested by users)~~
+- &#9745; ~~Whitelist (Requested by users)~~
+- &#9745; ~~Switching to mongodb (Requested by users)~~
+- &#9745; ~~Phishing module~~
+- &#9745; ~~Web service and API~~
+- &#9745; ~~Web interface (Requested by users)~~
+- &#9745; ~~Curling some TIPs (Requested by users)~~
+- &#9745; ~~MS office module~~
+- &#9745; ~~Snort wrapper (Requested by users)~~
+- &#9745; ~~Machine learning modules - Moving to different project~~
+- &#9745; ~~Offline multiscanner - Moving to different project~~
+- &#9745; ~~Adding more creds pattern (Requested by users)~~
+- Java analysis (Requested by users)
+- Web detection
+- Adding username and password wrappers to databases
+- CSS clean up
 
 ## Resources
 - Linux documentation

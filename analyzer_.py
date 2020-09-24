@@ -1,6 +1,11 @@
-__G__ = "(G)bd249ce4"
+# pylint: disable=C0301,R0913,W0702,E0401,R0201,R0902,R0914,R0912,R0903,R0904, W0613
 
-from analyzer.logger.logger import log_string, verbose, verbose_flag, verbose_timeout
+'''
+    __G__ = "(G)bd249ce4"
+    analyzer
+'''
+
+from analyzer.logger.logger import log_string, verbose
 from analyzer.modules.qbfile import QBFile
 from analyzer.modules.qbencoding import QBEncdoing
 from analyzer.modules.linuxelf import LinuxELF
@@ -38,10 +43,13 @@ from analyzer.mitre.mitreparser import MitreParser
 from analyzer.mitre.qbmitresearch import QBMitresearch
 
 class Analyzer:
-    @verbose(True, verbose_flag, verbose_timeout, "Starting Analyzer")
+    '''
+    Analyzer this class looks good
+    '''
+    @verbose(True, verbose_output=False, timeout=None, _str="Starting Analyzer")
     def __init__(self):
         '''
-        initialize class, and all modules 
+        initialize class, and all modules
         '''
         self.qbfile = QBFile()
         self.qbmitresearch = QBMitresearch(MitreParser)
@@ -76,8 +84,8 @@ class Analyzer:
         self.qbphising = QBPhishing()
         self.oleparser = OLEParser()
         self.qbsnort = QBSnort()
-    
-    @verbose(True, verbose_flag, verbose_timeout, "Starting Analyzer")
+
+    @verbose(True, verbose_output=False, timeout=None, _str="Starting Analyzing")
     def analyze(self, parsed) -> dict:
         '''
         main analyze logic!
@@ -173,5 +181,4 @@ class Analyzer:
             self.qbcountriesviz.get_flags_from_codes(data)
         if parsed.worldmap or parsed.full:
             self.qbcountriesviz.get_all_codes(data)
-
         return data

@@ -2,10 +2,9 @@ __G__ = "(G)bd249ce4"
 
 from json import loads
 from os import mkdir, path
-from analyzer.logger.logger import verbose, verbose_flag, verbose_timeout
-
+from analyzer.logger.logger import verbose
 class QBMitresearch():
-    @verbose(True, verbose_flag, verbose_timeout, "Starting QBMitresearch")
+    @verbose(True, verbose_output=False, timeout=None, _str="Starting QBMitresearch")
     def __init__(self, MitreParser):
         '''
         initialize class, make mitrefiles path
@@ -16,7 +15,7 @@ class QBMitresearch():
         if not path.isdir(self.mitrepath):mkdir(self.mitrepath)
         self.parsediocs = self.mitrepath+"parsediocs.json"
 
-    @verbose(True, verbose_flag, verbose_timeout, None)
+    @verbose(True, verbose_output=False, timeout=None, _str=None)
     def search_in_mitre_and_return(self, s, attack):
         '''
         get attack info from fulldict
@@ -27,7 +26,7 @@ class QBMitresearch():
                     return x
         return None
 
-    @verbose(True, verbose_flag, verbose_timeout, "Finding attack patterns")
+    @verbose(True, verbose_output=False, timeout=None, _str="Finding attack patterns")
     def check_mitre_similarity(self, data):
         '''
         check detections from parsediocs.json against wordsstripped, if yes bring attack info
@@ -52,7 +51,7 @@ class QBMitresearch():
                                             "Description":"None"})
             _list = []
 
-    @verbose(True, verbose_flag, verbose_timeout, "Finding mitre artifacts")
+    @verbose(True, verbose_output=False, timeout=None, _str="Finding mitre artifacts")
     def check_mitre(self, data):
         '''
         check if words are tools or malware listed in mitre 
@@ -72,7 +71,7 @@ class QBMitresearch():
                                             "Description":record["description"]})
         return True
 
-    @verbose(True, verbose_flag, verbose_timeout, "Analyzing with mitre")
+    @verbose(True, verbose_output=False, timeout=None, _str="Analyzing with mitre")
     def analyze(self, data):
         '''
         start mitre analysis for words and wordsstripped

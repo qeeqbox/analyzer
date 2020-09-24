@@ -1,14 +1,22 @@
-from elasticsearch import Elasticsearch
+'''
+    __G__ = "(G)bd249ce4"
+    connection -> elastic
+'''
+
 from os import environ
+from elasticsearch import Elasticsearch
 from analyzer.settings import elastic_db
+from analyzer.logger.logger import ignore_excpetion
 
 if environ["analyzer_env"] == "local":
-	es = Elasticsearch([elastic_db])
+    ELASTIC_SEARCH = Elasticsearch([elastic_db])
 elif environ["analyzer_env"] == "docker":
-	es = Elasticsearch([elastic_db])
+    ELASTIC_SEARCH = Elasticsearch([elastic_db])
 
 def push_to_elastic(uuid, json):
-	try:
-		res = es.index(index='jsdoc', ignore=400, doc_type='doc', id=uuid, body=json)
-	finally:
-		return res
+    '''
+    Not implemented
+    '''
+    with ignore_excpetion(Exception):
+        res = ELASTIC_SEARCH.index(index='jsdoc', ignore=400, doc_type='doc', id=uuid, body=json)
+    return res

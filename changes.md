@@ -1,3 +1,11 @@
+#### 2020.V.02.41
+- Code review and audit rev2
+- Fixed bugs were masked by nested exceptions
+- Implemented 68% of the original project (2018-????)
+- Stabilized packed files analysis
+- Added more verbose error logging  
+- Moved to content manger (exception wrapper)
+
 #### 2020.V.02.40
 - Code clean up
 

@@ -1,9 +1,9 @@
 __G__ = "(G)bd249ce4"
 
-from os import environ, path
-environ["analyzer_env"] = "docker"
-
-from flask import Flask, flash, jsonify, redirect, request, url_for, render_template, session
+from os import environ, getpid, path
+from uuid import uuid4
+from re import compile, search, DOTALL
+from flask import Flask, flash, jsonify, redirect, request, session, url_for
 from flask_mongoengine import MongoEngine
 from wtforms import form, fields, validators, SelectMultipleField
 from flask_admin import AdminIndexView, Admin, expose, BaseView
@@ -12,10 +12,7 @@ from flask_admin.babel import gettext
 from flask_admin.contrib.mongoengine import ModelView
 from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_bcrypt import Bcrypt
-from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
-from uuid import uuid4
-from os import environ, getpid, path, path
 from datetime import datetime
 from flask_wtf.csrf import CSRFProtect
 from requests import get
@@ -24,46 +21,40 @@ from pymongo import ASCENDING
 from platform import platform as pplatform
 from psutil import cpu_percent, virtual_memory, Process
 from shutil import disk_usage
-from settings import __V__, defaultdb, json_settings, meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, meta_users_settings
+from settings import defaultdb, json_settings, meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, meta_users_settings
 from wtforms.widgets import ListWidget, CheckboxInput
 from bson.objectid import ObjectId
 from json import JSONEncoder, dumps
-from re import compile, search, DOTALL
 from redisqueue.qbqueue import QBQueue
 from analyzer.connections.redisconn import get_cache
-from analyzer.connections.mongodbconn import client
+from analyzer.connections.mongodbconn import CLIENT
 from random import choice
 from string import ascii_uppercase
 from datetime import timedelta
+from analyzer.logger.logger import ignore_excpetion
 
 switches = [('full', 'full'), ('behavior', 'behavior'), ('xref', 'xref'), ('tags', 'tags'), ('yara', 'yara'), ('language', 'language'), ('mitre', 'mitre'), ('topurl', 'topurl'), ('ocr', 'ocr'), ('enc', 'enc'), ('cards', 'cards'), ('creds', 'creds'), ('secrets', 'secrets'), ('patterns', 'patterns'), ('suspicious', 'suspicious'), ('dga', 'dga'), ('plugins', 'plugins'), ('visualize', 'visualize'), ('flags', 'flags'), ('icons', 'icons'), ('worldmap', 'worldmap'), ('spelling', 'spelling'), ('image', 'image'), ('phishing', 'phishing'), ('unicode', 'unicode'), ('bigfile', 'bigfile'), ('w_internal', 'w_internal'), ('w_original', 'w_original'), ('w_hash', 'w_hash'), ('w_words', 'w_words'), ('w_all', 'w_all'), ('ms_all', 'ms_all')]
 
 def intro(filename, link):
     intromarkdown = ""
-    try:
+    with ignore_excpetion(Exception):
         r = get(link, verify=False, timeout=2)
         if r.text!= "" and r.ok:
             intromarkdown = search(compile(r"\#\# Features.*", DOTALL), r.text).group(0)
-    except:
-        pass
-
     if intromarkdown == "":
-        try:
+        with ignore_excpetion(Exception):
             readmefolder = path.abspath(path.join(path.dirname( __file__ ), filename))
             with open(readmefolder, "rU", encoding="utf-8") as f:
                 intromarkdown = search(compile(r"\#\# Features.*", DOTALL), f.read()).group(0)
-        except:
-            pass
     return intromarkdown
 
 def session_key(filename):
     key = ""
-    try:
+    with ignore_excpetion(Exception):
         readmefolder = path.abspath(path.join(path.dirname( __file__ ), filename))
         with open(readmefolder, "rU", encoding="utf-8") as f:
             key = f.read()
-    finally:
-        return key
+    return key
 
 app = Flask(__name__)
 app.secret_key = session_key("key.hex")
@@ -324,7 +315,7 @@ class CustomAdminIndexView(AdminIndexView):
 
     @expose('/toggled', methods=('GET', 'POST'))
     def is_toggled(self):
-        try:
+        with ignore_excpetion(Exception):
             if current_user.is_authenticated:
                 json_content = request.get_json(silent=True)
                 for key, value in json_content.items():
@@ -332,8 +323,7 @@ class CustomAdminIndexView(AdminIndexView):
                         session["navs"].remove(key)
                     else:
                         session["navs"].append(key)
-        finally:
-            return jsonify("Done")
+        return jsonify("Done")
 
     def is_visible(self):
         return False
@@ -460,32 +450,22 @@ class CustomViewBufferForm(BaseView):
 def get_stats():
     #lazy check stats
     stats = {}
-    try:
+    with ignore_excpetion(Exception):
         for coll in (defaultdb["reportscoll"], defaultdb["filescoll"], "fs.chunks", "fs.files"):
-            if coll in client[defaultdb["dbname"]].list_collection_names():
+            if coll in CLIENT[defaultdb["dbname"]].list_collection_names():
                 stats.update({"[{}] Collection".format(coll):"Exists"})
             else:
                 stats.update({"[{}] Collection".format(coll):"Does not exists"})
-    except:
-        pass
-    try:
-        stats.update({"[Reports] Total reports":client[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(), 
-                      "[Reports] Total used space":"{}".format(convert_size(client[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + client[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
-    except:
-        pass
-    try:
-        stats.update({"[Files] Total files uploaded":client[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
-    except:
-        pass
-    try:
-        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(client[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
-    except:
-        pass
-    try:
-        stats.update({"[Users] Total users":client[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
-    except:
-        pass
-    try:
+    with ignore_excpetion(Exception):
+        stats.update({"[Reports] Total reports":CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(), 
+                      "[Reports] Total used space":"{}".format(convert_size(CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
+    with ignore_excpetion(Exception):
+        stats.update({"[Files] Total files uploaded":CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
+    with ignore_excpetion(Exception):
+        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(CLIENT[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
+    with ignore_excpetion(Exception):
+        stats.update({"[Users] Total users":CLIENT[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
+    with ignore_excpetion(Exception):
         total, used, free = disk_usage("/")
         stats.update({"CPU memory":cpu_percent(), 
                       "Memory used":virtual_memory()[2], 
@@ -494,10 +474,7 @@ def get_stats():
                       "Used disk size": "{}".format(convert_size(used)), 
                       "Free disk size": "{}".format(convert_size(free)), 
                       "Host platform":pplatform()})
-    except:
-        pass
-
-    client.close()
+    CLIENT.close()
     return stats
 
 class CustomStatsView(BaseView):
@@ -517,9 +494,9 @@ def find_and_srot(db, col, key, var):
     _list = []
     
     if key == "time":
-        items = list(client[db][col].find().sort([('_id', -1)]).limit(1))
+        items = list(CLIENT[db][col].find().sort([('_id', -1)]).limit(1))
     else:
-        items = list(client[db][col].find({key: {"$gt": var}}).sort([(key, ASCENDING)]))
+        items = list(CLIENT[db][col].find({key: {"$gt": var}}).sort([(key, ASCENDING)]))
     
     for item in items:
         _list.append("{} {}".format(item["time"].isoformat(), item["message"]))
@@ -564,7 +541,7 @@ class CheckTask(BaseView):
         if request.method == 'POST':
             if request.json:
                 json_content = request.get_json(silent=True)
-                item = client[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"], "type":"text/html"})
+                item = CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"], "type":"text/html"})
                 if item:
                     return jsonify({"Task":str(item["file"])})
             return jsonify({"Task":""})
@@ -590,7 +567,7 @@ def find_items_without_coll(db, col, items):
     _dict = {}
     for item in items:
         if item != '':
-            ret = client[db][col].find_one({"_id":ObjectId(item)}, {'_id': False})
+            ret = CLIENT[db][col].find_one({"_id":ObjectId(item)}, {'_id': False})
             if ret != None:
                 _dict.update({item:ret})
     return _dict

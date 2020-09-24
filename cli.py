@@ -1,4 +1,7 @@
-__G__ = "(G)bd249ce4"
+'''
+    __G__ = "(G)bd249ce4"
+    cli
+'''
 
 from gevent.monkey import patch_all
 patch_all()
@@ -6,39 +9,8 @@ patch_all()
 from gevent import setswitchinterval
 setswitchinterval(1)
 
-from analyzer.settings import __V__
-print("                                                            ")
-print(" _____  __   _  _____        \\   / ______  ______  _____   ")
-print("|_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
-print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V__))
-print("                               |  https://github.com/QeeqBox/Analyzer")
-print("                                                            ")
-
 from sys import stdout, argv
 from os import environ, path
-
-if __name__ == '__main__':
-    if len(argv) == 3:
-        if argv[2] == "--local" or argv[2] == "--docker":
-            environ["analyzer_env"] = argv[2][2:]
-    else:
-        print("Please choose a mode:")
-        print("--local               Use local settings")
-        print("--docker              Use remote settings)")
-        print()
-        print("Examples:")
-        print("python3 -m app.cli --silent --docker\n")
-        exit()
-else:
-    exit()
-
-from analyzer.analyzer_ import Analyzer
-from analyzer.mics.funcs import kill_python_cli, kill_process_and_subs
-from analyzer.redisqueue.qbqueue import QBQueue
-from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger
-from analyzer.report.reporthandler import ReportHandler
-from analyzer.settings import json_settings
-from analyzer.connections.redisconn import put_cache
 from cmd import Cmd
 from argparse import ArgumentParser
 from signal import SIGTSTP, signal
@@ -46,6 +18,22 @@ from time import sleep
 from contextlib import redirect_stdout
 from io import StringIO
 from gc import collect
+from analyzer.analyzer_ import Analyzer
+from analyzer.mics.funcs import kill_python_cli, kill_process_and_subs
+from analyzer.redisqueue.qbqueue import QBQueue
+from analyzer.logger.logger import cancel_task_logger, log_string, setup_logger, setup_task_logger, ignore_excpetion
+from analyzer.report.reporthandler import ReportHandler
+from analyzer.settings import json_settings
+from analyzer.connections.redisconn import put_cache
+from analyzer.settings import __V__
+
+print("                                                            ")
+print(" _____  __   _  _____        \\   / ______  ______  _____   ")
+print("|_____| | \\  | |_____| |      \\_/   ____/ |______ |_____/")
+print("|     | |  \\_| |     | |_____  |   /_____ |______ |    \\ {}".format(__V__))
+print("                               |  https://github.com/QeeqBox/Analyzer")
+print("                                                            ")
+
 
 def ctrlhandler(signum, frame):
     stdout.write("\n")
@@ -66,7 +54,6 @@ class QBAnalyzer(Cmd):
     kill_python_cli()
     setup_logger()
     signal(SIGTSTP, ctrlhandler)
-    
     #signal(SIGINT, ctrlhandler)
     _analyze_parser = ArgumentParser(prog="analyze")
     _analyze_parser._action_groups.pop()
@@ -150,18 +137,22 @@ class QBAnalyzer(Cmd):
         self._analyze_parser.print_help()
 
     def do_cache_switches(self):
-        try:
+        good_exec = False
+        with ignore_excpetion(Exception):
             with StringIO() as buf, redirect_stdout(buf):
                 self._analyze_parser.print_help()
                 output = buf.getvalue()
             #subbed = search(compile(r"Analysis switches\:.*", DOTALL), output).group(0)
             put_cache("switches", output)
+            good_exec = True
+        if good_exec:
             log_string("Dumped switches", "Green")
-        except:
+        else:
             log_string("Dumping switches failed", "Red")
 
     def do_analyze(self, line, silent=False):
-        try:
+        good_exec = False
+        with ignore_excpetion(Exception):
             line["output"] = json_settings[environ["analyzer_env"]]["malware_output_folder"]
             parsed_args = vars(self._analyze_parser.parse_args(""))
             parsed = Namespace({**parsed_args, **line}, ["open", "print"], ["db_dump_json", "db_dump_html", "disk_dump_html", "disk_dump_json"])
@@ -170,21 +161,21 @@ class QBAnalyzer(Cmd):
             if int(parsed.analyzer_timeout) > 0 and int(parsed.analyzer_timeout) < 240:
                 json_settings[environ["analyzer_env"]]["analyzer_timeout"] = int(parsed.analyzer_timeout)
             if int(parsed.function_timeout) > 0 and int(parsed.function_timeout) < 240:
-               json_settings[environ["analyzer_env"]]["function_timeout"] = int(parsed.function_timeout)
+                json_settings[environ["analyzer_env"]]["function_timeout"] = int(parsed.function_timeout)
+            good_exec = True
+        if good_exec:
             log_string("Default timeout {}s for the task, and {}s for each logic".format(json_settings[environ["analyzer_env"]]["analyzer_timeout"], json_settings[environ["analyzer_env"]]["function_timeout"]), "Yellow")
-        except Exception as e:
-            print(e)
+        else:
             log_string("Parsing failed, something went wrong..", "Red")
             return
 
         log_string("Task {} (Started)".format(parsed.uuid), "Yellow")
 
         if parsed.file:
-            try:
+            with ignore_excpetion(Exception):
                 setup_task_logger(parsed.uuid)
                 self.analyze_file(parsed)
-            finally:
-                cancel_task_logger(parsed.uuid)
+            cancel_task_logger(parsed.uuid)
         else:
             log_string("File, Folder or Buffer is missing", "Red")
 
