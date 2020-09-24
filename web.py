@@ -3,8 +3,6 @@
     web
 '''
 
-__G__ = "(G)bd249ce4"
-
 from os import environ, getpid, path
 from uuid import uuid4
 from re import search, DOTALL
