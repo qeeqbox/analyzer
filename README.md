@@ -3,7 +3,7 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=Code%20Inspector%20Grade&query=$.grade&colorB=228B22&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/info) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=docker-compose&query=$.dockercompose&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=implemented&query=$.implemented&colorB=lightgrey&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-Do you want to analyze/visualize/structure **sensitive** locally?
+Do you want to analyze/visualize/structure **sensitive** files or data locally?
 
 Try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer. It extracts features, artifacts and IoCs from classified or unclassified data using analyzers, extractors and parsers modules that run locally. Those modules generate output that can be easily integrated in your research or SOC platforms.
 
