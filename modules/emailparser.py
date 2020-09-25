@@ -164,8 +164,6 @@ class EmailParser():
         parts = self.get_content_multi(data, message)
         if self.check_attachment_and_make_dir(data, message):
             streams = self.get_attachment(data, message)
-        else:
-            pass
         mixed = streams + parts + headers
         if len(mixed) > 0:
             get_words_multi_filesarray(data, mixed) #have to be bytes < will check this later on

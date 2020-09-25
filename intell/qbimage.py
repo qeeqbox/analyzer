@@ -54,7 +54,7 @@ class QBImage:
             no verbose
             '''
             with ignore_excpetion(Exception):
-                temp_list = [c for c in _buffer]
+                temp_list = list(_buffer)
                 _list = list(chunk_list(temp_list, temp_c))
                 out = list(chunk_list([int(get_average(l)) for l in _list], int(temp_s)))
                 temp__x = 10
@@ -69,7 +69,7 @@ class QBImage:
                 for row in out:
                     for item in row:
                         value = 255 - item
-                        if value >= 0 and value <= 255:
+                        if 0 <= value <= 255:
                             draw.rectangle([temp__x1, temp_y1, temp__x2, temp_y2], fill=(value, value, value), outline="#C8C8C8")
                             temp__x1 = temp__x1 + temp__x
                             temp__x2 = temp__x1 + temp__x

@@ -14,12 +14,12 @@ function check_task(task) {
         dataType: "json",
         success: function(_task) {
             parsed = JSON.stringify(_task)
-            if (_task["Task"] === "") {
+            if (_task.Task === "") {
                 setTimeout(function() {
                     check_task(task);
                 }, 1000)
             } else {
-                window.location.replace("/reportshtml/api/file/?id=" + _task["Task"] + "&coll=fs");
+                window.location.replace("/reportshtml/api/file/?id=" + _task.Task + "&coll=fs");
             }
         },
     });

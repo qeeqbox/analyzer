@@ -1,3 +1,6 @@
+
+#!/bin/bash
+
 echo -e "\nQeeqBox Analyzer v$(jq -r '.version' info) starter script -> https://github.com/qeeqbox/analyzer"
 
 setup_requirements () {

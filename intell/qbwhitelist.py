@@ -30,6 +30,17 @@ class QBWhitelist:
         self.wordsstripped = ""
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
+    def loop_wrapper(self, items, keys, data):
+       if len(items) > 0:
+        for item in items:
+            temp_dict = {}
+            for key in keys:
+                if key in item:
+                    temp_dict.update({key:item[key]})
+            if len(temp_dict) > 0:
+                data.append(temp_dict)
+
+    @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_it_from_words(self, data):
         '''
         look in the databases by words
@@ -40,14 +51,7 @@ class QBWhitelist:
             #pass on "unterminated character set at position 1" some words are not escaped
             with ignore_excpetion(Exception):
                 items = find_items("QBWindows", {"$or":[{"InternalName":rcompile(word, I)}, {"OriginalFilename":rcompile(word, I)}, {"md5":rcompile(word, I)}]})
-                if len(items) > 0:
-                    for item in items:
-                        temp_dict = {}
-                        for key in keys:
-                            if key in item:
-                                temp_dict.update({key:item[key]})
-                        if len(temp_dict) > 0:
-                            data.append(temp_dict)
+                self.loop_wrapper(items, keys, data)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_it_by_hash(self, md5, data):
@@ -57,14 +61,7 @@ class QBWhitelist:
         items = []
         items = find_items("QBWindows", {"md5":rcompile(md5, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
-        if len(items) > 0:
-            for item in items:
-                temp_dict = {}
-                for key in keys:
-                    if key in item:
-                        temp_dict.update({key:item[key]})
-                if len(temp_dict) > 0:
-                    data.append(temp_dict)
+        self.loop_wrapper(items, keys, data)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_it_by_original_filename(self, name, data):
@@ -74,14 +71,7 @@ class QBWhitelist:
         items = []
         items = find_items("QBWindows", {"OriginalFilename":rcompile(name, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
-        if len(items) > 0:
-            for item in items:
-                temp_dict = {}
-                for key in keys:
-                    if key in item:
-                        temp_dict.update({key:item[key]})
-                if len(temp_dict) > 0:
-                    data.append(temp_dict)
+        self.loop_wrapper(items, keys, data)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_it_by_internal_name(self, name, data):
@@ -91,14 +81,7 @@ class QBWhitelist:
         items = []
         items = find_items("QBWindows", {"InternalName":rcompile(name, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
-        if len(items) > 0:
-            for item in items:
-                temp_dict = {}
-                for key in keys:
-                    if key in item:
-                        temp_dict.update({key:item[key]})
-                if len(temp_dict) > 0:
-                    data.append(temp_dict)
+        self.loop_wrapper(items, keys, data)
 
     @verbose(True, verbose_output=False, timeout=None, _str="Checking whitelist")
     def analyze(self, data, parsed):

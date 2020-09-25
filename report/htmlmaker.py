@@ -19,6 +19,7 @@ class HtmlMaker:
         '''
         initialize class
         '''
+        self.bottom = ""
         self.templates = path.abspath(path.join(path.dirname(__file__), 'templates'))
         if not self.templates.endswith(path.sep):
             self.templates = self.templates+path.sep
@@ -28,9 +29,6 @@ class HtmlMaker:
         self.qbimage = qbimage()
         self.qbicons = qbicons()
         self.get_moudles()
-        self.bottom = ""
-        #self.add_text_area = """<div class=textareawrapper><textarea rows="1"></textarea></div>"""
-        #self.empty_text_area = """<div class=empty></div>"""
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_moudles(self):

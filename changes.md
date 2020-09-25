@@ -1,3 +1,8 @@
+#### 2020.V.02.42
+- Fixed buges related to code clean up
+- Fixed qbmitresearch
+- Added auto test result
+
 #### 2020.V.02.41
 - Code review and audit rev2
 - Fixed bugs were masked by nested exceptions

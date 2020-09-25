@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if which mongo ; then
 	if service --status-all |& grep -Fq 'mongodb'; then    
   		service mongodb start    
