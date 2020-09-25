@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./webinterface-Dockerfile
-    command: bash -c "/usr/local/bin/gunicorn --chdir analyzer --worker-class=gevent --worker-connections=1000 --workers=1 -b :8000 web:app"
+    command: bash -c "/usr/local/bin/gunicorn --chdir analyzer --worker-class=gevent --worker-connections=1000 --workers=1 -b :8000 web:APP"
     ports:
       - "8000:8000"
     depends_on:
