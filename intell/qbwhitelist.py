@@ -31,14 +31,14 @@ class QBWhitelist:
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def loop_wrapper(self, items, keys, data):
-       if len(items) > 0:
-        for item in items:
-            temp_dict = {}
-            for key in keys:
-                if key in item:
-                    temp_dict.update({key:item[key]})
-            if len(temp_dict) > 0:
-                data.append(temp_dict)
+        if len(items) > 0:
+            for item in items:
+                temp_dict = {}
+                for key in keys:
+                    if key in item:
+                        temp_dict.update({key:item[key]})
+                if len(temp_dict) > 0:
+                    data.append(temp_dict)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_it_from_words(self, data):
