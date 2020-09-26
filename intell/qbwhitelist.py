@@ -1,6 +1,6 @@
 '''
     __G__ = "(G)bd249ce4"
-    connection ->  whitelist
+    connection -> whitelist
 '''
 
 from re import I
