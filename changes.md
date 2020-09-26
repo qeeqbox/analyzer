@@ -2,6 +2,7 @@
 - Fixed buges related to code clean up
 - Fixed qbmitresearch
 - Added auto test result
+- Fixed missing modules in the report
 
 #### 2020.V.02.41
 - Code review and audit rev2
