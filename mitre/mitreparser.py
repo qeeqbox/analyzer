@@ -133,7 +133,7 @@ class MitreParser():
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def finduses(self):
         '''
-        find all relationship_type uses value and parse them into hardcoded list 
+        find all relationship_type uses value and parse them into hardcoded list
         '''
         temp_l = self.search_in_mitre_and_return(self.fulldict, {'relationship_type':'uses'}, ['source_ref', 'target_ref', 'description', 'collection'])
         temp_d = {}

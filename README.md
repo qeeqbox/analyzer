@@ -57,21 +57,20 @@ Try an **OTIA** -> **O**ffline **T**hreat **I**ntelligence **A**nalyzer. It extr
 - Snort support
 - Web interface
 
-## Other Features
-- Linux - wrapper -> ```ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection```
-- macOS - wrapper -> ```DMG extraction, Shell code detection, PLIST information, MITRE artifacts mapped to detection, macOS information```
-- Windows - wrapper -> ```PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..```
-- Android - wrapper -> ```APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection```
-- IPhone - built-in -> ```IPA information```
-- BlackBerry COD - built-in -> ```COD information, Functions extraction, Strings extraction```
-- PCAP - wrapper - > ```Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing```
-- PDF - built-in -> ```Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis```
-- Office - built-in and wrapper -> ```Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction```
-- OLE - wrapper -> ```Number of objects, Object extraction, Macros extraction```
-- EMAIL - built-in and wrapper -> ```Header information, Attachment extraction and parsing, Extract body, Phishing patterns check```
-- Archives - wrapper -> ```Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection```
-- HTML - wrapper -> ```Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy```
-- Some patterns -> ```AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID```
+## More Features
+- (Linux - wrapper) <sub>ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection</sub>
+- (Windows - wrapper) <sub>PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..</sub>
+- (Android - wrapper) <sub>APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection</sub>
+- (IPhone - built-in) <sub>IPA information</sub>
+- (BlackBerry COD - built-in) <sub>COD information, Functions extraction, Strings extraction</sub>
+- (PCAP - wrapper) <sub>Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing</sub>
+- (PDF - built-in_ <sub>Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis</sub>
+- (Office - built-in and wrapper) <sub>Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction</sub>
+- (OLE - wrapper) <sub>Number of objects, Object extraction, Macros extraction</sub>
+- (EMAIL - built-in and wrapper) <sub>Header information, Attachment extraction and parsing, Extract body, Phishing patterns check</sub>
+- (Archives - wrapper) <sub>Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection</sub>
+- (HTML - wrapper) <sub>Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy</sub>
+- (Some patterns) <sub>AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID</sub>
 
 - ~~Online TIPs (Required tokens, Moving to different project) HybridAnalysis MalShare MetaDefender VirusTotal AlienVault PulseDive~~
 
@@ -88,96 +87,6 @@ The project interface http://127.0.0.1:8000/login/ will open automatically after
 docker-compose -f docker-compose-dev.yml up --build
 
 Then open http://127.0.0.1:8000/login/
-
-
-## Task Example (macOS malware)
-```
-service_1  | 2020-09-17 22:19:31.212100 > Task e88b5d21-3c90-4072-96b1-1e739f260176 (Started)
-service_1  | 2020-09-17 22:19:31.212917 > Setting up task e88b5d21-3c90-4072-96b1-1e739f260176 logger
-service_1  | 2020-09-17 22:19:31.220021 X Starting Analyzer
-service_1  | 2020-09-17 22:19:31.225936 > Start analyzing /analyzer/folders/malware/file.dmg
-service_1  | 2020-09-17 22:19:31.228054 X Getting file details
-service_1  | 2020-09-17 22:19:31.333447 X Setting up ouput folder
-service_1  | 2020-09-17 22:19:31.335757 X Checking file encoding
-service_1  | 2020-09-17 22:19:31.500100 X Analzying DMG file
-service_1  | 2020-09-17 22:19:31.506124 X Checking whitelist
-service_1  | 2020-09-17 22:19:31.836300 X Finding english strings
-service_1  | 2020-09-17 22:19:32.114206 X Finding phishing patterns
-service_1  | 2020-09-17 22:19:32.116093 X Finding URLs patterns
-service_1  | 2020-09-17 22:19:32.661118 X Finding IP4s patterns
-service_1  | 2020-09-17 22:19:32.667960 X Finding IP4 ports patterns
-service_1  | 2020-09-17 22:19:32.675013 X Finding IP6s patterns
-service_1  | 2020-09-17 22:19:32.681682 X Finding Emails patterns
-service_1  | 2020-09-17 22:19:33.479113 X Finding tags patterns
-service_1  | 2020-09-17 22:19:33.483532 X Finding HEX patterns
-service_1  | 2020-09-17 22:19:33.566813 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.573913 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.575476 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.577334 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.578889 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.580484 X Adding descriptions to strings
-service_1  | 2020-09-17 22:19:33.581943 X Finding suspicious strings
-service_1  | 2020-09-17 22:19:33.586324 X Analyzing URLs
-service_1  | 2020-09-17 22:19:34.854877 X Analyzing image with OCR
-service_1  | 2020-09-17 22:19:35.244027 X Finding MD5 patterns
-service_1  | 2020-09-17 22:19:35.250898 X Finding SHA1 patterns
-service_1  | 2020-09-17 22:19:35.257421 X Finding SHA256 patterns
-service_1  | 2020-09-17 22:19:35.264126 X Finding SHA512 patterns
-service_1  | 2020-09-17 22:19:35.270321 X Finding CRC patterns
-service_1  | 2020-09-17 22:19:35.281362 X Finding UUID patterns
-service_1  | 2020-09-17 22:19:35.307276 X Finding encryptions
-service_1  | 2020-09-17 22:19:35.313605 X Finding American Express Card patterns
-service_1  | 2020-09-17 22:19:35.319171 X Finding Visa Card patterns
-service_1  | 2020-09-17 22:19:35.325201 X Finding Master Card patterns
-service_1  | 2020-09-17 22:19:35.344823 X Finding Discover Card patterns
-service_1  | 2020-09-17 22:19:35.358191 X Finding Jcb Card patterns
-service_1  | 2020-09-17 22:19:35.365373 X Finding Diners Club Card patterns
-service_1  | 2020-09-17 22:19:35.371754 X Finding SSN patterns
-service_1  | 2020-09-17 22:19:35.378959 X Finding logins
-service_1  | 2020-09-17 22:19:35.383010 X Finding AWS Clint ID patterns
-service_1  | 2020-09-17 22:19:35.388630 X Finding Amazon MWS Auth Token patterns
-service_1  | 2020-09-17 22:19:35.393158 X Finding Amazon Generic patterns
-service_1  | 2020-09-17 22:19:35.397347 X Finding ALIYUN OSS patterns
-service_1  | 2020-09-17 22:19:35.399320 X Finding AZURE Storage patterns
-service_1  | 2020-09-17 22:19:35.401041 X Finding Facebook Access Token patterns
-service_1  | 2020-09-17 22:19:35.405441 X Finding Github Token patterns
-service_1  | 2020-09-17 22:19:35.547575 X Finding Goole API Key patterns
-service_1  | 2020-09-17 22:19:35.553611 X Finding Google OAuth patterns
-service_1  | 2020-09-17 22:19:35.555113 X Finding Google Secret patterns
-service_1  | 2020-09-17 22:19:35.559293 X Finding Google OAuth Access Token patterns
-service_1  | 2020-09-17 22:19:35.563868 X Finding Mailgun API Key patterns
-service_1  | 2020-09-17 22:19:35.569479 X Finding MailChimp API patterns
-service_1  | 2020-09-17 22:19:35.582093 X Finding Picatic API patterns
-service_1  | 2020-09-17 22:19:35.588023 X Finding Slack Token patterns
-service_1  | 2020-09-17 22:19:35.594352 X Finding Square Access Token patterns
-service_1  | 2020-09-17 22:19:35.600065 X Finding Square OAuth Secret patterns
-service_1  | 2020-09-17 22:19:35.605487 X Finding Stripe API patterns
-service_1  | 2020-09-17 22:19:35.611355 X Finding Twilio API patterns
-service_1  | 2020-09-17 22:19:35.617564 X Finding Twilio SID patterns
-service_1  | 2020-09-17 22:19:35.633954 X Loading extra plugins
-service_1  | 2020-09-17 22:19:35.635282 X Finding suspicious functions
-service_1  | 2020-09-17 22:19:36.094941 X Analyzing Ransom patterns
-service_1  | 2020-09-17 22:19:36.175414 X Analyzing with mitre
-service_1  | 2020-09-17 22:19:36.177242 X Finding mitre artifacts
-service_1  | 2020-09-17 22:19:36.184892 X Finding attack patterns
-service_1  | 2020-09-17 22:19:36.257699 X Checking with yara rules
-service_1  | 2020-09-17 22:19:36.262425 X Finding yara tags
-service_1  | 2020-09-17 22:19:36.668507 X Finding yara matches
-service_1  | 2020-09-17 22:19:36.680279 X Making artifacts xrefs
-service_1  | 2020-09-17 22:19:36.682027 X Get countries flags
-service_1  | 2020-09-17 22:19:36.683390 X Get countries codes
-service_1  | 2020-09-17 22:19:36.684806 X Parsing and cleaning output
-service_1  | 2020-09-17 22:19:36.880433 X Making file tables
-service_1  | 2020-09-17 22:19:36.995937 X Making a visualized image
-service_1  | 2020-09-17 22:19:37.498378 > Generated Html file /analyzer/folders/output/e88b5d21-3c90-4072-96b1-1e739f260176_029a9f7ab62e650f70a46686cd9d0d2b/file.dmg.html
-service_1  | 2020-09-17 22:19:37.532127 > Generated JSON file /analyzer/folders/output/e88b5d21-3c90-4072-96b1-1e739f260176_029a9f7ab62e650f70a46686cd9d0d2b/file.dmg.json
-service_1  | 2020-09-17 22:19:37.559158 > JSON result dumped into db
-service_1  | 2020-09-17 22:19:37.560950 > Unable to dump JSON result to elastic
-service_1  | 2020-09-17 22:19:37.592101 > HTML result dumped into db
-service_1  | 2020-09-17 22:19:37.594306 > Closing up task e88b5d21-3c90-4072-96b1-1e739f260176 logger
-service_1  | 2020-09-17 22:19:37.605224 > Logs result dumped into db
-service_1  | 2020-09-17 22:19:37.606195 X Task e88b5d21-3c90-4072-96b1-1e739f260176 (Finished)
-```
 
 ## Prerequisites
 apt-get install -y python3 python3-pip curl libfuzzy-dev yara libmagic-dev libjansson-dev libssl-dev libffi-dev tesseract-ocr libtesseract-dev libssl-dev swig p7zip-full radare2 dmg2img mongodb redis
@@ -211,20 +120,7 @@ Prerequisites packages are required for some modules (If you are having issues u
 - CSS clean up
 
 ## Resources
-- Linux documentation
-- MacOS documentation
-- Windows documentation
-- Android documentation
-- software77
-- MITRE ATT&CK™
-- sc0ty
-- hexacorn
-- PEID
-- steren
-- bacde
-- cisco umbrella 
-- yara rules community 
-- TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
+Linux documentation, MacOS documentation,  Windows documentation,  Android documentation,  software77,  MITRE ATT&CK™,  sc0ty,  hexacorn,  PEID,  steren,  bacde,  cisco umbrella ,  yara rules community ,  TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
 
 ## Other Licenses
 By using this framework, you are accepting the license terms of each package listed below:

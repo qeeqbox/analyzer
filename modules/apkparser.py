@@ -165,6 +165,24 @@ class ApkParser:
         return False
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing DEX file")
+    def dex_wrapper(self, data, r2p, index):
+        data[index] = {"Classes":[],
+                       "Externals":[],
+                       "Symbols":[],
+                       "Bigfunctions":[],
+                       "Suspicious":[],
+                       "_Classes":["Type", "Name"],
+                       "_Externals":["Type", "Name"],
+                       "_Symbols":["Type", "Address", "X", "Name"],
+                       "_Bigfunctions":["Size", "Name"],
+                       "_Suspicious":["Location", "Function", "Xrefs"]}
+        data[index]["Classes"] = self.get_all_classes(r2p)
+        data[index]["Externals"] = self.get_all_externals(r2p)
+        data[index]["Symbols"] = self.get_all_symbols(r2p)
+        data[index]["Bigfunctions"] = self.big_functions(r2p)
+        data[index]["Suspicious"] = self.check_sus(r2p)
+
+    @verbose(True, verbose_output=False, timeout=None, _str="Analyzing DEX file")
     def analyze_dex(self, data):
         '''
         start analyzing dex logic (r2p timeout = 10) for individual dex
@@ -173,25 +191,8 @@ class ApkParser:
         r2p = r2open(data["Location"]["File"], flags=['-2'])
         r2p.cmd("e anal.timeout = 5")
         r2p.cmd("aaaa;")
-        k = 'APK_DEX_1'
-        data[k] = {"Classes":[],
-                   "Externals":[],
-                   "Symbols":[],
-                   "Bigfunctions":[],
-                   "Suspicious":[],
-                   "_Classes":["Type", "Name"],
-                   "_Externals":["Type", "Name"],
-                   "_Symbols":["Type", "Address", "X", "Name"],
-                   "_Bigfunctions":["Size", "Name"],
-                   "_Suspicious":["Location", "Function", "Xrefs"]}
-        data[k]["Classes"] = self.get_all_classes(r2p)
-        data[k]["Externals"] = self.get_all_externals(r2p)
-        data[k]["Symbols"] = self.get_all_symbols(r2p)
-        data[k]["Bigfunctions"] = self.big_functions(r2p)
-        data[k]["Suspicious"] = self.check_sus(r2p)
+        self.dex_wrapper(data, r2p, 'APK_DEX_1')
         get_words(data, data["Location"]["File"])
-
-        #future plan; force closing - try, except
         r2p.quit()
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing APK file")
@@ -212,24 +213,7 @@ class ApkParser:
                 r2p = r2open(item["Path"], flags=['-2'])
                 r2p.cmd("e anal.timeout = 5")
                 r2p.cmd("aaaa;")
-                k = 'APK_DEX_{}'.format(index)
-                data[k] = {"Classes":[],
-                           "Externals":[],
-                           "Symbols":[],
-                           "Bigfunctions":[],
-                           "Suspicious":[],
-                           "_Classes":["Type", "Name"],
-                           "_Externals":["Type", "Name"],
-                           "_Symbols":["Type", "Address", "X", "Name"],
-                           "_Bigfunctions":["Size", "Name"],
-                           "_Suspicious":["Location", "Function", "Xrefs"]}
-                data[k]["Classes"] = self.get_all_classes(r2p)
-                data[k]["Externals"] = self.get_all_externals(r2p)
-                data[k]["Symbols"] = self.get_all_symbols(r2p)
-                data[k]["Bigfunctions"] = self.big_functions(r2p)
-                data[k]["Suspicious"] = self.check_sus(r2p)
+                self.dex_wrapper(data, r2p, 'APK_DEX_{}'.format(index))
         add_description("AndroidPermissions", data["APK"]["Permissions"], "Permission")
         get_words_multi_files(data, data["Packed"]["Files"])
-
-        #future plan; force closing - try, except
         r2p.quit()

@@ -55,7 +55,7 @@ class QBMitresearch():
                              "Detected":', '.join(_list),
                              "Description":"None"}
                 if temp_x:
-                    with ignore_excpetion(Exception): 
+                    with ignore_excpetion(Exception):
                         temp_dict = {"Id":attack,
                                      "Name":temp_x["name"],
                                      "Detected":', '.join(_list),
