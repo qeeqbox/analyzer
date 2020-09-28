@@ -44,7 +44,7 @@ from analyzer.mitre.qbmitresearch import QBMitresearch
 
 class Analyzer:
     '''
-    Analyzer this class looks good
+    Analyzer class looks good
     '''
     @verbose(True, verbose_output=False, timeout=None, _str="Starting Analyzer")
     def __init__(self):
