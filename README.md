@@ -14,59 +14,61 @@ This project automates the daily tasks of Threat Intelligence Analyzer role with
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
 
-## Features
-- Runs locally (Offline)
-- Analyze buffer, file or full folder
-- Intime analysis (Session is saved)
-- 2 modes (Interactive and silent)
-- Generates HTML or JSON as output
-- Dump output file with details to mongodb
-- Save raw json result to mongodb
-- Basic file information MD5, charset, mime, ssdeep
-- Different string/patterns analysis methods
-- NL English words detection
-- OCR words detection
-- IPS hints and countries description
-- Ports hints
-- World IPS world image and flags
-- DNS servers description (Top servers)
-- Websites similarity detection (Top 10000)
-- Artifacts force directed image
-- Cross references force directed image and table
-- MITRE att&ck tools and patterns detection (could be FP)
-- Similarity image divided to classes
-- YARA module and YARA rules included (Downloaded a copy from yara-rules-github)
-- YARA module includes conditions
-- Yara tags by index
-- URL/EMAIL/TEL/Tags patterns extraction
-- Credit Cards patterns extraction
-- Credential patterns extraction
-- Secrets patterns extraction
-- Encryption patterns (base64, md5, sha1..) extraction
-- DGA (Domain Generation Algorithm) patterns extraction 
-- BOM (Byte Order Mark) detection
-- URL shorteners extraction
-- ASCII extraction from UNICODE
-- Whitelist implemented (Windows7, 8 and 10 files)
-- Check WAF and bypass proxy
-- Free/Fake email extraction
-- Spelling and punctuation check
-- Top phishing words included
-- Snort support
-- Web interface
-- (Linux - wrapper) <sub>ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection</sub>
-- (Windows - wrapper) <sub>PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..</sub>
-- (Android - wrapper) <sub>APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection</sub>
-- (IPhone - built-in) <sub>IPA information</sub>
-- (BlackBerry COD - built-in) <sub>COD information, Functions extraction, Strings extraction</sub>
-- (PCAP - wrapper) <sub>Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing</sub>
-- (PDF - built-in_ <sub>Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis</sub>
-- (Office - built-in and wrapper) <sub>Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction</sub>
-- (OLE - wrapper) <sub>Number of objects, Object extraction, Macros extraction</sub>
-- (EMAIL - built-in and wrapper) <sub>Header information, Attachment extraction and parsing, Extract body, Phishing patterns check</sub>
-- (Archives - wrapper) <sub>Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection</sub>
-- (HTML - wrapper) <sub>Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy</sub>
-- (Some patterns) <sub>AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID</sub>
+## Features  
+<ul>
+<li>Runs locally (Offline)</li>
+<li>Analyze buffer, file or full folder</li>
+<li>Intime analysis (Session is saved)  </li>
+<li>2 modes (Interactive and silent)</li>
+<li>Generates HTML or JSON as output</li>
+<li>Dump output file with details to mongodb</li>
+<li>Save raw json result to mongodb</li>
+<li>Basic file information MD5, charset, mime, ssdeep</li>
+<li>Different string/patterns analysis methods</li>
+<li>NL English words detection</li>
+<li>OCR words detection</li>
+<li>IPS hints and countries description</li>
+<li>Ports hints</li>
+<li>World IPS world image and flags</li>
+<li>DNS servers description (Top servers)</li>
+<li>Websites similarity detection (Top 10000)</li>
+<li>Artifacts force directed image</li>
+<li>Cross references force directed image and table</li>
+<li>MITRE att&ck tools and patterns detection (could be FP)</li>
+<li>Similarity image divided to classes</li>
+<li>YARA module and YARA rules included (Downloaded a copy from yara-rules-github)</li>
+<li>YARA module includes conditions</li>
+<li>Yara tags by index</li>
+<li>URL/EMAIL/TEL/Tags patterns extraction</li>
+<li>Credit Cards patterns extraction</li>
+<li>Credential patterns extraction</li>
+<li>Secrets patterns extraction</li>
+<li>Encryption patterns (base64, md5, sha1..) extraction</li>
+<li>DGA (Domain Generation Algorithm) patterns extraction </li>
+<li>BOM (Byte Order Mark) detection</li>
+<li>URL shorteners extraction</li>
+<li>ASCII extraction from UNICODE</li>
+<li>Whitelist implemented (Windows7, 8 and 10 files)</li>
+<li>Check WAF and bypass proxy</li>
+<li>Free/Fake email extraction</li>
+<li>Spelling and punctuation check</li>
+<li>Top phishing words included</li>
+<li>Snort support</li>
+<li>Web interface</li>
+<li>(Linux wrapper) ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection</li>
+<li>(Windows wrapper) PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..</li>
+<li>(Android wrapper) APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection</li>
+<li>(IPhone built-in) IPA information</li>
+<li>(BlackBerry COD built-in) COD information, Functions extraction, Strings extraction</li>
+<li>(PCAP wrapper) Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing</li>
+<li>(PDF built-in_ Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis</li>
+<li>(Office built-in and wrapper) Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction</li>
+<li>(OLE wrapper) Number of objects, Object extraction, Macros extraction</li>
+<li>(EMAIL built-in and wrapper) Header information, Attachment extraction and parsing, Extract body, Phishing patterns check</li>
+<li>(Archives wrapper) Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection</li>
+<li>(HTML wrapper) Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy</li>
+<li>(Some patterns) AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID</li>
+</ul>
 
 - ~~Online TIPs (Required tokens, Moving to different project) HybridAnalysis MalShare MetaDefender VirusTotal AlienVault PulseDive~~
 
