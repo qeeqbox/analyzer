@@ -55,13 +55,16 @@ This project automates the daily tasks of Threat Intelligence Analyzer role with
 <li>Top phishing words included</li>
 <li>Snort support</li>
 <li>Web interface</li>
+</ul>
+
+<ul>
 <li>(Linux wrapper) ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection</li>
 <li>(Windows wrapper) PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..</li>
 <li>(Android wrapper) APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection</li>
 <li>(IPhone built-in) IPA information</li>
 <li>(BlackBerry COD built-in) COD information, Functions extraction, Strings extraction</li>
 <li>(PCAP wrapper) Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing</li>
-<li>(PDF built-in_ Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis</li>
+<li>(PDF built-in) Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis</li>
 <li>(Office built-in and wrapper) Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction</li>
 <li>(OLE wrapper) Number of objects, Object extraction, Macros extraction</li>
 <li>(EMAIL built-in and wrapper) Header information, Attachment extraction and parsing, Extract body, Phishing patterns check</li>
