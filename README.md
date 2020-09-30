@@ -3,7 +3,7 @@
 #
 [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=Grade&query=$.grade&colorB=228B22&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/info) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=version&query=$.version&colorB=blue&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=build&query=$.dockercomposebuild&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=test&query=$.automatedtest&colorB=green&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/qeeqbox/analyzer/master/info&label=implemented&query=$.implemented&colorB=lightgrey&style=flat-square)](https://github.com/qeeqbox/analyzer/blob/master/changes.md) [![Generic badge](https://img.shields.io/static/v1?label=%F0%9F%91%8D&message=Thank%20You!&color=yellow&style=flat-square)](https://github.com/qeeqbox/analyzer/stargazers)
 
-Offline Threat Intelligence Analyzer for analyzing/visualizing/structuring **sensitive** files or data locally. It extracts features, artifacts and IoCs from classified or unclassified data using differnt modules. The output of those modules can be easily integrated in your research or SOC platforms.
+This project automates the daily tasks of Threat Intelligence Analyzer role without external resources' interaction. It analyzes/visualizes/structures **sensitive** files or data locally by extracting features, artifacts and IoS using different modules. The output of those modules can be easily integrated in your research or SOC platforms.
 
 ## Install
 ```git clone https://github.com/qeeqbox/analyzer.git && cd analyzer &&  chmod +x run.sh && ./run.sh auto_configure```
@@ -54,8 +54,6 @@ Offline Threat Intelligence Analyzer for analyzing/visualizing/structuring **sen
 - Top phishing words included
 - Snort support
 - Web interface
-
-## More Features
 - (Linux - wrapper) <sub>ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection</sub>
 - (Windows - wrapper) <sub>PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..</sub>
 - (Android - wrapper) <sub>APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection</sub>
