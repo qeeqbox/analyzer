@@ -1,3 +1,8 @@
+#### 2020.V.02.44
+- Removed old switches and added more detailed ones
+- Added last submitted buffers and files
+- Added entrypoint instructions (requested)
+
 #### 2020.V.02.42
 - Fixed d3j
 - Fixed html resize

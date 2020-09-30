@@ -33,10 +33,39 @@ from pymongo import ASCENDING
 from settings import defaultdb, json_settings, meta_files_settings, meta_reports_settings, meta_task_files_logs_settings, meta_users_settings
 from redisqueue.qbqueue import QBQueue
 from analyzer.logger.logger import ignore_excpetion
-from analyzer.connections.redisconn import get_cache
 from analyzer.connections.mongodbconn import CLIENT
 
-SWITCHES = [('full', 'full'), ('behavior', 'behavior'), ('xref', 'xref'), ('tags', 'tags'), ('yara', 'yara'), ('language', 'language'), ('mitre', 'mitre'), ('topurl', 'topurl'), ('ocr', 'ocr'), ('enc', 'enc'), ('cards', 'cards'), ('creds', 'creds'), ('secrets', 'secrets'), ('patterns', 'patterns'), ('suspicious', 'suspicious'), ('dga', 'dga'), ('plugins', 'plugins'), ('visualize', 'visualize'), ('flags', 'flags'), ('icons', 'icons'), ('worldmap', 'worldmap'), ('spelling', 'spelling'), ('image', 'image'), ('phishing', 'phishing'), ('unicode', 'unicode'), ('bigfile', 'bigfile'), ('w_internal', 'w_internal'), ('w_original', 'w_original'), ('w_hash', 'w_hash'), ('w_words', 'w_words'), ('w_all', 'w_all'), ('ms_all', 'ms_all')]
+SWITCHES = [('full', 'Enable all analysis features'),
+            ('behavior', 'Behavior analysis'),
+            ('xref', 'Find cross-references'),
+            ('tags', 'Generate YARA tags'),
+            ('yara', 'Enable YARA'),
+            ('language', 'English language detection'),
+            ('mitre', 'Mitre mapping'),
+            ('topurl', 'Find top domains'),
+            ('ocr', 'Enable OCR detection'),
+            ('enc', 'Find encryption'),
+            ('cards', 'Find credit cards'),
+            ('creds', 'Find credentials'),
+            ('secrets', 'Find API secrets'),
+            ('patterns', 'Find common patterns'),
+            ('suspicious', 'Find suspicious strings'),
+            ('dga', 'Find Domain generation algorithms'),
+            ('plugins', 'Scan with external plugins'),
+            ('visualize', 'Visualize artifacts'),
+            ('flags', 'Generate countries flags'),
+            ('icons', 'Generate executable icons'),
+            ('worldmap', 'Generate world map'),
+            ('spelling', 'Force spelling check'),
+            ('image', 'Generate similarity image'),
+            ('phishing', 'Analyze phishing content'),
+            ('unicode', 'Force extracting ASCII'),
+            ('bigfile', 'Force analyze big files'),
+            ('w_internal', 'Check whitelist by internal name'),
+            ('w_original', 'Check whitelist by original name'),
+            ('w_hash', 'Check whitelist by file hash'),
+            ('w_words', 'Check whitelist by words (very slow)'),
+            ('w_all', 'Enable all whitelist modules')]
 
 def intro(filename, link):
     '''
@@ -469,6 +498,15 @@ class CustomAdminIndexView(AdminIndexView):
         '''
         return False
 
+def get_last_files(files_or_buffer):
+    items = {}
+    with ignore_excpetion(Exception):
+        if files_or_buffer == "buffer":
+            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file":{"$regex":"._buffer$"}}).sort([('_id', -1)]).limit(10))
+        else:
+            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file":{"$regex":"^((?!._buffer).)*$"}}).sort([('_id', -1)]).limit(10))
+    return items
+
 class MultiCheckboxField(SelectMultipleField):
     '''
     this class will be used for mulit checckbox
@@ -533,7 +571,7 @@ class CustomViewUploadForm(BaseView):
                         flash(gettext("Done uploading {} Task ({})".format(filename, uuid)), 'success')
                 else:
                     flash(gettext("Something wrong while uploading {} Task ({})".format(filename, uuid)), 'error')
-        return self.render("upload.html", header="Scan File\\Files", form=temp_form, switches_details=get_cache("switches"))
+        return self.render("upload.html", header="Scan File\\Files", table_header="Last 10 Files", form=temp_form, recent_files=get_last_files("files"))
 
     def is_accessible(self):
         '''
@@ -582,7 +620,7 @@ class CustomViewBufferForm(BaseView):
                 for item in request.form.getlist("choices"):
                     result.update({item:True})
                 filename = ''.join(choice(ascii_uppercase) for _ in range(8))
-                savetotemp = path.join(MALWARE_FOLDER, filename)
+                savetotemp = path.join(MALWARE_FOLDER, filename) + "._buffer"
                 with open(savetotemp, "w") as tempfile:
                     tempfile.write(temp_form.buffer.data)
                 with open(savetotemp, "rb") as tempfile:
@@ -602,7 +640,7 @@ class CustomViewBufferForm(BaseView):
                         flash(gettext('Done submitting buffer Task {}'.format(uuid)), 'success')
             else:
                 flash(gettext("Something wrong"), 'error')
-        return self.render("upload.html", header="Scan Buffer", form=temp_form, switches_details=get_cache("switches"))
+        return self.render("upload.html", header="Scan Buffer", table_header="Last 10 Buffers", form=temp_form, recent_files=get_last_files("buffer"))
 
     def is_accessible(self):
         '''
@@ -624,9 +662,9 @@ def get_stats():
     with ignore_excpetion(Exception):
         for coll in (defaultdb["reportscoll"], defaultdb["filescoll"], "fs.chunks", "fs.files"):
             if coll in CLIENT[defaultdb["dbname"]].list_collection_names():
-                stats.update({"[{}] Collection".format(coll):"Exists"})
+                stats.update({"[{}] Collection".format(coll):"Good"})
             else:
-                stats.update({"[{}] Collection".format(coll):"Does not exists"})
+                stats.update({"[{}] Collection".format(coll):"Bad"})
     with ignore_excpetion(Exception):
         stats.update({"[Reports] Total reports":CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
                       "[Reports] Total used space":"{}".format(convert_size(CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
@@ -847,3 +885,7 @@ def before_request():
     session.permanent = True
     APP.permanent_session_lifetime = timedelta(minutes=60)
     session.modified = True
+
+@APP.template_filter('pretty_json')
+def pretty_json(value):
+    return dumps(value, indent=4)

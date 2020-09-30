@@ -49,6 +49,7 @@ a:focus {
 
 .sidebar-nav-custom-brand{
     background-color: #ffbb47 !important;
+    box-shadow: 0 8px 5px rgba(0,0,0,.08);
 }
 
  .navbar-brand{
@@ -105,6 +106,7 @@ a:focus {
 }
  .navbar-header{
      height: 50px !important;
+     box-shadow: 0 8px 5px rgba(0,0,0,.08);
 }
  .navbar-toggle {
      position: relative;
@@ -188,7 +190,7 @@ a:focus {
 }
 
 .custom-scrollbar{
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: #0d67ca #212222;
@@ -253,6 +255,7 @@ a:focus {
      margin: 10px 10px 10px 10px;
 }
  .card-header {
+     display: flex;
      height: 30px;
      background-color: #2b2c2c;
      font-size: 12px;
@@ -528,13 +531,13 @@ input[type='file'] {
 }
 
 table, tr, td {
-    border: 1px solid #b4b4b4 !important;
+    border: 1px solid #3c3c3c !important;
     border-collapse: collapse !important;
     border-spacing: 0 !important;
 }
 
 thead > tr > th {
-    border: 1px solid #b4b4b4 !important;
+    border: 1px solid #3c3c3c !important;
     border-collapse: collapse !important;
     border-spacing: 0 !important;
 }
@@ -572,7 +575,7 @@ table tr:hover{
 }
 
 .nav-tabs-custom {
-    border-bottom: 1px solid #b4b4b4 !important;
+    border-bottom: 1px solid #3c3c3c !important;
     background-color: #2b2c2c !important;
 }
 
@@ -618,6 +621,46 @@ table tr:hover{
 }
 
 input[type="search"]{
+    border: none !important;
+}
+
+.wrapper-col-content-cus * {
+    font-size: 11px !important;
+}
+
+.div-left { 
+}
+
+.div-right {
+    flex: 1;
+    -webkit-box-shadow:inset 0px -1px 0px #3c3c3c inset;
+    -moz-box-shadow:inset 0px -1px 0px #3c3c3c inset;
+     box-shadow: 0px -1px 0px #3c3c3c inset; 
+     margin-left: 10px !important;
+}
+
+.navbar-form {
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+ pre {
+    background-color: #383939 !important;
+     -webkit-border-radius: 2px !important;
+     border-radius: 2px !important;
+     border: none;
+     padding: 2px 5px 2px 5px;
+     color: #b4b4b4 !important;
+}
+
+.customrecentfiles{
+    width: 100%;
+    border: none !important;
+}
+
+.customrecentfiles tr, .customrecentfiles td{
+    width: 100%;
     border: none !important;
 }
 
