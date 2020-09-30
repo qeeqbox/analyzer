@@ -383,23 +383,21 @@ class HtmlMaker:
         render xref image into html table
         '''
         temp = """
-        <div class="tablewrapper no-max">
+        <div class="tablewrapper" id="newrefmap">
         <table>
-            <thead>
-                <tr>
-                    <th colspan="1">{{header}}</th>
-                </tr>
-            </thead>
             <tbody>
                    <tr>
                         <td id="{{name}}" class="nobackgroundcolor"><svg class="{{name}}"></svg></td>
                         <script>
-                        //contact me for license
+                        //contact me for license (G)bd249ce4
                         (function() {
-                        var width = 1000, 
-                            height = 1000, 
+                        var width = 10000,
+                            height = 10000,
                             radius = 10;
-                        var svg = d3.select(".{{name}}").attr("width", width).attr("height", height);
+                        var zoom = d3.behavior.zoom()
+                        .scaleExtent([.25, 4])
+                        .on("zoom", zoomed);
+                        var svg = d3.select(".XREFSd3map").attr("width", width).attr("height", height).call(zoom)
                         var dataset = {{data | safe}};
                         var force = d3.layout.force()
                             .nodes(dataset["nodes"])
@@ -407,7 +405,7 @@ class HtmlMaker:
                             .linkDistance(100)
                             .theta(0.1)
                             .size([width, height])
-                            .charge(-1000)
+                            .charge(-250)
                             .start();
                         var links = svg.selectAll("line")
                             .data(dataset["links"])
@@ -505,7 +503,10 @@ class HtmlMaker:
                             });
 
                         });
-
+                        function zoomed() {
+                            svg.attr("transform", "translate(0) scale(" + d3.event.scale + ")");
+                            resize();
+                        }
                         function resize() {
                             width = document.getElementById("{{name}}").clientWidth - 20; //for padding
                             height = document.getElementById("{{name}}").clientHeight;
@@ -575,13 +576,6 @@ class HtmlMaker:
                     elif key in ("GRAPH", "Flags"):
                         pass
 
-        if parsed.xref or parsed.full:
-            for key in ("XREFS", "REFS"):
-                if key in data and "GRAPH" in data[key]:
-                    if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
-                        table += self.make_header("{}".format(key).upper())
-                        table += self.make_ref_map_image(data[key]["GRAPH"], key, key+"d3map", None, False, None)
-
         if parsed.flags or parsed.full:
             if "Flags" in data:
                 if len(data["Flags"]["Flags"]) > 0:
@@ -605,6 +599,14 @@ class HtmlMaker:
             table += self.make_header("{}".format("similarity image").upper())
             out, temp_c = self.qbimage.create(data["FilesDumps"][_path])
             table += self.make_image_table_base64(out, temp_c, None, False, None)
+
+        if parsed.xref or parsed.full:
+            for key in ("XREFS", "REFS"):
+                if key in data and "GRAPH" in data[key]:
+                    if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
+                        table += self.make_header("{}".format(key).upper())
+                        table += self.make_ref_map_image(data[key]["GRAPH"], key, key+"d3map", None, False, None)
+
         return table
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)

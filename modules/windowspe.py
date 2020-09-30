@@ -10,6 +10,7 @@ from M2Crypto import BIO, m2, SMIME, X509
 from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import get_words, get_entropy, get_entropy_float_ret
 from analyzer.intell.qbdescription import add_description
+from r2pipe import open as r2open
 
 class WindowsPe:
     '''
@@ -29,6 +30,7 @@ class WindowsPe:
                            "Exported functions":[],
                            "Debug":[],
                            "Manifest":"",
+                           "Entrypoint":"",
                            "_General":{},
                            "_Characteristics":{},
                            "_Singed":["Wrong", "SignatureHex"],
@@ -40,7 +42,8 @@ class WindowsPe:
                            "_Imported functions":["Dll", "Function", "Description"],
                            "_Exported functions":["Dll", "Function", "Description"],
                            "_Debug":["Name", "Description"],
-                           "_Manifest":""}
+                           "_Manifest":"",
+                           "_Entrypoint":""}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def what_type(self, pe_info) -> str:
@@ -286,9 +289,14 @@ class WindowsPe:
         section = self.find_entry_point_function(pe_info, ep_info)
         singinhex = "UnKnown"
         en_section_name = "UnKnown"
+        sig_instructions = "UnKnown"
         with ignore_excpetion(Exception):
-            sig = section.get_data(ep_info, 12)
+            sig = section.get_data(ep_info, 52)
             singinhex = "".join("{:02x}".format(x) for x in sig)
+            r2p = r2open("-", flags=['-2'])
+            r2p.cmd("e anal.timeout = 5")
+            temp_sig_instructions = r2p.cmd("pad {}".format(singinhex)).split("\n")[:8]
+            sig_instructions = "\n".join(temp_sig_instructions)
         with ignore_excpetion(Exception):
             en_section_name = section.Name.decode("utf-8", errors="ignore").strip("\00")
         data["PE"]["General"] = {"PE Type":self.what_type(pe_info),
@@ -309,6 +317,7 @@ class WindowsPe:
         data["PE"]["Resources"], data["PE"]["Manifest"], data["ICONS"]["ICONS"] = self.get_recourse(pe_info)
         data["PE"]["Imported functions"] = self.get_imported_functions(pe_info)
         data["PE"]["Exported functions"] = self.get_exported_functions(pe_info)
+        data["PE"]["Entrypoint"] = sig_instructions
         add_description("WinApis", data["PE"]["Imported functions"], "Function")
         add_description("ManHelp", data["PE"]["Imported functions"], "Function")
         add_description("WinDlls", data["PE"]["Dlls"], "Dll")

@@ -1,7 +1,7 @@
-{"version":"2020.V.02.42",
+{"version":"2020.V.02.43",
  "code-inspector-grade":"https://www.code-inspector.com/project/13796/status/svg",
  "grade":"A",
  "dockercomposebuild":"passed",
  "automatedtest":"passed",
- "implemented":"68%",
- "auto_testing":"70f008b7-d783-4983-9381-fd6845860340"}
+ "implemented":"69%",
+ "auto_testing":"40A78D5D-B5C9-4B71-926A-258CBD8E35E7"}

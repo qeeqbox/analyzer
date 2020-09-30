@@ -61,11 +61,15 @@
         }
 
         .tablewrapper {
-            overflow-x: auto;
+            overflow-x: hidden;
             max-height: 250px;
             resize: vertical;
+            overflow-y: auto;
             width: 100%;
         }
+        .tablewrapper[style*="height"] {
+          max-height: unset; 
+        } 
 
         .tablewrappernoh {
             width: 100%;
@@ -193,6 +197,11 @@
         {{ footer }}
     </div>
     </div>
+     <script type="application/javascript">
+        $(document).ready(function(){
+            $("#newrefmap").scrollTop($('.XREFSd3map').height()/2);
+        });
+    </script> 
 </body>
 
 </html>

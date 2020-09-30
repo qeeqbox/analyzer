@@ -1,4 +1,8 @@
 #### 2020.V.02.42
+- Fixed d3j
+- Fixed html resize
+
+#### 2020.V.02.42
 - Fixed buges related to code clean up
 - Fixed qbmitresearch
 - Added auto test result
