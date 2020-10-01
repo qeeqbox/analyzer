@@ -1,3 +1,6 @@
+#### 2020.V.02.45
+- Changed circle spinner to hex spinner 
+
 #### 2020.V.02.44
 - Removed old switches and added more detailed ones
 - Added last submitted buffers and files

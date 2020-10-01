@@ -96,6 +96,7 @@ def session_key(filename):
 
 APP = Flask(__name__)
 APP.secret_key = session_key("key.hex")
+APP.jinja_env.add_extension('jinja2.ext.loopcontrols')
 INTROMARKDOWN = intro("README.md", "https://raw.githubusercontent.com/qeeqbox/analyzer/master/README.md")
 APP.config['MONGODB_SETTINGS'] = json_settings[environ["analyzer_env"]]["web_mongo"]
 APP.config['SESSION_COOKIE_SAMESITE'] = "Lax"
