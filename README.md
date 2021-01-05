@@ -121,56 +121,14 @@ Prerequisites packages are required for some modules (If you are having issues u
 - CSS clean up
 
 ## Resources
-Linux documentation, MacOS documentation,  Windows documentation,  Android documentation,  software77,  MITRE ATT&CK™,  sc0ty,  hexacorn,  PEID,  steren,  bacde,  cisco umbrella ,  yara rules community ,  TONS OF RESEARCHES.. (Please let me know if i missed a resource or dependency)
+`Linux documentation, MacOS documentation, Windows documentation, Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, steren, bacde, cisco umbrella , yara rules community , TONS OF RESEARCHES`
 
 ## Other Licenses
-By using this framework, you are accepting the license terms of each package listed below:
-- https://github.com/arbor/yara/blob/master/LICENSE
-- https://github.com/Yara-Rules/rules/blob/master/LICENSE
-- https://github.com/tesseract-ocr/tesseract/blob/master/LICENSE
-- http://www.swig.org/Release/LICENSE
-- https://www.radare.org/r/license.html
-- http://vu1tur.eu.org/tools/LICENSE
-- https://github.com/decalage2/oletools/wiki/License
-- https://www.mongodb.com/community/licensing
-- https://github.com/Supervisor/supervisor/blob/master/COPYRIGHT.txt
-- https://github.com/mattgwwalker/msg-extractor/blob/master/LICENSE.txt
-- https://www.snort.org/license
-- https://github.com/eliben/pyelftools/blob/master/LICENSE
-- https://bitbucket.org/ronaldoussoren/macholib/src/default/LICENSE
-- https://github.com/erocarrera/pefile/blob/master/LICENSE
-- https://github.com/secdev/scapy/blob/master/LICENSE
-- https://github.com/ahupp/python-magic/blob/master/LICENSE
-- https://flask.palletsprojects.com/en/0.12.x/license/
-- https://github.com/pallets/werkzeug/blob/master/LICENSE.rst
-- https://github.com/benoitc/gunicorn/blob/master/LICENSE
-- https://github.com/MongoEngine/flask-mongoengine/blob/master/LICENSE
-- https://github.com/flask-admin/flask-admin/blob/master/LICENSE
-- https://github.com/maxcountryman/flask-login/blob/master/LICENSE
-- https://github.com/maxcountryman/flask-bcrypt/blob/master/LICENSE
-- https://github.com/pyca/pyopenssl/blob/master/LICENSE
-- https://github.com/dcolish/flask-markdown/blob/master/LICENSE
-- https://github.com/barseghyanartur/tld/blob/master/LICENSE_GPL2.0.txt
-- https://github.com/giampaolo/psutil/blob/master/LICENSE
-- https://github.com/gevent/gevent/blob/master/LICENSE
-- https://github.com/dateutil/dateutil/blob/master/LICENSE
-- https://requests.readthedocs.io/en/master/user/intro/
-- https://github.com/mher/pymongo/blob/master/LICENSE
-- https://www.crummy.com/software/BeautifulSoup/
-- https://github.com/john-kurkowski/tldextract/blob/master/LICENSE
-- https://gitlab.com/m2crypto/m2crypto/-/blob/master/LICENCE
-- https://github.com/madmaze/pytesseract/blob/master/LICENSE
-- https://github.com/radareorg/radare2-r2pipe/blob/master/dotnet/LICENSE
-- https://ssdeep-project.github.io/ssdeep/index.html
-- https://github.com/Kronuz/jinja2/blob/master/LICENSE
-- https://github.com/python-pillow/Pillow/blob/master/LICENSE
-- https://github.com/nltk/nltk/blob/develop/LICENSE.txt
-- http://p7zip.sourceforge.net/
-- https://redislabs.com/legal/licenses/
-- https://github.com/andymccurdy/redis-py/blob/master/LICENSE
+By using this framework, you are accepting the license terms of each the following package:`yara, Yara-Rules, tesseract-ocr, swig, radare, vu1tur, oletools, mongodb, supervisor, msg-extractor, snort, pyelftools, macholib, pefile, scapy, python-magic, flask, werkzeug, gunicorn, flask-mongoengine, flask-admin, flask-login, flask-bcrypt, pyopenssl, flask-markdown, tld, psutil, gevent, dateutil, requests, pymongo, BeautifulSoup, tldextract, m2crypto, radare2, ssdeep, jinja2, Pillow, nltk, p7zip, redislabs, redis-py`
 
 ## Disclaimer\Notes
 - Do not deploy without proper configuration
 - Setup some security group rules and remove default credentials
 - This project is NOT an anti malware project and does not quarantine or delete malicious files
 - This project was developed for analyzing classified data and training some AI locally without internet/external interaction
+- Please let me know if i missed a resource or dependency
