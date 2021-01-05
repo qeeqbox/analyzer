@@ -124,7 +124,7 @@ Prerequisites packages are required for some modules (If you are having issues u
 `Linux documentation, MacOS documentation, Windows documentation, Android documentation, software77, MITRE ATT&CK™, sc0ty, hexacorn, PEID, steren, bacde, cisco umbrella , yara rules community , TONS OF RESEARCHES`
 
 ## Other Licenses
-By using this framework, you are accepting the license terms of each the following package:`yara, Yara-Rules, tesseract-ocr, swig, radare, vu1tur, oletools, mongodb, supervisor, msg-extractor, snort, pyelftools, macholib, pefile, scapy, python-magic, flask, werkzeug, gunicorn, flask-mongoengine, flask-admin, flask-login, flask-bcrypt, pyopenssl, flask-markdown, tld, psutil, gevent, dateutil, requests, pymongo, BeautifulSoup, tldextract, m2crypto, radare2, ssdeep, jinja2, Pillow, nltk, p7zip, redislabs, redis-py`
+By using this framework, you are accepting the license terms of each the following package: `yara, Yara-Rules, tesseract-ocr, swig, radare, vu1tur, oletools, mongodb, supervisor, msg-extractor, snort, pyelftools, macholib, pefile, scapy, python-magic, flask, werkzeug, gunicorn, flask-mongoengine, flask-admin, flask-login, flask-bcrypt, pyopenssl, flask-markdown, tld, psutil, gevent, dateutil, requests, pymongo, BeautifulSoup, tldextract, m2crypto, radare2, ssdeep, jinja2, Pillow, nltk, p7zip, redislabs, redis-py`
 
 ## Disclaimer\Notes
 - Do not deploy without proper configuration
