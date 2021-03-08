@@ -53,32 +53,19 @@ This project automates the daily tasks of Threat Intelligence Analyzer role **in
 - DGA (Domain Generation Algorithm) patterns extraction  
 
 ## Features
-- Linux wrapper
-- - ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection
-- Windows wrapper 
-- - PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..
-- Android wrapper
-- - APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection
-- IPhone built-in
-- - IPA information
-- BlackBerry COD built-in
-- - COD information, Functions extraction, Strings extraction
-- PCAP wrapper
-- - Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing
-- PDF built-in
-- - Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis
-- Office built-in and wrapper
-- - Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction
-- OLE wrapper
-- - Number of objects, Object extraction, Macros extraction
-- EMAIL built-in and wrapper
-- - Header information, Attachment extraction and parsing, Extract body, Phishing patterns check
-- Archives wrapper
-- - Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection
-- HTML wrapper
-- - Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy
-- Some patterns
-- - AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID
+- Linux wrapper - ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection  
+- Windows wrapper - PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..  
+- Android wrapper - APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection  
+- IPhone built-in - IPA information  
+- BlackBerry COD built-in - COD information, Functions extraction, Strings extraction  
+- PCAP wrapper - Frame filter, HTTP filter, DNS filter, ARP filter, WAF detection, DGA detection, Snort parsing  
+- PDF built-in - Objects enumeration, Keys, javascript, js, OpenAction, extraction, Streams parsing, String analysis  
+- Office built-in and wrapper - Meta info extraction, Hyper and target links extraction, Bin printable parser, Extract Text, Extract DDE, Macros extraction  
+- OLE wrapper - Number of objects, Object extraction, Macros extraction  
+- EMAIL built-in and wrapper - Header information, Attachment extraction and parsing, Extract body, Phishing patterns check  
+- Archives wrapper - Extract mimes and guess by extensions, Finding patterns in all unpacked files, Encrypted archives detection  
+- HTML wrapper - Extract scripts, iframes, links and forms, Decode/analyze links, Script entropy  
+- Some patterns - AWS Clint ID, Amazon MWS Auth Token, Amazon S3, ALIYUN OSS, AZURE Storage, Facebook Access Token, Github Token, Goole API Key, Google CAPTCHA, Google OAuth, Google Secret, Google OAuth Access Token, Mailgun API Key, MailChimp API, Picatic API, Slack Token, Square Access Token, Square OAuth Secret, Stripe API, Twilio API, Twilio SID  
 
 ## One click auto-configure
 ```bash
