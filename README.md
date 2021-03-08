@@ -13,6 +13,8 @@ This project automates the daily tasks of Threat Intelligence Analyzer role **in
 
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
+
+## Features 
 - Runs locally (Offline)
 - Analyze buffer, file or full folder
 - Intime analysis (Session is saved)
