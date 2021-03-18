@@ -13,12 +13,9 @@ setup_requirements () {
 }
 
 wait_on_web_interface () {
-echo ''
 until $(curl --silent --head --fail http://127.0.0.1:8000/login/ --output /dev/null); do
-echo -ne "\n\n[\033[47m\033[0;31mInitializing project in progress..\033[0m]\n\n"
 sleep 5
 done
-echo ''
 xdg-open http://127.0.0.1:8000/login
 }
 
@@ -43,7 +40,7 @@ auto_configure () {
 	setup_requirements 
 	dev_project 
 	stop_containers
-	kill %%
+	kill %% 2>/dev/null
 }
 
 if [[ "$1" == "auto_configure" ]]; then
@@ -54,7 +51,7 @@ if [[ "$1" == "auto_configure" ]]; then
 	stop_containers
 fi
 
-kill %%
+kill %% 2>/dev/null
 
 while read -p "`echo -e '\nChoose an option:\n1) Setup requirements (docker, docker-compose)\n9) Run auto configuration\n>> '`"; do
   case $REPLY in
