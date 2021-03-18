@@ -65,6 +65,7 @@ services:
 
   redis:
     image: redis
+    container_name: analyzer_redis
     ports:
       - '6379:6379'
     networks:
