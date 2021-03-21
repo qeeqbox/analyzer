@@ -10,6 +10,7 @@ from os import mkdir, path
 from copy import deepcopy
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBBehavior:
     '''
     QBBehavior uses detections folder
@@ -19,11 +20,11 @@ class QBBehavior:
         '''
         Initialize QBBehavior, this has to pass
         '''
-        self.datastruct = {"Intell":[],\
-                          "_Intell":["Matched", "Required", "Behavior", "Detected"]}
+        self.datastruct = {"Intell": [],
+                           "_Intell": ["Matched", "Required", "Behavior", "Detected"]}
         self.intell = path.abspath(path.join(path.dirname(__file__), 'detections'))
         if not self.intell.endswith(path.sep):
-            self.intell = self.intell+path.sep
+            self.intell = self.intell + path.sep
         if not path.isdir(self.intell):
             mkdir(self.intell)
         self.words = []
@@ -49,7 +50,7 @@ class QBBehavior:
                                 _list.append(temp_value.group())
                                 tempmatches += 1
                         if _list and tempmatches >= _["Options"]["Required"]:
-                            data.append({"Matched":tempmatches, "Required":_["Options"]["Required"], "Behavior":_["Name"], "Detected":', '.join(_list)})
+                            data.append({"Matched": tempmatches, "Required": _["Options"]["Required"], "Behavior": _["Name"], "Detected": ', '.join(_list)})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing behaviors")
     def analyze(self, data, filename):
@@ -61,6 +62,6 @@ class QBBehavior:
         temp = []
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        self.rcompile_and_find(temp, self.intell+filename)
+        self.rcompile_and_find(temp, self.intell + filename)
         if len(temp) > 0:
             data["Behavior"]["Intell"].extend(temp)

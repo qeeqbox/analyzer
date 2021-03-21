@@ -16,6 +16,7 @@ from analyzer.intell.qbdescription import add_description
 
 LC_MAIN = 0x28 | 0x80000000
 
+
 class Macho:
     '''
     Macho extracts artifacts from Macho
@@ -25,19 +26,19 @@ class Macho:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"General":{},
-                           "Sections":[],
-                           "Libraries":[],
-                           "Symbols":[],
-                           "Undefined Symbols":[],
-                           "External Symbols":[],
-                           "Local Symbols":[],
-                           "_Sections":["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
-                           "_Libraries":["Library", "Description"],
-                           "_Symbols":["Symbol", "Description"],
-                           "_Undefined Symbols":["Symbol", "Description"],
-                           "_External Symbols":["Symbol", "Description"],
-                           "_Local Symbols":["Symbol", "Description"]}
+        self.datastruct = {"General": {},
+                           "Sections": [],
+                           "Libraries": [],
+                           "Symbols": [],
+                           "Undefined Symbols": [],
+                           "External Symbols": [],
+                           "Local Symbols": [],
+                           "_Sections": ["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
+                           "_Libraries": ["Library", "Description"],
+                           "_Symbols": ["Symbol", "Description"],
+                           "_Undefined Symbols": ["Symbol", "Description"],
+                           "_External Symbols": ["Symbol", "Description"],
+                           "_Local Symbols": ["Symbol", "Description"]}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def entry_point(self, machos) -> bool:
@@ -59,8 +60,8 @@ class Macho:
         for header in machos.headers:
             for temp_lc, cmd, data in header.commands:
                 if temp_lc.cmd == LC_LOAD_DYLIB:
-                    temp_list.append({"Library":data.decode("utf-8", errors="ignore").rstrip('\x00'),
-                                      "Description":""})
+                    temp_list.append({"Library": data.decode("utf-8", errors="ignore").rstrip('\x00'),
+                                      "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -73,9 +74,9 @@ class Macho:
             for temp_lc, cmd, data in header.commands:
                 if temp_lc.cmd in (LC_SEGMENT, LC_SEGMENT_64):
                     name = cmd.segname[:cmd.segname.find(b'\x00')].decode("utf-8", errors="ignore")
-                    temp_list.append({"Segment":name,
-                                      "Address":hex(cmd.vmaddr),
-                                      "Description":""})
+                    temp_list.append({"Segment": name,
+                                      "Address": hex(cmd.vmaddr),
+                                      "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -87,7 +88,7 @@ class Macho:
         for header in machos.headers:
             for temp_lc, cmd, data in header.commands:
                 if hasattr(cmd, "segname"):
-                    #fbuffer[cmd.fileoff:cmd.filesize]
+                    # fbuffer[cmd.fileoff:cmd.filesize]
                     with BytesIO(fbuffer) as bio:
                         bio.seek(cmd.fileoff)
                         temp_x = bio.read(cmd.filesize)
@@ -100,12 +101,12 @@ class Macho:
                         seg = cmd.segname[:cmd.segname.find(b'\x00')].decode("utf-8", errors="ignore")
                         if seg == "__PAGEZERO":
                             sus = ""
-                        temp_list.append({"Section":seg,
-                                          "Suspicious":sus,
-                                          "Size":cmd.filesize,
-                                          "Entropy":get_entropy(temp_x),
-                                          "MD5":md5(temp_x).hexdigest(),
-                                          "Description":""})
+                        temp_list.append({"Section": seg,
+                                          "Suspicious": sus,
+                                          "Size": cmd.filesize,
+                                          "Entropy": get_entropy(temp_x),
+                                          "MD5": md5(temp_x).hexdigest(),
+                                          "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -116,8 +117,8 @@ class Macho:
         temp_list = []
         temp_s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in temp_s.nlists:
-            temp_list.append({"Symbol":name.decode("utf-8", errors="ignore"),
-                              "Description":""})
+            temp_list.append({"Symbol": name.decode("utf-8", errors="ignore"),
+                              "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -128,8 +129,8 @@ class Macho:
         temp_list = []
         temp_s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in temp_s.localsyms:
-            temp_list.append({"Symbol":name.decode("utf-8", errors="ignore"),
-                              "Description":""})
+            temp_list.append({"Symbol": name.decode("utf-8", errors="ignore"),
+                              "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -140,8 +141,8 @@ class Macho:
         temp_list = []
         temp_s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in temp_s.undefsyms:
-            temp_list.append({"Symbol":name.decode("utf-8", errors="ignore"),
-                              "Description":""})
+            temp_list.append({"Symbol": name.decode("utf-8", errors="ignore"),
+                              "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -152,8 +153,8 @@ class Macho:
         temp_list = []
         temp_s = SymbolTable.SymbolTable(machos)
         for (nlist, name) in temp_s.extdefsyms:
-            temp_list.append({"Symbol":name.decode("utf-8", errors="ignore"),
-                              "Description":""})
+            temp_list.append({"Symbol": name.decode("utf-8", errors="ignore"),
+                              "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -168,8 +169,8 @@ class Macho:
         '''
         check mime is dmg or not
         '''
-        if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
-            data["Location"]["Original"].endswith(".dmg"):
+        if data["Details"]["Properties"]["mime"] == "application/zlib" and \
+                data["Location"]["Original"].endswith(".dmg"):
             temp_x = dmg_unpack(data["Location"]["File"])
             if temp_x:
                 if check_packed_files(temp_x, ["info.plist"]) or check_packed_files(temp_x, ["Install"]):
@@ -191,8 +192,8 @@ class Macho:
         '''
         check mime is dmg or not
         '''
-        if  data["Details"]["Properties"]["mime"] == "application/zlib" and \
-            data["Location"]["Original"].endswith(".ipa"):
+        if data["Details"]["Properties"]["mime"] == "application/zlib" and \
+                data["Location"]["Original"].endswith(".ipa"):
             temp_x = dmg_unpack(data["Location"]["File"])
             if temp_x:
                 if check_packed_files(temp_x, ["info.plist"]):
@@ -200,14 +201,13 @@ class Macho:
                     return True
         return False
 
-
     @verbose(True, verbose_output=False, timeout=None, _str="Analzying IPA file")
     def analyze_ipa(self, data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
         '''
-        data["IPA"] = {"General":{},
-                       "_General":{}}
+        data["IPA"] = {"General": {},
+                       "_General": {}}
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Path"].lower().endswith("info.plist"):
                 data["DMG"]["General"] = self.get_plist(temp_var["Path"])
@@ -215,19 +215,18 @@ class Macho:
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Type"] == "text/x-shellscript":
                 temp_k = 'DMG_Shellscript_{}'.format(index)
-                data[temp_k] = {"Shell":"",
-                                "_Shell":""}
+                data[temp_k] = {"Shell": "",
+                                "_Shell": ""}
                 data[temp_k]["Shell"] = open(temp_var["Path"], "r").read()
         get_words_multi_files(data, data["Packed"]["Files"])
-
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analzying DMG file")
     def analyze_dmg(self, data):
         '''
         start analyzing dmg file, loop over packed file and extract info.plist and shells
         '''
-        data["DMG"] = {"General":{},
-                       "_General":{}}
+        data["DMG"] = {"General": {},
+                       "_General": {}}
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Path"].lower().endswith("info.plist"):
                 data["DMG"]["General"] = self.get_plist(temp_var["Path"])
@@ -235,8 +234,8 @@ class Macho:
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Type"] == "text/x-shellscript":
                 temp_k = 'DMG_Shellscript_{}'.format(index)
-                data[temp_k] = {"Shell":"",
-                                "_Shell":""}
+                data[temp_k] = {"Shell": "",
+                                "_Shell": ""}
                 data[temp_k]["Shell"] = open(temp_var["Path"], "r").read()
         get_words_multi_files(data, data["Packed"]["Files"])
 

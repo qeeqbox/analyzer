@@ -10,6 +10,7 @@ from datetime import datetime
 from jinja2 import Template
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class HtmlMaker:
     '''
     this will be used to generate the final html report
@@ -22,7 +23,7 @@ class HtmlMaker:
         self.bottom = ""
         self.templates = path.abspath(path.join(path.dirname(__file__), 'templates'))
         if not self.templates.endswith(path.sep):
-            self.templates = self.templates+path.sep
+            self.templates = self.templates + path.sep
         if not path.isdir(self.templates):
             mkdir(self.templates)
         self.template = self.templates + "template.html"
@@ -155,7 +156,7 @@ class HtmlMaker:
                        {% if _safe == None %}
                             <td>{{key|e}}</td>
                             <td>{{value|e}}</td>
-                            
+
                         {% else %}
                             <td>{{key|safe}}</td>
                             <td>{{value|safe}}</td>
@@ -297,7 +298,6 @@ class HtmlMaker:
 
         result = Template(temp).render(headers=headers, data=data, _safe=_safe)
         return result
-
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def make_flags(self, data, header, exclude=None, textarea=None, _safe=None) -> str:
@@ -473,13 +473,13 @@ class HtmlMaker:
                             links.attr({
                                 "x1": function(d) {
                                     return d["source"].x;
-                                }, 
+                                },
                                 "y1": function(d) {
                                     return d["source"].y;
-                                }, 
+                                },
                                 "x2": function(d) {
                                     return d["target"].x;
-                                }, 
+                                },
                                 "y2": function(d) {
                                     return d["target"].y;
                                 }
@@ -605,7 +605,7 @@ class HtmlMaker:
                 if key in data and "GRAPH" in data[key]:
                     if data[key]["GRAPH"]["nodes"] and data[key]["GRAPH"]["links"]:
                         table += self.make_header("{}".format(key).upper())
-                        table += self.make_ref_map_image(data[key]["GRAPH"], key, key+"d3map", None, False, None)
+                        table += self.make_ref_map_image(data[key]["GRAPH"], key, key + "d3map", None, False, None)
 
         return table
 

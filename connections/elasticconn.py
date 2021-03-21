@@ -13,6 +13,7 @@ if environ["analyzer_env"] == "local":
 elif environ["analyzer_env"] == "docker":
     ELASTIC_SEARCH = Elasticsearch([elastic_db])
 
+
 def push_to_elastic(uuid, json):
     '''
     Not implemented

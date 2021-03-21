@@ -25,6 +25,7 @@ if VERBOSE_FLAG is None:
 if VERBOSE_TIMEOUT is None:
     VERBOSE_TIMEOUT = json_settings[ENV_VAR]["function_timeout"]
 
+
 class TerminalColors:
     '''
     Colors (add more)
@@ -39,10 +40,12 @@ class TerminalColors:
     Cyan = "\033[36m"
     White = "\033[37m"
 
+
 GREEN_X = '{}{}{}'.format(TerminalColors.Green, "X", TerminalColors.Restore)
 YELLOW_ARROW = '{}{}{}'.format(TerminalColors.Yellow, ">", TerminalColors.Restore)
 EXCLAMATION_MARK = '{}{}{}'.format(TerminalColors.Yellow, "!", TerminalColors.Restore)
 RED_ARROW = '{}{}{}'.format(TerminalColors.Red, ">", TerminalColors.Restore)
+
 
 @contextmanager
 def ignore_excpetion(*exceptions):
@@ -55,10 +58,12 @@ def ignore_excpetion(*exceptions):
         #print("{} {} {}".format(datetime.utcnow(), EXCLAMATION_MARK, error))
         pass
 
+
 class Unbuffered:
     '''
     unused
     '''
+
     def __init__(self, stream):
         '''
         unused
@@ -71,12 +76,14 @@ class Unbuffered:
         '''
         self.stream.write(data)
         self.stream.flush()
-        #te.write(data)
+        # te.write(data)
+
 
 class CustomHandler(Handler):
     '''
     custom log handler for adding logs to file as well
     '''
+
     def __init__(self, file):
         '''
         initialize and prepare the file
@@ -92,12 +99,14 @@ class CustomHandler(Handler):
         stdout.flush()
         self.logsfile.write("{} {} {}\n".format(record.msg[0], record.msg[2], record.msg[1]))
         self.logsfile.flush()
-        add_item(defaultdb["dbname"], defaultdb["alllogscoll"], {'time':record.msg[0], 'message':record.msg[1]})
+        add_item(defaultdb["dbname"], defaultdb["alllogscoll"], {'time': record.msg[0], 'message': record.msg[1]})
+
 
 class TaskHandler(Handler):
     '''
     task log handler for adding logs to file as well
     '''
+
     def __init__(self, task):
         '''
         initialize and prepare the file
@@ -114,16 +123,18 @@ class TaskHandler(Handler):
         self.logsfile.flush()
         update_task(defaultdb["dbname"], defaultdb["taskdblogscoll"], self.task, "{} {}".format(record.msg[0], record.msg[1]))
 
+
 def setup_task_logger(task):
     '''
     setup the dynamic logger for the task
     '''
     log_string("Setting up task {} logger".format(task), "Yellow")
-    add_item(defaultdb["dbname"], defaultdb["taskdblogscoll"], {"task":task, "logs":[]})
+    add_item(defaultdb["dbname"], defaultdb["taskdblogscoll"], {"task": task, "logs": []})
     DYNAMIC.handlers.clear()
     DYNAMIC.setLevel(DEBUG)
     DYNAMIC.addHandler(TaskHandler(task))
     DYNAMIC.disabled = False
+
 
 def cancel_task_logger(task):
     '''
@@ -143,6 +154,7 @@ def cancel_task_logger(task):
     else:
         log_string("Unable to dump logs result to db", "Red")
 
+
 def log_string(_str, color, on_off=True):
     '''
     output str with color and symbol (they are all as info)
@@ -161,6 +173,7 @@ def log_string(_str, color, on_off=True):
         LOGTERMINAL.info([ctime, _str, EXCLAMATION_MARK])
         DYNAMIC.info([ctime, _str, "!"])
 
+
 def verbose(on_off=False, verbose_output=False, timeout=None, _str=None):
     '''
     decorator functions for debugging (show basic args, kwargs)
@@ -169,7 +182,7 @@ def verbose(on_off=False, verbose_output=False, timeout=None, _str=None):
         def wrapper(*args, **kwargs):
             result = None
             #global pool
-            function_name = func.__module__+"."+func.__name__
+            function_name = func.__module__ + "." + func.__name__
             try:
                 if not on_off:
                     log_string(function_name, "Yellow")
@@ -199,6 +212,7 @@ def verbose(on_off=False, verbose_output=False, timeout=None, _str=None):
             return result
         return wrapper
     return decorator
+
 
 def setup_logger():
     '''

@@ -11,6 +11,7 @@ from copy import deepcopy
 from analyzer.logger.logger import verbose
 from analyzer.mics.funcs import get_entropy_float_ret
 
+
 class QBDGA:
     '''
     QBDGA generates the API references map
@@ -20,24 +21,24 @@ class QBDGA:
         '''
         Initialize QBDGA, this has to pass
         '''
-        self.datastruct = {"Repeated":[],
-                           "LowFreqLetters":[],
-                           "ConsonantsRow":[],
-                           "Consonants":[],
-                           "Encryption":[],
-                           "Symbols":[],
-                           "Numbers":[],
-                           "Long":[],
-                           "Entropy":[],
-                           "_Repeated":["Length", "Repeated"],
-                           "_LowFreqLetters":["Count", "Letters", "URL"],
-                           "_ConsonantsRow":["Groups", "Row", "URL"],
-                           "_Consonants":["Count", "Letters", "URL"],
-                           "_Encryption":["Type", "Detected", "URL"],
-                           "_Symbols":["Count", "Symbols", "URL"],
-                           "_Numbers":["Count", "Numbers", "URL"],
-                           "_Long":["Length", "URL"],
-                           "_Entropy":["Entropy", "URL"]}
+        self.datastruct = {"Repeated": [],
+                           "LowFreqLetters": [],
+                           "ConsonantsRow": [],
+                           "Consonants": [],
+                           "Encryption": [],
+                           "Symbols": [],
+                           "Numbers": [],
+                           "Long": [],
+                           "Entropy": [],
+                           "_Repeated": ["Length", "Repeated"],
+                           "_LowFreqLetters": ["Count", "Letters", "URL"],
+                           "_ConsonantsRow": ["Groups", "Row", "URL"],
+                           "_Consonants": ["Count", "Letters", "URL"],
+                           "_Encryption": ["Type", "Detected", "URL"],
+                           "_Symbols": ["Count", "Symbols", "URL"],
+                           "_Numbers": ["Count", "Numbers", "URL"],
+                           "_Long": ["Length", "URL"],
+                           "_Entropy": ["Entropy", "URL"]}
 
         self.detectionlowfreq = rcompile(r"[vkjxqz]")
         self.detectionconsonantslettersinrow = rcompile(r"[bcdfghjklmnpqrstvwxyz]{4,}")
@@ -57,7 +58,7 @@ class QBDGA:
         for domain in domains:
             domain = domain["domain"]
             if len(domain) > 2:
-                for length in range(2, len(domain)+1):
+                for length in range(2, len(domain) + 1):
                     temp_var.extend([domain[i:i + length] for i in range(len(domain) - length + 1)])
                 allngrams.append(temp_var)
                 temp_var = []
@@ -66,7 +67,7 @@ class QBDGA:
             sortedlist = sorted(common_items, key=len, reverse=True)
             maxvalues = list(takewhile(lambda e: len(e) == len(sortedlist[0]), sortedlist))
             for temp_var in maxvalues:
-                data.append({"Length":len(temp_var), "Repeated":temp_var})
+                data.append({"Length": len(temp_var), "Repeated": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find low frequency letters")
     def find_low_freq_letters(self, data, domains):
@@ -77,7 +78,7 @@ class QBDGA:
             domain = domain["domain"]
             temp_var = findall(self.detectionlowfreq, domain)
             if len(temp_var) > 4:
-                data.append({"Count":len(temp_var), "Letters":''.join(temp_var), "URL":domain})
+                data.append({"Count": len(temp_var), "Letters": ''.join(temp_var), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find consonants letters in row")
     def find_consonants_letters_in_row(self, data, domains):
@@ -88,7 +89,7 @@ class QBDGA:
             domain = domain["domain"]
             temp_var = findall(self.detectionconsonantslettersinrow, domain)
             if len(temp_var) > 2:
-                data.append({"Groups":"{} > 2 groups".format(len(temp_var)), "Row":', '.join(temp_var), "URL":domain})
+                data.append({"Groups": "{} > 2 groups".format(len(temp_var)), "Row": ', '.join(temp_var), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find consonants letters")
     def find_consonants_letters(self, data, domains):
@@ -99,7 +100,7 @@ class QBDGA:
             domain = domain["domain"]
             temp_var = findall(self.detectionconsonants, domain)
             if len(temp_var) > 8:
-                data.append({"Count":"{} > 8".format(len(temp_var)), "Letters":''.join(temp_var), "URL":domain})
+                data.append({"Count": "{} > 8".format(len(temp_var)), "Letters": ''.join(temp_var), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find encryptions")
     def find_encryption_patterns(self, data, domains):
@@ -122,7 +123,7 @@ class QBDGA:
                 else:
                     temp = "HEX"
 
-                data.append({"Type":temp, "Detected":detection.group(), "URL":domain})
+                data.append({"Type": temp, "Detected": detection.group(), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find symbols")
     def find_all_symbols(self, data, domains):
@@ -132,9 +133,9 @@ class QBDGA:
         for domain in domains:
             domain = domain["domain"]
             temp_var = findall(self.detectionsymbols, domain)
-            #group them
+            # group them
             if len(temp_var) > 2:
-                data.append({"Count":"{} > 2".format(len(temp_var)), "Symbols":''.join(temp_var), "URL":domain})
+                data.append({"Count": "{} > 2".format(len(temp_var)), "Symbols": ''.join(temp_var), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find numbers")
     def find_all_numbers(self, data, domains):
@@ -145,7 +146,7 @@ class QBDGA:
             domain = domain["domain"]
             temp_var = findall(self.detectionnumbers, domain)
             if len(temp_var) > 5:
-                data.append({"Count":"{} > 5".format(len(temp_var)), "Numbers":''.join(temp_var), "URL":domain})
+                data.append({"Count": "{} > 5".format(len(temp_var)), "Numbers": ''.join(temp_var), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Find long domains")
     def url_length(self, data, domains):
@@ -155,7 +156,7 @@ class QBDGA:
         for domain in domains:
             domain = domain["domain"]
             if len(domain) > 13:
-                data.append({"Length":"{} > 13".format(len(domain)), "URL":domain})
+                data.append({"Length": "{} > 13".format(len(domain)), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="DGA-Get entropies of domains")
     def check_entropy(self, data, domains):
@@ -166,7 +167,7 @@ class QBDGA:
             domain = domain["domain"]
             entropy = get_entropy_float_ret(domain)
             if entropy > 3.7:
-                data.append({"Entropy":"{0:.15f}".format(entropy), "URL":domain})
+                data.append({"Entropy": "{0:.15f}".format(entropy), "URL": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Domain Generational Algorithm patterns")
     def analyze(self, data):

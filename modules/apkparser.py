@@ -11,6 +11,7 @@ from analyzer.modules.archive import check_packed_files, unpack_file
 from analyzer.mics.funcs import get_words_multi_files, get_words
 from analyzer.intell.qbdescription import add_description
 
+
 class ApkParser:
     '''
     ApkParser extract artifacts from apk files
@@ -54,7 +55,7 @@ class ApkParser:
         temp_list = []
         for _ in self.execute_with_swtich(r2p, "icq", ""):
             if _ != "":
-                temp_list.append({"Type":"Class", "Name":_})
+                temp_list.append({"Type": "Class", "Name": _})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -65,7 +66,7 @@ class ApkParser:
         temp_list = []
         for _ in self.execute_with_swtich(r2p, "iiq", ""):
             if _ != "":
-                temp_list.append({"Type":"External", "Name":_})
+                temp_list.append({"Type": "External", "Name": _})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -77,7 +78,7 @@ class ApkParser:
         for _ in self.execute_with_swtich(r2p, "isq", ""):
             if _ != "":
                 add, temp_x, name = _.split(" ")
-                temp_list.append({"Type":"Symbol", "Address":add, "X":temp_x, "Name":name})
+                temp_list.append({"Type": "Symbol", "Address": add, "X": temp_x, "Name": name})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -88,8 +89,8 @@ class ApkParser:
         temp_list = []
         for item in r2p.cmdj("aflj"):
             if item["size"] > 64:
-                temp_list.append({"Size":item["size"], "Name":item["name"]})
-                #temp_list.append(r2p.cmd("pif@"+str(a["offset"])+"~call"))
+                temp_list.append({"Size": item["size"], "Name": item["name"]})
+                # temp_list.append(r2p.cmd("pif@"+str(a["offset"])+"~call"))
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -101,18 +102,18 @@ class ApkParser:
         for _ in self.execute_with_swtich(r2p, "icq", self.sus):
             for __ in self.xref(r2p, _):
                 if _ != "" and __ != "":
-                    xref = __[__.rfind(' from ')+1:]
-                    temp_list.append({"Location":"Classes", "Function":_, "Xrefs":xref})
+                    xref = __[__.rfind(' from ') + 1:]
+                    temp_list.append({"Location": "Classes", "Function": _, "Xrefs": xref})
         for _ in self.execute_with_swtich(r2p, "iiq", self.sus):
             for __ in self.xref(r2p, _):
                 if _ != "" and __ != "":
-                    xref = __[__.rfind(' from ')+1:]
-                    temp_list.append({"Location":"Externals", "Function":_, "Xrefs":xref})
+                    xref = __[__.rfind(' from ') + 1:]
+                    temp_list.append({"Location": "Externals", "Function": _, "Xrefs": xref})
         for _ in self.execute_with_swtich(r2p, "isq", self.sus):
             for __ in self.xref(r2p, _):
                 if _ != "" and __ != "":
-                    xref = __[__.rfind(' from ')+1:]
-                    temp_list.append({"Location":"Symbols", "Function":_, "Xrefs":xref})
+                    xref = __[__.rfind(' from ') + 1:]
+                    temp_list.append({"Location": "Symbols", "Function": _, "Xrefs": xref})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -140,7 +141,7 @@ class ApkParser:
         if words:
             for item in words:
                 if "permission." in item:
-                    temp_list.append({"Permission":item, "Description":""})
+                    temp_list.append({"Permission": item, "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -148,8 +149,8 @@ class ApkParser:
         '''
         check if mime is an apk type or if file contains Androidmanifest in packed files
         '''
-        if  data["Details"]["Properties"]["mime"] == "application/java-archive" or \
-            data["Details"]["Properties"]["mime"] == "application/zip":
+        if data["Details"]["Properties"]["mime"] == "application/java-archive" or \
+                data["Details"]["Properties"]["mime"] == "application/zip":
             if check_packed_files(data["Location"]["File"], ["Androidmanifest.xml"]):
                 unpack_file(data, data["Location"]["File"])
                 return True
@@ -166,16 +167,16 @@ class ApkParser:
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing DEX file")
     def dex_wrapper(self, data, r2p, index):
-        data[index] = {"Classes":[],
-                       "Externals":[],
-                       "Symbols":[],
-                       "Bigfunctions":[],
-                       "Suspicious":[],
-                       "_Classes":["Type", "Name"],
-                       "_Externals":["Type", "Name"],
-                       "_Symbols":["Type", "Address", "X", "Name"],
-                       "_Bigfunctions":["Size", "Name"],
-                       "_Suspicious":["Location", "Function", "Xrefs"]}
+        data[index] = {"Classes": [],
+                       "Externals": [],
+                       "Symbols": [],
+                       "Bigfunctions": [],
+                       "Suspicious": [],
+                       "_Classes": ["Type", "Name"],
+                       "_Externals": ["Type", "Name"],
+                       "_Symbols": ["Type", "Address", "X", "Name"],
+                       "_Bigfunctions": ["Size", "Name"],
+                       "_Suspicious": ["Location", "Function", "Xrefs"]}
         data[index]["Classes"] = self.get_all_classes(r2p)
         data[index]["Externals"] = self.get_all_externals(r2p)
         data[index]["Symbols"] = self.get_all_symbols(r2p)
@@ -201,13 +202,13 @@ class ApkParser:
         start analyzing apk logic (r2p timeout = 10) for all dex files
         add description to strings, get words and wordsstripped from the packed files
         '''
-        data["APK"] = {"General":{},
-                       "Permissions":[],
-                       "_General":{},
-                       "_Permissions":["Permission", "Description"]}
+        data["APK"] = {"General": {},
+                       "Permissions": [],
+                       "_General": {},
+                       "_Permissions": ["Permission", "Description"]}
         for index, item in enumerate(data["Packed"]["Files"]):
             if item["Name"].lower() == "androidmanifest.xml":
-                #self.readpepackage(v["Path"])
+                # self.readpepackage(v["Path"])
                 data["APK"]["Permissions"] = self.read_permissions(data, item["Path"])
             if "classes" in item["Name"].lower() and item["Name"].lower().endswith(".dex"):
                 r2p = r2open(item["Path"], flags=['-2'])

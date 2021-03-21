@@ -8,6 +8,7 @@ from re import compile as recompile
 from copy import deepcopy
 from analyzer.logger.logger import verbose
 
+
 class QBSuspicious:
     '''
     QBSuspicious for extracting suspicious words
@@ -17,8 +18,8 @@ class QBSuspicious:
         '''
         Initialize QBSuspicious, this has to pass
         '''
-        self.datastruct = {"Strings":[],
-                           "_Strings":["Count", "Detected"]}
+        self.datastruct = {"Strings": [],
+                           "_Strings": ["Count", "Detected"]}
 
         self.suspicious = ["crypt", "==", "ransom", "+tcp", "pool.", "bitcoin", "encrypt", "decrypt", "mail", "ftp", "http", "https", "btc", "address", "sudo", "password", "pass", "admin", "payment"]
         self.words = []
@@ -36,7 +37,7 @@ class QBSuspicious:
                 for _ in temp_var:
                     temp_list.append(_[0])
             for temp_var in set(temp_list):
-                data.append({"Count":temp_list.count(temp_var), "Detected":temp_var})
+                data.append({"Count": temp_list.count(temp_var), "Detected": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_suspicious(self, data):
@@ -49,7 +50,7 @@ class QBSuspicious:
                 if sus in _:
                     temp_list.append(_)
             for temp_var in set(temp_list):
-                data.append({"Count":temp_list.count(temp_var), "Detected":temp_var})
+                data.append({"Count": temp_list.count(temp_var), "Detected": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding suspicious strings")
     def analyze(self, data):

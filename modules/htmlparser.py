@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from analyzer.logger.logger import verbose
 from analyzer.mics.funcs import get_words, get_entropy
 
+
 class HTMLParser():
     '''
     HTMLParser extract artifacts from html
@@ -18,21 +19,20 @@ class HTMLParser():
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"A":[],
-                           "Scripts":[],
-                           "Iframes":[],
-                           "Links":[],
-                           "Forms":[],
-                           "hrefs":[],
-                           "srcs":[],
-                           "_hrefs":["line", "href"],
-                           "_srcs":["line", "src"],
-                           "_A":["line", "type", "href", "title", "text"],
-                           "_Scripts":["line", "Entropy", "type", "src", "text"],
-                           "_Iframes":["line", "frameborder", "widthxheight", "scr", "text"],
-                           "_Links":["line", "type", "rel", "href", "text"],
-                           "_Forms":["line", "action", "type", "id", "name", "value", "text"]}
-
+        self.datastruct = {"A": [],
+                           "Scripts": [],
+                           "Iframes": [],
+                           "Links": [],
+                           "Forms": [],
+                           "hrefs": [],
+                           "srcs": [],
+                           "_hrefs": ["line", "href"],
+                           "_srcs": ["line", "src"],
+                           "_A": ["line", "type", "href", "title", "text"],
+                           "_Scripts": ["line", "Entropy", "type", "src", "text"],
+                           "_Iframes": ["line", "frameborder", "widthxheight", "scr", "text"],
+                           "_Links": ["line", "type", "rel", "href", "text"],
+                           "_Forms": ["line", "action", "type", "id", "name", "value", "text"]}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_a(self, data, soup):
@@ -67,11 +67,11 @@ class HTMLParser():
                     temp = "geo"
                 elif link["href"].find('ftp:') > -1:
                     temp = "ftp"
-            data.append({"line":link.sourceline,
-                         "type":temp,
-                         "href":link.get("href"),
-                         "title":link.get("title"),
-                         "text":link.text})
+            data.append({"line": link.sourceline,
+                         "type": temp,
+                         "href": link.get("href"),
+                         "title": link.get("title"),
+                         "text": link.text})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_scripts(self, data, soup):
@@ -84,11 +84,11 @@ class HTMLParser():
                 entropy = get_entropy(script.text)
             else:
                 entropy = None
-            data.append({"line":script.sourceline,
-                         "Entropy":entropy,
-                         "type":script.get("type"),
-                         "src":script.get("src"),
-                         "text":script.text})
+            data.append({"line": script.sourceline,
+                         "Entropy": entropy,
+                         "type": script.get("type"),
+                         "src": script.get("src"),
+                         "text": script.text})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_iframes(self, data, soup):
@@ -97,11 +97,11 @@ class HTMLParser():
         '''
         iframes = soup.findAll("iframe")
         for iframe in iframes:
-            data.append({"line":iframe.sourceline,
-                         "frameborder":iframe.get("frameborder"),
-                         "widthxheight":"{}x{}".format(iframe.get("width"), iframe.get("height")),
-                         "scr":iframe.get("src"),
-                         "text":iframe.text})
+            data.append({"line": iframe.sourceline,
+                         "frameborder": iframe.get("frameborder"),
+                         "widthxheight": "{}x{}".format(iframe.get("width"), iframe.get("height")),
+                         "scr": iframe.get("src"),
+                         "text": iframe.text})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_links(self, data, soup):
@@ -110,11 +110,11 @@ class HTMLParser():
         '''
         links = soup.findAll("link")
         for link in links:
-            data.append({"line":link.sourceline,
-                         "type":link.get("type"),
-                         "rel":link.get("rel"),
-                         "href":link.get("href"),
-                         "text":link.text})
+            data.append({"line": link.sourceline,
+                         "type": link.get("type"),
+                         "rel": link.get("rel"),
+                         "href": link.get("href"),
+                         "text": link.text})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_forms(self, data, soup):
@@ -125,13 +125,13 @@ class HTMLParser():
         for form in forms:
             inputs = form.findAll('input')
             for _input in inputs:
-                data.append({"line":_input.sourceline,
-                             "action":form.get("action"),
-                             "type":_input.get("type"),
-                             "id":_input.get("id"),
-                             "name":_input.get("name"),
-                             "value":_input.get("value"),
-                             "text":_input.text})
+                data.append({"line": _input.sourceline,
+                             "action": form.get("action"),
+                             "type": _input.get("type"),
+                             "id": _input.get("id"),
+                             "name": _input.get("name"),
+                             "value": _input.get("value"),
+                             "text": _input.text})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_all_hrefs(self, data, soup):
@@ -140,8 +140,8 @@ class HTMLParser():
         '''
         hrefs = soup.findAll(href=True)
         for href in hrefs:
-            data.append({"line":href.sourceline,
-                         "href":self.unquote_func(href.get("href"), 10)})
+            data.append({"line": href.sourceline,
+                         "href": self.unquote_func(href.get("href"), 10)})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_all_srcs(self, data, soup):
@@ -150,8 +150,8 @@ class HTMLParser():
         '''
         srcs = soup.findAll(src=True)
         for src in srcs:
-            data.append({"line":src.sourceline,
-                         "src":self.unquote_func(src.get("src"), 10)})
+            data.append({"line": src.sourceline,
+                         "src": self.unquote_func(src.get("src"), 10)})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def unquote_func(self, _str, num):
@@ -159,7 +159,7 @@ class HTMLParser():
         unqoute string
         '''
         while num > 0:
-            return self.unquote_func(unquote(_str), num-1)
+            return self.unquote_func(unquote(_str), num - 1)
         return _str
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -170,7 +170,7 @@ class HTMLParser():
         if data["FilesDumps"][data["Location"]["File"]].lower()[:4] == b"<htm" or data["FilesDumps"][data["Location"]["File"]].lower().startswith(b"<!doctype htm"):
             return True
         return False
-        #if bool(BeautifulSoup(data["FilesDumps"][data["Location"]["File"]].lower(), "html.parser").find()):
+        # if bool(BeautifulSoup(data["FilesDumps"][data["Location"]["File"]].lower(), "html.parser").find()):
         #    return True
 
     @verbose(True, verbose_output=False, timeout=None, _str="Starting analyzing html/htm")

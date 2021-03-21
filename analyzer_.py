@@ -42,6 +42,7 @@ from analyzer.qbdetect.loaddetections import LoadDetections
 from analyzer.mitre.mitreparser import MitreParser
 from analyzer.mitre.qbmitresearch import QBMitresearch
 
+
 class Analyzer:
     '''
     Analyzer class looks good

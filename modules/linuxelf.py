@@ -13,6 +13,7 @@ from analyzer.logger.logger import verbose
 from analyzer.mics.funcs import get_entropy, get_words, get_entropy_float_ret
 from analyzer.intell.qbdescription import add_description
 
+
 class LinuxELF:
     '''
     HTMLParser extract artifacts from linux
@@ -22,16 +23,16 @@ class LinuxELF:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"General":{},
-                           "Sections":[],
-                           "Dynamic":[],
-                           "Symbols":[],
-                           "Relocations":[],
-                           "_General":{},
-                           "_Sections":["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
-                           "_Dynamic":["Needed", "Description"],
-                           "_Symbols":["Type", "Symbol", "Description"],
-                           "_Relocations":["Section", "Name", "Description"]}
+        self.datastruct = {"General": {},
+                           "Sections": [],
+                           "Dynamic": [],
+                           "Symbols": [],
+                           "Relocations": [],
+                           "_General": {},
+                           "_Sections": ["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
+                           "_Dynamic": ["Needed", "Description"],
+                           "_Symbols": ["Type", "Symbol", "Description"],
+                           "_Relocations": ["Section", "Name", "Description"]}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_relocations(self, elf) -> list:
@@ -44,12 +45,12 @@ class LinuxELF:
                 symboltable = elf.get_section(section['sh_link'])
                 for relocation in section.iter_relocations():
                     symbol = symboltable.get_symbol(relocation['r_info_sym'])
-                    #address = hex(relocation['r_offset']) section['sh_flags']  section['sh_type']
-                    #some have no names, need to check this out
+                    # address = hex(relocation['r_offset']) section['sh_flags']  section['sh_type']
+                    # some have no names, need to check this out
                     if symbol.name != "":
-                        temp_list.append({"Section":section.name,
-                                          "Name":symbol.name,
-                                          "Description":""})
+                        temp_list.append({"Section": section.name,
+                                          "Name": symbol.name,
+                                          "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -63,9 +64,9 @@ class LinuxELF:
                 continue
             for symbol in section.iter_symbols():
                 if len(symbol.name) > 0:
-                    temp_list.append({"Type":describe_symbol_type(symbol['st_info']['type']),
-                                      "Symbol":symbol.name,
-                                      "Description":""})
+                    temp_list.append({"Type": describe_symbol_type(symbol['st_info']['type']),
+                                      "Symbol": symbol.name,
+                                      "Description": ""})
             return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -79,8 +80,8 @@ class LinuxELF:
             for tag in section.iter_tags():
                 if tag.entry.d_tag != "DT_NEEDED":
                     continue
-                temp_list.append({"Needed":tag.needed,
-                                  "Description":""})
+                temp_list.append({"Needed": tag.needed,
+                                  "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -97,12 +98,12 @@ class LinuxELF:
                     sus = "True, {}".format(entropy)
                 elif section.data_size == 0:
                     sus = "True, section size 0"
-                temp_list.append({"Section":section.name,
-                                  "Suspicious":sus,
-                                  "Size":section.data_size,
-                                  "MD5":md5(section.data()).hexdigest(),
-                                  "Entropy":get_entropy(section.data()),
-                                  "Description":""})
+                temp_list.append({"Section": section.name,
+                                  "Suspicious": sus,
+                                  "Size": section.data_size,
+                                  "MD5": md5(section.data()).hexdigest(),
+                                  "Entropy": get_entropy(section.data()),
+                                  "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -126,7 +127,6 @@ class LinuxELF:
             return True
         return False
 
-
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing ELF file")
     def analyze(self, data):
         '''
@@ -135,11 +135,11 @@ class LinuxELF:
         with open(data["Location"]["File"], 'rb') as file_1, open(data["Location"]["File"], 'rb') as file_2:
             data["ELF"] = deepcopy(self.datastruct)
             elf = ELFFile(file_1)
-            data["ELF"]["General"] = {"ELF Type" :elf.header.e_type,
-                                      "ELF Machine" :elf.header.e_machine,
-                                      "Entropy":get_entropy(file_2.read()),
-                                      "Entrypoint":hex(elf.header.e_entry),
-                                      "Interpreter":self.get_iter(elf)}
+            data["ELF"]["General"] = {"ELF Type": elf.header.e_type,
+                                      "ELF Machine": elf.header.e_machine,
+                                      "Entropy": get_entropy(file_2.read()),
+                                      "Entrypoint": hex(elf.header.e_entry),
+                                      "Interpreter": self.get_iter(elf)}
             data["ELF"]["Sections"] = self.get_section(elf)
             data["ELF"]["Dynamic"] = self.get_dynamic(elf)
             data["ELF"]["Symbols"] = self.get_symbols(elf)

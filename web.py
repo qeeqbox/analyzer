@@ -67,6 +67,7 @@ SWITCHES = [('full', 'Enable all analysis features'),
             ('w_words', 'Check whitelist by words (very slow)'),
             ('w_all', 'Enable all whitelist modules')]
 
+
 def intro(filename, link):
     '''
     this function is needed for the home page intro
@@ -83,6 +84,7 @@ def intro(filename, link):
                 intromarkdown = search(rcompile(r"\#\# Features.*", DOTALL), file.read()).group(0)
     return intromarkdown
 
+
 def session_key(filename):
     '''
     get the generated session key
@@ -93,6 +95,7 @@ def session_key(filename):
         with open(readmefolder, "rU", encoding="utf-8") as file:
             key = file.read()
     return key
+
 
 APP = Flask(__name__)
 APP.secret_key = session_key("key.hex")
@@ -114,12 +117,15 @@ CSRF = CSRFProtect()
 CSRF.init_app(APP)
 Markdown(APP)
 
+
 class Namespace:
     '''
     this namespace for switches
     '''
+
     def __init__(self, kwargs):
         self.__dict__.update(kwargs)
+
 
 def convert_size(_size):
     '''
@@ -131,12 +137,14 @@ def convert_size(_size):
         _size /= 1024.0
     return "File is too big"
 
+
 @LOGIN_MANAGER.user_loader
 def load_user(user_id):
     '''
     load user
     '''
     return User.objects(id=user_id).first()
+
 
 class User(MONGO_DB.Document):
     '''
@@ -179,6 +187,7 @@ class User(MONGO_DB.Document):
         '''
         return self.login
 
+
 class UserView(ModelView):
     '''
     user view (visable)
@@ -208,6 +217,7 @@ class UserView(ModelView):
         self._template_args['card_title'] = 'Current users'
         return super(UserView, self).index_view()
 
+
 class Files(MONGO_DB.Document):
     '''
     files doc
@@ -216,6 +226,7 @@ class Files(MONGO_DB.Document):
     line = MONGO_DB.DictField()
     file = MONGO_DB.FileField()
     meta = meta_files_settings
+
 
 class FilesView(ModelView):
     '''
@@ -247,6 +258,7 @@ class FilesView(ModelView):
         self._template_args['card_title'] = 'Uploaded files'
         return super(FilesView, self).index_view()
 
+
 class Reports(MONGO_DB.Document):
     '''
     reports doc
@@ -256,6 +268,7 @@ class Reports(MONGO_DB.Document):
     file = MONGO_DB.FileField()
     time = MONGO_DB.DateTimeField()
     meta = meta_reports_settings
+
 
 class ReportsViewJSON(ModelView):
     '''
@@ -294,6 +307,7 @@ class ReportsViewJSON(ModelView):
         self._template_args['card_title'] = 'Generated JSON reports'
         return super(ReportsViewJSON, self).index_view()
 
+
 class ReportsViewHTML(ModelView):
     '''
     html reports view (visable)
@@ -331,6 +345,7 @@ class ReportsViewHTML(ModelView):
         self._template_args['card_title'] = 'Generated HTML reports'
         return super(ReportsViewHTML, self).index_view()
 
+
 class Logs(MONGO_DB.Document):
     '''
     logs doc
@@ -340,6 +355,7 @@ class Logs(MONGO_DB.Document):
     file = MONGO_DB.FileField()
     time = MONGO_DB.DateTimeField()
     meta = meta_task_files_logs_settings
+
 
 class LogsView(ModelView):
     '''
@@ -372,18 +388,19 @@ class LogsView(ModelView):
         self._template_args['card_title'] = 'Generated logs'
         return super(LogsView, self).index_view()
 
+
 class LoginForm(form.Form):
     '''
     login form (username and password)
     '''
-    login = fields.StringField(render_kw={"placeholder":"Username", "autocomplete":"off"})
-    password = fields.PasswordField(render_kw={"placeholder":"Password", "autocomplete":"off"})
+    login = fields.StringField(render_kw={"placeholder": "Username", "autocomplete": "off"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password", "autocomplete": "off"})
 
     def validate_login(self, field):
         '''
         log in
         '''
-        user = self.get_user()  #fix AttributeError: 'NoneType' object has no attribute 'password'
+        user = self.get_user()  # fix AttributeError: 'NoneType' object has no attribute 'password'
         if user is not None:
             if not BCRYPT.check_password_hash(user.password, self.password.data):
                 raise validators.ValidationError('Invalid password')
@@ -394,12 +411,13 @@ class LoginForm(form.Form):
         '''
         return User.objects(login=self.login.data).first()
 
+
 class RegistrationForm(form.Form):
     '''
     register form (username and password)
     '''
-    login = fields.StringField(render_kw={"placeholder":"Username"})
-    password = fields.PasswordField(render_kw={"placeholder":"Password"})
+    login = fields.StringField(render_kw={"placeholder": "Username"})
+    password = fields.PasswordField(render_kw={"placeholder": "Password"})
 
     def validate_login(self, field):
         '''
@@ -407,6 +425,7 @@ class RegistrationForm(form.Form):
         '''
         if User.objects(login=self.login.data):
             raise validators.ValidationError('Duplicate username')
+
 
 class CustomAdminIndexView(AdminIndexView):
     '''
@@ -419,7 +438,7 @@ class CustomAdminIndexView(AdminIndexView):
         '''
         if not current_user.is_authenticated:
             return redirect(url_for('.login_view'))
-        #return redirect("/stats")
+        # return redirect("/stats")
 
         self._template_args['filename'] = "README.md @ https://github.com/qeeqbox/analyzer"
         self._template_args['intro'] = INTROMARKDOWN
@@ -499,14 +518,16 @@ class CustomAdminIndexView(AdminIndexView):
         '''
         return False
 
+
 def get_last_files(files_or_buffer):
     items = {}
     with ignore_excpetion(Exception):
         if files_or_buffer == "buffer":
-            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file":{"$regex":"._buffer$"}}).sort([('_id', -1)]).limit(10))
+            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file": {"$regex": "._buffer$"}}).sort([('_id', -1)]).limit(10))
         else:
-            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file":{"$regex":"^((?!._buffer).)*$"}}).sort([('_id', -1)]).limit(10))
+            items = list(CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({"line.file": {"$regex": "^((?!._buffer).)*$"}}).sort([('_id', -1)]).limit(10))
     return items
+
 
 class MultiCheckboxField(SelectMultipleField):
     '''
@@ -514,6 +535,7 @@ class MultiCheckboxField(SelectMultipleField):
     '''
     widget = ListWidget(prefix_label=False)
     option_widget = CheckboxInput()
+
 
 class UploadForm(form.Form):
     '''
@@ -523,13 +545,15 @@ class UploadForm(form.Form):
     file = fields.FileField(render_kw={"multiple": True})
     analyzertimeout = fields.SelectField('analyzertimeout', choices=[(30, '30sec analyzing timeout'), (60, '1min analyzing timeout'), (120, '2min analyzing timeout')], default=(ANALYZER_TIMEOUT), coerce=int)
     functiontimeout = fields.SelectField('functiontimeout', choices=[(10, '10sec logic timeout'), (20, '20sec logic timeout'), (30, '30sec logic timeout'), (40, '40sec logic timeout'), (50, '50sec logic timeout'), (60, '1min logic timeout'), (100, '1:40min logic timeout')], default=(FUNCTION_TIMEOUT), coerce=int)
-    submit = fields.SubmitField(render_kw={"class":"btn"})
-    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class":"btn"})
+    submit = fields.SubmitField(render_kw={"class": "btn"})
+    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class": "btn"})
     __order = ('file', 'choices', 'analyzertimeout', 'functiontimeout', 'submit', 'submitandwait')
+
     def __iter__(self):
         temp_fields = list(super(UploadForm, self).__iter__())
-        get_field = lambda fid: next((f for f in temp_fields if f.id == fid))
+        def get_field(fid): return next((f for f in temp_fields if f.id == fid))
         return (get_field(fid) for fid in self.__order)
+
 
 class CustomViewUploadForm(BaseView):
     '''
@@ -553,7 +577,7 @@ class CustomViewUploadForm(BaseView):
                     filename = secure_filename(file.filename)
                     savetotemp = path.join(MALWARE_FOLDER, filename)
                     for item in request.form.getlist("choices"):
-                        result.update({item:True})
+                        result.update({item: True})
                     result["file"] = savetotemp
                     result["uuid"] = uuid
                     result["analyzer_timeout"] = temp_form.analyzertimeout.data
@@ -586,21 +610,24 @@ class CustomViewUploadForm(BaseView):
         '''
         return redirect(url_for('admin.login_view', next=request.url))
 
+
 class BufferForm(form.Form):
     '''
     needs more check
     '''
     choices = MultiCheckboxField('Assigned', choices=SWITCHES)
-    buffer = fields.TextAreaField(render_kw={"class":"buffer"})
+    buffer = fields.TextAreaField(render_kw={"class": "buffer"})
     analyzertimeout = fields.SelectField('analyzertimeout', choices=[(30, '30sec'), (60, '1min'), (120, '2min')], default=int(ANALYZER_TIMEOUT), coerce=int)
     functiontimeout = fields.SelectField('functiontimeout', choices=[(10, '10sec'), (20, '20sec'), (30, '30sec'), (40, '40sec'), (50, '50sec'), (60, '60sec'), (100, '1:40min')], default=int(FUNCTION_TIMEOUT), coerce=int)
-    submit = fields.SubmitField(render_kw={"class":"btn"})
-    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class":"btn"})
+    submit = fields.SubmitField(render_kw={"class": "btn"})
+    submitandwait = fields.SubmitField('Submit And Wait', render_kw={"class": "btn"})
     __order = ('buffer', 'choices', 'analyzertimeout', 'functiontimeout', 'submit', 'submitandwait')
+
     def __iter__(self):
         temp_fields = list(super(BufferForm, self).__iter__())
-        get_field = lambda fid: next((f for f in temp_fields if f.id == fid))
+        def get_field(fid): return next((f for f in temp_fields if f.id == fid))
         return (get_field(fid) for fid in self.__order)
+
 
 class CustomViewBufferForm(BaseView):
     '''
@@ -619,7 +646,7 @@ class CustomViewBufferForm(BaseView):
                 uuid = str(uuid4())
                 result = {}
                 for item in request.form.getlist("choices"):
-                    result.update({item:True})
+                    result.update({item: True})
                 filename = ''.join(choice(ascii_uppercase) for _ in range(8))
                 savetotemp = path.join(MALWARE_FOLDER, filename) + "._buffer"
                 with open(savetotemp, "w") as tempfile:
@@ -655,6 +682,7 @@ class CustomViewBufferForm(BaseView):
         '''
         return redirect(url_for('admin.login_view', next=request.url))
 
+
 def get_stats():
     '''
     get stats from databases
@@ -663,29 +691,30 @@ def get_stats():
     with ignore_excpetion(Exception):
         for coll in (defaultdb["reportscoll"], defaultdb["filescoll"], "fs.chunks", "fs.files"):
             if coll in CLIENT[defaultdb["dbname"]].list_collection_names():
-                stats.update({"[{}] Collection".format(coll):"Good"})
+                stats.update({"[{}] Collection".format(coll): "Good"})
             else:
-                stats.update({"[{}] Collection".format(coll):"Bad"})
+                stats.update({"[{}] Collection".format(coll): "Bad"})
     with ignore_excpetion(Exception):
-        stats.update({"[Reports] Total reports":CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
-                      "[Reports] Total used space":"{}".format(convert_size(CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
+        stats.update({"[Reports] Total reports": CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find({}).count(),
+                      "[Reports] Total used space": "{}".format(convert_size(CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["storageSize"] + CLIENT[defaultdb["dbname"]].command("collstats", defaultdb["reportscoll"])["totalIndexSize"]))})
     with ignore_excpetion(Exception):
-        stats.update({"[Files] Total files uploaded":CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
+        stats.update({"[Files] Total files uploaded": CLIENT[defaultdb["dbname"]][defaultdb["filescoll"]].find({}).count()})
     with ignore_excpetion(Exception):
-        stats.update({"[Files] Total uploaded files size":"{}".format(convert_size(CLIENT[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
+        stats.update({"[Files] Total uploaded files size": "{}".format(convert_size(CLIENT[defaultdb["dbname"]]["fs.chunks"].find().count() * 255 * 1000))})
     with ignore_excpetion(Exception):
-        stats.update({"[Users] Total users":CLIENT[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
+        stats.update({"[Users] Total users": CLIENT[defaultdb["dbname"]][defaultdb["userscoll"]].find({}).count()})
     with ignore_excpetion(Exception):
         total, used, free = disk_usage("/")
-        stats.update({"CPU memory":cpu_percent(),
-                      "Memory used":virtual_memory()[2],
-                      "Current process used memory":"{}".format(convert_size(Process(getpid()).memory_info().rss)),
-                      "Total disk size":"{}".format(convert_size(total)),
-                      "Used disk size":"{}".format(convert_size(used)),
-                      "Free disk size":"{}".format(convert_size(free)),
-                      "Host platform":pplatform()})
+        stats.update({"CPU memory": cpu_percent(),
+                      "Memory used": virtual_memory()[2],
+                      "Current process used memory": "{}".format(convert_size(Process(getpid()).memory_info().rss)),
+                      "Total disk size": "{}".format(convert_size(total)),
+                      "Used disk size": "{}".format(convert_size(used)),
+                      "Free disk size": "{}".format(convert_size(free)),
+                      "Host platform": pplatform()})
     CLIENT.close()
     return stats
+
 
 class CustomStatsView(BaseView):
     '''
@@ -710,6 +739,7 @@ class CustomStatsView(BaseView):
         '''
         return redirect(url_for('admin.login_view', next=request.url))
 
+
 def find_and_srot(database, collection, key, var):
     '''
     hmm finding by time is weird?
@@ -725,6 +755,7 @@ def find_and_srot(database, collection, key, var):
         return "\n".join(temp_list), str(items[-1]["_id"])
     return "", 0
 
+
 def get_last_logs(json):
     '''
     get last item from logs
@@ -734,7 +765,8 @@ def get_last_logs(json):
         items, startid = find_and_srot(defaultdb["dbname"], defaultdb["alllogscoll"], "time", datetime.now())
     else:
         items, startid = find_and_srot(defaultdb["dbname"], defaultdb["alllogscoll"], "_id", ObjectId(json['id']))
-    return {"id":startid, "logs":items}
+    return {"id": startid, "logs": items}
+
 
 class CustomLogsView(BaseView):
     '''
@@ -753,8 +785,7 @@ class CustomLogsView(BaseView):
             if request.json:
                 json_content = request.get_json(silent=True)
                 return dumps(get_last_logs(json_content))
-        return jsonify({"Error":"Something wrong"})
-
+        return jsonify({"Error": "Something wrong"})
 
     def is_accessible(self):
         '''
@@ -768,6 +799,7 @@ class CustomLogsView(BaseView):
         '''
         return redirect(url_for('admin.login_view', next=request.url))
 
+
 class CheckTask(BaseView):
     '''
     check task view (This acts as api)
@@ -780,10 +812,10 @@ class CheckTask(BaseView):
         if request.method == 'POST':
             if request.json:
                 json_content = request.get_json(silent=True)
-                item = CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid":json_content["uuid"], "type":"text/html"})
+                item = CLIENT[defaultdb["dbname"]][defaultdb["reportscoll"]].find_one({"uuid": json_content["uuid"], "type": "text/html"})
                 if item:
-                    return jsonify({"Task":str(item["file"])})
-            return jsonify({"Task":""})
+                    return jsonify({"Task": str(item["file"])})
+            return jsonify({"Task": ""})
         return self.render("activelogs.html")
 
     def is_visible(self):
@@ -804,10 +836,12 @@ class CheckTask(BaseView):
         '''
         return redirect(url_for('admin.login_view', next=request.url))
 
+
 class TimeEncoder(JSONEncoder):
     '''
     json encoder for time
     '''
+
     def default(self, obj):
         '''
         override default
@@ -816,6 +850,7 @@ class TimeEncoder(JSONEncoder):
             return obj.astimezone().strftime("%Y-%m-%d %H:%M:%S.%f")
         return JSONEncoder.default(self, obj)
 
+
 def find_items_without_coll(database, collection, items):
     '''
     ???
@@ -823,15 +858,17 @@ def find_items_without_coll(database, collection, items):
     temp_dict = {}
     for item in items:
         if item != '':
-            temp_ret = CLIENT[database][collection].find_one({"_id":ObjectId(item)}, {'_id': False})
+            temp_ret = CLIENT[database][collection].find_one({"_id": ObjectId(item)}, {'_id': False})
             if temp_ret is not None:
-                temp_dict.update({item:temp_ret})
+                temp_dict.update({item: temp_ret})
     return temp_dict
+
 
 class CustomMenuLink(MenuLink):
     '''
     items will the header top left
     '''
+
     def is_accessible(self):
         '''
         is accessible
@@ -843,11 +880,13 @@ class CustomMenuLink(MenuLink):
         if not accessible then go to login
         '''
         return redirect(url_for('admin.login_view', next=request.url))
+
 
 class StarProject(MenuLink):
     '''
     ??
     '''
+
     def is_accessible(self):
         '''
         is accessible
@@ -859,6 +898,7 @@ class StarProject(MenuLink):
         if not accessible then go to login
         '''
         return redirect(url_for('admin.login_view', next=request.url))
+
 
 ADMIN = Admin(APP, "QeeqBox", index_view=CustomAdminIndexView(url='/'), base_template='base.html', template_mode='bootstrap3')
 ADMIN.add_link(CustomMenuLink(name='', category='', url="https://github.com/qeeqbox/analyzer", icon_type='glyph', icon_value='glyphicon-star'))
@@ -878,6 +918,7 @@ ADMIN.add_view(CheckTask('Task', endpoint='task', menu_icon_type='glyph', menu_i
 #app.run(host = "127.0.0.1", ssl_context=(certsdir+'cert.pem', certsdir+'key.pem'))
 #app.run(host = "127.0.0.1", port= "8001", debug=True)
 
+
 @APP.before_request
 def before_request():
     '''
@@ -886,6 +927,7 @@ def before_request():
     session.permanent = True
     APP.permanent_session_lifetime = timedelta(minutes=60)
     session.modified = True
+
 
 @APP.template_filter('pretty_json')
 def pretty_json(value):

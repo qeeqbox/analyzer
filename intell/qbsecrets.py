@@ -8,6 +8,7 @@ from re import compile as rcompile
 from copy import deepcopy
 from analyzer.logger.logger import verbose
 
+
 class QBSecrets:
     '''
     QBSecrets for common API keys/secrets
@@ -17,50 +18,50 @@ class QBSecrets:
         '''
         Initialize QBSecrets, this has to pass
         '''
-        self.datastruct = {"AWSCLIENTID":[],
-                           "AMAZONMWSAUTHTOKEN":[],
-                           "AMAZONAWS":[],
-                           "AMAZONGENERIC":[],
-                           "ALIYUNOSS":[],
-                           "AZURESTORAGE":[],
-                           "FACEBOOKACCESSTOKEN":[],
-                           "GITHUBTOKEN":[],
-                           "GOOGLEAPIKEY":[],
-                           "GOOGLECAPTCHA":[],
-                           "GOOGLEOAUTH":[],
-                           "GOOGLESECRET":[],
-                           "GOOGLEOAUTHACCESSTOKEN":[],
-                           "MAILGUNAPIKEY":[],
-                           "MAILCHAMPAPI":[],
-                           "PICATICAPI":[],
-                           "SLACKTOKEN":[],
-                           "SQUAREACCESSTOKEN":[],
-                           "SQUAREOAUTHSECRET":[],
-                           "STRIPESAPI":[],
-                           "TWILIOAPIKEY":[],
-                           "TWILIOSID":[],
-                           "_AWSCLIENTID":["Count", "AWSCLIENTID"],
-                           "_AMAZONMWSAUTHTOKEN":["Count", "AMAZONMWSAUTHTOKEN"],
-                           "_AMAZONAWS":["Count", "AMAZONAWS"],
-                           "_AMAZONGENERIC":["Count", "AMAZONGENERIC"],
-                           "_ALIYUNOSS":["Count", "ALIYUNOSS"],
-                           "_AZURESTORAGE":["Count", "AZURESTORAGE"],
-                           "_FACEBOOKACCESSTOKEN":["Count", "FACEBOOKACCESSTOKEN"],
-                           "_GITHUBTOKEN":["Count", "GITHUBTOKEN"],
-                           "_GOOGLEAPIKEY":["Count", "GOOGLEAPIKEY"],
-                           "_GOOGLECAPTCHA":["Count", "GOOGLECAPTCHA"],
-                           "_GOOGLEOAUTH":["Count", "GOOGLEOAUTH"],
-                           "_GOOGLESECRET":["Count", "GOOGLESECRET"],
-                           "_GOOGLEOAUTHACCESSTOKEN":["Count", "GOOGLEOAUTHACCESSTOKEN"],
-                           "_MAILGUNAPIKEY":["Count", "MAILGUNAPIKEY"],
-                           "_MAILCHAMPAPI":["Count", "MAILCHAMPAPI"],
-                           "_PICATICAPI":["Count", "PICATICAPI"],
-                           "_SLACKTOKEN":["Count", "SLACKTOKEN"],
-                           "_SQUAREACCESSTOKEN":["Count", "SQUAREACCESSTOKEN"],
-                           "_SQUAREOAUTHSECRET":["Count", "SQUAREOAUTHSECRET"],
-                           "_STRIPESAPI":["Count", "STRIPESAPI"],
-                           "_TWILIOAPIKEY":["Count", "TWILIOAPIKEY"],
-                           "_TWILIOSID":["Count", "TWILIOSID"]}
+        self.datastruct = {"AWSCLIENTID": [],
+                           "AMAZONMWSAUTHTOKEN": [],
+                           "AMAZONAWS": [],
+                           "AMAZONGENERIC": [],
+                           "ALIYUNOSS": [],
+                           "AZURESTORAGE": [],
+                           "FACEBOOKACCESSTOKEN": [],
+                           "GITHUBTOKEN": [],
+                           "GOOGLEAPIKEY": [],
+                           "GOOGLECAPTCHA": [],
+                           "GOOGLEOAUTH": [],
+                           "GOOGLESECRET": [],
+                           "GOOGLEOAUTHACCESSTOKEN": [],
+                           "MAILGUNAPIKEY": [],
+                           "MAILCHAMPAPI": [],
+                           "PICATICAPI": [],
+                           "SLACKTOKEN": [],
+                           "SQUAREACCESSTOKEN": [],
+                           "SQUAREOAUTHSECRET": [],
+                           "STRIPESAPI": [],
+                           "TWILIOAPIKEY": [],
+                           "TWILIOSID": [],
+                           "_AWSCLIENTID": ["Count", "AWSCLIENTID"],
+                           "_AMAZONMWSAUTHTOKEN": ["Count", "AMAZONMWSAUTHTOKEN"],
+                           "_AMAZONAWS": ["Count", "AMAZONAWS"],
+                           "_AMAZONGENERIC": ["Count", "AMAZONGENERIC"],
+                           "_ALIYUNOSS": ["Count", "ALIYUNOSS"],
+                           "_AZURESTORAGE": ["Count", "AZURESTORAGE"],
+                           "_FACEBOOKACCESSTOKEN": ["Count", "FACEBOOKACCESSTOKEN"],
+                           "_GITHUBTOKEN": ["Count", "GITHUBTOKEN"],
+                           "_GOOGLEAPIKEY": ["Count", "GOOGLEAPIKEY"],
+                           "_GOOGLECAPTCHA": ["Count", "GOOGLECAPTCHA"],
+                           "_GOOGLEOAUTH": ["Count", "GOOGLEOAUTH"],
+                           "_GOOGLESECRET": ["Count", "GOOGLESECRET"],
+                           "_GOOGLEOAUTHACCESSTOKEN": ["Count", "GOOGLEOAUTHACCESSTOKEN"],
+                           "_MAILGUNAPIKEY": ["Count", "MAILGUNAPIKEY"],
+                           "_MAILCHAMPAPI": ["Count", "MAILCHAMPAPI"],
+                           "_PICATICAPI": ["Count", "PICATICAPI"],
+                           "_SLACKTOKEN": ["Count", "SLACKTOKEN"],
+                           "_SQUAREACCESSTOKEN": ["Count", "SQUAREACCESSTOKEN"],
+                           "_SQUAREOAUTHSECRET": ["Count", "SQUAREOAUTHSECRET"],
+                           "_STRIPESAPI": ["Count", "STRIPESAPI"],
+                           "_TWILIOAPIKEY": ["Count", "TWILIOAPIKEY"],
+                           "_TWILIOSID": ["Count", "TWILIOSID"]}
 
         self.detectionawsclientid = rcompile(r'\b((A3T[A-Z0-9]|ABIA|ACCA|AGPA|AIDA|AIPA|AKIA|ANPA|ANVA|APKA|AROA|ASCA|ASIA)[A-Z0-9]{16})\b', I)
         self.detectionamazonmwsauthtoken = rcompile(r'amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', I)
@@ -98,7 +99,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_[0])
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AWSCLIENTID":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AWSCLIENTID": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Amazon MWS Auth Token patterns")
     def amazonmwsauthtoken(self, data):
@@ -111,7 +112,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AMAZONMWSAUTHTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AMAZONMWSAUTHTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Amazon S3 patterns")
     def amazonaws(self, data):
@@ -124,7 +125,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AMAZONAWS":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AMAZONAWS": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Amazon Generic patterns")
     def amazongeneric(self, data):
@@ -137,7 +138,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AMAZONGENERIC":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AMAZONGENERIC": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding ALIYUN OSS patterns")
     def aliyunoss(self, data):
@@ -150,7 +151,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "ALIYUNOSS":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "ALIYUNOSS": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding AZURE Storage patterns")
     def azurestorage(self, data):
@@ -163,7 +164,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AZURESTORAGE":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AZURESTORAGE": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Facebook Access Token patterns")
     def facebookaccesstoken(self, data):
@@ -176,7 +177,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "FACEBOOKACCESSTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "FACEBOOKACCESSTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Github Token patterns")
     def githubtoken(self, data):
@@ -189,7 +190,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GITHUBTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GITHUBTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Goole API Key patterns")
     def googleapikey(self, data):
@@ -202,7 +203,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GOOGLEAPIKEY":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GOOGLEAPIKEY": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Google CAPTCHA patterns")
     def googlecaptcha(self, data):
@@ -215,7 +216,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GOOGLECAPTCHA":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GOOGLECAPTCHA": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Google OAuth patterns")
     def googleoauth(self, data):
@@ -228,7 +229,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GOOGLEOAUTH":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GOOGLEOAUTH": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Google Secret patterns")
     def googlesecret(self, data):
@@ -241,7 +242,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GOOGLESECRET":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GOOGLESECRET": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Google OAuth Access Token patterns")
     def googleoauthaccesstoken(self, data):
@@ -254,7 +255,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "GOOGLEOAUTHACCESSTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "GOOGLEOAUTHACCESSTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Mailgun API Key patterns")
     def mailgunapikey(self, data):
@@ -267,7 +268,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "MAILGUNAPIKEY":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "MAILGUNAPIKEY": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding MailChimp API patterns")
     def mailchampapi(self, data):
@@ -280,7 +281,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "MAILCHAMPAPI":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "MAILCHAMPAPI": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Picatic API patterns")
     def picaticapi(self, data):
@@ -293,7 +294,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "PICATICAPI":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "PICATICAPI": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Slack Token patterns")
     def slacktoken(self, data):
@@ -306,7 +307,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_[0])
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "SLACKTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "SLACKTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Square Access Token patterns")
     def squareaccesstoken(self, data):
@@ -319,7 +320,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "SQUAREACCESSTOKEN":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "SQUAREACCESSTOKEN": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Square OAuth Secret patterns")
     def squareoauthsecret(self, data):
@@ -332,7 +333,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "SQUAREOAUTHSECRET":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "SQUAREOAUTHSECRET": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Stripe API patterns")
     def stripesapi(self, data):
@@ -345,7 +346,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "STRIPESAPI":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "STRIPESAPI": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Twilio API patterns")
     def twilioapikey(self, data):
@@ -358,7 +359,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "TWILIOAPIKEY":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "TWILIOAPIKEY": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Twilio SID patterns")
     def twiliosid(self, data):
@@ -371,7 +372,7 @@ class QBSecrets:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "TWILIOSID":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "TWILIOSID": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def analyze(self, data):
@@ -390,7 +391,7 @@ class QBSecrets:
         self.facebookaccesstoken(data["SECRETS"]["FACEBOOKACCESSTOKEN"])
         self.githubtoken(data["SECRETS"]["GITHUBTOKEN"])
         self.googleapikey(data["SECRETS"]["GOOGLEAPIKEY"])
-        #self.googlecaptcha(data["SECRETS"]["GOOGLECAPTCHA"])
+        # self.googlecaptcha(data["SECRETS"]["GOOGLECAPTCHA"])
         self.googleoauth(data["SECRETS"]["GOOGLEOAUTH"])
         self.googlesecret(data["SECRETS"]["GOOGLESECRET"])
         self.googleoauthaccesstoken(data["SECRETS"]["GOOGLEOAUTHACCESSTOKEN"])

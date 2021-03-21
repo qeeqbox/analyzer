@@ -15,6 +15,7 @@ from analyzer.logger.logger import verbose
 from analyzer.mics.funcs import get_words, get_words_multi_files, get_entropy
 from analyzer.modules.archive import unpack_file
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def convert_size(_size):
     '''
@@ -26,6 +27,7 @@ def convert_size(_size):
         _size /= 1024.0
     return "File is too big"
 
+
 class QBFile:
     '''
     QBFile getting file info
@@ -35,8 +37,8 @@ class QBFile:
         '''
         initialize class and datastruct, this is very important
         '''
-        self.datastruct = {"Properties":{},
-                           "_Properties":{}}
+        self.datastruct = {"Properties": {},
+                           "_Properties": {}}
         self.malwarefarm = ""
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -46,7 +48,7 @@ class QBFile:
         '''
         self.malwarefarm = folder
         if not self.malwarefarm.endswith(path.sep):
-            self.malwarefarm = self.malwarefarm+path.sep
+            self.malwarefarm = self.malwarefarm + path.sep
         if not path.isdir(self.malwarefarm):
             mkdir(self.malwarefarm)
 
@@ -59,17 +61,17 @@ class QBFile:
         if len(safename) == 0:
             safename = "temp"
         temp_md5 = data["Details"]["Properties"]["md5"]
-        folder_path = self.malwarefarm+uuid+"_"+temp_md5
+        folder_path = self.malwarefarm + uuid + "_" + temp_md5
         if path.exists(folder_path):
             rmtree(folder_path)
         mkdir(folder_path)
-        copyfile(_path, folder_path+path.sep+"temp")
-        data["Location"] = {"Original":_path,
-                            "File":folder_path+path.sep+"temp",
-                            "html":folder_path+path.sep+safename+".html",
-                            "json":folder_path+path.sep+safename+".json",
-                            "Folder":folder_path+path.sep+"temp_unpacked"}
-        data["FilesDumps"] = {folder_path+path.sep+"temp":open(_path, "rb").read()}
+        copyfile(_path, folder_path + path.sep + "temp")
+        data["Location"] = {"Original": _path,
+                            "File": folder_path + path.sep + "temp",
+                            "html": folder_path + path.sep + safename + ".html",
+                            "json": folder_path + path.sep + safename + ".json",
+                            "Folder": folder_path + path.sep + "temp_unpacked"}
+        data["FilesDumps"] = {folder_path + path.sep + "temp": open(_path, "rb").read()}
 
     @verbose(True, verbose_output=False, timeout=None, _str="Getting file details")
     def get_detailes(self, data, _path):
@@ -79,17 +81,16 @@ class QBFile:
         data["Details"] = deepcopy(self.datastruct)
         temp_f = open(_path, "rb").read()
         open(_path, "rb").read(4)
-        data["Details"]["Properties"] = {"Name":path.basename(_path).lower(),
-                                         "md5":md5(temp_f).hexdigest(),
-                                         "sha1":sha1(temp_f).hexdigest(),
-                                         "sha256":sha256(temp_f).hexdigest(),
-                                         "ssdeep":hash_from_file(_path),
-                                         "size":convert_size(path.getsize(_path)),
-                                         "bytes":path.getsize(_path),
-                                         "mime":from_file(_path, mime=True),
-                                         "extension":guess_type(_path)[0],
-                                         "Entropy":get_entropy(temp_f)}
-
+        data["Details"]["Properties"] = {"Name": path.basename(_path).lower(),
+                                         "md5": md5(temp_f).hexdigest(),
+                                         "sha1": sha1(temp_f).hexdigest(),
+                                         "sha256": sha256(temp_f).hexdigest(),
+                                         "ssdeep": hash_from_file(_path),
+                                         "size": convert_size(path.getsize(_path)),
+                                         "bytes": path.getsize(_path),
+                                         "mime": from_file(_path, mime=True),
+                                         "extension": guess_type(_path)[0],
+                                         "Entropy": get_entropy(temp_f)}
 
     @verbose(True, verbose_output=False, timeout=None, _str="Handling unknown format")
     def check_sig(self, data):
@@ -98,9 +99,9 @@ class QBFile:
         if file is archive, then unpack and get words, wordsstripped otherwise
         get words, wordsstripped from the file only
         '''
-        if  data["Details"]["Properties"]["mime"] == "application/java-archive" or \
-            data["Details"]["Properties"]["mime"] == "application/zip" or \
-            data["Details"]["Properties"]["mime"] == "application/zlib":
+        if data["Details"]["Properties"]["mime"] == "application/java-archive" or \
+                data["Details"]["Properties"]["mime"] == "application/zip" or \
+                data["Details"]["Properties"]["mime"] == "application/zlib":
             unpack_file(data, data["Location"]["File"])
             get_words_multi_files(data, data["Packed"]["Files"])
         else:

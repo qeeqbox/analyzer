@@ -8,17 +8,18 @@ from uuid import uuid4
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import PKey, TYPE_RSA, X509, X509Extension, dump_certificate, dump_privatekey
 
+
 def create_dummy_certificate(certname, keyname, _dir, force=False) -> bool:
     '''
     this will create dummp cert, not needed for now
     '''
     if certname and keyname and _dir:
-        if path.exists(_dir+keyname) and path.exists(_dir+certname) and not force:
+        if path.exists(_dir + keyname) and path.exists(_dir + certname) and not force:
             return True
-        if path.exists(_dir+certname):
-            remove(_dir+certname)
-        if path.exists(_dir+keyname):
-            remove(_dir+keyname)
+        if path.exists(_dir + certname):
+            remove(_dir + certname)
+        if path.exists(_dir + keyname):
+            remove(_dir + keyname)
         key = PKey()
         key.generate_key(TYPE_RSA, 4096)
         cert = X509()
@@ -38,9 +39,9 @@ def create_dummy_certificate(certname, keyname, _dir, force=False) -> bool:
                              X509Extension(b"keyUsage", True, b"keyCertSign, cRLSign"),
                              X509Extension(b"subjectKeyIdentifier", False, b"hash", subject=cert), ])
         cert.sign(key, 'sha256')
-        with open(_dir+certname, 'wb') as file:
+        with open(_dir + certname, 'wb') as file:
             file.write(dump_certificate(FILETYPE_PEM, cert))
-        with open(_dir+keyname, 'wb') as file:
+        with open(_dir + keyname, 'wb') as file:
             file.write(dump_privatekey(FILETYPE_PEM, key))
         return True
     return False

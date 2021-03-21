@@ -7,10 +7,12 @@ from os import path
 from json import JSONEncoder, dump as jdump, dumps as jdumps
 from analyzer.logger.logger import log_string, verbose
 
+
 class ComplexEncoder(JSONEncoder):
     '''
     this will be used to encode objects
     '''
+
     def default(self, obj):
         '''
         override default
@@ -20,6 +22,7 @@ class ComplexEncoder(JSONEncoder):
         if isinstance(obj, int):
             return str(obj)
         return JSONEncoder.default(self, obj)
+
 
 class JSONMaker:
     '''

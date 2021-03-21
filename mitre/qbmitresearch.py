@@ -7,6 +7,7 @@ from os import mkdir, path
 from json import loads
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBMitresearch():
     '''
     this module will use parsediocs for detection
@@ -19,10 +20,10 @@ class QBMitresearch():
         self.mitre = MitreParser()
         self.mitrepath = path.abspath(path.join(path.dirname(__file__), 'mitrefiles'))
         if not self.mitrepath.endswith(path.sep):
-            self.mitrepath = self.mitrepath+path.sep
+            self.mitrepath = self.mitrepath + path.sep
         if not path.isdir(self.mitrepath):
             mkdir(self.mitrepath)
-        self.parsediocs = self.mitrepath+"parsediocs.json"
+        self.parsediocs = self.mitrepath + "parsediocs.json"
         self.words = []
         self.wordsstripped = ""
 
@@ -50,16 +51,16 @@ class QBMitresearch():
                     _list.append(ioc.lower())
             if len(_list) > 0:
                 temp_x = self.search_in_mitre_and_return(self.mitre.fulldict, attack)
-                temp_dict = {"Id":attack,
-                             "Name":"None",
-                             "Detected":', '.join(_list),
-                             "Description":"None"}
+                temp_dict = {"Id": attack,
+                             "Name": "None",
+                             "Detected": ', '.join(_list),
+                             "Description": "None"}
                 if temp_x:
                     with ignore_excpetion(Exception):
-                        temp_dict = {"Id":attack,
-                                     "Name":temp_x["name"],
-                                     "Detected":', '.join(_list),
-                                     "Description":temp_x["description"]}
+                        temp_dict = {"Id": attack,
+                                     "Name": temp_x["name"],
+                                     "Detected": ', '.join(_list),
+                                     "Description": temp_x["description"]}
                 data["Attack"].append(temp_dict)
             _list = []
 
@@ -72,15 +73,15 @@ class QBMitresearch():
             toolrecords = self.mitre.findtool(_word)
             if toolrecords:
                 for record in toolrecords:
-                    data["Binary"].append({"Word":_word,
-                                           "Name":record["name"],
-                                           "Description":record["description"]})
+                    data["Binary"].append({"Word": _word,
+                                           "Name": record["name"],
+                                           "Description": record["description"]})
             malwarerecords = self.mitre.findmalware(_word)
             if malwarerecords:
                 for record in malwarerecords:
-                    data["Binary"].append({"Word":_word,
-                                           "Name":record["name"],
-                                           "Description":record["description"]})
+                    data["Binary"].append({"Word": _word,
+                                           "Name": record["name"],
+                                           "Description": record["description"]})
         return True
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing with mitre")
@@ -90,9 +91,9 @@ class QBMitresearch():
         '''
         self.words = data["StringsRAW"]["wordsinsensitive"]
         self.wordsstripped = data["StringsRAW"]["wordsstripped"]
-        data["MITRE"] = {"Binary":[],
-                         "Attack":[],
-                         "_Binary":["Word", "Name", "Description"],
-                         "_Attack":["Id", "Name", "Detected", "Description"]}
+        data["MITRE"] = {"Binary": [],
+                         "Attack": [],
+                         "_Binary": ["Word", "Name", "Description"],
+                         "_Attack": ["Id", "Name", "Detected", "Description"]}
         self.check_mitre(data["MITRE"])
         self.check_mitre_similarity(data["MITRE"])

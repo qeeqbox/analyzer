@@ -8,6 +8,7 @@ from re import compile as rcompile
 from copy import deepcopy
 from analyzer.logger.logger import verbose
 
+
 class QBCreditcards:
     '''
     QBCreditcards extracts some PII
@@ -17,18 +18,18 @@ class QBCreditcards:
         '''
         Initialize QBCreditcards, this has to pass
         '''
-        self.datastruct = {"AMERICANEXPRESS":[],
-                           "VISA":[],
-                           "MASTERCARD":[],
-                           "DISCOVER":[],
-                           "JCB":[],
-                           "DINERSCLUB":[],
-                           "_AMERICANEXPRESS":["Count", "AmericanExpress"],
-                           "_VISA":["Count", "Visa"],
-                           "_MASTERCARD":["Count", "MasterCard"],
-                           "_DISCOVER":["Count", "Discover"],
-                           "_JCB":["Count", "JCB"],
-                           "_DINERSCLUB":["Count", "DinersClub"]}
+        self.datastruct = {"AMERICANEXPRESS": [],
+                           "VISA": [],
+                           "MASTERCARD": [],
+                           "DISCOVER": [],
+                           "JCB": [],
+                           "DINERSCLUB": [],
+                           "_AMERICANEXPRESS": ["Count", "AmericanExpress"],
+                           "_VISA": ["Count", "Visa"],
+                           "_MASTERCARD": ["Count", "MasterCard"],
+                           "_DISCOVER": ["Count", "Discover"],
+                           "_JCB": ["Count", "JCB"],
+                           "_DINERSCLUB": ["Count", "DinersClub"]}
         self.detectionamericanexpress = rcompile(r'\b(?:3[47][0-9]{13})\b', I)
         self.detectionvisa = rcompile(r'\b(?:4[0-9]{12})(?:[0-9]{3})?\b', I)
         self.detectionmastercard = rcompile(r'\b(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}\b', I)
@@ -49,7 +50,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "AmericanExpress":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "AmericanExpress": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Visa Card patterns")
     def visa(self, data):
@@ -62,7 +63,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "Visa":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "Visa": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Master Card patterns")
     def mastercard(self, data):
@@ -75,7 +76,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "MasterCard":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "MasterCard": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Discover Card patterns")
     def discover(self, data):
@@ -88,7 +89,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "Discover":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "Discover": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Jcb Card patterns")
     def jcb(self, data):
@@ -101,7 +102,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "JCB":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "JCB": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Diners Club Card patterns")
     def dinersclub(self, data):
@@ -114,7 +115,7 @@ class QBCreditcards:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            data.append({"Count":temp_list.count(temp_var), "DinersClub":temp_var})
+            data.append({"Count": temp_list.count(temp_var), "DinersClub": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def analyze(self, data):

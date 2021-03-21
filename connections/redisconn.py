@@ -10,6 +10,7 @@ from analyzer.settings import json_settings
 
 REDIS = Redis.from_url(json_settings[environ["analyzer_env"]]["redis_settings"])
 
+
 def get_cache(val):
     '''
     Not used
@@ -17,6 +18,7 @@ def get_cache(val):
     data = None
     data = REDIS.get(val)
     return loads(data)
+
 
 def put_cache(val, data):
     '''

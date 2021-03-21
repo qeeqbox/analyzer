@@ -14,6 +14,7 @@ from tld import get_fld, get_tld
 from psutil import process_iter, Process, wait_procs
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 def kill_process_and_subs():
     '''
     kill python app
@@ -27,6 +28,7 @@ def kill_process_and_subs():
         process.kill()
     proc.kill()
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def kill_python_cli():
     '''
@@ -38,12 +40,14 @@ def kill_python_cli():
         if " ".join(cmdline) == "python3 -m qbanalyzer.cli" and process.pid != current:
             process.kill()
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def open_in_browser(_path):
     '''
     open html file in default browser
     '''
     open_new_tab(_path)
+
 
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_entropy(data) -> str:
@@ -62,6 +66,7 @@ def get_entropy(data) -> str:
         return "{} (Minimum: 0.0, Maximum: 8.0)".format(entropy)
     return "None"
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_entropy_float_ret(data) -> float:
     '''
@@ -79,6 +84,7 @@ def get_entropy_float_ret(data) -> float:
         return entropy
     return 0.0
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_entropyold(data):
     '''
@@ -89,6 +95,7 @@ def get_entropyold(data):
     entropy = entropy - sum([probability * log2(probability) / log2(2.0) for probability in probabilities])
     return entropy
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def long_to_ip(decimal) -> str:
     '''
@@ -96,12 +103,14 @@ def long_to_ip(decimal) -> str:
     '''
     return inet_ntoa(pack("!L", decimal))
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def ip_to_long(ip_add) -> int:
     '''
     ip to decimal
     '''
     return unpack("!L", inet_aton(ip_add))[0]
+
 
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_words(data, _path) -> (list, str):
@@ -121,10 +130,11 @@ def get_words(data, _path) -> (list, str):
         wordssensitive.append(word.decode(encoding, errors="ignore"))
         wordsinsensitive.append(word.lower().decode(encoding, errors="ignore"))
 
-    wordsstripped = '\n'+'\n'.join(wordsinsensitive) + '\n'
+    wordsstripped = '\n' + '\n'.join(wordsinsensitive) + '\n'
     data["StringsRAW"] = {"wordssensitive": wordssensitive,
                           "wordsinsensitive": wordsinsensitive,
                           "wordsstripped": wordsstripped}
+
 
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_words_multi_files(data, arr) -> (list, str):
@@ -149,6 +159,7 @@ def get_words_multi_files(data, arr) -> (list, str):
                           "wordsinsensitive": wordsinsensitive,
                           "wordsstripped": wordsstripped}
 
+
 @verbose(True, verbose_output=False, timeout=None, _str=None)
 def get_words_multi_filesarray(data, arr) -> (list, str):
     '''
@@ -160,7 +171,7 @@ def get_words_multi_filesarray(data, arr) -> (list, str):
     wordssensitive = []
     encoding = data["Encoding"]["Details"]["ForceEncoding"]
     for word in arr:
-        #if x["Path"].endswith(".xml"):
+        # if x["Path"].endswith(".xml"):
         if encoding == "utf-16":
             words.extend(findall(br"[\x20-\x7e\x00]{4,}", word))
         else:
@@ -172,6 +183,7 @@ def get_words_multi_filesarray(data, arr) -> (list, str):
     data["StringsRAW"] = {"wordssensitive": wordssensitive,
                           "wordsinsensitive": wordsinsensitive,
                           "wordsstripped": wordsstripped}
+
 
 def serialize_obj(obj):
     '''
@@ -188,13 +200,14 @@ def serialize_obj(obj):
             obj = str(obj)
         return obj
 
+
 def check_url(url) -> bool:
     '''
     check if url or not
     '''
     with ignore_excpetion(Exception):
         if not url.startswith(("http://", "https://", "ftp://")):
-            url = "http://"+url
+            url = "http://" + url
         if get_tld(url, fail_silently=True):
             root = None
             with ignore_excpetion(Exception):

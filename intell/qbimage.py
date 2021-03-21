@@ -8,6 +8,7 @@ from base64 import b64encode
 from PIL import Image, ImageDraw
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBImage:
     '''
     QBImage similarity images
@@ -58,7 +59,7 @@ class QBImage:
                 _list = list(chunk_list(temp_list, temp_c))
                 out = list(chunk_list([int(get_average(l)) for l in _list], int(temp_s)))
                 temp__x = 10
-                temp_h = len(out)* temp__x
+                temp_h = len(out) * temp__x
                 temp_w = int(temp_s) * temp__x
                 img = Image.new('RGB', (temp_w, temp_h), (255, 255, 255))
                 draw = ImageDraw.Draw(img)

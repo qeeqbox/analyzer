@@ -12,6 +12,7 @@ from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import get_words_multi_files
 from analyzer.modules.archive import check_packed_files, unpack_file
 
+
 class Officex:
     '''
     Officex extracts artifacts from office files
@@ -21,18 +22,18 @@ class Officex:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"General":{},
-                           "Text":"",
-                           "Hyper":[],
-                           "Other":[],
-                           "Macro":[],
-                           "DDE":[],
-                           "_General":{},
-                           "_Text":"",
-                           "_Hyper":["Count", "Link"],
-                           "_Other":["Count", "Link"],
-                           "_Macro":["Name", "VBA"],
-                           "_DDE":""}
+        self.datastruct = {"General": {},
+                           "Text": "",
+                           "Hyper": [],
+                           "Other": [],
+                           "Macro": [],
+                           "DDE": [],
+                           "_General": {},
+                           "_Text": "",
+                           "_Hyper": ["Count", "Link"],
+                           "_Other": ["Count", "Link"],
+                           "_Macro": ["Name", "VBA"],
+                           "_DDE": ""}
 
         self.word_namespace = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
         self.para = self.word_namespace + 'p'
@@ -44,8 +45,8 @@ class Officex:
         '''
         get hyber links or other links by regex
         '''
-        temp_dict = {"Hyber":[], "Other":[]}
-        _temp = {"Hyber":[], "Other":[]}
+        temp_dict = {"Hyber": [], "Other": []}
+        _temp = {"Hyber": [], "Other": []}
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Name"].lower().endswith(".xml"):
                 with ignore_excpetion(Exception):
@@ -53,10 +54,10 @@ class Officex:
                     for hyber in findall(r'http.*?\<', temp_x):
                         temp_dict["Hyber"].append(hyber)
                     for hyber in findall(r'(http.*?) ', temp_x):
-                        temp_dict["Other"].append(hyber[:-1]) #-1 for "
+                        temp_dict["Other"].append(hyber[:-1])  # -1 for "
         for key in temp_dict:
             for temp_x in set(temp_dict[key]):
-                _temp[key].append({"Count":temp_dict[key].count(temp_x), "Link":temp_x})
+                _temp[key].append({"Count": temp_dict[key].count(temp_x), "Link": temp_x})
         return _temp
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -67,8 +68,8 @@ class Officex:
         for index, temp_var in enumerate(data["Packed"]["Files"]):
             if temp_var["Name"].lower().endswith(".bin"):
                 temp_k = 'Office_bin_{}'.format(index)
-                data[temp_k] = {"Bin_Printable":"",
-                                "_Bin_Printable":""}
+                data[temp_k] = {"Bin_Printable": "",
+                                "_Bin_Printable": ""}
                 temp_x = open(temp_var["Path"], "r", encoding="utf-8", errors='ignore').read()
                 data[temp_k]["Bin_Printable"] = sub(r'[^\x20-\x7F]+', '', temp_x)
 
@@ -86,7 +87,7 @@ class Officex:
                 for item in meta:
                     temp_x = tree.find("{}{}".format(corepropns, item))
                     if temp_x is not None:
-                        temp_dict.update({item:temp_x.text})
+                        temp_dict.update({item: temp_x.text})
                 break
         return temp_dict
 
@@ -127,7 +128,7 @@ class Officex:
         temp_list = []
         with ignore_excpetion(Exception):
             for (temp_f, temp_s, vbaname, vbacode) in VBA_Parser(path).extract_macros():
-                temp_list.append({"Name":vbaname, "VBA":vbacode})
+                temp_list.append({"Name": vbaname, "VBA": vbacode})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -136,11 +137,10 @@ class Officex:
         check if file is office or contains [Content_Types].xml
         '''
         if "application/vnd.openxmlformats-officedocument" in data["Details"]["Properties"]["mime"] or \
-            check_packed_files(data["Location"]["File"], ["[Content_Types].xml"]):
+                check_packed_files(data["Location"]["File"], ["[Content_Types].xml"]):
             unpack_file(data, data["Location"]["File"])
             return True
         return False
-
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing office[x] file")
     def analyze(self, data):

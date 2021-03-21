@@ -10,6 +10,7 @@ from analyzer.logger.logger import verbose
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+
 class QBIcons:
     '''
     QBIcons converting all to base64 (this need to be fixed, some icons kinda big for the template table)

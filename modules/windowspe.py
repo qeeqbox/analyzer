@@ -12,38 +12,39 @@ from analyzer.mics.funcs import get_words, get_entropy, get_entropy_float_ret
 from analyzer.intell.qbdescription import add_description
 from r2pipe import open as r2open
 
+
 class WindowsPe:
     '''
     WindowsPe extract artifacts from pe
     '''
     @verbose(True, verbose_output=False, timeout=None, _str="Starting WindowsPe")
     def __init__(self):
-        self.datastruct = {"General":{},
-                           "Characteristics":{},
-                           "Singed":[],
-                           "SignatureExtracted":{},
-                           "Stringfileinfo":{},
-                           "Sections":[],
-                           "Dlls":[],
-                           "Resources":[],
-                           "Imported functions":[],
-                           "Exported functions":[],
-                           "Debug":[],
-                           "Manifest":"",
-                           "Entrypoint":"",
-                           "_General":{},
-                           "_Characteristics":{},
-                           "_Singed":["Wrong", "SignatureHex"],
-                           "__SignatureExtracted":{},
-                           "_Stringfileinfo":{},
-                           "_Sections":["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
-                           "_Dlls":["Dll", "Description"],
-                           "_Resources":["Resource", "Offset", "MD5", "Sig", "Description"],
-                           "_Imported functions":["Dll", "Function", "Description"],
-                           "_Exported functions":["Dll", "Function", "Description"],
-                           "_Debug":["Name", "Description"],
-                           "_Manifest":"",
-                           "_Entrypoint":""}
+        self.datastruct = {"General": {},
+                           "Characteristics": {},
+                           "Singed": [],
+                           "SignatureExtracted": {},
+                           "Stringfileinfo": {},
+                           "Sections": [],
+                           "Dlls": [],
+                           "Resources": [],
+                           "Imported functions": [],
+                           "Exported functions": [],
+                           "Debug": [],
+                           "Manifest": "",
+                           "Entrypoint": "",
+                           "_General": {},
+                           "_Characteristics": {},
+                           "_Singed": ["Wrong", "SignatureHex"],
+                           "__SignatureExtracted": {},
+                           "_Stringfileinfo": {},
+                           "_Sections": ["Section", "Suspicious", "Size", "Entropy", "MD5", "Description"],
+                           "_Dlls": ["Dll", "Description"],
+                           "_Resources": ["Resource", "Offset", "MD5", "Sig", "Description"],
+                           "_Imported functions": ["Dll", "Function", "Description"],
+                           "_Exported functions": ["Dll", "Function", "Description"],
+                           "_Debug": ["Name", "Description"],
+                           "_Manifest": "",
+                           "_Entrypoint": ""}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def what_type(self, pe_info) -> str:
@@ -71,7 +72,7 @@ class WindowsPe:
         address = pe_info.OPTIONAL_HEADER.DATA_DIRECTORY[DIRECTORY_ENTRY['IMAGE_DIRECTORY_ENTRY_SECURITY']].VirtualAddress
         if address != 0:
             with ignore_excpetion(Exception):
-                sig = pe_info.write()[address+8:]
+                sig = pe_info.write()[address + 8:]
                 m2cbio = BIO.MemoryBuffer(bytes(sig))
                 if m2cbio:
                     pkcs7bio = m2.pkcs7_read_bio_der(m2cbio.bio_ptr())
@@ -79,15 +80,15 @@ class WindowsPe:
                         pkcs7 = SMIME.PKCS7(pkcs7bio)
                         for cert in pkcs7.get0_signers(X509.X509_Stack()):
                             tempcert = "CERT_{}".format(index)
-                            _extracted[tempcert] = {"CommonName":None,
-                                                    "OrganizationalUnit":None,
-                                                    "Organization":None,
-                                                    "Locality":None,
-                                                    "StateOrProvinceName":None,
-                                                    "CountryName":None,
-                                                    "Start":None,
-                                                    "Ends":None,
-                                                    "SerialNumber":None}
+                            _extracted[tempcert] = {"CommonName": None,
+                                                    "OrganizationalUnit": None,
+                                                    "Organization": None,
+                                                    "Locality": None,
+                                                    "StateOrProvinceName": None,
+                                                    "CountryName": None,
+                                                    "Start": None,
+                                                    "Ends": None,
+                                                    "SerialNumber": None}
                             with ignore_excpetion(Exception):
                                 _extracted[tempcert]["CommonName"] = cert.get_subject().CN
                             with ignore_excpetion(Exception):
@@ -111,8 +112,8 @@ class WindowsPe:
                                 _extracted[tempcert]["SerialNumberMD5"] = cert.get_fingerprint('md5').lower().rjust(32, '0')
                 problems = False
             sighex = "".join("{:02x}".format(x) for x in sig)
-            temp_list.append({"Wrong":problems,
-                              "SignatureHex":sighex})
+            temp_list.append({"Wrong": problems,
+                              "SignatureHex": sighex})
         return temp_list, _extracted
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -133,8 +134,8 @@ class WindowsPe:
         temp_list = []
         for dll in pe_info.DIRECTORY_ENTRY_IMPORT:
             if dll.dll.decode("utf-8", errors="ignore") not in str(temp_list):
-                temp_list.append({"Dll":dll.dll.decode("utf-8", errors="ignore"),
-                                  "Description":""})
+                temp_list.append({"Dll": dll.dll.decode("utf-8", errors="ignore"),
+                                  "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -150,12 +151,12 @@ class WindowsPe:
                 is_sus = "True, {}".format(entropy)
             elif section.SizeOfRawData == 0:
                 is_sus = "True, section size 0"
-            temp_list.append({"Section":section.Name.decode("utf-8", errors="ignore").strip("\00"),
-                              "Suspicious":is_sus,
-                              "Size":section.SizeOfRawData,
-                              "MD5":section.get_hash_md5(),
-                              "Entropy":get_entropy(section.get_data()),
-                              "Description":""})
+            temp_list.append({"Section": section.Name.decode("utf-8", errors="ignore").strip("\00"),
+                              "Suspicious": is_sus,
+                              "Size": section.SizeOfRawData,
+                              "MD5": section.get_hash_md5(),
+                              "Entropy": get_entropy(section.get_data()),
+                              "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -168,9 +169,9 @@ class WindowsPe:
             for entry in pe_info.DIRECTORY_ENTRY_IMPORT:
                 for func in entry.imports:
                     #print({entry.dll.decode("utf-8", errors="ignore"):func.name.decode("utf-8", errors="ignore")})
-                    temp_list.append({"Dll":entry.dll.decode("utf-8", errors="ignore"),
-                                      "Function":func.name.decode("utf-8", errors="ignore"),
-                                      "Description":""})
+                    temp_list.append({"Dll": entry.dll.decode("utf-8", errors="ignore"),
+                                      "Function": func.name.decode("utf-8", errors="ignore"),
+                                      "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -181,8 +182,8 @@ class WindowsPe:
         temp_list = []
         if hasattr(pe_info, "DIRECTORY_ENTRY_EXPORT"):
             for func in pe_info.DIRECTORY_ENTRY_EXPORT.symbols:
-                temp_list.append({"Function":func.name.decode("utf-8", errors="ignore"),
-                                  "Description":""})
+                temp_list.append({"Function": func.name.decode("utf-8", errors="ignore"),
+                                  "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -212,11 +213,11 @@ class WindowsPe:
                                 sig = ""
                                 if len(resourcedata) >= 12:
                                     sig = "".join("{:02x}".format(x) for x in resourcedata[:12])
-                                temp_list.append({"Resource":name,
-                                                  "Offset":hex(resource_lang.data.struct.OffsetToData),
-                                                  "MD5":md5(resourcedata).hexdigest(),
-                                                  "Sig":sig,
-                                                  "Description":""})
+                                temp_list.append({"Resource": name,
+                                                  "Offset": hex(resource_lang.data.struct.OffsetToData),
+                                                  "MD5": md5(resourcedata).hexdigest(),
+                                                  "Sig": sig,
+                                                  "Description": ""})
                                 if name == "RT_ICON":
                                     _icons.append(resourcedata)
         return temp_list, manifest, _icons
@@ -233,7 +234,7 @@ class WindowsPe:
                 if fileinfo.Key.decode() == 'StringFileInfo':
                     for string_table in fileinfo.StringTable:
                         for entry in string_table.entries.items():
-                            _dict.update({(entry[0].decode("utf-8", errors="ignore")):entry[1].decode("utf-8", errors="ignore")})
+                            _dict.update({(entry[0].decode("utf-8", errors="ignore")): entry[1].decode("utf-8", errors="ignore")})
                     if len(_dict) > 0:
                         return _dict
         return _dict
@@ -243,16 +244,16 @@ class WindowsPe:
         '''
         get characteristics of file
         '''
-        temp_x = {"High Entropy":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA,
-                  "aslr":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE,
-                  "Force Integrity":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY,
-                  "dep":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NX_COMPAT,
-                  "seh":not pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_SEH,
-                  "No Bind":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_BIND,
-                  "cfg":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_GUARD_CF,
-                  "No Isolation":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_ISOLATION,
-                  "App Container":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_APPCONTAINER,
-                  "wdm Driver":pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_WDM_DRIVER}
+        temp_x = {"High Entropy": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA,
+                  "aslr": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE,
+                  "Force Integrity": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY,
+                  "dep": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NX_COMPAT,
+                  "seh": not pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_SEH,
+                  "No Bind": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_BIND,
+                  "cfg": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_GUARD_CF,
+                  "No Isolation": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_NO_ISOLATION,
+                  "App Container": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_APPCONTAINER,
+                  "wdm Driver": pe_info.OPTIONAL_HEADER.IMAGE_DLLCHARACTERISTICS_WDM_DRIVER}
         return temp_x
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -263,8 +264,8 @@ class WindowsPe:
         temp_list = []
         if hasattr(pe_info, "DIRECTORY_ENTRY_DEBUG"):
             for item in pe_info.DIRECTORY_ENTRY_DEBUG:
-                temp_list.append({"Name":item.entries.PdbFileName,
-                                  "Description":""})
+                temp_list.append({"Name": item.entries.PdbFileName,
+                                  "Description": ""})
         return temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -272,8 +273,8 @@ class WindowsPe:
         '''
         check mime is exe or msi
         '''
-        if  data["Details"]["Properties"]["mime"] == "application/x-dosexec" or \
-            data["Details"]["Properties"]["mime"] == "application/x-msi":
+        if data["Details"]["Properties"]["mime"] == "application/x-dosexec" or \
+                data["Details"]["Properties"]["mime"] == "application/x-msi":
             return True
         return False
 
@@ -283,7 +284,7 @@ class WindowsPe:
         start analyzing exe logic, add descriptions and get words and wordsstripped from the file
         '''
         data["PE"] = deepcopy(self.datastruct)
-        data["ICONS"] = {"ICONS":[]}
+        data["ICONS"] = {"ICONS": []}
         pe_info = PE(data["Location"]["File"])
         ep_info = pe_info.OPTIONAL_HEADER.AddressOfEntryPoint
         section = self.find_entry_point_function(pe_info, ep_info)
@@ -299,16 +300,16 @@ class WindowsPe:
             sig_instructions = "\n".join(temp_sig_instructions)
         with ignore_excpetion(Exception):
             en_section_name = section.Name.decode("utf-8", errors="ignore").strip("\00")
-        data["PE"]["General"] = {"PE Type":self.what_type(pe_info),
-                                 "Entrypoint":pe_info.OPTIONAL_HEADER.AddressOfEntryPoint,
-                                 "Entrypoint Section":en_section_name,
-                                 "Header checksum":hex(pe_info.OPTIONAL_HEADER.CheckSum),
-                                 "Verify checksum":hex(pe_info.generate_checksum()),
-                                 "Match checksum":pe_info.verify_checksum(),
-                                 "Sig":singinhex,
-                                 "imphash":pe_info.get_imphash(),
-                                 "warning":pe_info.get_warnings() if len(pe_info.get_warnings()) > 0 else "None",
-                                 "Timestamp":datetime.fromtimestamp(pe_info.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
+        data["PE"]["General"] = {"PE Type": self.what_type(pe_info),
+                                 "Entrypoint": pe_info.OPTIONAL_HEADER.AddressOfEntryPoint,
+                                 "Entrypoint Section": en_section_name,
+                                 "Header checksum": hex(pe_info.OPTIONAL_HEADER.CheckSum),
+                                 "Verify checksum": hex(pe_info.generate_checksum()),
+                                 "Match checksum": pe_info.verify_checksum(),
+                                 "Sig": singinhex,
+                                 "imphash": pe_info.get_imphash(),
+                                 "warning": pe_info.get_warnings() if len(pe_info.get_warnings()) > 0 else "None",
+                                 "Timestamp": datetime.fromtimestamp(pe_info.FILE_HEADER.TimeDateStamp).strftime('%Y-%m-%d %H:%M:%S')}
         data["PE"]["Characteristics"] = self.get_characteristics(pe_info)
         data["PE"]["Singed"], data["PE"]["SignatureExtracted"] = self.check_if_singed(pe_info)
         data["PE"]["Stringfileinfo"] = self.get_string_file_info(pe_info)

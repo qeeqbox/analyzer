@@ -10,6 +10,7 @@ from PIL import Image
 from pytesseract import image_to_string
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBOCRDetect:
     '''
     QBLanguage for reading OCR
@@ -19,8 +20,8 @@ class QBOCRDetect:
         '''
         Initialize QBOCRDetect, this has to pass
         '''
-        self.datastruct = {"OCR":[],
-                           "_OCR":["Word", "File"]}
+        self.datastruct = {"OCR": [],
+                           "_OCR": ["Word", "File"]}
         self.words = []
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -45,8 +46,7 @@ class QBOCRDetect:
         for words in _list:
             for word in words[0]:
                 if len(word) > 0:
-                    data.append({"Word":word, "File":words[1]})
-
+                    data.append({"Word": word, "File": words[1]})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing image with OCR")
     def analyze(self, data):

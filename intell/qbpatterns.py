@@ -12,6 +12,7 @@ from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import check_url
 from analyzer.intell.qbdescription import add_description
 
+
 class QBPatterns:
     '''
     QBPatterns for detecting common patterns
@@ -21,22 +22,22 @@ class QBPatterns:
         '''
         Initialize QBPatterns, this has to pass
         '''
-        self.datastruct = {"IP4S":[],
-                           "IP4SANDPORT":[],
-                           "IP6S":[],
-                           "LINKS":[],
-                           "EMAILS":[],
-                           "TELS":[],
-                           "TAGS":[],
-                           "HEX":[],
-                           "_IP4S":["Count", "IP", "Code", "Alpha2", "Description"],
-                           "_IP4SANDPORT":["Count", "IP", "Port", "Description"],
-                           "_IP6S":["Count", "IP", "Code", "Alpha2", "Description"],
-                           "_LINKS":["Count", "Link", "Description"],
-                           "_EMAILS":["Count", "EMAIL", "Description"],
-                           "_TELS":["Count", "TEL", "Description"],
-                           "_TAGS":["Count", "TAG", "Description"],
-                           "_HEX":["Count", "HEX", "Parsed"]}
+        self.datastruct = {"IP4S": [],
+                           "IP4SANDPORT": [],
+                           "IP6S": [],
+                           "LINKS": [],
+                           "EMAILS": [],
+                           "TELS": [],
+                           "TAGS": [],
+                           "HEX": [],
+                           "_IP4S": ["Count", "IP", "Code", "Alpha2", "Description"],
+                           "_IP4SANDPORT": ["Count", "IP", "Port", "Description"],
+                           "_IP6S": ["Count", "IP", "Code", "Alpha2", "Description"],
+                           "_LINKS": ["Count", "Link", "Description"],
+                           "_EMAILS": ["Count", "EMAIL", "Description"],
+                           "_TELS": ["Count", "TEL", "Description"],
+                           "_TAGS": ["Count", "TAG", "Description"],
+                           "_HEX": ["Count", "HEX", "Parsed"]}
 
         self.links = rcompile(r"((?:(smb|srm|ssh|ftps|file|http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)", I)
         self.ip4 = rcompile(r'\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\b', I)
@@ -61,7 +62,7 @@ class QBPatterns:
                 if check_url(_[0]):
                     temp_list.append(_[0])
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "Link":temp_var})
+            _data.append({"Count": temp_list.count(temp_var), "Link": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding IP4s patterns")
     def check_ip4(self, _data):
@@ -76,7 +77,7 @@ class QBPatterns:
                     ip_address(_)
                     temp_list.append(_)
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "IP":temp_var, "Code":"", "Alpha2":"", "Description":""})
+            _data.append({"Count": temp_list.count(temp_var), "IP": temp_var, "Code": "", "Alpha2": "", "Description": ""})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding IP4 ports patterns")
     def check_ip4_ports(self, _data):
@@ -93,7 +94,7 @@ class QBPatterns:
                     temp_list.append(_)
         for temp_var in set(temp_list):
             temp_ip, temp_port = temp_var.split(":")
-            _data.append({"Count":temp_list.count(temp_var), "IP":temp_ip, "Port":temp_port, "Description":""})
+            _data.append({"Count": temp_list.count(temp_var), "IP": temp_ip, "Port": temp_port, "Description": ""})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding IP6s patterns")
     def check_ip6(self, _data):
@@ -106,7 +107,7 @@ class QBPatterns:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "IP":temp_var, "Code":"", "Alpha2":"", "Description":""})
+            _data.append({"Count": temp_list.count(temp_var), "IP": temp_var, "Code": "", "Alpha2": "", "Description": ""})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding Emails patterns")
     def check_email(self, _data):
@@ -119,7 +120,7 @@ class QBPatterns:
             for _ in temp_var:
                 temp_list.append(_[0])
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "EMAIL":temp_var})
+            _data.append({"Count": temp_list.count(temp_var), "EMAIL": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding TELs patterns")
     def check_phone_number(self, _data):
@@ -132,7 +133,7 @@ class QBPatterns:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "TEL":temp_var})
+            _data.append({"Count": temp_list.count(temp_var), "TEL": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding tags patterns")
     def check_tags(self, _data):
@@ -145,7 +146,7 @@ class QBPatterns:
             for _ in temp_var:
                 temp_list.append(_)
         for temp_var in set(temp_list):
-            _data.append({"Count":temp_list.count(temp_var), "TAG":temp_var})
+            _data.append({"Count": temp_list.count(temp_var), "TAG": temp_var})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Finding HEX patterns")
     def check_hex(self, _data):
@@ -160,7 +161,7 @@ class QBPatterns:
         for temp_var in set(temp_list):
             with ignore_excpetion(Exception):
                 parsed = unhexlify(temp_var)
-                _data.append({"Count":temp_list.count(temp_var), "HEX":temp_var, "Parsed":parsed.decode('utf-8', errors="ignore")})
+                _data.append({"Count": temp_list.count(temp_var), "HEX": temp_var, "Parsed": parsed.decode('utf-8', errors="ignore")})
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def analyze(self, data):

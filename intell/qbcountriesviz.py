@@ -6,6 +6,7 @@
 from copy import deepcopy
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBCountriesviz:
     '''
     QBCountriesviz extracting flags and codes
@@ -15,7 +16,7 @@ class QBCountriesviz:
         '''
         Initialize QBCountriesviz, this has to pass
         '''
-        self.datastruct = {"Codes":[]}
+        self.datastruct = {"Codes": []}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def find_flags(self, flags, data):
@@ -48,7 +49,7 @@ class QBCountriesviz:
         '''
         start get countries flags logic
         '''
-        data["Flags"] = {"Flags":[]}
+        data["Flags"] = {"Flags": []}
         self.find_flags(data["Flags"]["Flags"], data)
 
     @verbose(True, verbose_output=False, timeout=None, _str="Get countries codes")

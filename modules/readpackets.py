@@ -14,6 +14,7 @@ from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import get_words
 from analyzer.intell.qbdescription import add_description
 
+
 class ReadPackets:
     '''
     read packets kinda slow
@@ -23,25 +24,25 @@ class ReadPackets:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"WAF":[],
-                           "URLs":[],
-                           "Domains":[],
-                           "ARP":[],
-                           "DNS":[],
-                           "HTTP":[],
-                           "ALL":[],
-                           "PORTS":[],
-                           "IP4S":[],
-                           "Flags":[],
-                           "_WAF":["Matched", "Required", "WAF", "Detected"],
-                           "_Domains":["Time", "subdomain", "domain", "tld"],
-                           "_URLs":["Time", "src", "Method", "Host", "Path"],
-                           "_ARP":["Time", "Type", "PacketSoruce", "PacketDestination", "Macaddress"],
-                           "_DNS":["Time", "Type", "Source", "SourcePort", "Destination", "DestinationPort", "qname", "rrname", "rdata"],
-                           "_HTTP":["Time", "Type", "Source", "SourcePort", "Destination", "DestinationPort", "fields", "payload"],
-                           "_ALL":["Time", "ProtocolsFrame", "Source", "SourcePort", "SPDescription", "Destination", "DestinationPort", "DPDescription"],
-                           "_PORTS":["Port", "Description"],
-                           "_IP4S":["IP", "Code", "Alpha2", "Description"]}
+        self.datastruct = {"WAF": [],
+                           "URLs": [],
+                           "Domains": [],
+                           "ARP": [],
+                           "DNS": [],
+                           "HTTP": [],
+                           "ALL": [],
+                           "PORTS": [],
+                           "IP4S": [],
+                           "Flags": [],
+                           "_WAF": ["Matched", "Required", "WAF", "Detected"],
+                           "_Domains": ["Time", "subdomain", "domain", "tld"],
+                           "_URLs": ["Time", "src", "Method", "Host", "Path"],
+                           "_ARP": ["Time", "Type", "PacketSoruce", "PacketDestination", "Macaddress"],
+                           "_DNS": ["Time", "Type", "Source", "SourcePort", "Destination", "DestinationPort", "qname", "rrname", "rdata"],
+                           "_HTTP": ["Time", "Type", "Source", "SourcePort", "Destination", "DestinationPort", "fields", "payload"],
+                           "_ALL": ["Time", "ProtocolsFrame", "Source", "SourcePort", "SPDescription", "Destination", "DestinationPort", "DPDescription"],
+                           "_PORTS": ["Port", "Description"],
+                           "_IP4S": ["IP", "Code", "Alpha2", "Description"]}
 
         self.ipdetection = rcompile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])', I)
         self.waf = waf()
@@ -83,121 +84,121 @@ class ReadPackets:
             fields = {}
             if packet.haslayer(scapy.ARP):
                 if packet[scapy.ARP].op == 1:
-                    _listreadarp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "Type":"ARPQuestion",
-                                         "PacketSoruce":packet[scapy.ARP].psrc,
-                                         "PacketDestination":packet[scapy.ARP].pdst})
+                    _listreadarp.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "Type": "ARPQuestion",
+                                         "PacketSoruce": packet[scapy.ARP].psrc,
+                                         "PacketDestination": packet[scapy.ARP].pdst})
                 elif packet[scapy.ARP].op == 2:
-                    _listreadarp.append({"time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "type":"ARPAnswer",
-                                         "Macaddress":packet[scapy.ARP].hwsrc,
-                                         "PacketSoruce":packet[scapy.ARP].psrc})
+                    _listreadarp.append({"time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "type": "ARPAnswer",
+                                         "Macaddress": packet[scapy.ARP].hwsrc,
+                                         "PacketSoruce": packet[scapy.ARP].psrc})
             if packet.haslayer(scapy.DNS):
                 if isinstance(packet.an, scapy.DNSQR):
-                    _listreaddns.append({"Type":"DNSQR",
-                                         "Source":packet.getlayer(scapy.IP).src,
-                                         "SourcePort":packet.getlayer(scapy.IP).sport,
-                                         "Destination":packet.getlayer(scapy.IP).dst,
-                                         "DestinationPort":packet.getlayer(scapy.IP).dport,
-                                         "qname":packet.qd.qname,
-                                         "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
+                    _listreaddns.append({"Type": "DNSQR",
+                                         "Source": packet.getlayer(scapy.IP).src,
+                                         "SourcePort": packet.getlayer(scapy.IP).sport,
+                                         "Destination": packet.getlayer(scapy.IP).dst,
+                                         "DestinationPort": packet.getlayer(scapy.IP).dport,
+                                         "qname": packet.qd.qname,
+                                         "Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
                 elif isinstance(packet.an, scapy.DNSRR):
-                    _listreaddns.append({"Type":"DNSRR",
-                                         "Source":packet.getlayer(scapy.IP).src,
-                                         "SourcePort":packet.getlayer(scapy.IP).sport,
-                                         "Destination":packet.getlayer(scapy.IP).dst,
-                                         "DestinationPort":packet.getlayer(scapy.IP).dport,
-                                         "rrname":packet.an.rrname.decode("utf-8", errors="ignore"),
-                                         "rdata":str(packet.an.rdata)[1:], #I know... do not ask, long story
-                                         "Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
+                    _listreaddns.append({"Type": "DNSRR",
+                                         "Source": packet.getlayer(scapy.IP).src,
+                                         "SourcePort": packet.getlayer(scapy.IP).sport,
+                                         "Destination": packet.getlayer(scapy.IP).dst,
+                                         "DestinationPort": packet.getlayer(scapy.IP).dport,
+                                         "rrname": packet.an.rrname.decode("utf-8", errors="ignore"),
+                                         "rdata": str(packet.an.rdata)[1:],  # I know... do not ask, long story
+                                         "Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S')})
                     if packet.an.rrname.decode("utf-8", errors="ignore")[:-1] not in _tempdomains:
                         with ignore_excpetion(Exception):
                             parsedhost = packet.an.rrname.decode("utf-8", errors="ignore")[:-1]
                             temp_s, temp_d, temp_t = self.extract(parsedhost)
                             _tempdomains.append(parsedhost)
-                            _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                             "subdomain":temp_s,
-                                             "domain":temp_d,
-                                             "tld":temp_t})
+                            _domains.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                             "subdomain": temp_s,
+                                             "domain": temp_d,
+                                             "tld": temp_t})
             if packet.haslayer(http.HTTPRequest):
                 for temp_k in packet.getlayer(http.HTTPRequest).fields:
                     temp_v = packet.getlayer(http.HTTPRequest).fields[temp_k]
                     with ignore_excpetion(Exception):
-                        fields.update({temp_k:temp_v.decode("utf-8", errors="ignore")})
+                        fields.update({temp_k: temp_v.decode("utf-8", errors="ignore")})
                 with ignore_excpetion(Exception):
                     payload = "Error parsing"
                     payload = str(packet.getlayer(http.HTTPRequest).payload)
-                _listreadhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                      "Type":"HTTPRequest",
-                                      "Source":packet.getlayer(scapy.IP).src,
-                                      "SourcePort":packet.getlayer(scapy.IP).sport,
-                                      "Destination":packet.getlayer(scapy.IP).dst,
-                                      "DestinationPort":packet.getlayer(scapy.IP).dport,
-                                      "fields":fields,
-                                      "payload":payload})
+                _listreadhttp.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                      "Type": "HTTPRequest",
+                                      "Source": packet.getlayer(scapy.IP).src,
+                                      "SourcePort": packet.getlayer(scapy.IP).sport,
+                                      "Destination": packet.getlayer(scapy.IP).dst,
+                                      "DestinationPort": packet.getlayer(scapy.IP).dport,
+                                      "fields": fields,
+                                      "payload": payload})
                 with ignore_excpetion(Exception):
                     src = packet.getlayer(scapy.IP).src
                     fields = packet.getlayer(http.HTTPRequest).fields
-                    _listurlhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "src":src,
-                                         "Method":fields["Method"].decode("utf-8", errors="ignore"),
-                                         "Host":fields["Host"].decode("utf-8", errors="ignore"),
-                                         "Path":fields["Path"].decode("utf-8", errors="ignore")})
+                    _listurlhttp.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "src": src,
+                                         "Method": fields["Method"].decode("utf-8", errors="ignore"),
+                                         "Host": fields["Host"].decode("utf-8", errors="ignore"),
+                                         "Path": fields["Path"].decode("utf-8", errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8", errors="ignore")
                     if not search(self.ipdetection, parsedhost) and parsedhost not in _tempdomains:
                         temp_s, temp_d, temp_t = self.extract(parsedhost)
                         _tempdomains.append(parsedhost)
-                        _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "subdomain":temp_s,
-                                         "domain":temp_d,
-                                         "tld":temp_t})
+                        _domains.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "subdomain": temp_s,
+                                         "domain": temp_d,
+                                         "tld": temp_t})
 
             if packet.haslayer(http.HTTPResponse):
                 for temp_k in packet.getlayer(http.HTTPResponse).fields:
                     temp_v = packet.getlayer(http.HTTPResponse).fields[temp_k]
                     with ignore_excpetion(Exception):
-                        fields.update({temp_k:temp_v.decode("utf-8", errors="ignore")})
+                        fields.update({temp_k: temp_v.decode("utf-8", errors="ignore")})
                 with ignore_excpetion(Exception):
                     payload = "Error parsing"
                     payload = str(packet.getlayer(http.HTTPResponse).payload)
-                _listreadhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                      "Type":"HTTPResponse",
-                                      "Source":packet.getlayer(scapy.IP).src,
-                                      "SourcePort":packet.getlayer(scapy.IP).sport,
-                                      "Destination":packet.getlayer(scapy.IP).dst,
-                                      "DestinationPort":packet.getlayer(scapy.IP).dport,
-                                      "fields":fields,
-                                      "payload":payload})
+                _listreadhttp.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                      "Type": "HTTPResponse",
+                                      "Source": packet.getlayer(scapy.IP).src,
+                                      "SourcePort": packet.getlayer(scapy.IP).sport,
+                                      "Destination": packet.getlayer(scapy.IP).dst,
+                                      "DestinationPort": packet.getlayer(scapy.IP).dport,
+                                      "fields": fields,
+                                      "payload": payload})
 
                 with ignore_excpetion(Exception):
                     src = packet.getlayer(scapy.IP).src
                     fields = packet.getlayer(http.HTTPResponse).fields
-                    _listurlhttp.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "src":src,
-                                         "Method":fields["Method"].decode("utf-8", errors="ignore"),
-                                         "Host":fields["Host"].decode("utf-8", errors="ignore"),
-                                         "Path":fields["Path"].decode("utf-8", errors="ignore")})
+                    _listurlhttp.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "src": src,
+                                         "Method": fields["Method"].decode("utf-8", errors="ignore"),
+                                         "Host": fields["Host"].decode("utf-8", errors="ignore"),
+                                         "Path": fields["Path"].decode("utf-8", errors="ignore")})
                     parsedhost = fields["Host"].decode("utf-8", errors="ignore")
                     if not search(self.ipdetection, parsedhost) and parsedhost not in _tempdomains:
                         temp_s, temp_d, temp_t = self.extract(parsedhost)
                         _tempdomains.append(parsedhost)
-                        _domains.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                                         "subdomain":temp_s,
-                                         "domain":temp_d,
-                                         "tld":temp_t})
+                        _domains.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                                         "subdomain": temp_s,
+                                         "domain": temp_d,
+                                         "tld": temp_t})
 
             packetlayers = self.get_layers(packet)
             #packetdata = hexlify(bytes(packet))
             if hasattr(packet.payload, "sport"):
-                _list.append({"Time":datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
-                              "ProtocolsFrame":packetlayers,
-                              "Source":packet.getlayer(scapy.IP).src,
-                              "SourcePort":str(packet.getlayer(scapy.IP).sport),
-                              "SPDescription":"",
-                              "Destination":packet.getlayer(scapy.IP).dst,
-                              "DestinationPort":str(packet.getlayer(scapy.IP).dport),
-                              "DPDescription":"",
-                              "Data":str(packet.payload)})
+                _list.append({"Time": datetime.fromtimestamp(packet.time).strftime('%Y-%m-%d %H:%M:%S'),
+                              "ProtocolsFrame": packetlayers,
+                              "Source": packet.getlayer(scapy.IP).src,
+                              "SourcePort": str(packet.getlayer(scapy.IP).sport),
+                              "SPDescription": "",
+                              "Destination": packet.getlayer(scapy.IP).dst,
+                              "DestinationPort": str(packet.getlayer(scapy.IP).dport),
+                              "DPDescription": "",
+                              "Data": str(packet.payload)})
                 if str(packet.getlayer(scapy.IP).sport) not in tempports:
                     tempports.append(str(packet.getlayer(scapy.IP).sport))
                     #_ports.append({"Port":str(packet.getlayer(scapy.IP).sport), "Description":""})
@@ -211,9 +212,9 @@ class ReadPackets:
                     tempips.append(packet.getlayer(scapy.IP).dst)
         if tempports:
             tempports.sort(key=int)
-            _ports = [{"Port":x, "Description":""} for x in tempports]
+            _ports = [{"Port": x, "Description": ""} for x in tempports]
         if tempips:
-            _ips = [{"IP":x, "Code":"", "Alpha2":"", "Description":""} for x in tempips]
+            _ips = [{"IP": x, "Code": "", "Alpha2": "", "Description": ""} for x in tempips]
 
         return _list, _ports, _ips, _listreadarp, _listreaddns, _listreadhttp, _listurlhttp, _domains
 

@@ -15,6 +15,7 @@ from extract_msg import Message
 from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import get_words_multi_filesarray, get_words
 
+
 class MSGParser():
     '''
     MSGParser extracts artifacts from emails
@@ -24,12 +25,12 @@ class MSGParser():
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"General":[],
-                           "Parsed":"",
-                           "Attachments":[],
-                           "_General":["Key", "Value", "descriptions"],
-                           "_Parsed":"",
-                           "_Attachments":["Name", "Type", "Extension", "md5", "Path"]}
+        self.datastruct = {"General": [],
+                           "Parsed": "",
+                           "Attachments": [],
+                           "_General": ["Key", "Value", "descriptions"],
+                           "_Parsed": "",
+                           "_Attachments": ["Name", "Type", "Extension", "md5", "Path"]}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_attachment(self, data, msg) -> list:
@@ -40,21 +41,21 @@ class MSGParser():
         if msg.attachments != 0:
             for attachment in msg.attachments:
                 tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
-                safename = "temp_"+tempstring
+                safename = "temp_" + tempstring
                 file = path.join(data["Location"]["Folder"], safename)
-                tempfilename = "temp"+"".join([c for c in attachment.longFilename if match(r'[\w\.]', c)])
+                tempfilename = "temp" + "".join([c for c in attachment.longFilename if match(r'[\w\.]', c)])
                 buffer = attachment.data
                 with open(file, "wb") as temp_file:
                     temp_file.write(buffer)
                     _md5 = md5(buffer).hexdigest()
                     mime = from_file(file, mime=True)
-                    data["MSG"]["Attachments"].append({"Name":attachment.longFilename,
-                                                       "Type":mime,
-                                                       "Extension":guess_type(tempfilename)[0],
-                                                       "Path":file,
-                                                       "md5":_md5})
-                    data[tempstring] = {"Attached":"",
-                                        "_Attached":""}
+                    data["MSG"]["Attachments"].append({"Name": attachment.longFilename,
+                                                       "Type": mime,
+                                                       "Extension": guess_type(tempfilename)[0],
+                                                       "Path": file,
+                                                       "md5": _md5})
+                    data[tempstring] = {"Attached": "",
+                                        "_Attached": ""}
                     data[tempstring]["Attached"] = buffer.decode("utf-8", errors="ignore")
                     streams.append(buffer)
         return streams
@@ -84,9 +85,9 @@ class MSGParser():
         '''
         headers = []
         for key, value in msg.header.items():
-            data.append({"Key":key, "Value":value, "descriptions":""})
+            data.append({"Key": key, "Value": value, "descriptions": ""})
             with ignore_excpetion(Exception):
-                headers.append(str.encode(value)) # convert to bytes...
+                headers.append(str.encode(value))  # convert to bytes...
         return headers
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -95,7 +96,7 @@ class MSGParser():
         check mime if it contains message or not
         '''
         if "vnd.ms-outlook" in data["Details"]["Properties"]["mime"] or \
-            data["Location"]["Original"].endswith(".msg"):
+                data["Location"]["Original"].endswith(".msg"):
             return True
         return False
 
@@ -118,7 +119,7 @@ class MSGParser():
             pass
         mixed = streams + parts + headers
         if len(mixed) > 0:
-            get_words_multi_filesarray(data, mixed) #have to be bytes < will check this later on
+            get_words_multi_filesarray(data, mixed)  # have to be bytes < will check this later on
         else:
             get_words(data, data["Location"]["File"])
         parsed.type = "msg"

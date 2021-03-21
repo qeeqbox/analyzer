@@ -9,6 +9,7 @@ from copy import deepcopy
 from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.connections.mongodbconn import find_items
 
+
 class QBWhitelist:
     '''
     QBWafDetect for find original system files (Has to be enabled explicitly)
@@ -18,14 +19,14 @@ class QBWhitelist:
         '''
         initialize class and make detections path
         '''
-        self.datastruct = {"ByInternalName":[],
-                           "OriginalFilename":[],
-                           "Bymd5":[],
-                           "Fromwords":[],
-                           "_ByInternalName":["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
-                           "_OriginalFilename":["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
-                           "_Bymd5":["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
-                           "_Fromwords":["Collection", "FileDescription", "InternalName", "OriginalFilename", "ProductName", "md5", "entropy", "path"]}
+        self.datastruct = {"ByInternalName": [],
+                           "OriginalFilename": [],
+                           "Bymd5": [],
+                           "Fromwords": [],
+                           "_ByInternalName": ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
+                           "_OriginalFilename": ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
+                           "_Bymd5": ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"],
+                           "_Fromwords": ["Collection", "FileDescription", "InternalName", "OriginalFilename", "ProductName", "md5", "entropy", "path"]}
         self.words = []
         self.wordsstripped = ""
 
@@ -36,7 +37,7 @@ class QBWhitelist:
                 temp_dict = {}
                 for key in keys:
                     if key in item:
-                        temp_dict.update({key:item[key]})
+                        temp_dict.update({key: item[key]})
                 if len(temp_dict) > 0:
                     data.append(temp_dict)
 
@@ -48,9 +49,9 @@ class QBWhitelist:
         items = []
         keys = ["Collection", "FileDescription", "InternalName", "OriginalFilename", "ProductName", "md5", "entropy", "path"]
         for word in self.words:
-            #pass on "unterminated character set at position 1" some words are not escaped
+            # pass on "unterminated character set at position 1" some words are not escaped
             with ignore_excpetion(Exception):
-                items = find_items("QBWindows", {"$or":[{"InternalName":rcompile(word, I)}, {"OriginalFilename":rcompile(word, I)}, {"md5":rcompile(word, I)}]})
+                items = find_items("QBWindows", {"$or": [{"InternalName": rcompile(word, I)}, {"OriginalFilename": rcompile(word, I)}, {"md5": rcompile(word, I)}]})
                 self.loop_wrapper(items, keys, data)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -59,7 +60,7 @@ class QBWhitelist:
         look in the databases by hash
         '''
         items = []
-        items = find_items("QBWindows", {"md5":rcompile(md5, I)})
+        items = find_items("QBWindows", {"md5": rcompile(md5, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
         self.loop_wrapper(items, keys, data)
 
@@ -69,7 +70,7 @@ class QBWhitelist:
         look in the databases by name (most common)
         '''
         items = []
-        items = find_items("QBWindows", {"OriginalFilename":rcompile(name, I)})
+        items = find_items("QBWindows", {"OriginalFilename": rcompile(name, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
         self.loop_wrapper(items, keys, data)
 
@@ -79,7 +80,7 @@ class QBWhitelist:
         look in the databases by internal name
         '''
         items = []
-        items = find_items("QBWindows", {"InternalName":rcompile(name, I)})
+        items = find_items("QBWindows", {"InternalName": rcompile(name, I)})
         keys = ["Collection", "CompanyName", "FileDescription", "FileVersion", "InternalName", "LegalCopyright", "OriginalFilename", "ProductName", "ProductVersion", "md5", "entropy", "path"]
         self.loop_wrapper(items, keys, data)
 

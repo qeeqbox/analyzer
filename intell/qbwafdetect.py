@@ -10,6 +10,7 @@ from json import loads
 from os import mkdir, path
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBWafDetect:
     '''
     QBWafDetect for waf detections, it uses detections folder
@@ -21,7 +22,7 @@ class QBWafDetect:
         '''
         self.intell = path.abspath(path.join(path.dirname(__file__), 'detections'))
         if not self.intell.endswith(path.sep):
-            self.intell = self.intell+path.sep
+            self.intell = self.intell + path.sep
         if not path.isdir(self.intell):
             mkdir(self.intell)
         self.ipv4privateonelinebad = rcompile(r"^(10|127|169\.254|172\.1[6-9]|172\.2[0-9]|172\.3[0-1]|192\.168)\..*", I)
@@ -44,7 +45,7 @@ class QBWafDetect:
             if found != "":
                 temp_var = search(self.ipv4privateonelinebad, _["fields"][found])
                 if temp_var is not None:
-                    _data.append({"Matched":"1", "Required":1, "WAF":"{} contains private IP".format(found), "Detected":temp_var.group()})
+                    _data.append({"Matched": "1", "Required": 1, "WAF": "{} contains private IP".format(found), "Detected": temp_var.group()})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Checking packets for WAF detection")
     def analyze(self, data, _data, filename):
@@ -61,7 +62,7 @@ class QBWafDetect:
         headers = "".join(listheaders)
         content = "".join(listpayloads)
 
-        with copen(self.intell+filename, "r", encoding='utf8') as file:
+        with copen(self.intell + filename, "r", encoding='utf8') as file:
             for _ in loads(file.read()):
                 with ignore_excpetion(Exception):
                     if "Type" in _ and "WQREGEX" in _["Type"]:
@@ -70,6 +71,6 @@ class QBWafDetect:
                         elif _["Options"]["Word"] == "Normal" and "Content_Detection" in _:
                             temp_var = search(rcompile(r"{}".format(_["Content_Detection"]), _["Options"]["Flag"]), content)
                         if temp_var is not None:
-                            _data.append({"Matched":"1", "Required":_["Options"]["Required"], "WAF":_["Name"], "Detected":temp_var.group()})
+                            _data.append({"Matched": "1", "Required": _["Options"]["Required"], "WAF": _["Name"], "Detected": temp_var.group()})
 
         self.check_proxy_bypass(data, _data)

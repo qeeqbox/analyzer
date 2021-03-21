@@ -10,6 +10,7 @@ from subprocess import PIPE, Popen
 from datetime import datetime
 from analyzer.logger.logger import verbose
 
+
 class QBSnort:
     '''
     QBSnort for parsing snort output
@@ -19,8 +20,8 @@ class QBSnort:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"Snort":[],
-                           "_Snort":["time", "sid", "revision", "class", "priority", "protocol", "src", "dest", "msg"]}
+        self.datastruct = {"Snort": [],
+                           "_Snort": ["time", "sid", "revision", "class", "priority", "protocol", "src", "dest", "msg"]}
 
         self.snortpattern = rcompile(r'(\d{2}\/\d{2}\/\d{2}\-\d{2}\:\d{2}\:\d{2}\.\d{6})\s+\[\*\*\]\s+\[(\d+)\:([\d]+)\:(\d+)\]\s+(.+)\s+\[\*\*\]\s+\[(.+)\]\s+\[(.+)\]\s+\{(.+)\}\s+([\d.:]+)\s+\-\>\s+([\d.:]+)')
 
@@ -44,7 +45,7 @@ class QBSnort:
         if len(ret) > 0:
             items = findall(self.snortpattern, ret)
             for item in items:
-                temp_list.append({"time":item[0], "sid":item[2], "revision":item[3], "msg":item[4], "class":item[5], "priority":item[6], "protocol":item[7], "src":item[8], "dest":item[9]})
+                temp_list.append({"time": item[0], "sid": item[2], "revision": item[3], "msg": item[4], "class": item[5], "priority": item[6], "protocol": item[7], "src": item[8], "dest": item[9]})
         if len(temp_list) > 0:
             data["Snort"] = deepcopy(sorted(temp_list, key=lambda i: datetime.strptime(i["time"], "%m/%d/%y-%H:%M:%S.%f")))
 

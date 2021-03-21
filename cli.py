@@ -40,6 +40,7 @@ def ctrlhandler(signum, frame):
     log_string("Terminating..", "Red")
     kill_process_and_subs()
 
+
 class Namespace:
     def __init__(self, kwargs, disable_keys, enable_keys):
         for key in disable_keys:
@@ -49,6 +50,7 @@ class Namespace:
             if key in kwargs:
                 kwargs[key] = True
         self.__dict__.update(kwargs)
+
 
 class QBAnalyzer(Cmd):
     kill_python_cli()
@@ -125,13 +127,13 @@ class QBAnalyzer(Cmd):
             while True:
                 sleep(1)
                 task = queue.get()
-                if task != None:
+                if task is not None:
                     self.do_analyze(task['data'], True)
                     log_string("Waiting on tasks..", "Green")
                     collect()
             kill_process_and_subs()
         else:
-            self.prompt = "(testing) " #no more interactive
+            self.prompt = "(testing) "  # no more interactive
 
     def help_analyze(self):
         self._analyze_parser.print_help()
@@ -192,7 +194,9 @@ class QBAnalyzer(Cmd):
     def list_switches(self):
         for x in vars(self._analyze_parser.parse_args("")):
             print("(\'{}\', \'{}\'')".format(x, x))
+
     def do_exit(self, line):
         exit()
+
 
 QBAnalyzer(argv[1]).cmdloop()

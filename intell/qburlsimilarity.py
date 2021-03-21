@@ -17,6 +17,7 @@ from tld import get_fld, get_tld
 from nltk import edit_distance
 from analyzer.logger.logger import ignore_excpetion, verbose
 
+
 class QBURLSimilarity:
     '''
     QBURLSimilarity for url similarity
@@ -26,12 +27,12 @@ class QBURLSimilarity:
         '''
         Initialize QBURLSimilarity, this has to pass
         '''
-        self.datastruct = {"URLs":[],
-                           "_URLs":["Distance", "URL", "Similar"]}
+        self.datastruct = {"URLs": [],
+                           "_URLs": ["Distance", "URL", "Similar"]}
 
         self.refs = path.abspath(path.join(path.dirname(__file__), 'refs'))
         if not self.refs.endswith(path.sep):
-            self.refs = self.refs+path.sep
+            self.refs = self.refs + path.sep
         self.links = recompile(r"((?:(http|https|ftp):\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9-]+)+([a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-]*[a-zA-Z0-9_\,\'\/\+&amp;%#\$\?\=~\.\-])?)", I)
         self.top = "http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip"
         self.topsliced = None
@@ -39,7 +40,7 @@ class QBURLSimilarity:
         self.setup(self.refs)
         self.words = []
         self.wordsstripped = ""
-        #update_tld_names()
+        # update_tld_names()
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def setup(self, _path):
@@ -47,11 +48,11 @@ class QBURLSimilarity:
         check if top-1m.csv exists or not, if not then download load
         it and unzip it and take the top 10000 only
         '''
-        if not path.exists(_path+'top-1m.csv'):
+        if not path.exists(_path + 'top-1m.csv'):
             zip_file = ZipFile(BytesIO(get(self.top).content))
-            with zip_file.open('top-1m.csv') as temp_zip_file, open(_path+'top-1m.csv', 'wb') as file:
+            with zip_file.open('top-1m.csv') as temp_zip_file, open(_path + 'top-1m.csv', 'wb') as file:
                 copyfileobj(temp_zip_file, file)
-        with open(_path+'top-1m.csv', 'r') as file:
+        with open(_path + 'top-1m.csv', 'r') as file:
             self.topsliced = islice(reader(file), 10000)
             self.topdomains = [x[1] for x in self.topsliced]
 
@@ -66,7 +67,7 @@ class QBURLSimilarity:
         for _ in temp_var:
             url = ""
             if not _[0].startswith(("http://", "https://", "ftp://")):
-                url = "http://"+_[0]
+                url = "http://" + _[0]
             if get_tld(url, fail_silently=True):
                 root = None
                 with ignore_excpetion(Exception):
@@ -78,8 +79,7 @@ class QBURLSimilarity:
             for domain in self.topdomains:
                 dist = edit_distance(domain, root)
                 if dist <= 2:
-                    data.append({"Distance":dist, "URL":root, "Similar":domain})
-
+                    data.append({"Distance": dist, "URL": root, "Similar": domain})
 
     @verbose(True, verbose_output=False, timeout=None, _str="Analyzing URLs")
     def analyze(self, data):

@@ -11,6 +11,7 @@ from magic import from_buffer
 from analyzer.logger.logger import verbose
 from analyzer.mics.funcs import get_words_multi_filesarray, get_words
 
+
 class PDFParser:
     '''
     PDFParser extracts artifacts from pdf files
@@ -20,42 +21,42 @@ class PDFParser:
         '''
         initialize class and datastruct, this has to pass
         '''
-        self.datastruct = {"Count":{},
-                           "Object":[],
-                           "Stream":[],
-                           "JS":[],
-                           "Javascript":[],
-                           "OpenAction":[],
-                           "Launch":[],
-                           "URI":[],
-                           "Action":[],
-                           "GoTo":[],
-                           "RichMedia":[],
-                           "AA":[],
-                           "_Count":{},
-                           "_Object":["Object", "Value"],
-                           "_Stream":["Stream", "Parsed", "Value"],
-                           "_JS":["Key", "Value"],
-                           "_Javascript":["Key", "Value"],
-                           "_Launch":["Key", "Value"],
-                           "_OpenAction":["Key", "Value"],
-                           "_URI":["Key", "Value"],
-                           "_Action":["Key", "Value"],
-                           "_GoTo":["Key", "Value"],
-                           "_RichMedia":["Key", "Value"],
-                           "_AA":["Key", "Value"]}
+        self.datastruct = {"Count": {},
+                           "Object": [],
+                           "Stream": [],
+                           "JS": [],
+                           "Javascript": [],
+                           "OpenAction": [],
+                           "Launch": [],
+                           "URI": [],
+                           "Action": [],
+                           "GoTo": [],
+                           "RichMedia": [],
+                           "AA": [],
+                           "_Count": {},
+                           "_Object": ["Object", "Value"],
+                           "_Stream": ["Stream", "Parsed", "Value"],
+                           "_JS": ["Key", "Value"],
+                           "_Javascript": ["Key", "Value"],
+                           "_Launch": ["Key", "Value"],
+                           "_OpenAction": ["Key", "Value"],
+                           "_URI": ["Key", "Value"],
+                           "_Action": ["Key", "Value"],
+                           "_GoTo": ["Key", "Value"],
+                           "_RichMedia": ["Key", "Value"],
+                           "_AA": ["Key", "Value"]}
 
-        self.objectsdetection = rcompile(br'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj', DOTALL|MULTILINE)
-        self.streamdetection = rcompile(br'.*?FlateDecode.*?stream(.*?)endstream', DOTALL|MULTILINE)
-        self.jsdetection = rcompile(br'/JS([\S][^>]+)', DOTALL|MULTILINE)
-        self.javascriptdetection = rcompile(br'/JavaScript([\S][^>]+)', DOTALL|MULTILINE)
-        self.openactiondetection = rcompile(br'/OpenAction([\S][^>]+)', DOTALL|MULTILINE)
-        self.launchdetection = rcompile(br'/Launch([\S][^>]+)', DOTALL|MULTILINE)
-        self.uridetection = rcompile(br'/URI([\S][^>]+)', DOTALL|MULTILINE)
-        self.actiondetection = rcompile(br'/Action([\S][^>]+)', DOTALL|MULTILINE)
-        self.gotodetection = rcompile(br'/GoTo([\S][^>]+)', DOTALL|MULTILINE)
-        self.richmediadetection = rcompile(br'/RichMedia([\S][^>]+)', DOTALL|MULTILINE)
-        self.aadetection = rcompile(br'/AA([\S][^>]+)', DOTALL|MULTILINE)
+        self.objectsdetection = rcompile(br'(\d+\s\d)+\sobj([\s\S]*?\<\<([\s\S]*?))endobj', DOTALL | MULTILINE)
+        self.streamdetection = rcompile(br'.*?FlateDecode.*?stream(.*?)endstream', DOTALL | MULTILINE)
+        self.jsdetection = rcompile(br'/JS([\S][^>]+)', DOTALL | MULTILINE)
+        self.javascriptdetection = rcompile(br'/JavaScript([\S][^>]+)', DOTALL | MULTILINE)
+        self.openactiondetection = rcompile(br'/OpenAction([\S][^>]+)', DOTALL | MULTILINE)
+        self.launchdetection = rcompile(br'/Launch([\S][^>]+)', DOTALL | MULTILINE)
+        self.uridetection = rcompile(br'/URI([\S][^>]+)', DOTALL | MULTILINE)
+        self.actiondetection = rcompile(br'/Action([\S][^>]+)', DOTALL | MULTILINE)
+        self.gotodetection = rcompile(br'/GoTo([\S][^>]+)', DOTALL | MULTILINE)
+        self.richmediadetection = rcompile(br'/RichMedia([\S][^>]+)', DOTALL | MULTILINE)
+        self.aadetection = rcompile(br'/AA([\S][^>]+)', DOTALL | MULTILINE)
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_object(self, pdf) -> (str, list):
@@ -65,7 +66,7 @@ class PDFParser:
         temp_list = []
         objects_list = findall(self.objectsdetection, pdf)
         for _ in objects_list:
-            temp_list.append({"Object":_[0].decode("utf-8", errors="ignore"), "Value":_[1].decode('utf-8', errors="ignore")})
+            temp_list.append({"Object": _[0].decode("utf-8", errors="ignore"), "Value": _[1].decode('utf-8', errors="ignore")})
         return len(objects_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -85,7 +86,7 @@ class PDFParser:
                 parsed = decompress(temp_x)
                 parseddecode = parsed.decode("utf-8", errors="ignore")
                 streams_list.append(parsed)
-            temp_list.append({"Stream":mime, "Parsed":parseddecode, "Value":temp_x.decode('utf-8', errors="ignore")})
+            temp_list.append({"Stream": mime, "Parsed": parseddecode, "Value": temp_x.decode('utf-8', errors="ignore")})
         return len(streams), temp_list, streams_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -96,7 +97,7 @@ class PDFParser:
         temp_list = []
         jslist = findall(self.jsdetection, pdf)
         for _ in jslist:
-            temp_list.append({"Key":"/JS", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/JS", "Value": _.decode("utf-8", errors="ignore")})
         return len(jslist), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -107,7 +108,7 @@ class PDFParser:
         temp_list = []
         javascript_list = findall(self.javascriptdetection, pdf)
         for _ in javascript_list:
-            temp_list.append({"Key":"/JavaScript", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/JavaScript", "Value": _.decode("utf-8", errors="ignore")})
         return len(javascript_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -118,7 +119,7 @@ class PDFParser:
         temp_list = []
         open_action_list = findall(self.openactiondetection, pdf)
         for _ in open_action_list:
-            temp_list.append({"Key":"/OpenAction", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/OpenAction", "Value": _.decode("utf-8", errors="ignore")})
         return len(open_action_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -129,7 +130,7 @@ class PDFParser:
         temp_list = []
         launch_list = findall(self.launchdetection, pdf)
         for _ in launch_list:
-            temp_list.append({"Key":"/Launch", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/Launch", "Value": _.decode("utf-8", errors="ignore")})
         return len(launch_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -140,7 +141,7 @@ class PDFParser:
         temp_list = []
         uri_list = findall(self.uridetection, pdf)
         for _ in uri_list:
-            temp_list.append({"Key":"/URI", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/URI", "Value": _.decode("utf-8", errors="ignore")})
         return len(uri_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -151,7 +152,7 @@ class PDFParser:
         temp_list = []
         action_list = findall(self.actiondetection, pdf)
         for _ in action_list:
-            temp_list.append({"Key":"/Action", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/Action", "Value": _.decode("utf-8", errors="ignore")})
         return len(action_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -162,9 +163,8 @@ class PDFParser:
         temp_list = []
         goto_list = findall(self.gotodetection, pdf)
         for _ in goto_list:
-            temp_list.append({"Key":"/GoToR", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/GoToR", "Value": _.decode("utf-8", errors="ignore")})
         return len(goto_list), temp_list
-
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_richmedia(self, pdf) -> (str, list):
@@ -174,7 +174,7 @@ class PDFParser:
         temp_list = []
         richmedia_list = findall(self.richmediadetection, pdf)
         for _ in richmedia_list:
-            temp_list.append({"Key":"/RichMedia", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/RichMedia", "Value": _.decode("utf-8", errors="ignore")})
         return len(richmedia_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -185,7 +185,7 @@ class PDFParser:
         temp_list = []
         aa_list = findall(self.aadetection, pdf)
         for _ in aa_list:
-            temp_list.append({"Key":"/AA", "Value":_.decode("utf-8", errors="ignore")})
+            temp_list.append({"Key": "/AA", "Value": _.decode("utf-8", errors="ignore")})
         return len(aa_list), temp_list
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -217,17 +217,17 @@ class PDFParser:
         rmlen, rmlist = self.get_richmedia(temp_f)
         aalen, aalist = self.get_aa(temp_f)
 
-        data["PDF"]["Count"] = {"Object":objlen,
-                                "Stream":strlen,
-                                "JS":jslen,
-                                "Javascript":jalen,
-                                "OpenAction":oalen,
-                                "Launch":llen,
-                                "URI":ulen,
-                                "Action":alen,
-                                "GoTo":gtrlen,
-                                "RichMedia":rmlen,
-                                "AA":aalen}
+        data["PDF"]["Count"] = {"Object": objlen,
+                                "Stream": strlen,
+                                "JS": jslen,
+                                "Javascript": jalen,
+                                "OpenAction": oalen,
+                                "Launch": llen,
+                                "URI": ulen,
+                                "Action": alen,
+                                "GoTo": gtrlen,
+                                "RichMedia": rmlen,
+                                "AA": aalen}
 
         data["PDF"]["Object"] = objs
         data["PDF"]["JS"] = jslist

@@ -16,6 +16,7 @@ from magic import from_file
 from analyzer.logger.logger import ignore_excpetion, verbose
 from analyzer.mics.funcs import get_words_multi_filesarray, get_words
 
+
 class EmailParser():
     '''
     EmailParser extract artifacts from emails
@@ -25,12 +26,12 @@ class EmailParser():
         '''
         initialize class, this has to pass
         '''
-        self.datastruct = {"General":[],
-                           "Parsed":"",
-                           "Attachments":[],
-                           "_General":["Key", "Value", "descriptions"],
-                           "_Parsed":"",
-                           "_Attachments":["Name", "Type", "Extension", "md5", "Path"]}
+        self.datastruct = {"General": [],
+                           "Parsed": "",
+                           "Attachments": [],
+                           "_General": ["Key", "Value", "descriptions"],
+                           "_Parsed": "",
+                           "_Attachments": ["Name", "Type", "Extension", "md5", "Path"]}
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
     def get_attachment(self, data, msg) -> list:
@@ -46,21 +47,21 @@ class EmailParser():
                 if attachment.get('Content-Disposition') is None:
                     continue
                 tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
-                safename = "temp_"+tempstring
+                safename = "temp_" + tempstring
                 file = path.join(data["Location"]["Folder"], safename)
-                tempfilename = "temp"+"".join([c for c in attachment.get_filename() if match(r'[\w\.]', c)])
+                tempfilename = "temp" + "".join([c for c in attachment.get_filename() if match(r'[\w\.]', c)])
                 buffer = attachment.get_payload(decode=True)
                 with open(file, "wb") as temp_file:
                     temp_file.write(buffer)
                     _md5 = md5(buffer).hexdigest()
                     mime = from_file(file, mime=True)
-                    data["EMAIL"]["Attachments"].append({"Name":attachment.get_filename(),
-                                                         "Type":mime,
-                                                         "Extension":guess_type(tempfilename)[0],
-                                                         "Path":file,
-                                                         "md5":_md5})
-                    data[tempstring] = {"Attached":"",
-                                        "_Attached":""}
+                    data["EMAIL"]["Attachments"].append({"Name": attachment.get_filename(),
+                                                         "Type": mime,
+                                                         "Extension": guess_type(tempfilename)[0],
+                                                         "Path": file,
+                                                         "md5": _md5})
+                    data[tempstring] = {"Attached": "",
+                                        "_Attached": ""}
                     data[tempstring]["Attached"] = buffer.decode("utf-8", errors="ignore")
                     streams.append(buffer)
         return streams
@@ -92,8 +93,8 @@ class EmailParser():
             for part in msg.get_payload():
                 tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
                 temppart = "Part {}".format(counter)
-                data[tempstring] = {temppart:"",
-                                    "_"+temppart:""}
+                data[tempstring] = {temppart: "",
+                                    "_" + temppart: ""}
                 data[tempstring][temppart] = part.get_payload()
                 parts.append(bytes(part.get_payload(), 'utf8'))
                 counter += 1
@@ -101,8 +102,8 @@ class EmailParser():
             body = msg.get_payload()
             tempstring = "".join([choice(ascii_lowercase) for _ in range(5)])
             temppart = "Part {}".format(counter)
-            data[tempstring] = {temppart:"",
-                                "_"+temppart:""}
+            data[tempstring] = {temppart: "",
+                                "_" + temppart: ""}
             data[tempstring][temppart] = body.get_payload()
             parts.append(bytes(body.get_payload(), 'utf8'))
             counter += 1
@@ -126,15 +127,15 @@ class EmailParser():
 
         headers = []
 
-        #with open(path, 'r') as file:
+        # with open(path, 'r') as file:
         #    headers = HeaderParser().parse(file, headersonly=True)
         #    for key, value in headers.items():
         #        data.update({key:value.replace('\n', ' ').replace('\t', ' ').replace('\r', ' ')})
 
         for key, value in msg.items():
-            data.append({"Key":key, "Value":value, "descriptions":""})
+            data.append({"Key": key, "Value": value, "descriptions": ""})
             with ignore_excpetion(Exception):
-                headers.append(str.encode(value)) # convert to bytes...
+                headers.append(str.encode(value))  # convert to bytes...
         return headers
 
     @verbose(True, verbose_output=False, timeout=None, _str=None)
@@ -143,7 +144,7 @@ class EmailParser():
         check mime if it contains message or not
         '''
         if "message" in data["Details"]["Properties"]["mime"] or \
-            data["Location"]["Original"].endswith(".eml"):
+                data["Location"]["Original"].endswith(".eml"):
             return True
         return False
 
@@ -166,7 +167,7 @@ class EmailParser():
             streams = self.get_attachment(data, message)
         mixed = streams + parts + headers
         if len(mixed) > 0:
-            get_words_multi_filesarray(data, mixed) #have to be bytes < will check this later on
+            get_words_multi_filesarray(data, mixed)  # have to be bytes < will check this later on
         else:
             get_words(data, data["Location"]["File"])
         parsed.type = "email"

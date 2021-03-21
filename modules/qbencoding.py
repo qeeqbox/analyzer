@@ -5,6 +5,8 @@
 
 from magic import Magic
 from analyzer.logger.logger import verbose
+
+
 class QBEncdoing:
     '''
     QBEncdoing getting encoding
@@ -39,8 +41,8 @@ class QBEncdoing:
         '''
         start analyzing
         '''
-        data["Encoding"] = {"Details":{},
-                            "_Details":{}}
+        data["Encoding"] = {"Details": {},
+                            "_Details": {}}
 
         open(_path, "rb").read()
         fbom = open(_path, "rb").read(4)
@@ -50,6 +52,6 @@ class QBEncdoing:
         else:
             encoding = "utf-8"
 
-        data["Encoding"]["Details"] = {"charset":Magic(mime_encoding=True).from_file(_path),
-                                       "ForceEncoding":encoding,
-                                       "ByteOrderMark":self.check_bom(fbom)}
+        data["Encoding"]["Details"] = {"charset": Magic(mime_encoding=True).from_file(_path),
+                                       "ForceEncoding": encoding,
+                                       "ByteOrderMark": self.check_bom(fbom)}

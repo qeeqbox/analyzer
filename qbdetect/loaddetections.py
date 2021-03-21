@@ -10,6 +10,7 @@ from glob import glob
 from importlib import import_module
 from analyzer.logger.logger import log_string, verbose, ignore_excpetion
 
+
 class LoadDetections:
     '''
     LoadDetections loads ???.py detections
@@ -19,15 +20,15 @@ class LoadDetections:
         '''
         initialize class, this has to pass
         '''
-        self.datastruct = {"Detection":[],
-                           "_Detection":["Count", "Offset", "Rule", "Parsed", "Match"]}
+        self.datastruct = {"Detection": [],
+                           "_Detection": ["Count", "Offset", "Rule", "Parsed", "Match"]}
 
         self.detections = path.abspath(path.join(path.dirname(__file__), 'detections'))
         if not self.detections.endswith(path.sep):
-            self.detections = self.detections+path.sep
+            self.detections = self.detections + path.sep
         if not path.isdir(self.detections):
             mkdir(self.detections)
-        self.modules = glob(self.detections+"*.py")
+        self.modules = glob(self.detections + "*.py")
         self.imported = []
         for _module in self.modules:
             with ignore_excpetion(Exception):
