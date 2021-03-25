@@ -18,7 +18,7 @@ jobs:
           git config user.name "qb-auto"
           git config user.email "qbactions@gmail.com"
           git add -- . :!auto-checking.sh
-          git commit -m "[auto-a] clean up"
+          git commit -m "🤖"
           git push
       - name: delete auto-checking.sh
         if: always()
