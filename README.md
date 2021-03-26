@@ -14,7 +14,7 @@ This project automates the daily tasks of Threat Intelligence Analyzer role **in
 ## Output 
 - [APT-Malware JSON\HTML reports (+190 sample)](https://files.qeeqbox.com/set1/)
 
-# Features
+## Features
 - Runs locally (Offline)  
 - Analyze buffer, file or full folder  
 - Intime analysis (Session is saved)  
@@ -52,7 +52,7 @@ This project automates the daily tasks of Threat Intelligence Analyzer role **in
 - Encryption patterns (base64, md5, sha1..) extraction  
 - DGA (Domain Generation Algorithm) patterns extraction  
 
-## Features
+## Modules
 - Linux wrapper - ELF information, API functions descriptions, System commands descriptions, Sections descriptions, Lib descriptions, Encrypted section detection, Symbols extraction, MITRE artifacts mapped to detection, Cross references detection, Behavior detection  
 - Windows wrapper - PE information, Encrypted section detection, Sections descriptions, DLL descriptions, Symbols extraction, Signature extraction and validation, API descriptions, PE ASLR, DEP, SEH and CFG detection, MITRE artifacts mapped to detection, API Behavior detection, DLL injection, Process Hollowing, Process Doppelganging etc.., Cross references detection, Icon extraction, Extract String file info, FileDescription, FileDescription etc..  
 - Android wrapper - APK information, DEX information, Manifest descriptions, Intent descriptions, Resources extraction, Symbols extraction, Classes extraction, Big functions identification, Cross references detection, API Behavior detection  
