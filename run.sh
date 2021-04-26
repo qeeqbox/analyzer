@@ -20,7 +20,7 @@ xdg-open http://127.0.0.1:8000/login
 }
 
 dev_project () {
-	docker-compose -f docker-compose-dev.yml up --build
+	docker-compose -f docker-compose-dev.yml up --build --remove-orphan
 }
 
 stop_containers () {
