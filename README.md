@@ -1,6 +1,5 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/qeeqbox/analyzer/master/readme/analyzerlogo.png"></p>
 
-#
 This project automates the daily tasks of Threat Intelligence Analyzer role **internally** without external resources' interaction. It analyzes, visualizes and structures **sensitive** files (Malware) or data by extracting features, artifacts and IoC using different modules. The output of those modules can be easily integrated in your research or SOC platforms.
 
 ## Install
