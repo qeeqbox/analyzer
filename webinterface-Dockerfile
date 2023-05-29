@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y curl python3 python3-pip
-RUN pip3 install requests flask werkzeug gunicorn flask_mongoengine flask_admin flask_login flask_bcrypt pyOpenSSL Flask-Markdown psutil gevent python-dateutil redis pymongo==3.12.1
+RUN pip3 install requests flask==2.2.3 werkzeug gunicorn flask_mongoengine==0.9 flask_admin flask_login flask_bcrypt pyOpenSSL Flask-Markdown psutil gevent python-dateutil redis pymongo==3.12.1 Flask-Json
 WORKDIR /analyzer
 ADD ./ .
 RUN python3 initializer.py --key
