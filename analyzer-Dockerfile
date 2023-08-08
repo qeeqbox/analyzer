@@ -7,9 +7,9 @@ RUN python3 -c 'import tldextract; tldextract.TLDExtract()'
 RUN ln -s /usr/local/lib/python3.7/site-packages/usr/local/lib/libyara.so /usr/local/lib/libyara.so
 RUN pip3 install --global-option="build" --global-option="--enable-cuckoo" --global-option="--enable-magic" yara-python
 RUN chmod a+r /etc/snort/snort.conf
-RUN wget -O /tmp/community-rules.tar.gz https://www.snort.org/downloads/community/community-rules.tar.gz && \
-    mkdir -p /etc/snort/rules && \
-    tar zxvf /tmp/community-rules.tar.gz -C /etc/snort/rules --strip-components=1
+#RUN wget -O /tmp/community-rules.tar.gz https://www.snort.org/downloads/community/community-rules.tar.gz && \
+#    mkdir -p /etc/snort/rules && \
+#    tar zxvf /tmp/community-rules.tar.gz -C /etc/snort/rules --strip-components=1
 ADD ./ /analyzer
 RUN mv /analyzer/old-backup-yara-rules-github.zip /tmp/yara-rules.zip && \
 	mkdir -p /analyzer/yara/yara-rules-github && \
